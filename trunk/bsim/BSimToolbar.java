@@ -42,16 +42,16 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private JFileChooser fc;
 	
 	// Images used on the buttons
-	private static final ImageIcon iconPause = new ImageIcon("bsim/icons/PauseSmall.gif");
-	private static final ImageIcon iconPlay = new ImageIcon("bsim/icons/PlaySmall.gif");
-	private static final ImageIcon iconToStart = new ImageIcon("bsim/icons/ToStartSmall.gif");
-	private static final ImageIcon iconRecord = new ImageIcon("bsim/icons/RecordSmall.gif");
-	private static final ImageIcon iconZoomIn = new ImageIcon("bsim/icons/ZoomInSmall.gif");
-	private static final ImageIcon iconZoomAct = new ImageIcon("bsim/icons/ZoomActSmall.gif");
-	private static final ImageIcon iconPanIn = new ImageIcon("bsim/icons/PanInSmall.gif");
-	private static final ImageIcon iconPanAct = new ImageIcon("bsim/icons/PanActSmall.gif");
-	private static final ImageIcon iconScreenshot = new ImageIcon("bsim/icons/ScreenshotSmall.gif");
-	private static final ImageIcon iconLoadSim = new ImageIcon("bsim/icons/PrefsSmall.gif");
+	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("icons/PauseSmall.gif"));
+	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("icons/PlaySmall.gif"));
+	private static final ImageIcon iconToStart = new ImageIcon(BSimToolbar.class.getResource("icons/ToStartSmall.gif"));
+	private static final ImageIcon iconRecord = new ImageIcon(BSimToolbar.class.getResource("icons/RecordSmall.gif"));
+	private static final ImageIcon iconZoomIn = new ImageIcon(BSimToolbar.class.getResource("icons/ZoomInSmall.gif"));
+	private static final ImageIcon iconZoomAct = new ImageIcon(BSimToolbar.class.getResource("icons/ZoomActSmall.gif"));
+	private static final ImageIcon iconPanIn = new ImageIcon(BSimToolbar.class.getResource("icons/PanInSmall.gif"));
+	private static final ImageIcon iconPanAct = new ImageIcon(BSimToolbar.class.getResource("icons/PanActSmall.gif"));
+	private static final ImageIcon iconScreenshot = new ImageIcon(BSimToolbar.class.getResource("icons/ScreenshotSmall.gif"));
+	private static final ImageIcon iconLoadSim = new ImageIcon(BSimToolbar.class.getResource("icons/PrefsSmall.gif"));
 	
 	private static BSimParameters params;
 	
