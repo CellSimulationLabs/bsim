@@ -45,6 +45,10 @@ The default radius of a bacterium in microns.
 
 The force (in pN) that a bacterium exerts when moving up and down an Aspartate chemotactic gradient.
 
+   BACTERIA_SPEED:  50.0
+
+Currently unused.
+
    UP_RUN_LENGTH:	1.6
    DOWN_RUN_LENGTH:	0.7
    ISO_RUN_LENGTH:	0.86
@@ -62,15 +66,15 @@ The default radius of a particle in microns.
    CREATE_BACTERIA_SET: p1x	p1y	width	height	number	type	diameter(0=default)
 
 Creates a set of uniformly random distributed bacteria within a rectangular region defined by an upper left point, p1, and a width and height. If you wish the bacteria to be the default size then the diameter value should be 0, otherwise enter the size in microns. There are 5 types of bacteria:
-# Basic
-# Sensing
-# Co-ordinated
-# Recruit
-# Dead
+  # Basic
+  # Sensing
+  # Co-ordinated
+  # Recruit
+  # Dead
 
    CREATE_PARTICLE_SET: p1x	p1y	width	height	number	type	diameter(0=default)
 
-Creates a set of uniformly random distributed particles within a rectangular region defined by an upper left point, p1, and a width and height. At present there is only one type of particle and so this should be left as 0. If you wish the particle to be the default size then the diameter value should be 0, otherwise enter the size in microns.
+Creates a set of uniformly random distributed particles within a rectangular region defined by an upper left point, p1, and a width and height. At present there is only one type of particle and so this should be left as 1. If you wish the particle to be the default size then the diameter value should be 0, otherwise enter the size in microns.
 
    CREATE_BOUNDARY_SOLID:	p1x	p1y	p2x	p2y
 
