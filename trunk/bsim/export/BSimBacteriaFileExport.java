@@ -7,16 +7,14 @@
  * Created: 17/08/2008
  * Updated: 18/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.export;
 
-// Standard packages required by the application
-import bsim.*;
-import bsim.object.*;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.Vector;
+
+import bsim.BSimParameters;
+import bsim.BSimScene;
+import bsim.object.BSimObject;
 
 
 public class BSimBacteriaFileExport extends BSimFileExport {

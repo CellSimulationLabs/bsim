@@ -10,13 +10,13 @@
  * accordance with the license agreement you entered into with  
  * Werner Randelshofer. For details see accompanying license terms. 
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.export;
 
-import java.io.*;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+
 import javax.imageio.stream.ImageOutputStream;
+
 
 /**
  * FilterImageOutputStream adapts a ImageOutputStream to the FilterOutputStream 

@@ -7,18 +7,14 @@
  * Created: 20/07/2008
  * Updated: 25/08/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim.object.bacteria;
 
-//Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.physics.*;
+import java.util.Vector;
 
-//Standard packages required by the application
-import java.util.*;
+import bsim.BSimParameters;
+import bsim.BSimScene;
+import bsim.BSimUtils;
+import bsim.object.BSimObject;
 
 
 public class BSimBacteriaCreate {

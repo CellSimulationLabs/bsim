@@ -8,21 +8,18 @@
  * Created: 14/07/2008
  * Updated: 24/07/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
-// Standard packages required by the application
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.SwingUtilities;
-import javax.swing.filechooser.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
 
 
 public class BSimToolbar extends JToolBar implements ActionListener{

@@ -8,21 +8,22 @@
  * Created: 12/07/2008
  * Updated: 24/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.export.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-// Standard packages required by the application
-import java.util.*;
-import java.io.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.*;
+import javax.swing.JFrame;
+import javax.swing.ProgressMonitor;
+
+import bsim.export.PngEncoder;
+import bsim.export.QuickTimeOutputStream;
 
 
 public class BSimApp extends JFrame{

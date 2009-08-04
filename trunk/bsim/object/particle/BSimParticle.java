@@ -8,15 +8,12 @@
  * Created: 12/07/2008
  * Updated: 19/07/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.particle;
 
-// Standard packages required by the application
-import java.awt.*;
-import java.util.*;
-import bsim.object.*;
+import java.awt.Color;
+import java.awt.Graphics;
+
+import bsim.object.BSimObject;
 
 
 public class BSimParticle extends BSimObject {

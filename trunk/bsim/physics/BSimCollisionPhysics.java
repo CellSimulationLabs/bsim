@@ -11,20 +11,16 @@
  * Created: 13/08/2008
  * Updated: 24/08/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim.physics;
 
-//Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.bacteria.*;
-import bsim.object.boundary.*;
-import bsim.object.particle.*;
+import java.util.Vector;
 
-//Standard packages required by the application
-import java.util.*;
+import bsim.BSimParameters;
+import bsim.BSimScene;
+import bsim.object.BSimObject;
+import bsim.object.bacteria.BSimBacterium;
+import bsim.object.boundary.BSimBoundary;
+import bsim.object.particle.BSimParticle;
 
 
 public class BSimCollisionPhysics extends BSimPhysics{

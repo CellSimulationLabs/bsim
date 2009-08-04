@@ -1,15 +1,3 @@
-// Define the location of the class in the bsim package
-package bsim.export;
-
-import java.awt.Image;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.zip.CRC32;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-
 /**
  * PngEncoder takes a Java Image object and creates a byte string which can be saved as a PNG file.
  * The Image is presumed to use the DirectColorModel.
@@ -50,6 +38,17 @@ import java.util.zip.DeflaterOutputStream;
  *               PngEncoderB can inherit them (JDE)
  *				 Fixed bug with calculation of nRows
  */
+package bsim.export;
+
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import java.awt.image.PixelGrabber;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.CRC32;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
+
 
 public class PngEncoder extends Object {
 

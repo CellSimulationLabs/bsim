@@ -10,18 +10,9 @@
  * Created: 12/07/2008
  * Updated: 20/07/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.physics;
 
-// Import the bsim packages used
-import bsim.*;
-
-// Standard packages required by the application
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import bsim.BSimScene;
 
 
 public abstract class BSimPhysics{

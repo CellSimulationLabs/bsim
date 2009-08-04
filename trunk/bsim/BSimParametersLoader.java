@@ -8,17 +8,10 @@
  * Created: 18/08/2008
  * Updated: 24/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
-
-// Standard packages required by the application
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 

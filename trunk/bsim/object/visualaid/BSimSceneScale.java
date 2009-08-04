@@ -7,19 +7,15 @@
  * Created: 28/08/2008
  * Updated: 28/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.visualaid;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 
-// Standard packages required by the application
-import java.util.*;
-import java.awt.*;
-import java.awt.geom.*;
+import bsim.BSimScene;
 
 
 public class BSimSceneScale implements BSimVisualAid {

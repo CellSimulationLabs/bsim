@@ -11,23 +11,21 @@
  * Created: 12/07/2008
  * Updated: 14/08/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim.object.bacteria;
 
-//Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.field.*;
-import bsim.logic.*;
-
-//Standard packages required by the application
-import java.awt.*;
-import java.lang.Math;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
+import java.util.Vector;
+
+import bsim.BSimParameters;
+import bsim.BSimScene;
+import bsim.BSimUtils;
+import bsim.logic.BSimLogic;
+import bsim.object.BSimObject;
+import bsim.object.field.BSimChemicalField;
 
 
 public class BSimBacterium extends BSimObject implements BSimLogic {

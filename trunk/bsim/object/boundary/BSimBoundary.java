@@ -8,18 +8,12 @@
  * Created: 23/08/2008
  * Updated: 23/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.boundary;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
-// Standard packages required by the application
-import java.util.*;
-import java.awt.*;
+import bsim.object.BSimObject;
 
 
 public class BSimBoundary {

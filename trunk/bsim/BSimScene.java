@@ -15,27 +15,29 @@
  * Created: 12/07/2008
  * Updated: 25/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.bacteria.*;
-import bsim.object.visualaid.*;
-import bsim.object.boundary.*;
-import bsim.object.field.*;
-import bsim.object.particle.*;
-import bsim.physics.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.Vector;
 
-// Standard packages required by the application
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import java.io.*;
+import javax.swing.JPanel;
+
+import bsim.object.bacteria.BSimBacterium;
+import bsim.object.boundary.BSimBoundary;
+import bsim.object.boundary.BSimWrapBoundary;
+import bsim.object.field.BSimChemicalField;
+import bsim.object.particle.BSimParticle;
+import bsim.object.visualaid.BSimVisualAid;
+import bsim.physics.BSimCollisionPhysics;
+import bsim.physics.BSimPhysics;
 
 
 public class BSimScene extends JPanel implements Runnable,

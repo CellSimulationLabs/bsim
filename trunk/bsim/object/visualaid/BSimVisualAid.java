@@ -8,13 +8,9 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.visualaid;
 
-// Standard packages required by the application
-import java.awt.*;
+import java.awt.Graphics;
 
 
 public interface BSimVisualAid {

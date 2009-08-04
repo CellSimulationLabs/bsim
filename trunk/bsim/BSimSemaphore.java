@@ -11,9 +11,6 @@
  * Created: 13/07/2008
  * Updated: 15/07/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
 public class BSimSemaphore{

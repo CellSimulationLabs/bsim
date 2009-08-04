@@ -9,19 +9,14 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.visualaid;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.particle.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Vector;
 
-// Standard packages required by the application
-import java.util.*;
-import java.awt.*;
+import bsim.BSimScene;
+import bsim.object.particle.BSimParticle;
 
 
 public class BSimParticleTrace implements BSimVisualAid {

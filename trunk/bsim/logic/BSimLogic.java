@@ -8,9 +8,6 @@
  * Created: 11/08/2008
  * Updated: 11/08/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim.logic;
 
 

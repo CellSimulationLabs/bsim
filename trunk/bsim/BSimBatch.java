@@ -7,20 +7,20 @@
  * Created: 18/08/2008
  * Updated: 18/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.export.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.Vector;
 
-// Standard packages required by the application
-import java.util.*;
-import java.io.*;
-import java.awt.*;
-import java.awt.image.*;
+import bsim.export.BSimBacteriaFileExport;
+import bsim.export.BSimExport;
+import bsim.export.BSimParticleFileExport;
+import bsim.export.QuickTimeOutputStream;
 
 
 public class BSimBatch{

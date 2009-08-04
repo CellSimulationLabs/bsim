@@ -11,16 +11,12 @@
  * Created: 20/07/2008
  * Updated: 20/07/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim.object.field;
 
-// Import the bsim packages used
-import bsim.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
-//Standard packages required by the application
-import java.awt.*;
+import bsim.BSimParameters;
 
 
 public class BSimChemicalField {

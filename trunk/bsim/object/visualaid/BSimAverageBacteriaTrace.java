@@ -9,19 +9,14 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-
-
-// Define the location of the class in the bsim package
 package bsim.object.visualaid;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.bacteria.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Vector;
 
-// Standard packages required by the application
-import java.util.*;
-import java.awt.*;
+import bsim.BSimScene;
+import bsim.object.bacteria.BSimBacterium;
 
 
 public class BSimAverageBacteriaTrace implements BSimVisualAid {

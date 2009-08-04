@@ -13,19 +13,19 @@
  * Created: 01/08/2008
  * Updated: 24/08/2008
  */
-
-
 package bsim.object.boundary;
 
-import java.awt.*;
-import java.awt.geom.*;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Stroke;
+import java.awt.geom.Line2D;
+import java.util.Vector;
 
-import bsim.BSimUtils;
-import bsim.object.*;
-import bsim.object.bacteria.*;
-import bsim.object.particle.*;
-
-import java.util.*;
+import bsim.object.BSimObject;
+import bsim.object.bacteria.BSimBacterium;
+import bsim.object.particle.BSimParticle;
 
 public class BSimWrapBoundary extends BSimBoundary {
 	// The offset given to an object that intersects with a boundary of type WRAP

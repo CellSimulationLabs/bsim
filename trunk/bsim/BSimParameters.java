@@ -8,23 +8,17 @@
  * Created: 05/08/2008
  * Updated: 22/08/2008
  */
-
-
-//Define the location of the class in the bsim package
 package bsim;
 
-// Import the bsim packages used
-import bsim.*;
-import bsim.object.*;
-import bsim.object.bacteria.*;
-import bsim.object.boundary.*;
-import bsim.object.visualaid.*;
-import bsim.object.field.*;
-import bsim.object.particle.*;
+import java.awt.Color;
+import java.util.Vector;
 
-//Standard packages required by the application
-import java.util.*;
-import java.awt.*;
+import bsim.object.bacteria.BSimBacteriaCreate;
+import bsim.object.boundary.BSimBoundaryCreate;
+import bsim.object.field.BSimChemicalField;
+import bsim.object.field.BSimChemicalFieldCreate;
+import bsim.object.particle.BSimParticlesCreate;
+import bsim.object.visualaid.BSimVisualAidCreate;
 
 
 public class BSimParameters {
