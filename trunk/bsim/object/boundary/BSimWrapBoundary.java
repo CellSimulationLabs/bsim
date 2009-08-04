@@ -15,13 +15,15 @@
  */
 
 
-package bsim.object;
-
+package bsim.object.boundary;
 
 import java.awt.*;
 import java.awt.geom.*;
 
 import bsim.BSimUtils;
+import bsim.object.*;
+import bsim.object.bacteria.*;
+import bsim.object.particle.*;
 
 import java.util.*;
 
@@ -103,8 +105,8 @@ public class BSimWrapBoundary extends BSimBoundary {
 	 * nearest end 
 	 */
 	public boolean isColliding(BSimObject x) {
-		double[] point = x.centrePos;
-		double radius = x.size/2;
+		double[] point = x.getCentrePos();
+		double radius = x.getSize()/2;
 		double dist;
 		
 		double perpDist = distPointToLine(point) * length;
@@ -181,13 +183,13 @@ public class BSimWrapBoundary extends BSimBoundary {
 		double[] offset = new double[2];
 		double[] newCentrePos = new double[2];
 		
-		offset[0] = wrapOffset[0] - x.size*wrapOffset[0]/Math.abs(wrapOffset[0]);
-		offset[1] = wrapOffset[1] - x.size*wrapOffset[1]/Math.abs(wrapOffset[1]);
+		offset[0] = wrapOffset[0] - x.getSize()*wrapOffset[0]/Math.abs(wrapOffset[0]);
+		offset[1] = wrapOffset[1] - x.getSize()*wrapOffset[1]/Math.abs(wrapOffset[1]);
 		
 		for (int i = 0; i<2; i++) if (Double.isNaN(offset[i])) offset[i] = 0;
 		
-		newCentrePos[0] = x.centrePos[0] + offset[0];
-		newCentrePos[1] = x.centrePos[1] + offset[1];
+		newCentrePos[0] = x.getCentrePos()[0] + offset[0];
+		newCentrePos[1] = x.getCentrePos()[1] + offset[1];
 		
 		x.setCentrePos(newCentrePos);
 	}

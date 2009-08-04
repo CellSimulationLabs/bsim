@@ -12,11 +12,12 @@
 
 
 // Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.visualaid;
 
 // Import the bsim packages used
 import bsim.*;
 import bsim.object.*;
+import bsim.object.bacteria.*;
 
 // Standard packages required by the application
 import java.util.*;

@@ -10,10 +10,11 @@
 
 
 //Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.bacteria;
 
 //Import the bsim packages used
 import bsim.*;
+import bsim.object.*;
 import bsim.physics.*;
 
 //Standard packages required by the application

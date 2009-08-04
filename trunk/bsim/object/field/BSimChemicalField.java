@@ -14,7 +14,7 @@
 
 
 //Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.field;
 
 // Import the bsim packages used
 import bsim.*;

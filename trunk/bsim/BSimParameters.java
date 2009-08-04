@@ -16,6 +16,11 @@ package bsim;
 // Import the bsim packages used
 import bsim.*;
 import bsim.object.*;
+import bsim.object.bacteria.*;
+import bsim.object.boundary.*;
+import bsim.object.visualaid.*;
+import bsim.object.field.*;
+import bsim.object.particle.*;
 
 //Standard packages required by the application
 import java.util.*;

@@ -11,10 +11,11 @@
 
 
 // Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.boundary;
 
 // Import the bsim packages used
 import bsim.*;
+import bsim.object.*;
 
 // Standard packages required by the application
 import java.util.*;
@@ -118,7 +119,7 @@ public class BSimBoundary {
 	public synchronized double distToBoundary(BSimObject x) {
 
 		// Return the distance of the object to the bounday (we use edge of object not centre)
-		return calcDistFromBoundary(x.getCentrePos()) - (x.size / 2);
+		return calcDistFromBoundary(x.getCentrePos()) - (x.getSize() / 2);
 	}
 
 	

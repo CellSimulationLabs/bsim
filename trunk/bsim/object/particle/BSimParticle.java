@@ -11,11 +11,12 @@
 
 
 // Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.particle;
 
 // Standard packages required by the application
 import java.awt.*;
 import java.util.*;
+import bsim.object.*;
 
 
 public class BSimParticle extends BSimObject {

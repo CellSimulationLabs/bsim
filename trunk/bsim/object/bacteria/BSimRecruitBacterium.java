@@ -1,23 +1,25 @@
 /**
- * BSimCoordBacterium.java
+ * BSimRecruitBacterium.java
  *
  * Class that represents a bacterium that by default will move randomly, until contact 
  * with a particle is made at which time it will follow the goal chemoattractant. A 
  * co-ordination signal will also be released that will cause any bacteria in a high 
- * enough concentration to also follow the chemoattractant.
+ * enough concentration to also follow the chemoattractant. Also, a recruitment signal is
+ * produced on contact with a particle that all bacteria will follow by default.
  *
  * Authors: Thomas Gorochowski
- * Created: 28/08/2008
- * Updated: 28/08/2008
+ * Created: 01/09/2008
+ * Updated: 01/09/2008
  */
 
 
 //Define the location of the class in the bsim package
-package bsim.object;
+package bsim.object.bacteria;
 
 //Import the bsim packages used
 import bsim.*;
 import bsim.object.*;
+import bsim.object.field.*;
 import bsim.logic.*;
 
 //Standard packages required by the application
@@ -28,17 +30,14 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic {
+public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic {
 
-	
-	// Threshold for detecting co-ordination signal (AHL)
-	protected double coordThreshold = 0.1;
-
+	protected boolean foundRecruit = false;
 
 	/**
 	 * General constructor.
 	 */
-	public BSimCoordBacterium(double newSpeed, double newMass, double newSize,
+	public BSimRecruitBacterium(double newSpeed, double newMass, double newSize,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
@@ -47,9 +46,7 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		// Call the parent constructor with the basic properties	
 		super(newSpeed, newMass, newSize, newDirection, newPosition, newForceMagnitudeDown,
 		newForceMagnitudeUp, newState,
-		      newTumbleSpeed, newRemDt, newScene, newParams, newSwitchSpeed);
-		
-		coordThreshold = newCoordThreshold;
+		      newTumbleSpeed, newRemDt, newScene, newParams, newSwitchSpeed, newCoordThreshold);
 	}
 
 
@@ -62,15 +59,28 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 	                           boolean contactPart,
 	                           boolean contactBoundary ) {
 		
-		if(partContactTimer > 0){
-			partContactTimer--;
-			
-			// Generate some co-ordination chemical (AHL) at current location
-			scene.getCoordinationField().addChemical (1.0, this.getCentrePos());
+		int newChemo = 0;
+		
+		// Need to check if a switch to chemo has been made.
+		if(partContactTimer > 0 || 
+		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold) {
+			newChemo = BAC_CHEMO_GOAL;
+		}
+		else{
+			newChemo = BAC_CHEMO_RECRUIT;
 		}
 		
-		if(contactPart){
-			partContactTimer = (int)(switchSpeed / params.getDtSecs());
+		if(newChemo != chemo){
+			// Reset the memory
+			memToReset = true;
+		}
+		
+		// Update the gradient to use
+		chemo = newChemo;
+		
+		if(partContactTimer > 0){
+				// Generate some recruitment chemical at current location
+				scene.getRecruitmentField().addChemical (1.0, this.getCentrePos());
 		}
 		
 		return  super.runLogic(contactBac, contactPart, contactBoundary);
@@ -90,33 +100,28 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		double longTermMemoryLength = 3.0; // seconds
 		double sensitivity = 0.000001;
 		
-		// Check to see if the bacteria has been in contact with a particle
-		if(partContactTimer > 0 || 
-		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){
-			// Perform the normal attraction to the goal chemoattractant
-			for(int i=0; i<concMemory.size();i++) {
-				if(i <= (longTermMemoryLength/params.getDtSecs())) {
-					longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
-				} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
-			}
-			shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/params.getDtSecs()));
-			longTermMean = longTermCounter / (longTermMemoryLength/params.getDtSecs());
-		
-			if(shortTermMean - longTermMean > sensitivity) {
-				runUp = true;
-				return upRunProb;
-			}
-			else if(longTermMean - shortTermMean > sensitivity) {
-				runUp = false;
-				return downRunProb;
-			}
-			else {
-				runUp = false;
-				return isoRunProb;
-			}
+		// Perform the normal attraction to the goal chemoattractant
+		for(int i=0; i<concMemory.size();i++) {
+			if(i <= (longTermMemoryLength/params.getDtSecs())) {
+				longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
+			} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
 		}
-		else{
-			// If not perform random walk
+		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/params.getDtSecs()));
+		longTermMean = longTermCounter / (longTermMemoryLength/params.getDtSecs());
+	
+		if(shortTermMean - longTermMean > sensitivity) {
+			foundRecruit = true;
+			runUp = true;
+			return upRunProb;
+		}
+		else if(longTermMean - shortTermMean > sensitivity){
+			foundRecruit = false;
+			runUp = false;
+			return downRunProb;
+		}
+		else {
+			foundRecruit = false;
+			runUp = false;
 			return isoRunProb;
 		}
 	}
@@ -134,6 +139,9 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		}
 		else if(scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){
 			g.setColor(Color.YELLOW);
+		}
+		else if(foundRecruit == true){
+			g.setColor(Color.RED);
 		}
 		else{
 			g.setColor(Color.GREEN);
