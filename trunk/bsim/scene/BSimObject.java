@@ -11,7 +11,7 @@
  * Created: 12/07/2008
  * Updated: 20/07/2008
  */
-package bsim.object;
+package bsim.scene;
 
 import java.awt.Graphics;
 

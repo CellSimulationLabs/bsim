@@ -8,12 +8,12 @@
  * Created: 12/07/2008
  * Updated: 19/07/2008
  */
-package bsim.object.particle;
+package bsim.scene.particle;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bsim.object.BSimObject;
+import bsim.scene.BSimObject;
 
 
 public class BSimParticle extends BSimObject {

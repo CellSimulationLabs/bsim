@@ -8,12 +8,12 @@
  * Created: 23/08/2008
  * Updated: 23/08/2008
  */
-package bsim.object.boundary;
+package bsim.scene.boundary;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bsim.object.BSimObject;
+import bsim.scene.BSimObject;
 
 
 public class BSimBoundary {

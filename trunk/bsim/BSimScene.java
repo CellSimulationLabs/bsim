@@ -30,14 +30,14 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import bsim.object.bacteria.BSimBacterium;
-import bsim.object.boundary.BSimBoundary;
-import bsim.object.boundary.BSimWrapBoundary;
-import bsim.object.field.BSimChemicalField;
-import bsim.object.particle.BSimParticle;
-import bsim.object.visualaid.BSimVisualAid;
 import bsim.physics.BSimCollisionPhysics;
 import bsim.physics.BSimPhysics;
+import bsim.scene.bacteria.BSimBacterium;
+import bsim.scene.boundary.BSimBoundary;
+import bsim.scene.boundary.BSimWrapBoundary;
+import bsim.scene.field.BSimChemicalField;
+import bsim.scene.particle.BSimParticle;
+import bsim.scene.visualaid.BSimVisualAid;
 
 
 public class BSimScene extends JPanel implements Runnable,

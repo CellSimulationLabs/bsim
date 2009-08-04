@@ -7,7 +7,7 @@
  * Created: 25/07/2008
  * Updated: 25/08/2008
  */
-package bsim.object.field;
+package bsim.scene.field;
 
 import java.awt.Color;
 

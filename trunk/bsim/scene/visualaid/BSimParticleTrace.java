@@ -1,24 +1,25 @@
 /**
- * BSimBacteriaTrace.java
+ * BSimParticleTrace.java
  *
- * Class that will display a trace for every bacterium in a simulation.
+ * Class 
  *
  * Authors: Thomas Gorochowski
+ *          Ian Miles
+ *          Charlie Harrison
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.object.visualaid;
+package bsim.scene.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
 import bsim.BSimScene;
-import bsim.object.bacteria.BSimBacterium;
+import bsim.scene.particle.BSimParticle;
 
 
-public class BSimBacteriaTrace implements BSimVisualAid {
-	
+public class BSimParticleTrace implements BSimVisualAid {
 	
 	// Variables for tracing the movement of particles
 	private Vector traces;
@@ -37,7 +38,7 @@ public class BSimBacteriaTrace implements BSimVisualAid {
 	/**
 	 * General constructor
 	 */
-	public BSimBacteriaTrace (BSimScene newScene, int newFrameSkip) {
+	public BSimParticleTrace (BSimScene newScene, int newFrameSkip) {
 		
 		// Update the internal variables
 		frameSkip = newFrameSkip;
@@ -49,9 +50,9 @@ public class BSimBacteriaTrace implements BSimVisualAid {
 	
 	private void createNewTraces() {
 		
-		// Create a trace vector for each bacterium
-		traces = new Vector(scene.getBacteria().size());
-		for(int i=0; i<scene.getBacteria().size(); i++){
+		// Create a trace vector for each particles
+		traces = new Vector(scene.getParticles().size());
+		for(int i=0; i<scene.getParticles().size(); i++){
 			traces.add(new Vector());
 		}
 	}
@@ -60,23 +61,23 @@ public class BSimBacteriaTrace implements BSimVisualAid {
 	
 	
 	/**
-	 * Update the bacterium trace
+	 * Update the particle trace
 	 */
 	public void updateState() {
 		int j;
-		Vector trace, bacteria;
+		Vector trace, particles;
 		
 		if(scene.getTimeStep() % frameSkip == 0){ 
 			
-			bacteria = scene.getBacteria();
+			particles = scene.getParticles();
 			
 			for(j=0; j<traces.size(); j++){
 				
 				trace = (Vector)traces.elementAt(j);
 				
 				double[] point = new double[2];
-				point[0] = ((BSimBacterium)bacteria.elementAt(j)).getCentrePos()[0];
-				point[1] = ((BSimBacterium)bacteria.elementAt(j)).getCentrePos()[1];
+				point[0] = ((BSimParticle)particles.elementAt(j)).getCentrePos()[0];
+				point[1] = ((BSimParticle)particles.elementAt(j)).getCentrePos()[1];
 				trace.add(0,(double[])point);
 			}
 		}
@@ -84,7 +85,7 @@ public class BSimBacteriaTrace implements BSimVisualAid {
 	
 	
 	/**
-	 * Draw the vector containing the trace of the bacterium position
+	 * Draw the vector containing the trace of the particles position
 	 */
 	public void redraw(Graphics g) {
 		int n, j, i;

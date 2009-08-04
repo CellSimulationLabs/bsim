@@ -17,10 +17,10 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.object.BSimObject;
-import bsim.object.bacteria.BSimBacterium;
-import bsim.object.boundary.BSimBoundary;
-import bsim.object.particle.BSimParticle;
+import bsim.scene.BSimObject;
+import bsim.scene.bacteria.BSimBacterium;
+import bsim.scene.boundary.BSimBoundary;
+import bsim.scene.particle.BSimParticle;
 
 
 public class BSimCollisionPhysics extends BSimPhysics{

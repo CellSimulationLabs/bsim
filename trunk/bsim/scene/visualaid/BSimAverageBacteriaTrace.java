@@ -9,14 +9,14 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.object.visualaid;
+package bsim.scene.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
 import bsim.BSimScene;
-import bsim.object.bacteria.BSimBacterium;
+import bsim.scene.bacteria.BSimBacterium;
 
 
 public class BSimAverageBacteriaTrace implements BSimVisualAid {

@@ -11,7 +11,7 @@
  * Created: 12/07/2008
  * Updated: 14/08/2008
  */
-package bsim.object.bacteria;
+package bsim.scene.bacteria;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -24,8 +24,8 @@ import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.logic.BSimLogic;
-import bsim.object.BSimObject;
-import bsim.object.field.BSimChemicalField;
+import bsim.scene.BSimObject;
+import bsim.scene.field.BSimChemicalField;
 
 
 public class BSimBacterium extends BSimObject implements BSimLogic {

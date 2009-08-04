@@ -7,7 +7,7 @@
  * Created: 25/08/2008
  * Updated: 25/08/2008
  */
-package bsim.object.particle;
+package bsim.scene.particle;
 
 import java.util.Vector;
 

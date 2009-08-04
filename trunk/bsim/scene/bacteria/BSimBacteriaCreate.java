@@ -7,14 +7,14 @@
  * Created: 20/07/2008
  * Updated: 25/08/2008
  */
-package bsim.object.bacteria;
+package bsim.scene.bacteria;
 
 import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
-import bsim.object.BSimObject;
+import bsim.scene.BSimObject;
 
 
 public class BSimBacteriaCreate {

@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.object.BSimObject;
+import bsim.scene.BSimObject;
 
 
 public class BSimBacteriaFileExport extends BSimFileExport {

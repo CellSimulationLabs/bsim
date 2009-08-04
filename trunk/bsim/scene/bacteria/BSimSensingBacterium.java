@@ -8,7 +8,7 @@
  * Created: 28/08/2008
  * Updated: 28/08/2008
  */
-package bsim.object.bacteria;
+package bsim.scene.bacteria;
 
 import java.awt.Color;
 import java.awt.Graphics;

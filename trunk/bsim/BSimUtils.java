@@ -9,7 +9,7 @@
 */
 package bsim;
 
-import bsim.object.BSimObject;
+import bsim.scene.BSimObject;
 
 
 public class BSimUtils {
