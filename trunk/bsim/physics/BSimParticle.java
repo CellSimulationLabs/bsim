@@ -3,8 +3,7 @@
  *
  * Abstract class which defines the basic properties of an object in our simulation. 
  * It cannot be used directly and should instead be extended to include additional
- * properties of a real object and imeplement a redraw method to display the item
- * as required.
+ * properties of a real object.
  *
  * Authors: Thomas Gorochowski
  *          Ian Miles
