@@ -13,10 +13,10 @@ package bsim.scene.bead;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
-public class BSimBead extends BSimObject {
+public class BSimBead extends BSimParticle {
 	
 	
 	/**
@@ -26,7 +26,7 @@ public class BSimBead extends BSimObject {
 			double[] newDirection, double[] newPosition) {
 				
 		// Call the parent constructor
-		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimObject.OBTYPE_BEAD);
+		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimParticle.PART_BEAD);
 	}
 	
 	

@@ -14,7 +14,7 @@ import java.util.Vector;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
 public class BSimBacteriaCreate {
@@ -73,7 +73,7 @@ public class BSimBacteriaCreate {
 			BSimBacterium thisBacterium = new BSimBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params);
 			
 			for(int j=0; j<beadVec.size(); j++) {
-				if(BSimUtils.objectsIntersecting((BSimObject)beadVec.elementAt(j), (BSimObject)thisBacterium)) {
+				if(BSimUtils.particlesIntersecting((BSimParticle)beadVec.elementAt(j), (BSimParticle)thisBacterium)) {
 					i = i-1;
 					invalidPlacement = true;
 				}

@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
 public class BSimBacteriaFileExport extends BSimFileExport {
@@ -75,7 +75,7 @@ public class BSimBacteriaFileExport extends BSimFileExport {
 			for(int i=0; i<bacteria.size(); i++){
 
 				// Get the position of the bacteria
-				bacteriaPos = ((BSimObject)bacteria.elementAt(i)).getPosition();
+				bacteriaPos = ((BSimParticle)bacteria.elementAt(i)).getPosition();
 
 				xAv += bacteriaPos[0];
 				yAv += bacteriaPos[1];

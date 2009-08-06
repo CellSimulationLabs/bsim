@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
 public class BSimBeadFileExport extends BSimFileExport {
@@ -80,7 +80,7 @@ public class BSimBeadFileExport extends BSimFileExport {
 			for(int i=0; i<beads.size(); i++){
 				
 				// Get the position of the bead and add to the output file
-				beadPos = ((BSimObject)beads.elementAt(i)).getPosition();
+				beadPos = ((BSimParticle)beads.elementAt(i)).getPosition();
 				outStr += ", " + beadPos[0];
 				outStr += ", " + beadPos[1];
 				

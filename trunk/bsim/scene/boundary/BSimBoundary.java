@@ -13,7 +13,7 @@ package bsim.scene.boundary;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
 public class BSimBoundary {
@@ -110,7 +110,7 @@ public class BSimBoundary {
 	/**
 	 * Find the reaction force for the boundary.
 	 */
-	public synchronized double distToBoundary(BSimObject x) {
+	public synchronized double distToBoundary(BSimParticle x) {
 
 		// Return the distance of the object to the bounday (we use edge of object not centre)
 		return calcDistFromBoundary(x.getCentrePos()) - (x.getSize() / 2);

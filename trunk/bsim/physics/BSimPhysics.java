@@ -41,7 +41,7 @@ public abstract class BSimPhysics{
 	 
 	/**
 	 * Abstract method that models the physics for the simulation. It should update
-	 * all positions and properties of every object in the simulation.
+	 * all positions and properties of every particle in the simulation.
 	 */
 	public abstract void updateProperties();
 	

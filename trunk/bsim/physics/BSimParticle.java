@@ -1,5 +1,5 @@
 /**
- * BSimObject.java
+ * BSimParticle.java
  *
  * Abstract class which defines the basic properties of an object in our simulation. 
  * It cannot be used directly and should instead be extended to include additional
@@ -11,17 +11,17 @@
  * Created: 12/07/2008
  * Updated: 20/07/2008
  */
-package bsim.scene;
+package bsim.physics;
 
 import java.awt.Graphics;
 
 
-public abstract class BSimObject {
+public abstract class BSimParticle {
 	
-	public static int OBTYPE_OBJECT = 0;
-	public static int OBTYPE_BACT = 1;
-	public static int OBTYPE_BEAD = 2;
-	protected int obType = OBTYPE_OBJECT;
+	public static int PART_PART = 0;
+	public static int PART_BACT = 1;
+	public static int PART_BEAD = 2;
+	protected int partType = PART_PART;
 	
 	// General properties of all objects in a simulation
 	protected double size  = 0, // microns
@@ -34,7 +34,7 @@ public abstract class BSimObject {
 	/**
 	 * General constructor.
 	 */
-	public BSimObject(double newSpeed, double newMass, double newSize, 
+	public BSimParticle(double newSpeed, double newMass, double newSize, 
 			double[] newDirection, double[] newPosition, int newType) {
 		super();
 		speed        = newSpeed;
@@ -46,7 +46,7 @@ public abstract class BSimObject {
 		position[1]  = newPosition[1];
 		centrePos[0] = newPosition[0] + newSize/2.0;
 		centrePos[1] = newPosition[1] + newSize/2.0;
-		obType = newType;
+		partType = newType;
 	}
 	
 	
@@ -63,7 +63,7 @@ public abstract class BSimObject {
 	public void setRadius(double r) {size = 2.0*r;}
 	public void setMass(double m) {mass = m;}
 	public void setSpeed(double s) {speed = s;}
-	public void setType(int t) {obType = t;}
+	public void setType(int t) {partType = t;}
 	public void setPosition(double[] p) {
 		position[0] = p[0]; 
 		position[1] = p[1];
@@ -90,7 +90,7 @@ public abstract class BSimObject {
 	public double getRadius() {return size/2.0;}
 	public double getMass () { return mass; }
 	public double getSpeed () { return speed; }
-	public int getType() {return obType;}
+	public int getType() {return partType;}
 	public double[] getPosition () { return position; }
 	public double[] getCentrePos () { return centrePos; }
 	public double[] getDirection () { return direction; }

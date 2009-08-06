@@ -23,7 +23,7 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.util.Vector;
 
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 import bsim.scene.bacteria.BSimBacterium;
 import bsim.scene.bead.BSimBead;
 
@@ -83,7 +83,7 @@ public class BSimWrapBoundary extends BSimBoundary {
 			
 			// Check for collision with boundary; displace object if necessary 
 			if (isColliding(bact)) {
-				displace((BSimObject)bact);
+				displace((BSimParticle)bact);
 				// Reset their memory
 				bact.setMemToReset(true);
 			}
@@ -95,7 +95,7 @@ public class BSimWrapBoundary extends BSimBoundary {
 			bead  = (BSimBead)beads.elementAt(i);
 			
 			// Check for collision with boundary; displace object if necessary 
-			if (isColliding(bead)) displace((BSimObject)bead);
+			if (isColliding(bead)) displace((BSimParticle)bead);
 		}
 	}
 	
@@ -104,7 +104,7 @@ public class BSimWrapBoundary extends BSimBoundary {
 	 * the minimum distance to the boundary, which is either the perpendicular distance or the distance to the 
 	 * nearest end 
 	 */
-	public boolean isColliding(BSimObject x) {
+	public boolean isColliding(BSimParticle x) {
 		double[] point = x.getCentrePos();
 		double radius = x.getSize()/2;
 		double dist;
@@ -179,7 +179,7 @@ public class BSimWrapBoundary extends BSimBoundary {
 	/**
 	 * Move an object according to the wrapOffset vector
 	 */
-	public void displace(BSimObject x) {
+	public void displace(BSimParticle x) {
 		double[] offset = new double[2];
 		double[] newCentrePos = new double[2];
 		

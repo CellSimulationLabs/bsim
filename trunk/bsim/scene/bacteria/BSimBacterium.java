@@ -24,11 +24,11 @@ import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.logic.BSimLogic;
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 import bsim.scene.field.BSimChemicalField;
 
 
-public class BSimBacterium extends BSimObject implements BSimLogic {
+public class BSimBacterium extends BSimParticle implements BSimLogic {
 
 	// Propulsive force that the bacterium can produce; this is a function of
 	// size, as well as viscosity and speed (which are fixed)
@@ -85,7 +85,7 @@ public class BSimBacterium extends BSimObject implements BSimLogic {
 		    BSimParameters newParams) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimObject.OBTYPE_BACT);
+		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimParticle.PART_BACT);
 
 		// Update extended properties
 		forceMagnitudeDown = newForceMagnitudeDown;

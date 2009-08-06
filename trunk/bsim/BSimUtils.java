@@ -9,7 +9,7 @@
 */
 package bsim;
 
-import bsim.scene.BSimObject;
+import bsim.physics.BSimParticle;
 
 
 public class BSimUtils {
@@ -77,7 +77,7 @@ public class BSimUtils {
 	}
 	
 	
-	public static synchronized boolean objectsIntersecting(BSimObject a, BSimObject b) {
+	public static synchronized boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
 		double centreDist = get2Ddist(a.getCentrePos(),b.getCentrePos());
 		double aRad = a.getRadius(), bRad = b.getRadius();
 		
