@@ -122,7 +122,7 @@ public class BSimBacterium extends BSimObject implements BSimLogic {
 	 * at a timestep is returned.
 	 */
 	public double[] runLogic ( boolean contactBac, 
-	                           boolean contactPart,
+	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
 		if(memToReset){

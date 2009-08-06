@@ -3,7 +3,7 @@
  *
  * Class that represents the scene of a simulation. It extends a JPanel which allows
  * for it to be easily embedded into any swing based GUI. Additionally, this class 
- * maintains the vectors of all bacteria and particles, as well as the physcis engine 
+ * maintains the vectors of all bacteria and beads, as well as the physcis engine 
  * used to update the position and properties of all objects in the simulation. The class
  * is threaded to ensure that the main GUI event thread continues to function and
  * control of animaton is via a semaphre implemented as a notifiable object to ensure that
@@ -33,10 +33,10 @@ import javax.swing.JPanel;
 import bsim.physics.BSimCollisionPhysics;
 import bsim.physics.BSimPhysics;
 import bsim.scene.bacteria.BSimBacterium;
+import bsim.scene.bead.BSimBead;
 import bsim.scene.boundary.BSimBoundary;
 import bsim.scene.boundary.BSimWrapBoundary;
 import bsim.scene.field.BSimChemicalField;
-import bsim.scene.particle.BSimParticle;
 import bsim.scene.visualaid.BSimVisualAid;
 
 
@@ -75,9 +75,9 @@ public class BSimScene extends JPanel implements Runnable,
 	private int orgSimWidth = 0;
 	private int orgSimHeight = 0;
 	
-	// Vectors holding all bacteria and particles in the simulation
+	// Vectors holding all bacteria and beads in the simulation
 	private Vector bacteria;
-	private Vector particles;
+	private Vector beads;
 	private Vector solidBoundaries;
 	private Vector wrapBoundaries;
 	private Vector visualAids;
@@ -146,7 +146,7 @@ public class BSimScene extends JPanel implements Runnable,
 		// Create the default physics engine for the simulation
 		physics = new BSimCollisionPhysics(this, params);
 		
-		// Create initial bacteria and particles
+		// Create initial bacteria and beads
 		resetScene(1);
 		
 		// Create new thread to run the simulation in an associate with this object
@@ -179,13 +179,13 @@ public class BSimScene extends JPanel implements Runnable,
 		// Create the default physics engine for the simulation
 		physics = new BSimCollisionPhysics(this, params);
 		
-		// Create initial bacteria and particles
+		// Create initial bacteria and beads
 		resetScene(1);
 	}
 	
 	
 	/**
-	 * Reset the scene creating bactera and particles.
+	 * Reset the scene creating bactera and beads.
 	 */
 	private void resetScene(int firstTime) {
 		
@@ -219,8 +219,8 @@ public class BSimScene extends JPanel implements Runnable,
 			app.updateTime(getFormatedTime());
 		}
 		
-		// Create the bacteria and particle sets
-		particles = params.createNewParticleVec();
+		// Create the bacteria and bead sets
+		beads = params.createNewBeadVec();
 		bacteria = params.createNewBacteriaVec(this);
 		
 		// Create both wrapping and solid boundaries
@@ -298,12 +298,12 @@ public class BSimScene extends JPanel implements Runnable,
 	private void runAllUpdates(){
 		int i;
 		
-		// Update the properties for bacteria and particles
+		// Update the properties for bacteria and beads
 		physics.updateProperties();
 		
 		// Perform necessary boundary operations
 		for (i = 0; i < wrapBoundaries.size(); i++) {
-			((BSimWrapBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, particles);
+			((BSimWrapBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
 		}
 		
 		// Update the fields
@@ -459,12 +459,12 @@ public class BSimScene extends JPanel implements Runnable,
 		fRecruitment.redraw(g);
 		fCoordination.redraw(g);
 		
-		// Get each particle and particle to draw itself
-		for(i=0; i < particles.size(); i++) {
-			((BSimParticle)(particles.elementAt(i))).redraw(g);
+		// Get each bead and bead to draw itself
+		for(i=0; i < beads.size(); i++) {
+			((BSimBead)(beads.elementAt(i))).redraw(g);
 		}
 		
-		// Get each bacteria and particle to draw itself
+		// Get each bacteria and bead to draw itself
 		for(i=0; i < bacteria.size(); i++) {
 			((BSimBacterium)(bacteria.elementAt(i))).redraw(g);
 		}
@@ -651,7 +651,7 @@ public class BSimScene extends JPanel implements Runnable,
 	 * Standard get methods for the class.
 	 */
 	public Vector getBacteria (){ return bacteria; }
-	public Vector getParticles (){ return particles; }
+	public Vector getBeads (){ return beads; }
 	public Vector getSolidBoundaries (){ return solidBoundaries; }
 	public Vector getWrapBoundaries (){ return wrapBoundaries; }
 	public Vector getVisualAids (){ return visualAids; }

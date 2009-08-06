@@ -19,7 +19,7 @@ import java.util.Vector;
 
 import bsim.export.BSimBacteriaFileExport;
 import bsim.export.BSimExport;
-import bsim.export.BSimParticleFileExport;
+import bsim.export.BSimBeadFileExport;
 import bsim.export.QuickTimeOutputStream;
 
 
@@ -121,13 +121,13 @@ public class BSimBatch{
 				"_Bacteria-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
 			
 			File filePart = new File(pathToExport + "/" + timestampStr + 
-				"_Particle-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
+				"_Bead-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
 			
 			String filenameMovie = pathToExport + "/" + timestampStr + 
 				"_Video-Export_"  + BSimUtils.padInt4(i+1) + ".mov";
 				
 			exportPlugins.add(new BSimBacteriaFileExport(fileBac, txtFrameSkip));
-			exportPlugins.add(new BSimParticleFileExport(filePart, txtFrameSkip));
+			exportPlugins.add(new BSimBeadFileExport(filePart, txtFrameSkip));
 			
 			// If a simulation has been run reset first
 			if(i != 0){

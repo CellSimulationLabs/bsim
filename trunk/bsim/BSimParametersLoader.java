@@ -65,9 +65,9 @@ public class BSimParametersLoader {
 		
 		// singles arguments: [xpos ypos]
 		// set arguements: [NWxpos NWypos width length n] (assume constant radius, speed, etc)
-		else if(line[0].equals("PARTICLE_RADIUS:")) p.setPartRadius(args[0]);
-		else if(line[0].equals("CREATE_PARTICLE_SINGLE:")) p.addSingleParticle(args);
-		else if(line[0].equals("CREATE_PARTICLE_SET:"))	p.addParticleSet(args);
+		else if(line[0].equals("BEAD_RADIUS:")) p.setBeadRadius(args[0]);
+		else if(line[0].equals("CREATE_BEAD_SINGLE:")) p.addSingleBead(args);
+		else if(line[0].equals("CREATE_BEAD_SET:"))	p.addBeadSet(args);
 
 		else if(line[0].equals("BACTERIA_RADIUS:")) p.setBactRadius(args[0]);
 		else if(line[0].equals("CREATE_BACTERIUM_SINGLE:")) p.addSingleBacterium(args);
@@ -88,12 +88,12 @@ public class BSimParametersLoader {
 		
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BACT:")) p.setWellWidthBactBact((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BACT:")) p.setWellDepthBactBact((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_PART:")) p.setWellWidthBactPart((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_PART:")) p.setWellDepthBactPart((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_PART_PART:")) p.setWellWidthPartPart((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_PART_PART:")) p.setWellDepthPartPart((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_PART_BDRY:")) p.setWellWidthPartBdry((double)args[0]);
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_PART_BDRY:")) p.setWellDepthPartBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) p.setWellWidthBactBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) p.setWellDepthBactBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BEAD:")) p.setWellWidthBeadBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BEAD:")) p.setWellDepthBeadBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BDRY:")) p.setWellWidthBeadBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BDRY:")) p.setWellDepthBeadBdry((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BDRY:")) p.setWellWidthBactBdry((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BDRY:")) p.setWellDepthBactBdry((double)args[0]);
 		else if(line[0].equals("PHYSICS_REACT_FORCE:")) p.setReactForce((double)args[0]);
@@ -110,7 +110,7 @@ public class BSimParametersLoader {
 		
 		else if(line[0].equals("VISUAL_AID_BACTERIA_TRACE:")) p.addBacteriaTrace(args);
 		else if(line[0].equals("VISUAL_AID_AVG_BACTERIA_TRACE:")) p.addAvgBacteriaTrace(args);
-		else if(line[0].equals("VISUAL_AID_PARTICLE_TRACE:")) p.addParticleTrace(args);
+		else if(line[0].equals("VISUAL_AID_BEAD_TRACE:")) p.addBeadTrace(args);
 		else if(line[0].equals("VISUAL_AID_CLOCK:")) p.addClock(args);
 		else if(line[0].equals("VISUAL_AID_SCALE:")) p.addScale(args);
 		

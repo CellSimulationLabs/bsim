@@ -20,12 +20,12 @@ import bsim.scene.bacteria.BSimBacterium;
 public class BSimBacteriaTrace implements BSimVisualAid {
 	
 	
-	// Variables for tracing the movement of particles
+	// Variables for tracing the movement of beads
 	private Vector traces;
 	private Color traceStartCol = Color.BLUE;
 	private Color traceEndCol = Color.WHITE;
 	
-	private Vector particles;
+	private Vector beads;
 	
 	// Number of frames to skip for each line section
 	private int frameSkip = 1;

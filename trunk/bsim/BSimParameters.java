@@ -14,17 +14,17 @@ import java.awt.Color;
 import java.util.Vector;
 
 import bsim.scene.bacteria.BSimBacteriaCreate;
+import bsim.scene.bead.BSimBeadsCreate;
 import bsim.scene.boundary.BSimBoundaryCreate;
 import bsim.scene.field.BSimChemicalField;
 import bsim.scene.field.BSimChemicalFieldCreate;
-import bsim.scene.particle.BSimParticlesCreate;
 import bsim.scene.visualaid.BSimVisualAidCreate;
 
 
 public class BSimParameters {
 
 
-	public double   partSize         = 10.0;	// microns (diameter)
+	public double   beadSize         = 10.0;	// microns (diameter)
 
 	public double   bactSize         = 1.4;	// microns (diameter)
 	public double   bactForceUp      = 0.4387; // micro newtons
@@ -43,13 +43,13 @@ public class BSimParameters {
 	
 	public Vector   bacteriaSingles, 
 	                bacteriaSets, 
-	                particleSingles, 
-	                particleSets, 
+	                beadSingles, 
+	                beadSets, 
 	                solidBoundaries,
 	                wrapBoundaries,
 	                vaBacteriaTraces,
 	                vaAvgBacteriaTraces,
-	                vaParticleTraces,
+	                vaBeadTraces,
 	                vaClocks,
 					vaScales;
 
@@ -73,12 +73,12 @@ public class BSimParameters {
 	
 	public double   wellWidthBactBact = 0.0;
 	public double   wellDepthBactBact = 0.0;
-	public double   wellWidthBactPart = 0.0;
-	public double   wellDepthBactPart = 0.0;
-	public double   wellWidthPartPart = 0.0;
-	public double   wellDepthPartPart = 0.0;
-	public double   wellWidthPartBdry = 0.0;
-	public double   wellDepthPartBdry = 0.0;
+	public double   wellWidthBactBead = 0.0;
+	public double   wellDepthBactBead = 0.0;
+	public double   wellWidthBeadBead = 0.0;
+	public double   wellDepthBeadBead = 0.0;
+	public double   wellWidthBeadBdry = 0.0;
+	public double   wellDepthBeadBdry = 0.0;
 	public double   wellWidthBactBdry = 0.0;
 	public double   wellDepthBactBdry = 0.0;
 	
@@ -90,13 +90,13 @@ public class BSimParameters {
 		// Create the vectors for the objects that will need to be created by the scene
 		bacteriaSingles = new Vector();
 		bacteriaSets = new Vector();
-		particleSingles = new Vector();
-		particleSets = new Vector();
+		beadSingles = new Vector();
+		beadSets = new Vector();
 		solidBoundaries = new Vector();
         wrapBoundaries = new Vector();
         vaBacteriaTraces = new Vector();
         vaAvgBacteriaTraces = new Vector();
-        vaParticleTraces = new Vector();
+        vaBeadTraces = new Vector();
         vaClocks = new Vector();
 		vaScales = new Vector();
 		
@@ -111,8 +111,8 @@ public class BSimParameters {
 	public double 	getDtSecs() {return dt;}
 	public double 	getBactSize() {return bactSize;}
 	public double	getBactRadius() {return bactSize/2.0;}
-	public double 	getPartSize() {return partSize;}
-	public double 	getPartRadius() {return partSize/2.0;}
+	public double 	getBeadSize() {return beadSize;}
+	public double 	getBeadRadius() {return beadSize/2.0;}
 	public double 	getBactForceUp() {return bactForceUp;}
 	public double 	getBactForceDown() {return bactForceDown;}
 	public double 	getBactSpeed() {return bactSpeed;}
@@ -123,15 +123,15 @@ public class BSimParameters {
 	public double 	getDownRunLength() {return runLengthDown;}
 	public double 	getIsoRunLength() {return runLengthIso;}
 	public Vector 	getSingleBacteria() { return bacteriaSingles; }
-	public Vector 	getSingleParticle() { return particleSingles; }
+	public Vector 	getSingleBead() { return beadSingles; }
 	public Vector 	getBacteriaSet() { return bacteriaSets; }
-	public Vector 	getParticleSet() { return particleSets; }
+	public Vector 	getBeadSet() { return beadSets; }
 	public Vector   getSolidBoundaries() { return solidBoundaries; }
 	public Vector   getWrapBoundaries() { return wrapBoundaries; }
 	
 	public Vector   getBacteriaTraces() { return vaBacteriaTraces; }
 	public Vector   getAvgBacteriaTraces() { return vaAvgBacteriaTraces; }
-	public Vector   getParticleTraces() { return vaParticleTraces; }
+	public Vector   getBeadTraces() { return vaBeadTraces; }
 	public Vector   getClocks() { return vaClocks; }
 	public Vector	getScales() { return vaScales; }
 	
@@ -146,15 +146,15 @@ public class BSimParameters {
 	public int		getNumOfThreads() {return numOfThreads;}
 	
 	public double   getWellWidthBactBact () { return wellWidthBactBact; }
-	public double   getWellWidthBactPart () { return wellWidthBactPart; }
-	public double   getWellWidthPartPart () { return wellWidthPartPart; }
-	public double   getWellWidthPartBdry () { return wellWidthPartBdry; }
+	public double   getWellWidthBactBead () { return wellWidthBactBead; }
+	public double   getWellWidthBeadBead () { return wellWidthBeadBead; }
+	public double   getWellWidthBeadBdry () { return wellWidthBeadBdry; }
 	public double   getWellWidthBactBdry () { return wellWidthBactBdry; }
 	
 	public double   getWellDepthBactBact () { return wellDepthBactBact; }
-	public double   getWellDepthBactPart () { return wellDepthBactPart; }
-	public double   getWellDepthPartPart () { return wellDepthPartPart; }
-	public double   getWellDepthPartBdry () { return wellDepthPartBdry; }
+	public double   getWellDepthBactBead () { return wellDepthBactBead; }
+	public double   getWellDepthBeadBead () { return wellDepthBeadBead; }
+	public double   getWellDepthBeadBdry () { return wellDepthBeadBdry; }
 	public double   getWellDepthBactBdry () { return wellDepthBactBdry; }
 	
 	public double	getReactForce () { return reactForce; }
@@ -173,8 +173,8 @@ public class BSimParameters {
 	public void 	setDtSecs(double newDt) {dt = newDt;}
 	public void 	setBactSize(double s) {bactSize = s;}
 	public void		setBactRadius(double r) {bactSize = 2.0*r;}
-	public void 	setPartSize(double s) {partSize = s;}
-	public void 	setPartRadius(double r) {partSize = 2.0*r;}
+	public void 	setBeadSize(double s) {beadSize = s;}
+	public void 	setBeadRadius(double r) {beadSize = 2.0*r;}
 	public void 	setBactForceUp(double f) {bactForceUp = f;}
 	public void 	setBactForceDown(double f) {bactForceDown = f;}
 	public void 	setBactSpeed(double s) {bactSpeed = s;}
@@ -186,16 +186,16 @@ public class BSimParameters {
 	public void 	setIsoRunLength(double l) {runLengthIso = l;}
 
 	public void 	addSingleBacterium(double[] b) { bacteriaSingles.add(b); }
-	public void 	addSingleParticle(double[] p) { particleSingles.add(p); }
+	public void 	addSingleBead(double[] p) { beadSingles.add(p); }
 	public void 	addBacteriaSet(double[] b) { bacteriaSets.add(b); }
-	public void 	addParticleSet(double[] p) { particleSets.add(p); }
+	public void 	addBeadSet(double[] p) { beadSets.add(p); }
 	
 	public void 	addSolidBoundary(double[] p) { solidBoundaries.add(p); }
 	public void 	addWrapBoundary(double[] p) { wrapBoundaries.add(p); }
 	
 	public void 	addBacteriaTrace(double[] p) { vaBacteriaTraces.add(p); }
 	public void 	addAvgBacteriaTrace(double[] p) { vaAvgBacteriaTraces.add(p); }
-	public void 	addParticleTrace(double[] p) { vaParticleTraces.add(p); }
+	public void 	addBeadTrace(double[] p) { vaBeadTraces.add(p); }
 	public void 	addClock(double[] p) { vaClocks.add(p); }
 	public void		addScale(double[] p) { vaScales.add(p); }
 	
@@ -210,15 +210,15 @@ public class BSimParameters {
 	public void 	setNumOfThreads(int x) { numOfThreads = x;}
 	
 	public void     setWellWidthBactBact ( double x) { wellWidthBactBact = x; }
-	public void     setWellWidthBactPart ( double x) { wellWidthBactPart = x; }
-	public void     setWellWidthPartPart ( double x) { wellWidthPartPart = x; }
-	public void     setWellWidthPartBdry ( double x) { wellWidthPartBdry = x; }
+	public void     setWellWidthBactBead ( double x) { wellWidthBactBead = x; }
+	public void     setWellWidthBeadBead ( double x) { wellWidthBeadBead = x; }
+	public void     setWellWidthBeadBdry ( double x) { wellWidthBeadBdry = x; }
 	public void     setWellWidthBactBdry ( double x) { wellWidthBactBdry = x; }
 	
 	public void     setWellDepthBactBact ( double x) { wellDepthBactBact = x; }
-	public void     setWellDepthBactPart ( double x) { wellDepthBactPart = x; }
-	public void     setWellDepthPartPart ( double x) { wellDepthPartPart = x; }
-	public void     setWellDepthPartBdry ( double x) { wellDepthPartBdry = x; }
+	public void     setWellDepthBactBead ( double x) { wellDepthBactBead = x; }
+	public void     setWellDepthBeadBead ( double x) { wellDepthBeadBead = x; }
+	public void     setWellDepthBeadBdry ( double x) { wellDepthBeadBdry = x; }
 	public void     setWellDepthBactBdry ( double x) { wellDepthBactBdry = x; }
 	
 	public void 	setReactForce ( double x) { reactForce = x; }
@@ -241,12 +241,12 @@ public class BSimParameters {
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
 		
-		// Create a new single particle for every item in the list
+		// Create a new single bead for every item in the list
 		for(i=0; i<bacteriaSingles.size(); i++){
 			newVec.add(BSimBacteriaCreate.createBacterium((double[])bacteriaSingles.elementAt(i), scene, this));
 		}
 		
-		// Create a new particle set for every item in the list
+		// Create a new bead set for every item in the list
 		for(i=0; i<bacteriaSets.size(); i++){
 			newVec.addAll(BSimBacteriaCreate.createBacteriaSet((double[])bacteriaSets.elementAt(i), scene, this));
 		}
@@ -255,20 +255,20 @@ public class BSimParameters {
 		return newVec;
 	}
 	
-	public Vector createNewParticleVec() {
+	public Vector createNewBeadVec() {
 		int i;
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
 		
-		// Create a new single particle for every item in the list
-		for(i=0; i<particleSingles.size(); i++){
-			newVec.add(BSimParticlesCreate.createParticle((double[])particleSingles.elementAt(i), this));
+		// Create a new single bead for every item in the list
+		for(i=0; i<beadSingles.size(); i++){
+			newVec.add(BSimBeadsCreate.createBead((double[])beadSingles.elementAt(i), this));
 		}
 		
-		// Create a new particle set for every item in the list
-		for(i=0; i<particleSets.size(); i++){
-			newVec.addAll(BSimParticlesCreate.createParticleSet((double[])particleSets.elementAt(i), this));
+		// Create a new bead set for every item in the list
+		for(i=0; i<beadSets.size(); i++){
+			newVec.addAll(BSimBeadsCreate.createBeadSet((double[])beadSets.elementAt(i), this));
 		}
 		
 		// Return the new vector
@@ -316,8 +316,8 @@ public class BSimParameters {
 		for(i=0; i<vaAvgBacteriaTraces.size(); i++){
 			newVec.add(BSimVisualAidCreate.createAvgBacteriaTrace(scene, (double[])vaAvgBacteriaTraces.elementAt(i)));
 		}
-		for(i=0; i<vaParticleTraces.size(); i++){
-			newVec.add(BSimVisualAidCreate.createParticleTrace(scene, (double[])vaParticleTraces.elementAt(i)));
+		for(i=0; i<vaBeadTraces.size(); i++){
+			newVec.add(BSimVisualAidCreate.createBeadTrace(scene, (double[])vaBeadTraces.elementAt(i)));
 		}
 		for(i=0; i<vaClocks.size(); i++){
 			newVec.add(BSimVisualAidCreate.createSceneClock(scene));

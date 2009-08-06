@@ -14,7 +14,7 @@ package bsim.logic;
 public interface BSimLogic {
 
 	public abstract double[] runLogic ( boolean contactBac, 
-	                                    boolean contactPart,
+	                                    boolean contactBead,
 	                                    boolean contactBoundary);
 
 }

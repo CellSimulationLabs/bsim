@@ -2,10 +2,10 @@
  * BSimRecruitBacterium.java
  *
  * Class that represents a bacterium that by default will move randomly, until contact 
- * with a particle is made at which time it will follow the goal chemoattractant. A 
+ * with a bead is made at which time it will follow the goal chemoattractant. A 
  * co-ordination signal will also be released that will cause any bacteria in a high 
  * enough concentration to also follow the chemoattractant. Also, a recruitment signal is
- * produced on contact with a particle that all bacteria will follow by default.
+ * produced on contact with a bead that all bacteria will follow by default.
  *
  * Authors: Thomas Gorochowski
  * Created: 01/09/2008
@@ -47,13 +47,13 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 	 * at a timestep is returned.
 	 */
 	public double[] runLogic ( boolean contactBac, 
-	                           boolean contactPart,
+	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
 		int newChemo = 0;
 		
 		// Need to check if a switch to chemo has been made.
-		if(partContactTimer > 0 || 
+		if(beadContactTimer > 0 || 
 		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold) {
 			newChemo = BAC_CHEMO_GOAL;
 		}
@@ -69,18 +69,18 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 		// Update the gradient to use
 		chemo = newChemo;
 		
-		if(partContactTimer > 0){
+		if(beadContactTimer > 0){
 				// Generate some recruitment chemical at current location
 				scene.getRecruitmentField().addChemical (1.0, this.getCentrePos());
 		}
 		
-		return  super.runLogic(contactBac, contactPart, contactBoundary);
+		return  super.runLogic(contactBac, contactBead, contactBoundary);
 	}
 
 	
 	/**
 	 * This is an updated version of the BSimBacterium method to only allow for the
-	 * sensed goal concentration to be used if in contact with a particle.
+	 * sensed goal concentration to be used if in contact with a bead.
 	 */
 	protected double senseRunContinueProb() {
 		double shortTermMean;
@@ -125,7 +125,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 	public void redraw(Graphics g) {
 
 		// Draw the main shape of bacterium
-		if(partContactTimer > 0){
+		if(beadContactTimer > 0){
 			g.setColor(Color.BLUE);
 		}
 		else if(scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){

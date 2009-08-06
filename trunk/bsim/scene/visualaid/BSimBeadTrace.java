@@ -1,5 +1,5 @@
 /**
- * BSimParticleTrace.java
+ * BSimBeadTrace.java
  *
  * Class 
  *
@@ -16,17 +16,17 @@ import java.awt.Graphics;
 import java.util.Vector;
 
 import bsim.BSimScene;
-import bsim.scene.particle.BSimParticle;
+import bsim.scene.bead.BSimBead;
 
 
-public class BSimParticleTrace implements BSimVisualAid {
+public class BSimBeadTrace implements BSimVisualAid {
 	
-	// Variables for tracing the movement of particles
+	// Variables for tracing the movement of beads
 	private Vector traces;
 	private Color traceStartCol = Color.BLUE;
 	private Color traceEndCol = Color.WHITE;
 	
-	private Vector particles;
+	private Vector beads;
 	
 	// Number of frames to skip for each line section
 	private int frameSkip = 1;
@@ -38,7 +38,7 @@ public class BSimParticleTrace implements BSimVisualAid {
 	/**
 	 * General constructor
 	 */
-	public BSimParticleTrace (BSimScene newScene, int newFrameSkip) {
+	public BSimBeadTrace (BSimScene newScene, int newFrameSkip) {
 		
 		// Update the internal variables
 		frameSkip = newFrameSkip;
@@ -50,9 +50,9 @@ public class BSimParticleTrace implements BSimVisualAid {
 	
 	private void createNewTraces() {
 		
-		// Create a trace vector for each particles
-		traces = new Vector(scene.getParticles().size());
-		for(int i=0; i<scene.getParticles().size(); i++){
+		// Create a trace vector for each beads
+		traces = new Vector(scene.getBeads().size());
+		for(int i=0; i<scene.getBeads().size(); i++){
 			traces.add(new Vector());
 		}
 	}
@@ -61,23 +61,23 @@ public class BSimParticleTrace implements BSimVisualAid {
 	
 	
 	/**
-	 * Update the particle trace
+	 * Update the bead trace
 	 */
 	public void updateState() {
 		int j;
-		Vector trace, particles;
+		Vector trace, beads;
 		
 		if(scene.getTimeStep() % frameSkip == 0){ 
 			
-			particles = scene.getParticles();
+			beads = scene.getBeads();
 			
 			for(j=0; j<traces.size(); j++){
 				
 				trace = (Vector)traces.elementAt(j);
 				
 				double[] point = new double[2];
-				point[0] = ((BSimParticle)particles.elementAt(j)).getCentrePos()[0];
-				point[1] = ((BSimParticle)particles.elementAt(j)).getCentrePos()[1];
+				point[0] = ((BSimBead)beads.elementAt(j)).getCentrePos()[0];
+				point[1] = ((BSimBead)beads.elementAt(j)).getCentrePos()[1];
 				trace.add(0,(double[])point);
 			}
 		}
@@ -85,7 +85,7 @@ public class BSimParticleTrace implements BSimVisualAid {
 	
 	
 	/**
-	 * Draw the vector containing the trace of the particles position
+	 * Draw the vector containing the trace of the beads position
 	 */
 	public void redraw(Graphics g) {
 		int n, j, i;

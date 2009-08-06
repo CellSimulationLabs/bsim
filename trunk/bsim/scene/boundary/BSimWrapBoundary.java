@@ -5,7 +5,7 @@
  * 
  * N.B. When creating wrapping boundaries, care must be taken to avoid offsets that place 
  * objects outside of the desired area.  It is also advisable to make the area 
- * large enough so that particles are very unlikely to reach the edges.
+ * large enough so that beads are very unlikely to reach the edges.
  *
  * Authors: Sophie Woods
  *          Charlie Harrison
@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import bsim.scene.BSimObject;
 import bsim.scene.bacteria.BSimBacterium;
-import bsim.scene.particle.BSimParticle;
+import bsim.scene.bead.BSimBead;
 
 public class BSimWrapBoundary extends BSimBoundary {
 	// The offset given to an object that intersects with a boundary of type WRAP
@@ -69,12 +69,12 @@ public class BSimWrapBoundary extends BSimBoundary {
 	/**
 	 * Method to deal with boundary collisions
 	 */
-	public void boundaryCollisions(Vector bacteria, Vector particles) {
+	public void boundaryCollisions(Vector bacteria, Vector beads) {
 		
 		int n = bacteria.size();
-		int m = particles.size();
+		int m = beads.size();
 		BSimBacterium bact;
-		BSimParticle part;
+		BSimBead bead;
 		
 		// Loop through each bacterium
 		for (int i=0; i < n; i++) {
@@ -89,13 +89,13 @@ public class BSimWrapBoundary extends BSimBoundary {
 			}
 		}
 		
-		// Loop through all particles
+		// Loop through all beads
 		for (int i=0; i < m; i++) {
-			// Get next particle
-			part  = (BSimParticle)particles.elementAt(i);
+			// Get next bead
+			bead  = (BSimBead)beads.elementAt(i);
 			
 			// Check for collision with boundary; displace object if necessary 
-			if (isColliding(part)) displace((BSimObject)part);
+			if (isColliding(bead)) displace((BSimObject)bead);
 		}
 	}
 	

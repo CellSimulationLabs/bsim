@@ -22,12 +22,12 @@ public class BSimBacteriaCreate {
 	
 	/**
 	 * Create a bacteria set with given parameters (uniform random distribution). No 
-	 * checking of overlapping particles is performed meaning initial simulation output 
+	 * checking of overlapping beads is performed meaning initial simulation output 
 	 * should be investigated if strange movement occurs.
 	 */
 	public static Vector createBacteriaSet (double[] args, BSimScene scene, BSimParameters params) {
 		
-		// Variables for each particle property
+		// Variables for each bead property
 		double newSpeed = params.getBactSpeed();
 		double newMass = 0; // Not used
 		double newSize = params.getBactSize();
@@ -38,7 +38,7 @@ public class BSimBacteriaCreate {
 		double newTumbleSpeed;
 		int newRemDt = 1;
 		Vector bactVec = new Vector();
-		Vector partVec = scene.getParticles();
+		Vector beadVec = scene.getBeads();
 		
 		if(args[6] == 0) {
 			newSize = params.getBactSize();
@@ -72,8 +72,8 @@ public class BSimBacteriaCreate {
 			
 			BSimBacterium thisBacterium = new BSimBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params);
 			
-			for(int j=0; j<partVec.size(); j++) {
-				if(BSimUtils.objectsIntersecting((BSimObject)partVec.elementAt(j), (BSimObject)thisBacterium)) {
+			for(int j=0; j<beadVec.size(); j++) {
+				if(BSimUtils.objectsIntersecting((BSimObject)beadVec.elementAt(j), (BSimObject)thisBacterium)) {
 					i = i-1;
 					invalidPlacement = true;
 				}
@@ -84,11 +84,11 @@ public class BSimBacteriaCreate {
 				switch((int)args[5]){
 					// Standard bacteria
 					case 1: bactVec.add(new BSimBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params)); break;
-					// Particle sensing bacteria
+					// Bead sensing bacteria
 					case 2: bactVec.add(new BSimSensingBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[7])); break;
-					// Particle sensing and co-ordinating bacteria
+					// Bead sensing and co-ordinating bacteria
 					case 3: bactVec.add(new BSimCoordBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[7], args[8])); break;
-					// Particle sensing, co-ordinating and recruiting bacteria
+					// Bead sensing, co-ordinating and recruiting bacteria
 					case 4: bactVec.add(new BSimRecruitBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[7], args[8])); break;
 					// Dead bacteria
 					case 5: bactVec.add(new BSimDeadBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params)); break;
@@ -144,11 +144,11 @@ public class BSimBacteriaCreate {
 		switch((int)args[3]){
 			// Standard bacteria
 			case 1: newBact = new BSimBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params); break;
-			// Particle sensing bacteria
+			// Bead sensing bacteria
 			case 2: newBact = new BSimSensingBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[4]); break;
-			// Particle sensing and co-ordinating bacteria
+			// Bead sensing and co-ordinating bacteria
 			case 3: newBact = new BSimCoordBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[4], args[5]); break;
-			// Particle sensing, co-ordinating and recruiting bacteria
+			// Bead sensing, co-ordinating and recruiting bacteria
 			case 4: newBact = new BSimRecruitBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[4], args[5]); break;
 			// Dead bacteria
 			case 5: newBact = new BSimDeadBacterium(newSpeed, newMass, newSize, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params); break;

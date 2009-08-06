@@ -19,8 +19,8 @@ import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.scene.BSimObject;
 import bsim.scene.bacteria.BSimBacterium;
+import bsim.scene.bead.BSimBead;
 import bsim.scene.boundary.BSimBoundary;
-import bsim.scene.particle.BSimParticle;
 
 
 public class BSimCollisionPhysics extends BSimPhysics{
@@ -32,14 +32,14 @@ public class BSimCollisionPhysics extends BSimPhysics{
 	protected double wellWidthBactBact;
 	protected double wellDepthBactBact;
 
-	protected double wellWidthBactPart;
-	protected double wellDepthBactPart;
+	protected double wellWidthBactBead;
+	protected double wellDepthBactBead;
 
-	protected double wellWidthPartPart;
-	protected double wellDepthPartPart; 
+	protected double wellWidthBeadBead;
+	protected double wellDepthBeadBead; 
 	
-	protected double wellWidthPartBdry;
-	protected double wellDepthPartBdry; 
+	protected double wellWidthBeadBdry;
+	protected double wellDepthBeadBdry; 
 	
 	protected double wellWidthBactBdry;
 	protected double wellDepthBactBdry; 
@@ -71,15 +71,15 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		params = p;
 		
 		wellWidthBactBact = params.getWellWidthBactBact();
-		wellWidthBactPart = params.getWellWidthBactPart();
-		wellWidthPartPart = params.getWellWidthPartPart();
-		wellWidthPartBdry = params.getWellWidthPartBdry();
+		wellWidthBactBead = params.getWellWidthBactBead();
+		wellWidthBeadBead = params.getWellWidthBeadBead();
+		wellWidthBeadBdry = params.getWellWidthBeadBdry();
 		wellWidthBactBdry = params.getWellWidthBactBdry();
 		
 		wellDepthBactBact = params.getWellDepthBactBact();
-		wellDepthBactPart = params.getWellDepthBactPart();
-		wellDepthPartPart = params.getWellDepthPartPart();
-		wellDepthPartBdry = params.getWellDepthPartBdry();
+		wellDepthBactBead = params.getWellDepthBactBead();
+		wellDepthBeadBead = params.getWellDepthBeadBead();
+		wellDepthBeadBdry = params.getWellDepthBeadBdry();
 		wellDepthBactBdry = params.getWellDepthBactBdry();
 		
 		reactForce = params.getReactForce();
@@ -96,11 +96,11 @@ public class BSimCollisionPhysics extends BSimPhysics{
 	public void updateProperties() {
 		int i, xStart, xEnd;
 		Vector bacteria = scene.getBacteria();
-		Vector particles = scene.getParticles();
+		Vector beads = scene.getBeads();
 		Vector solidBoundaries = scene.getSolidBoundaries();
 
 		int n = bacteria.size();
-		int m = particles.size();
+		int m = beads.size();
 		int b = solidBoundaries.size();
 		int tTotal = n+m;
 		
@@ -132,7 +132,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			}
 			
 			// Create and start the actual threads with the required parameters
-			workerThreads[i] = new BSimCollisionPhysicsThread(bacteria, particles, solidBoundaries, newForceMat, xStart, xEnd);
+			workerThreads[i] = new BSimCollisionPhysicsThread(bacteria, beads, solidBoundaries, newForceMat, xStart, xEnd);
 			workerThreads[i].start();
 		}
 		
@@ -151,8 +151,8 @@ public class BSimCollisionPhysics extends BSimPhysics{
 	 */
 	protected class BSimCollisionPhysicsThread extends Thread {
 		
-		// Variables to hold references to bacteria, particles and the new force matrix
-		Vector bacteria, particles, solidBoundaries;
+		// Variables to hold references to bacteria, beads and the new force matrix
+		Vector bacteria, beads, solidBoundaries;
 		double[][][] newForceMat;
 		
 		// The thread number and total number of threads
@@ -162,7 +162,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		/**
 		 * General constructor.
 		 */
-		public BSimCollisionPhysicsThread(Vector newBacteria, Vector newParticles, 
+		public BSimCollisionPhysicsThread(Vector newBacteria, Vector newBeads, 
 		                                  Vector newSolidBoundaries, 
 		                                  double[][][] newNewForceMat, 
 		                                  int newXStart, int newXEnd){
@@ -171,7 +171,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			xStart = newXStart;
 			xEnd = newXEnd;
 			bacteria = newBacteria;
-			particles = newParticles;
+			beads = newBeads;
 			solidBoundaries = newSolidBoundaries;
 			newForceMat = newNewForceMat;
 		}
@@ -183,7 +183,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		 */
 		public void run(){
 			int n = bacteria.size();
-			int m = particles.size();
+			int m = beads.size();
 			int obTotal = n + m;
 			int b = solidBoundaries.size();
 			double[] relativePos = new double[2];
@@ -191,7 +191,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			double reactionForce;
 			BSimObject objectI, objectJ;
 			BSimBacterium objectBac;
-			BSimParticle objectPart;
+			BSimBead objectBead;
 			BSimBoundary objectBdry;
 			double[] bdryDist;
 			
@@ -219,12 +219,12 @@ public class BSimCollisionPhysics extends BSimPhysics{
 						
 						// Decide from which population to get first object
 						if (i<n) objectI = (BSimObject)(bacteria.elementAt(i));
-						else objectI = (BSimObject)(particles.elementAt(i-n));
+						else objectI = (BSimObject)(beads.elementAt(i-n));
 						
 
 						// Decide from which population to get second object
 						if (j<n) objectJ = (BSimObject)(bacteria.elementAt(j));
-						else if (j<n+m) objectJ = (BSimObject)(particles.elementAt(j-n));
+						else if (j<n+m) objectJ = (BSimObject)(beads.elementAt(j-n));
 						else objectJ = null;
 						
 						// Check to see if interaction is with boundary (ObjectI->Boundary)
@@ -252,7 +252,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 							}
 						}
 						else {
-							// Bacteria or Particle Interaction
+							// Bacteria or Bead Interaction
 							
 							centreDist = distBetweenPoints(objectJ.getCentrePos(),objectI.getCentrePos());
 							edgeDist = centreDist - (objectI.getSize() + objectJ.getSize())/2;
@@ -278,7 +278,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 								collisionTypes[i][0] = true;
 							}
 						
-							// Check for particle interactions
+							// Check for bead interactions
 							if((j >= n) && 
 							   (newForceMat[j][i][0] != 0.0 || newForceMat[j][i][1] != 0.0)){
 								// Force exists between a bacteria so update flag
@@ -300,10 +300,10 @@ public class BSimCollisionPhysics extends BSimPhysics{
 					linearMotion(objectBac,internalForce, i);
 				}
 				else{
-					// The current object is a particle so call the required functions (no internal force)
+					// The current object is a bead so call the required functions (no internal force)
 					internalForce[0] = 0.0;
 					internalForce[1] = 0.0;
-					linearMotion((BSimParticle)scene.getParticles().elementAt(i-n),internalForce, i-n+n); 
+					linearMotion((BSimBead)scene.getBeads().elementAt(i-n),internalForce, i-n+n); 
 				}
 			}
 		}
@@ -317,29 +317,29 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			double wellWidth = 0.0, wellDepth = 0.0;
 			
 			// Select the right parameters according to object type
-			// Bacterium-Particle interaction
-			if (((type1 == BSimObject.OBTYPE_BACT) && (type2 == BSimObject.OBTYPE_PART)) ||
-			    ((type2 == BSimObject.OBTYPE_BACT) && (type1 == BSimObject.OBTYPE_PART))) {
-				wellWidth = wellWidthBactPart;
-				wellDepth = wellDepthBactPart;
+			// Bacterium-Bead interaction
+			if (((type1 == BSimObject.OBTYPE_BACT) && (type2 == BSimObject.OBTYPE_BEAD)) ||
+			    ((type2 == BSimObject.OBTYPE_BACT) && (type1 == BSimObject.OBTYPE_BEAD))) {
+				wellWidth = wellWidthBactBead;
+				wellDepth = wellDepthBactBead;
 			// Bacterium-Bacterium interaction
 			} else if ((type1 == BSimObject.OBTYPE_BACT) && (type2 == BSimObject.OBTYPE_BACT)) {
 				wellWidth = wellWidthBactBact;
 				wellDepth = wellDepthBactBact;
-			// Particle-Particle interaction
-			} else if ((type1 == BSimObject.OBTYPE_PART) && (type2 == BSimObject.OBTYPE_PART)) {
-				wellWidth = wellWidthPartPart;
-				wellDepth = wellDepthPartPart;
+			// Bead-Bead interaction
+			} else if ((type1 == BSimObject.OBTYPE_BEAD) && (type2 == BSimObject.OBTYPE_BEAD)) {
+				wellWidth = wellWidthBeadBead;
+				wellDepth = wellDepthBeadBead;
 			// Bacterium-Boundary interaction
 			}else if (((type1 == BSimObject.OBTYPE_BACT) && (type2 == BOUNDARY_TYPE)) ||
 				    ((type1 == BOUNDARY_TYPE) && (type2 == BSimObject.OBTYPE_BACT))) {
 					wellWidth = wellWidthBactBdry;
 					wellDepth = wellDepthBactBdry;	
-			// Particle-Boundary interaction
-			}else if (((type1 == BSimObject.OBTYPE_PART) && (type2 == BOUNDARY_TYPE)) ||
-				    ((type1 == BOUNDARY_TYPE) && (type2 == BSimObject.OBTYPE_PART))) {
-					wellWidth = wellWidthPartBdry;
-					wellDepth = wellDepthPartBdry;
+			// Bead-Boundary interaction
+			}else if (((type1 == BSimObject.OBTYPE_BEAD) && (type2 == BOUNDARY_TYPE)) ||
+				    ((type1 == BOUNDARY_TYPE) && (type2 == BSimObject.OBTYPE_BEAD))) {
+					wellWidth = wellWidthBeadBdry;
+					wellDepth = wellDepthBeadBdry;
 			} else { System.err.println("Type error in getReactionForce()"); System.exit(1);}
 			
 			// Calculate reaction force

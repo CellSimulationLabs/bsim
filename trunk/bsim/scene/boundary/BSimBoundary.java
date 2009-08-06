@@ -2,7 +2,7 @@
  * BSimBoundary.java
  *
  * Class that represents simulation boundaries. These are solid lines that act as walls
- * restricting the movement that both particles and bacteria can make.
+ * restricting the movement that both beads and bacteria can make.
  *
  * Authors: Thomas Gorochowski
  * Created: 23/08/2008

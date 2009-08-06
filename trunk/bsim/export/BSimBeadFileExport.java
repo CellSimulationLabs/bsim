@@ -1,7 +1,7 @@
 /**
- * BSimParticleFileExport.java
+ * BSimBeadFileExport.java
  *
- * Class that implements an file output of individual particle locations.
+ * Class that implements an file output of individual bead locations.
  *
  * Authors: Thomas Gorochowski
  * Created: 17/08/2008
@@ -17,7 +17,7 @@ import bsim.BSimScene;
 import bsim.scene.BSimObject;
 
 
-public class BSimParticleFileExport extends BSimFileExport {
+public class BSimBeadFileExport extends BSimFileExport {
 	
 	
 	// Number of frames to skip between measurements
@@ -27,7 +27,7 @@ public class BSimParticleFileExport extends BSimFileExport {
 	/**
 	 * General constructor that uses a given file as the bases for the object.
 	 */
-	public BSimParticleFileExport(File f, int newFrameSkip) {
+	public BSimBeadFileExport(File f, int newFrameSkip) {
 		super(f);
 		
 		// Update internal parameter
@@ -44,13 +44,13 @@ public class BSimParticleFileExport extends BSimFileExport {
 		
 		outStr = "Timestep";
 		
-		for(int i=0; i<scene.getParticles().size(); i++){
-			outStr += ", Particle_" + i + "_x";
-			outStr += ", Particle_" + i + "_y";
+		for(int i=0; i<scene.getBeads().size(); i++){
+			outStr += ", Bead_" + i + "_x";
+			outStr += ", Bead_" + i + "_y";
 		}
 		
-		outStr += ", Particle_Average_x";
-		outStr += ", Particle_Average_y";
+		outStr += ", Bead_Average_x";
+		outStr += ", Bead_Average_y";
 		
 		return outStr;
 	}
@@ -61,36 +61,36 @@ public class BSimParticleFileExport extends BSimFileExport {
 	 */
 	public String nextOutputLine(BSimScene scene, BSimParameters params){
 		String outStr;
-		Vector particles;
-		double[] particlePos;
+		Vector beads;
+		double[] beadPos;
 		double xAv = 0.0, yAv = 0.0;
 		double actTime;
 		
 		// Check to see if the frame needs to be output
 		if(scene.getTimeStep() % frameSkip == 0){
 			
-			particles = scene.getParticles();
+			beads = scene.getBeads();
 			
 			// Add the timestep
 			actTime = scene.getTimeStep() * scene.getDtSec();
 			outStr = "";
 			outStr += "" + actTime;
 			
-			// Loop through all the particles and add their details to the output
-			for(int i=0; i<particles.size(); i++){
+			// Loop through all the beads and add their details to the output
+			for(int i=0; i<beads.size(); i++){
 				
-				// Get the position of the particle and add to the output file
-				particlePos = ((BSimObject)particles.elementAt(i)).getPosition();
-				outStr += ", " + particlePos[0];
-				outStr += ", " + particlePos[1];
+				// Get the position of the bead and add to the output file
+				beadPos = ((BSimObject)beads.elementAt(i)).getPosition();
+				outStr += ", " + beadPos[0];
+				outStr += ", " + beadPos[1];
 				
-				xAv += particlePos[0];
-				yAv += particlePos[1];
+				xAv += beadPos[0];
+				yAv += beadPos[1];
 			}
 			
 			// Calaculte the average positions and output
-			xAv = xAv / particles.size();
-			yAv = yAv / particles.size();
+			xAv = xAv / beads.size();
+			yAv = yAv / beads.size();
 			outStr += ", " + xAv;
 			outStr += ", " + yAv;
 			

@@ -42,7 +42,7 @@ public class BSimDeadBacterium extends BSimBacterium implements BSimLogic {
 	 * at a timestep is returned.
 	 */
 	public double[] runLogic ( boolean contactBac, 
-	                           boolean contactPart,
+	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
 		double[] f = {0.0, 0.0};

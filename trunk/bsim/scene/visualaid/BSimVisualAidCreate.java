@@ -31,10 +31,10 @@ public class BSimVisualAidCreate {
 		return new BSimAverageBacteriaTrace(scene, (int)args[0]);
 	}
 	
-	public static BSimVisualAid createParticleTrace(BSimScene scene, double[] args ){
+	public static BSimVisualAid createBeadTrace(BSimScene scene, double[] args ){
 		
 		// Return the new object
-		return new BSimParticleTrace(scene, (int)args[0]);
+		return new BSimBeadTrace(scene, (int)args[0]);
 	}
 	
 	public static BSimVisualAid createSceneClock(BSimScene scene){

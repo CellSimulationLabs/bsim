@@ -20,7 +20,7 @@ public abstract class BSimObject {
 	
 	public static int OBTYPE_OBJECT = 0;
 	public static int OBTYPE_BACT = 1;
-	public static int OBTYPE_PART = 2;
+	public static int OBTYPE_BEAD = 2;
 	protected int obType = OBTYPE_OBJECT;
 	
 	// General properties of all objects in a simulation

@@ -36,7 +36,7 @@ public class BSimSceneClock implements BSimVisualAid {
 	
 	
 	/**
-	 * Update the particle trace
+	 * Update the bead trace
 	 */
 	public void updateState() {
 		// No internal state to update
@@ -44,7 +44,7 @@ public class BSimSceneClock implements BSimVisualAid {
 	
 	
 	/**
-	 * Draw the vector containing the trace of the particles position
+	 * Draw the vector containing the trace of the beads position
 	 */
 	public void redraw(Graphics g) {
 		Graphics2D g2d = (Graphics2D)g;

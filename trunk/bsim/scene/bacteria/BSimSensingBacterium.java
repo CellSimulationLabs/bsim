@@ -2,7 +2,7 @@
  * BSimSensingBacterium.java
  *
  * Class that represents a bacterium that by default will move randomly, until contact 
- * with a particle is made at which time it will follow the goal chemoattractant.
+ * with a bead is made at which time it will follow the goal chemoattractant.
  *
  * Authors: Thomas Gorochowski
  * Created: 28/08/2008
@@ -20,7 +20,7 @@ import bsim.logic.BSimLogic;
 
 public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 
-	protected int partContactTimer = 0;
+	protected int beadContactTimer = 0;
 	
 	protected double switchSpeed = 2.0;
 
@@ -47,24 +47,24 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 	 * at a timestep is returned.
 	 */
 	public double[] runLogic ( boolean contactBac, 
-	                           boolean contactPart,
+	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
-		if(partContactTimer > 0){
-			partContactTimer--;
+		if(beadContactTimer > 0){
+			beadContactTimer--;
 		}
 		
-		if(contactPart){
-			partContactTimer = (int)(switchSpeed / params.getDtSecs());
+		if(contactBead){
+			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
 		}
 		
-		return super.runLogic(contactBac, contactPart, contactBoundary);
+		return super.runLogic(contactBac, contactBead, contactBoundary);
 	}
 
 	
 	/**
 	 * This is an updated version of the BSimBacterium method to only allow for the
-	 * sensed goal concentration to be used if in contact with a particle.
+	 * sensed goal concentration to be used if in contact with a bead.
 	 */
 	protected double senseRunContinueProb() {
 		double shortTermMean;
@@ -75,8 +75,8 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 		double longTermMemoryLength = 3.0; // seconds
 		double sensitivity = 0.000001;
 		
-		// Check to see if the bacteria has been in contact with a particle
-		if(partContactTimer > 0){
+		// Check to see if the bacteria has been in contact with a bead
+		if(beadContactTimer > 0){
 			// Perform the normal attraction to the goal chemoattractant
 			for(int i=0; i<concMemory.size();i++) {
 				if(i <= (longTermMemoryLength/params.getDtSecs())) {
@@ -113,7 +113,7 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 	public void redraw(Graphics g) {
 
 		// Draw the main shape of bacterium
-		if(partContactTimer > 0){
+		if(beadContactTimer > 0){
 			g.setColor(Color.BLUE);
 		}
 		else{
