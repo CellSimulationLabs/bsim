@@ -14,10 +14,11 @@ import java.awt.Graphics;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
+import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimDeadBacterium extends BSimBacterium implements BSimLogic {
+public class BSimDeadBacterium extends BSimBacterium implements BSimLogic, BSimDrawable {
 
 
 	/**

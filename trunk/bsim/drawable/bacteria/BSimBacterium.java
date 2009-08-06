@@ -23,12 +23,13 @@ import java.util.Vector;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
+import bsim.drawable.BSimDrawable;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.logic.BSimLogic;
 import bsim.physics.BSimParticle;
 
 
-public class BSimBacterium extends BSimParticle implements BSimLogic {
+public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawable {
 
 	// Propulsive force that the bacterium can produce; this is a function of
 	// size, as well as viscosity and speed (which are fixed)

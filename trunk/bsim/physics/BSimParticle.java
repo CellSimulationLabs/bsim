@@ -12,7 +12,6 @@
  */
 package bsim.physics;
 
-import java.awt.Graphics;
 
 
 public abstract class BSimParticle {

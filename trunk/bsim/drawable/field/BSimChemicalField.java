@@ -17,9 +17,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import bsim.BSimParameters;
+import bsim.drawable.BSimDrawable;
 
 
-public class BSimChemicalField {
+public class BSimChemicalField implements BSimDrawable {
 
 
 	// The type of field

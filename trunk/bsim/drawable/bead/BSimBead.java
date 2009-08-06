@@ -13,10 +13,11 @@ package bsim.drawable.bead;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import bsim.drawable.BSimDrawable;
 import bsim.physics.BSimParticle;
 
 
-public class BSimBead extends BSimParticle {
+public class BSimBead extends BSimParticle implements BSimDrawable {
 	
 	
 	/**

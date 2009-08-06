@@ -15,10 +15,11 @@ import java.awt.Graphics;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
+import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
+public class BSimSensingBacterium extends BSimBacterium implements BSimLogic, BSimDrawable {
 
 	protected int beadContactTimer = 0;
 	

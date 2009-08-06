@@ -23,11 +23,12 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.util.Vector;
 
+import bsim.drawable.BSimDrawable;
 import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.bead.BSimBead;
 import bsim.physics.BSimParticle;
 
-public class BSimWrapBoundary extends BSimBoundary {
+public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 	// The offset given to an object that intersects with a boundary of type WRAP
 	private double[] wrapOffset = {0.0,0.0};
 	

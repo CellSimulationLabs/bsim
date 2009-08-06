@@ -18,8 +18,8 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import bsim.export.BSimBacteriaFileExport;
-import bsim.export.BSimExport;
 import bsim.export.BSimBeadFileExport;
+import bsim.export.BSimExport;
 import bsim.export.QuickTimeOutputStream;
 
 

@@ -31,9 +31,6 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 import bsim.drawable.BSimDrawable;
-import bsim.drawable.bacteria.BSimBacterium;
-import bsim.drawable.bead.BSimBead;
-import bsim.drawable.boundary.BSimBoundary;
 import bsim.drawable.boundary.BSimWrapBoundary;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.visualaid.BSimVisualAid;

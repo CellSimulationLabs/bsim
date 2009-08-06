@@ -18,10 +18,11 @@ import java.awt.Graphics;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
+import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic {
+public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic, BSimDrawable {
 
 	protected boolean foundRecruit = false;
 

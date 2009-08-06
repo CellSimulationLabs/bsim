@@ -17,10 +17,11 @@ import java.awt.Graphics;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
+import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic {
+public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic, BSimDrawable {
 
 	
 	// Threshold for detecting co-ordination signal (AHL)

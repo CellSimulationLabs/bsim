@@ -13,10 +13,11 @@ package bsim.drawable.boundary;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import bsim.drawable.BSimDrawable;
 import bsim.physics.BSimParticle;
 
 
-public class BSimBoundary {
+public class BSimBoundary implements BSimDrawable {
 
 	
 	// Start and end points of the boundary
