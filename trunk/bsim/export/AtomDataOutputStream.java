@@ -11,7 +11,7 @@
  * Werner Randelshofer. For details see accompanying license terms. 
  */
 package bsim.export;
-//hello!
+
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
