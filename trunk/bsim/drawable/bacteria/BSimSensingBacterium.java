@@ -1,16 +1,14 @@
 /**
- * BSimCoordBacterium.java
+ * BSimSensingBacterium.java
  *
  * Class that represents a bacterium that by default will move randomly, until contact 
- * with a bead is made at which time it will follow the goal chemoattractant. A 
- * co-ordination signal will also be released that will cause any bacteria in a high 
- * enough concentration to also follow the chemoattractant.
+ * with a bead is made at which time it will follow the goal chemoattractant.
  *
  * Authors: Thomas Gorochowski
  * Created: 28/08/2008
  * Updated: 28/08/2008
  */
-package bsim.scene.bacteria;
+package bsim.drawable.bacteria;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -20,28 +18,26 @@ import bsim.BSimScene;
 import bsim.logic.BSimLogic;
 
 
-public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic {
+public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 
+	protected int beadContactTimer = 0;
 	
-	// Threshold for detecting co-ordination signal (AHL)
-	protected double coordThreshold = 0.1;
-
+	protected double switchSpeed = 2.0;
 
 	/**
 	 * General constructor.
 	 */
-	public BSimCoordBacterium(double newSpeed, double newMass, double newSize,
+	public BSimSensingBacterium(double newSpeed, double newMass, double newSize,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    BSimParameters newParams, double newSwitchSpeed, double newCoordThreshold) {
+		    BSimParameters newParams, double newSwitchSpeed) {
 
 		// Call the parent constructor with the basic properties	
 		super(newSpeed, newMass, newSize, newDirection, newPosition, newForceMagnitudeDown,
-		newForceMagnitudeUp, newState,
-		      newTumbleSpeed, newRemDt, newScene, newParams, newSwitchSpeed);
+		      newForceMagnitudeUp, newState, newTumbleSpeed, newRemDt, newScene, newParams);
 		
-		coordThreshold = newCoordThreshold;
+		switchSpeed = newSwitchSpeed;
 	}
 
 
@@ -56,16 +52,13 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		
 		if(beadContactTimer > 0){
 			beadContactTimer--;
-			
-			// Generate some co-ordination chemical (AHL) at current location
-			scene.getCoordinationField().addChemical (1.0, this.getCentrePos());
 		}
 		
 		if(contactBead){
 			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
 		}
 		
-		return  super.runLogic(contactBac, contactBead, contactBoundary);
+		return super.runLogic(contactBac, contactBead, contactBoundary);
 	}
 
 	
@@ -83,8 +76,7 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		double sensitivity = 0.000001;
 		
 		// Check to see if the bacteria has been in contact with a bead
-		if(beadContactTimer > 0 || 
-		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){
+		if(beadContactTimer > 0){
 			// Perform the normal attraction to the goal chemoattractant
 			for(int i=0; i<concMemory.size();i++) {
 				if(i <= (longTermMemoryLength/params.getDtSecs())) {
@@ -123,9 +115,6 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		// Draw the main shape of bacterium
 		if(beadContactTimer > 0){
 			g.setColor(Color.BLUE);
-		}
-		else if(scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){
-			g.setColor(Color.YELLOW);
 		}
 		else{
 			g.setColor(Color.GREEN);

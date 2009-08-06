@@ -7,7 +7,7 @@
  * Created: 25/08/2008
  * Updated: 25/08/2008
  */
-package bsim.scene.bead;
+package bsim.drawable.bead;
 
 import java.util.Vector;
 

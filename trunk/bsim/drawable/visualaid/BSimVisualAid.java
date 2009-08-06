@@ -8,9 +8,8 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.scene.visualaid;
+package bsim.drawable.visualaid;
 
-import java.awt.Graphics;
 
 
 public interface BSimVisualAid {
@@ -21,7 +20,5 @@ public interface BSimVisualAid {
 	
 	// Function called on each time step to update the visual aid internal state
 	public abstract void updateState();
-	
-	// Function to redraw the visual aid
-	public abstract void redraw( Graphics g );
+
 }

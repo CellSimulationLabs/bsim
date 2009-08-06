@@ -13,7 +13,7 @@
  * Created: 01/08/2008
  * Updated: 24/08/2008
  */
-package bsim.scene.boundary;
+package bsim.drawable.boundary;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -23,9 +23,9 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.util.Vector;
 
+import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.bead.BSimBead;
 import bsim.physics.BSimParticle;
-import bsim.scene.bacteria.BSimBacterium;
-import bsim.scene.bead.BSimBead;
 
 public class BSimWrapBoundary extends BSimBoundary {
 	// The offset given to an object that intersects with a boundary of type WRAP

@@ -48,13 +48,7 @@ public abstract class BSimParticle {
 		centrePos[1] = newPosition[1] + newSize/2.0;
 		partType = newType;
 	}
-	
-	
-	/**
-	 * Abstract method that should be over written to display the object as required.
-	 */
-	public abstract void redraw(Graphics g);
-	
+		
 	
 	/**
 	 * Standard set methods for the class.

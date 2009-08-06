@@ -8,7 +8,7 @@
  * Created: 23/08/2008
  * Updated: 23/08/2008
  */
-package bsim.scene.boundary;
+package bsim.drawable.boundary;
 
 import java.awt.Color;
 import java.awt.Graphics;

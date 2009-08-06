@@ -7,7 +7,7 @@
  * Created: 20/07/2008
  * Updated: 25/08/2008
  */
-package bsim.scene.bacteria;
+package bsim.drawable.bacteria;
 
 import java.util.Vector;
 

@@ -8,7 +8,7 @@
  * Created: 12/07/2008
  * Updated: 19/07/2008
  */
-package bsim.scene.bead;
+package bsim.drawable.bead;
 
 import java.awt.Color;
 import java.awt.Graphics;

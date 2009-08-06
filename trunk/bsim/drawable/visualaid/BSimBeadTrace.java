@@ -9,17 +9,18 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.scene.visualaid;
+package bsim.drawable.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
 import bsim.BSimScene;
-import bsim.scene.bead.BSimBead;
+import bsim.drawable.BSimDrawable;
+import bsim.drawable.bead.BSimBead;
 
 
-public class BSimBeadTrace implements BSimVisualAid {
+public class BSimBeadTrace implements BSimVisualAid, BSimDrawable {
 	
 	// Variables for tracing the movement of beads
 	private Vector traces;

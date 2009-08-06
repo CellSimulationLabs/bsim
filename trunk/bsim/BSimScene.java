@@ -30,14 +30,15 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import bsim.drawable.BSimDrawable;
+import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.bead.BSimBead;
+import bsim.drawable.boundary.BSimBoundary;
+import bsim.drawable.boundary.BSimWrapBoundary;
+import bsim.drawable.field.BSimChemicalField;
+import bsim.drawable.visualaid.BSimVisualAid;
 import bsim.physics.BSimCollisionPhysics;
 import bsim.physics.BSimPhysics;
-import bsim.scene.bacteria.BSimBacterium;
-import bsim.scene.bead.BSimBead;
-import bsim.scene.boundary.BSimBoundary;
-import bsim.scene.boundary.BSimWrapBoundary;
-import bsim.scene.field.BSimChemicalField;
-import bsim.scene.visualaid.BSimVisualAid;
 
 
 public class BSimScene extends JPanel implements Runnable,
@@ -461,25 +462,25 @@ public class BSimScene extends JPanel implements Runnable,
 		
 		// Get each bead and bead to draw itself
 		for(i=0; i < beads.size(); i++) {
-			((BSimBead)(beads.elementAt(i))).redraw(g);
+			((BSimDrawable)(beads.elementAt(i))).redraw(g);
 		}
 		
 		// Get each bacteria and bead to draw itself
 		for(i=0; i < bacteria.size(); i++) {
-			((BSimBacterium)(bacteria.elementAt(i))).redraw(g);
+			((BSimDrawable)(bacteria.elementAt(i))).redraw(g);
 		}
 		
 		// Draw the boundaries
 		for(i=0; i < solidBoundaries.size(); i++) {
-			((BSimBoundary)solidBoundaries.elementAt(i)).redraw(g);
+			((BSimDrawable)solidBoundaries.elementAt(i)).redraw(g);
 		}
 		for(i=0; i < wrapBoundaries.size(); i++) {
-			((BSimWrapBoundary)wrapBoundaries.elementAt(i)).redraw(g);
+			((BSimDrawable)wrapBoundaries.elementAt(i)).redraw(g);
 		}
 		
 		// Draw all the visual aids
 		for(i=0; i<visualAids.size(); i++) {
-			((BSimVisualAid)visualAids.elementAt(i)).redraw(g);
+			((BSimDrawable)visualAids.elementAt(i)).redraw(g);
 		}
 	}
 

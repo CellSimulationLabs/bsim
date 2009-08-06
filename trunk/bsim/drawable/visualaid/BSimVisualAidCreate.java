@@ -7,7 +7,7 @@
  * Created: 24/08/2008
  * Updated: 24/08/2008
  */
-package bsim.scene.visualaid;
+package bsim.drawable.visualaid;
 
 import bsim.BSimScene;
 

@@ -7,7 +7,7 @@
  * Created: 24/08/2008
  * Updated: 24/08/2008
  */
-package bsim.scene.boundary;
+package bsim.drawable.boundary;
 
 
 public class BSimBoundaryCreate {
