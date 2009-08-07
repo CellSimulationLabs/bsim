@@ -46,7 +46,7 @@ public class BSimDeadBacterium extends BSimBacterium implements BSimLogic, BSimD
 	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
-		double[] f = {0.0, 0.0};
+		double[] f = {0.0, 0.0, 0.0};
 		
 		return  f;
 	}
