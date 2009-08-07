@@ -36,7 +36,7 @@ public class BSimChemicalField implements BSimDrawable {
 	protected int boundaryType          = BOUNDARY_LEAK;
 
 	// The discrete 2D field holding concentration values
-	protected double[][] field;
+	protected double[][][] field;
 
 	// The diffusion rate between field elements (this is per unit squared area)
 	// IMPORTANT: Field blocks may not be square in shape so rate must be altered 
@@ -45,11 +45,11 @@ public class BSimChemicalField implements BSimDrawable {
 
 	// Position of the field in the simulation space
 	protected double[] startPos;
-	protected double width, height;
+	protected double width, height, depth;
 
 	// Number of discrete divisions along each axis
-	protected int xBoxes, yBoxes;
-	protected double boxWidth, boxHeight;
+	protected int xBoxes, yBoxes, zBoxes;
+	protected double boxWidth, boxHeight , boxDepth;
 
 	// Time step length
 	protected double dt;
@@ -66,6 +66,7 @@ public class BSimChemicalField implements BSimDrawable {
 	// The direction of a linear field (constants)
 	public static int LINEAR_X = 1;
 	public static int LINEAR_Y = 2;
+	public static int LINEAR_Z = 2;
 
 	// The type of diffusion used (if required)
 	public static int DIFFUSE_X2  = 1;
@@ -86,8 +87,8 @@ public class BSimChemicalField implements BSimDrawable {
 	 * General constructor.
 	 */
 	public BSimChemicalField (int newFieldType, int newBoundaryType, double newRate, 
-			double[] newStartPos, double newWidth, double newHeight, int newXBoxes,
-			int newYBoxes, double newDt, double newThreshold, Color newColour,
+			double[] newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
+			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour,
 			BSimParameters p){
 
 		// Set all internal variables
@@ -102,12 +103,15 @@ public class BSimChemicalField implements BSimDrawable {
 		startPos = newStartPos;
 		width = newWidth;
 		height = newHeight;
+		depth = newDepth;
 
 		xBoxes = newXBoxes;
 		yBoxes = newYBoxes;
+		zBoxes = newZBoxes;
 
 		boxWidth  = width/xBoxes;
 		boxHeight = height/yBoxes;
+		boxDepth = height/zBoxes;
 
 		dt = newDt;
 		colour = newColour;
@@ -115,7 +119,7 @@ public class BSimChemicalField implements BSimDrawable {
 		threshold = newThreshold;
 
 		// Create the field of the required size (this is fixed for the duration of the object)
-		field = new double[xBoxes][yBoxes];
+		field = new double[xBoxes][yBoxes][zBoxes];
 	}
 
 
@@ -125,12 +129,12 @@ public class BSimChemicalField implements BSimDrawable {
 	 * to zero. The gradient is linear between start and end concentrations.
 	 */
 	public void setAsLinear (int dir, double startCon, double endCon){
-		int i, j;
+		int i, j, k;
 
 		// Variable to hold the value of each box along the gradient
 		double[] linVals;
 
-		// Check that the concentration values are positive (if not set ot zero)
+		// Check that the concentration values are positive (if not set or zero)
 		if(startCon < 0){ startCon = 0;}
 		if(endCon < 0){ endCon = 0;}
 
@@ -153,8 +157,11 @@ public class BSimChemicalField implements BSimDrawable {
 			// Update the field
 			for(i=0; i<xBoxes; i++){
 				for(j=0; j<yBoxes; j++){
-					// Update the field with the calculated value
-					field[i][j] = linVals[i];
+					for(k=0; k<zBoxes; k++)
+					{
+						// Update the field with the calculated value
+						field[i][j][k] = linVals[i];
+					}
 				}
 			}
 		}
@@ -176,11 +183,39 @@ public class BSimChemicalField implements BSimDrawable {
 			// Update the field
 			for(i=0; i<xBoxes; i++){
 				for(j=0; j<yBoxes; j++){
-					// Update the field with the calculated value
-					field[i][j] = linVals[j];
+					for(k=0; k<zBoxes; k++)
+					{
+						// Update the field with the calculated value
+						field[i][j][k] = linVals[j];
+					}
 				}
 			}
 		}
+		else if(dir == LINEAR_Z){
+	
+				// We will have x boxes worth of values
+				linVals = new double[zBoxes];
+	
+				// Calculate the difference in concentation between boxes
+				double conDelta = (endCon - startCon) / (double)zBoxes;
+	
+				// Find the concentration for each box
+				for(i=0; i<zBoxes; i++){
+					// Calculate the concentration for the current box
+					linVals[i] = startCon + (i * conDelta);
+				}
+	
+				// Update the field
+				for(i=0; i<xBoxes; i++){
+					for(j=0; j<yBoxes; j++){
+						for(k=0; k<zBoxes; k++)
+						{
+							// Update the field with the calculated value
+							field[i][j][k] = linVals[k];
+						}
+					}
+				}
+			}
 		// An invalid direction must have been given
 		else{
 			System.err.println("Invalid direction for static linear field.");
@@ -219,27 +254,31 @@ public class BSimChemicalField implements BSimDrawable {
 			float bComp = (float)(colour.getBlue()/255.0);
 			float aComp  = 0;
 			
-			int fWidth, fHeight;
+			int fWidth, fHeight, fDepth;
 
 			// Loop through all x and y boxes
 			for(int x=0; x<xBoxes; x++) {
 				for(int y=0; y<yBoxes; y++) {
+					for(int z=0; z<zBoxes; z++) {
 
 					fWidth = (int)boxWidth;
 					fHeight = (int)boxHeight;
+					fDepth = (int) boxDepth;
 					
-					// Check to see if the field is visible (i.e. not 0 concentration)
-					if(field[x][y] != 0.0f){
-						
-						aComp = (float)(field[x][y] * maxCon);
-						
-						// Set the colour of the field (alpha is the concentration)
-						g.setColor(new Color(rComp, gComp, bComp, aComp));
-
-						// Draw a box of the field
-						g.fillRect((int)(startPos[0] + (x * boxWidth)), 
-								(int)(startPos[1] + (y * boxHeight)), 
-								fWidth, fHeight);
+						// Check to see if the field is visible (i.e. not 0 concentration)
+						if(field[x][y][z] != 0.0f){
+							
+							aComp = (float)(field[x][y][z] * maxCon);
+							
+							// Set the colour of the field (alpha is the concentration)
+							g.setColor(new Color(rComp, gComp, bComp, aComp));
+	
+							// Draw a box of the field
+							g.fillRect((int)(startPos[0] + (x * boxWidth)), 
+									(int)(startPos[1] + (y * boxHeight)), 
+									fWidth, fHeight);
+							// Draw a cubic stuff?
+						}
 					}
 				}
 			}
@@ -258,11 +297,13 @@ public class BSimChemicalField implements BSimDrawable {
 		if(fieldType == TYPE_DIFFUSE){
 
 			// Array to hold the updated field
-			double[][] newField = new double[xBoxes][yBoxes];
+			double[][][] newField = new double[xBoxes][yBoxes][zBoxes];
 
 			// Ratios of each side (for weighting, used later but only calculated once)
-			double xRat = (width  * 2) / (width + height);
-			double yRat = (height * 2) / (width + height);
+			double xRat = (width  * 2) / (width + height + depth);
+			double yRat = (height * 2) / (width + height + depth);
+			double zRat = (depth * 2) / (width + height + depth);
+			
 			
 			// Create array of worker threads
 			Thread[] workerThreads = new Thread[MAX_WORKER_THREADS];
@@ -280,7 +321,7 @@ public class BSimChemicalField implements BSimDrawable {
 				}
 				
 				// Create and start the actual threads with the required parameters
-				workerThreads[i] = new BSimChemicalFieldThread(newField, xRat, yRat, xStart, xEnd);
+				workerThreads[i] = new BSimChemicalFieldThread(newField, xRat, yRat, zRat, xStart, xEnd);
 				workerThreads[i].start();
 			}
 			
@@ -306,10 +347,10 @@ public class BSimChemicalField implements BSimDrawable {
 		
 		// The field to work on (this will be a reference because arrays are objects)
 		// This means a single instance of the array will by all the threads.
-		double[][] newField;
+		double[][][] newField;
 		
 		// Ratios of the edges
-		double xRat, yRat;
+		double xRat, yRat, zRat;
 		
 		// The thread number and total number of threads
 		int xStart, xEnd;
@@ -317,14 +358,16 @@ public class BSimChemicalField implements BSimDrawable {
 		
 		/**
 		 * General constructor.
+		 * 
 		 */
-		public BSimChemicalFieldThread(double[][] newNewField, double newXRat,
-		                               double newYRat, int newXStart, int newXEnd){
+		public BSimChemicalFieldThread(double[][][] newNewField, double newXRat,
+		                               double newYRat, double newZRat, int newXStart, int newXEnd){
 			
 			// Update local values for the worker thread to work over
 			newField = newNewField;
 			xRat = newXRat;
 			yRat = newYRat;
+			zRat = newZRat;
 			xStart = newXStart;
 			xEnd = newXEnd;
 		}
@@ -337,43 +380,78 @@ public class BSimChemicalField implements BSimDrawable {
 			
 			// Variables used in calculating the amount of diffusion
 			double curVal, curDelta, 
-			valN, valE, valS, valW, 
-			dN, dE, dS, dW;
+			valN, valE, valS, valW, valU, valD, 
+			dN, dE, dS, dW, dU, dD;
 
 			// Flags to handle boundaries
-			boolean noN, noE, noS, noW;
+			boolean noN, noE, noS, noW, noU, noD;
 
 			// Loop through all x and y boxes
 			for(int x=xStart; x<xEnd; x++) {
 				for(int y=0; y<yBoxes; y++) {
+					for(int z=0;z<zBoxes; z++){
 
 					// Reset the edge constraints
 					noN = false;
 					noE = false;
 					noS = false;
 					noW = false;
+					//u means up
+					noU = false;
+					//D means down
+					noD = false;
 
 					// Reset other variables
 					valN = 0.0;
 					valE = 0.0;
 					valS = 0.0;
 					valW = 0.0;
+					//u means up
+					valU = 0.0;
+					//D means down
+					valD = 0.0;
+					
+					
 					dN = 0.0;
 					dE = 0.0;
 					dS = 0.0;
 					dW = 0.0;
+					//u means up
+					dU = 0.0;
+					//D means down
+					dD = 0.0;
 
 					// Get the current value of the field at the given box
-					curVal = field[x][y];
+					curVal = field[x][y][z];
 
 					// Calculate the diffusion coefficients for each edge
 					// and update the boolean flags if edges are not present
+					
+					//not sure about this solution
+					if(z == 0){ 
+						noU = true;
+						dU = diffuseCoeff(curVal, 0);
+					}
+					else{ 
+						valU = field[x][y][z-1];
+						dU = diffuseCoeff(curVal, valN); 
+					}
+
+					if(z == zBoxes-1){ 
+						noD = true;
+						dD = diffuseCoeff(curVal, 0);
+					}
+					else{
+						valD = field[x][y][z+1];
+						dD = diffuseCoeff(curVal, valS); 
+					}
+					
 					if(y == 0){ 
 						noN = true;
 						dN = diffuseCoeff(curVal, 0);
 					}
 					else{ 
-						valN = field[x][y-1];
+						valN = field[x][y-1][z];
 						dN = diffuseCoeff(curVal, valN); 
 					}
 
@@ -382,7 +460,7 @@ public class BSimChemicalField implements BSimDrawable {
 						dS = diffuseCoeff(curVal, 0);
 					}
 					else{
-						valS = field[x][y+1];
+						valS = field[x][y+1][z];
 						dS = diffuseCoeff(curVal, valS); 
 					}
 
@@ -391,7 +469,7 @@ public class BSimChemicalField implements BSimDrawable {
 						dW = diffuseCoeff(curVal, 0);
 					}
 					else{ 
-						valW = field[x-1][y];
+						valW = field[x-1][y][z];
 						dW = diffuseCoeff(curVal, valW); 
 					}
 
@@ -400,7 +478,7 @@ public class BSimChemicalField implements BSimDrawable {
 						dE = diffuseCoeff(curVal, 0);
 					}
 					else{ 
-						valE = field[x+1][y];
+						valE = field[x+1][y][z];
 						dE = diffuseCoeff(curVal, valE); 
 					}
 
@@ -413,13 +491,17 @@ public class BSimChemicalField implements BSimDrawable {
 					dS = dS * xRat;
 					dE = dE * yRat;
 					dW = dW * yRat;
+					dU = dU * zRat;
+					dD = dD * zRat;
 
 					// Add up the edge contributions
 					if(boundaryType == BOUNDARY_LEAK){
 						curDelta = dN * (curVal - valN) + 
 						dE * (curVal - valE) +
 						dS * (curVal - valS) +
-						dW * (curVal - valW);
+						dW * (curVal - valW) +
+						dU * (curVal - valU) +
+						dD * (curVal - valD);
 					}
 					else{
 						if(!noN){
@@ -434,10 +516,17 @@ public class BSimChemicalField implements BSimDrawable {
 						if(!noW){
 							curDelta += dW * (curVal - valW);
 						}
+						if(!noU){
+							curDelta += dU * (curVal - valU);
+						}
+						if(!noD){
+							curDelta += dD * (curVal - valD);
+						}
 					}
 
 					// Update the new field
-					newField[x][y] = curVal - (dt * curDelta);
+					newField[x][y][z] = curVal - (dt * curDelta);
+				}
 				}
 			}
 		}
@@ -482,8 +571,8 @@ public class BSimChemicalField implements BSimDrawable {
 		double con, newCon;
 
 		// Check to see if the position falls in the field
-		if(position[0]<startPos[0] || position[1]<startPos[1] || 
-				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)) {
+		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
+				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)  || position[2]>(startPos[2] + depth)) {
 			// Outside the bound of the field so do nothing
 		}
 		else{
@@ -491,10 +580,12 @@ public class BSimChemicalField implements BSimDrawable {
 			// Find the square that the position falls in and get the concentration
 			int xNum = (int)((position[0] - startPos[0])/boxWidth);
 			int yNum = (int)((position[1] - startPos[1])/boxHeight);
-			con = field[xNum][yNum];
+			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			con = field[xNum][yNum][zNum];
 
 			// Weight the new concentration by the area of the box
-			newCon = con + (amount/(width/height));
+			//not sure about this
+			newCon = con + (amount/(width/height/depth));
 
 			// Ensure that concentration does not exceed 1
 			if(newCon > 1.0) {
@@ -502,7 +593,7 @@ public class BSimChemicalField implements BSimDrawable {
 			}
 
 			// Update the field
-			field[xNum][yNum] = newCon;
+			field[xNum][yNum][zNum] = newCon;
 		}
 	}
 
@@ -518,8 +609,8 @@ public class BSimChemicalField implements BSimDrawable {
 		double con;
 
 		// Check to see if the position falls in the field
-		if(position[0]<startPos[0] || position[1]<startPos[1] || 
-				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)) {
+		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
+				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height) || position[2]>(startPos[2] + depth)) {
 
 			// Outside the bound of the field so return 0
 			con = 0.0;
@@ -529,7 +620,8 @@ public class BSimChemicalField implements BSimDrawable {
 			// Find the square that the position falls in and return concentration
 			int xNum = (int)((position[0] - startPos[0])/boxWidth);
 			int yNum = (int)((position[1] - startPos[1])/boxHeight);
-			con = field[xNum][yNum];
+			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			con = field[xNum][yNum][zNum];
 		}
 
 		// Return the concentration
@@ -543,6 +635,6 @@ public class BSimChemicalField implements BSimDrawable {
 	public int getFieldType (){ return fieldType; }
 	public int getBoundaryType (){ return boundaryType; }
 	public double getRate (){ return rate; }
-	public double[][] getField (){ return field; }
+	public double[][][] getField (){ return field; }
 	public double getThreshold() {return threshold;}
 }
