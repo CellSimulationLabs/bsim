@@ -437,7 +437,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			
 			// Calculate distance on the line segment
 			u = (((p3[0] - p1[0])*(p2[0] - p1[0])) +
-			        ((p3[1] - p1[1])*(p2[1] - p1[1]))) / Math.pow((p2[0] - p1[0]) + (p2[1] - p1[1]), 2.0);
+			        ((p3[1] - p1[1])*(p2[1] - p1[1]))) / (Math.pow(p2[0]-p1[0], 2.0)+ Math.pow(p2[1] - p1[1], 2.0));
 			
 			if(Double.isNaN(u)){
 				u = 0.0;
@@ -466,14 +466,14 @@ public class BSimCollisionPhysics extends BSimPhysics{
 				// Return the smallest
 				if(d1 <= d2) { 
 					c[0] = d1;
-					uv = unitVecBetweenPoints(p1, p3);
+					uv = unitVecBetweenPoints(p3, p1);
 					c[1] = uv[0];
 					c[2] = uv[1];
 					return c; 
 				}
 				else { 
 					c[0] = d2;
-					uv = unitVecBetweenPoints(p2, p3);
+					uv = unitVecBetweenPoints(p3, p2);
 					c[1] = uv[0];
 					c[2] = uv[1];
 					return c; 
