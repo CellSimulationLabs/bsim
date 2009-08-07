@@ -21,8 +21,8 @@ public class BSimBoundary implements BSimDrawable {
 
 	
 	// Start and end points of the boundary
-	protected double[] p1 = {0.0,0.0};
-	protected double[] p2 = {0.0,0.0};
+	protected double[] p1 = {0.0,0.0,0.0};
+	protected double[] p2 = {0.0,0.0,0.0};
 
 	// Colour of all boundaries
 	protected Color boundColour = Color.GRAY;
@@ -30,6 +30,7 @@ public class BSimBoundary implements BSimDrawable {
 	protected double mod_p2_sub_p1_sq;
 	protected double px2_sub_px1;
 	protected double py2_sub_py1;
+	protected double pz2_sub_pz1;
 	
 	/**
 	 * General constructor.
@@ -39,15 +40,19 @@ public class BSimBoundary implements BSimDrawable {
 		// Update the internal variables
 		p1[0] = newStartPoint[0];
 		p1[1] = newStartPoint[1];
+		p1[1] = newStartPoint[2];
 		p2[0] = newEndPoint[0];
 		p2[1] = newEndPoint[1];
+		p2[2] = newEndPoint[2];
 		
+		//Not sure about the mathematics
 		// u denominator
-		mod_p2_sub_p1_sq = Math.pow((p2[0] - p1[0]) + (p2[1] - p1[1]), 2.0); 
+		mod_p2_sub_p1_sq = Math.pow((p2[0] - p1[0]) + (p2[1] - p1[1]) + (p2[2] - p1[2]), 2.0); 
 		
 		// Differences
 		px2_sub_px1 = p2[0] - p1[0];
 		py2_sub_py1 = p2[1] - p1[1];
+		pz2_sub_pz1 = p2[2] - p2[2];
 	}
 
 	
@@ -59,7 +64,8 @@ public class BSimBoundary implements BSimDrawable {
 		
 		// Calculate the distance
 		return (((p3[0] - p1[0])*(p2[0] - p1[0])) +
-		        ((p3[1] - p3[1])*(p2[1] - p1[1]))) / mod_p2_sub_p1_sq;
+		        ((p3[1] - p3[1])*(p2[1] - p1[1])) +
+		        ((p3[2] - p3[2])*(p2[2] - p1[2]))) / mod_p2_sub_p1_sq;
 	}
 	
 	
@@ -70,11 +76,12 @@ public class BSimBoundary implements BSimDrawable {
 	 */
 	protected synchronized double calcDistFromBoundary(double[] p3) {
 		double u, d1, d2;
-		double[] p4 = new double[2];
+		double[] p4 = new double[3];
 		
 		// Calculate distance on the line segment
 		u = (((p3[0] - p1[0])*(p2[0] - p1[0])) +
-		        ((p3[1] - p3[1])*(p2[1] - p1[1]))) / mod_p2_sub_p1_sq;
+		     ((p3[1] - p3[1])*(p2[1] - p1[1])) +
+		     ((p3[2] - p3[2])*(p2[2] - p1[2]))) / mod_p2_sub_p1_sq;
 		
 		// Check to see if point falls on line segment
 		if(u >= 0 || u <= 1 ) {
@@ -82,6 +89,7 @@ public class BSimBoundary implements BSimDrawable {
 			// Find the point on the line segment
 			p4[0] = p1[0] + (u * (p2[0] - p1[0]));
 			p4[1] = p1[1] + (u * (p2[1] - p1[1]));
+			p4[2] = p1[2] + (u * (p2[2] - p1[2]));
 			
 			// Return the perpendicular distance
 			return distBetweenPoints(p3, p4);
@@ -103,8 +111,8 @@ public class BSimBoundary implements BSimDrawable {
 	 */
 	protected synchronized double distBetweenPoints(double[] p1, double[] p2) {
 		
-		// Length = sqrt(a^2 + b^2)
-		return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2));
+		// Length = sqrt(a^2 + b^2 + c^2)
+		return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2) + Math.pow(p1[2] - p2[2], 2));
 	}
 	
 	
