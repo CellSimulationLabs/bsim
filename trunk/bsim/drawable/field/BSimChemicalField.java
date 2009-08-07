@@ -66,7 +66,7 @@ public class BSimChemicalField implements BSimDrawable {
 	// The direction of a linear field (constants)
 	public static int LINEAR_X = 1;
 	public static int LINEAR_Y = 2;
-	public static int LINEAR_Z = 2;
+	public static int LINEAR_Z = 3;
 
 	// The type of diffusion used (if required)
 	public static int DIFFUSE_X2  = 1;
@@ -86,6 +86,8 @@ public class BSimChemicalField implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
+	
+	
 	public BSimChemicalField (int newFieldType, int newBoundaryType, double newRate, 
 			double[] newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
 			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour,
