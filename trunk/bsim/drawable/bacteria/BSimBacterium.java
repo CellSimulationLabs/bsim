@@ -319,8 +319,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		// Read in the file to the specified array
     	try {
     		Scanner scan = new Scanner(new File("bsim/gammaVals.txt"));
-    		while (scan.hasNextDouble()) {
-    			gammaVals[i] = scan.nextDouble();		 
+    		while (scan.hasNextLine()) {
+    			gammaVals[i] = Double.parseDouble(scan.nextLine());		 
     			i++;
     		}
     	} catch (IOException ex){
