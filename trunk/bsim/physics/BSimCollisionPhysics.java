@@ -185,7 +185,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			int m = beads.size();
 			int obTotal = n + m;
 			int b = solidBoundaries.size();
-			double[] relativePos = new double[2];
+			double[] relativePos = new double[3];
 			double centreDist, edgeDist;
 			double reactionForce;
 			BSimParticle partI, partJ;
