@@ -158,7 +158,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		}
 
 		// Find the swimming force vector of the bacterium, if any
-		double[] internalForce = {0.0, 0.0};
+		double[] internalForce = {0.0, 0.0, 0.0};
 
 		if (this.state == BAC_STATE_RUNNING) internalForce = this.doRun();
 		
@@ -171,14 +171,24 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	 */
 	protected void iterateTumble() {
 		double[] curDirection = this.getDirection();
-		double[] newDirection = new double[2];
+		double[] newDirection = new double[3];
 
+		/*
+		 * 
+		 * 
+		 * TODO modify the tumbling iteration
+		 * 
+		 * 
+		 */
 		// Get the angle (direction)
 		double theta = Math.atan2(curDirection[1],curDirection[0]);
 
 		// Find and update the new direction of the bacterium
 		newDirection[0] = Math.cos(theta + tumbleSpeed);
 		newDirection[1] = Math.sin(theta + tumbleSpeed);
+		//TODO modify
+		newDirection[2] = newDirection[2];
+		
 		setDirection(newDirection);
 	}
 
@@ -192,6 +202,11 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 			// Change state; Switch from run to tumble
 
 			// Calculate tumble angle (only approximates distribution)
+			/*
+			 * 
+			 * not yet modified
+			 *
+			 */
 			double tumbleAngle = approxTumbleAngle();
 
 			// Update the state and other properties of the bacterium
@@ -257,7 +272,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		double prevConc = previousConc;
 		BSimChemicalField field;
 		double currConc, prob;
-		double[] internalForce = new double[2];
+		double[] internalForce = new double[3];
 
 		// Check the chemotaxis state, i.e. which to follow - goal or recruitment
 		if(chemoState == BAC_CHEMO_GOAL) field = scene.getGoalField();
@@ -275,14 +290,17 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 			if(runUp){
 				internalForce[0] = direction[0] * forceMagnitudeUp;
 				internalForce[1] = direction[1] * forceMagnitudeUp;
+				internalForce[2] = direction[2] * forceMagnitudeUp;
 			}
 			else{
 				internalForce[0] = direction[0] * forceMagnitudeDown;
 				internalForce[1] = direction[1] * forceMagnitudeDown;
+				internalForce[2] = direction[2] * forceMagnitudeDown;
 			}
 		} else {					// TERMINATE RUN
 			internalForce[0] = 0.0;
 			internalForce[1] = 0.0;
+			internalForce[2] = 0.0;
 			startNewPhase();
 		}
 		this.setLastConc(currConc);
