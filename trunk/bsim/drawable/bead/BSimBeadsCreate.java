@@ -25,30 +25,31 @@ public class BSimBeadsCreate {
 	public static Vector createBeadSet (double[] args, BSimParameters params) {
 		
 		// Variables for each bead property
-		double[] newDirection = {0,0};
+		double[] newDirection = {0,0,0};
 		double newSize, newMass, newSpeed;
-		double[] newPosition = new double[2];
+		double[] newPosition = new double[3];
 		Vector beadVec = new Vector();
 		
-		if(args[6] == 0) {
+		if(args[8] == 0) {
 			newSize = params.getBeadSize();
 		}
 		else{
-			newSize = args[6];
+			newSize = args[8];
 		}
 		
 		newMass = 0.0; // Not used
 		newSpeed = 0.0;
 		
 		// Loop through the number of beads to create
-		for(int i=0; i<args[4]; i++){
+		for(int i=0; i<args[6]; i++){
 			
 			// Randomly select a new position for the bead
-			newPosition[0] = args[0] + (args[2] * Math.random());
-			newPosition[1] = args[1] + (args[3] * Math.random());
+			newPosition[0] = args[0] + (args[3] * Math.random());
+			newPosition[1] = args[1] + (args[4] * Math.random());
+			newPosition[2] = args[2] + (args[5] * Math.random());
 			
 			// Create the type of bead required
-			switch((int)args[5]){
+			switch((int)args[7]){
 				// Standard bead
 				case 1: beadVec.add(new BSimBead(newSpeed, newMass, newSize, newDirection, newPosition)); break;
 			}
@@ -65,17 +66,18 @@ public class BSimBeadsCreate {
 	public static BSimBead createBead (double[] args, BSimParameters params) {
 		
 		// Variables for each bead property
-		double[] newDirection = {0,0};
+		double[] newDirection = {0,0,0};
 		double newSize, newMass, newSpeed;
-		double[] newPosition = new double[2];
+		double[] newPosition = new double[3];
 		newPosition[0] = args[0];
 		newPosition[1] = args[1];
+		newPosition[2] = args[2];
 		
-		if(args[2] == 0) {
+		if(args[3] == 0) {
 			newSize = params.getBeadSize();
 		}
 		else{
-			newSize = args[2];
+			newSize = args[3];
 		}
 		
 		newMass = 0.0; // Not used
