@@ -25,9 +25,9 @@ public abstract class BSimParticle {
 	protected double size  = 0, // microns
 	                 mass  = 0, 
 	                 speed = 0; // microns per second
-	protected double position[]  = {0,0};
-	protected double centrePos[] = {0,0};
-	protected double direction[] = {0,0};
+	protected double position[]  = {0,0,0};
+	protected double centrePos[] = {0,0,0};
+	protected double direction[] = {0,0,0};
 	
 	/**
 	 * General constructor.
@@ -40,10 +40,14 @@ public abstract class BSimParticle {
 		size         = newSize;
 		direction[0] = newDirection[0];
 		direction[1] = newDirection[1];
+		direction[2] = newDirection[2];
 		position[0]  = newPosition[0];
 		position[1]  = newPosition[1];
+		position[2]  = newPosition[2];
 		centrePos[0] = newPosition[0] + newSize/2.0;
 		centrePos[1] = newPosition[1] + newSize/2.0;
+		centrePos[2] = newPosition[2] + newSize/2.0;
+		
 		partType = newType;
 	}
 		
@@ -59,19 +63,24 @@ public abstract class BSimParticle {
 	public void setPosition(double[] p) {
 		position[0] = p[0]; 
 		position[1] = p[1];
+		position[2] = p[2];
 		centrePos[0] = p[0] + size/2.0;
 		centrePos[1] = p[1] + size/2.0;
+		centrePos[2] = p[2] + size/2.0;
 	}
 	public void setCentrePos(double cp[]) {
 		position[0] = cp[0] - size/2.0; 
 		position[1] = cp[1] - size/2.0;
+		position[2] = cp[2] - size/2.0;
 		centrePos[0] = cp[0];
 		centrePos[1] = cp[1];
+		centrePos[2] = cp[2];
 	}
 	public void setDirection(double[] d) {
-		double[] normD = normalise2DVector(d);
+		double[] normD = normalise3DVector(d);
 		direction[0] = normD[0]; 
 		direction[1] = normD[1];
+		direction[2] = normD[2];
 	}
 	
 	
@@ -91,15 +100,17 @@ public abstract class BSimParticle {
 	/**
 	 * Normalises the length of a given 2D vector.
 	 */
-	private double[] normalise2DVector(double[] newVector) {
+	private double[] normalise3DVector(double[] newVector) {
 		
 		// Variables holding normalising constants
 		double xPow2 = Math.pow(newVector[0],2.0);
 		double yPow2 = Math.pow(newVector[1],2.0);
+		double zPow2 = Math.pow(newVector[2],2.0);
 		
 		// Calculate the normalised components
-		newVector[0] = newVector[0] / Math.sqrt(xPow2 + yPow2);
-		newVector[1] = newVector[1] / Math.sqrt(xPow2 + yPow2);
+		newVector[0] = newVector[0] / Math.sqrt(xPow2 + yPow2 + zPow2);
+		newVector[1] = newVector[1] / Math.sqrt(xPow2 + yPow2 + zPow2);
+		newVector[2] = newVector[2] / Math.sqrt(xPow2 + yPow2 + zPow2);
 		
 		// Return the new normalised vector
 		return newVector;
