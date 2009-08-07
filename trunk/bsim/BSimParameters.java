@@ -53,11 +53,11 @@ public class BSimParameters {
 	                vaClocks,
 					vaScales;
 
-	public double[] cfGoalDefine = {0, 0, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	public double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
-	public double[] cfCoordDefine = {0, 0, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	public double[] cfCoordDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfCoordSetup = {0, 0, 0, 0, 0, 0};
-	public double[] cfRecruitDefine = {0, 0, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	public double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
 	
 	public double   screenZoom       = 1, 
