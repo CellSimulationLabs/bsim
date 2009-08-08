@@ -285,7 +285,7 @@ public class BSimParameters {
 		for(int i=0; i<solidBoundaries.size(); i++){
 			for(int j=0;j<6;j++)
 			{
-					newVec.add(BSimSolidPlaneBoundaryCreate.createSolidPlaneBoundary((double[])solidBoundaries.elementAt(i),j));
+					newVec.add(BSimPlaneBoundaryCreate.createSolidPlaneBoundary((double[])solidBoundaries.elementAt(i),j));
 			}
 		}
 		// Return the new vector
