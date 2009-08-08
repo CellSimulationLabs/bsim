@@ -44,9 +44,9 @@ public abstract class BSimParticle {
 		position[0]  = newPosition[0];
 		position[1]  = newPosition[1];
 		position[2]  = newPosition[2];
-		centrePos[0] = newPosition[0] + newSize/2.0;
-		centrePos[1] = newPosition[1] + newSize/2.0;
-		centrePos[2] = newPosition[2] + newSize/2.0;
+		centrePos[0] = newPosition[0] + (newSize/2.0);
+		centrePos[1] = newPosition[1] + (newSize/2.0);
+		centrePos[2] = newPosition[2] + (newSize/2.0);
 		
 		partType = newType;
 	}
@@ -98,7 +98,7 @@ public abstract class BSimParticle {
 	
 	
 	/**
-	 * Normalises the length of a given 2D vector.
+	 * Normalises the length of a given 3D vector.
 	 */
 	private double[] normalise3DVector(double[] newVector) {
 		
