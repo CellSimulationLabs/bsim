@@ -64,7 +64,7 @@ public class BSimBacteriaCreate {
 
 			newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
 			newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			newDirection[1] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+			newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
 
 			newForceUp = params.getBactForceUp();
 			newForceDown = params.getBactForceDown();
@@ -116,7 +116,7 @@ public class BSimBacteriaCreate {
 		double[] newPosition = new double[3];
 		newPosition[0] = args[0];
 		newPosition[1] = args[1];
-		newPosition[1] = args[2];		
+		newPosition[2] = args[2];		
 		double[] newDirection = {0,0,0};
 		double newForceUp, newForceDown;		
 		double dx,dy,dz;
@@ -137,7 +137,7 @@ public class BSimBacteriaCreate {
 
 		newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
 		newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-		newDirection[1] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+		newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
 
 		newForceUp = params.getBactForceUp();
 		newForceDown = params.getBactForceDown();
