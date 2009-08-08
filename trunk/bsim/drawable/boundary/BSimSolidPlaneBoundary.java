@@ -53,26 +53,17 @@ public class BSimSolidPlaneBoundary implements BSimDrawable {
 		p4[1] = newP4[1];
 		p4[2] = newP4[2];
 		
-		double[] p1p2= {0.0,0.0,0.0};
-		double[] p1p3= {0.0,0.0,0.0};
-		
-		p1p2[0]=p2[0]-p1[0];
-		p1p2[1]=p2[1]-p1[1];
-		p1p2[2]=p2[2]-p1[2];
-		p1p3[0]=p3[0]-p1[0];
-		p1p3[1]=p3[1]-p1[1];
-		p1p3[2]=p3[2]-p1[2];
-		
-		double[] v={0.0,0.0,0.0};
-		v[0]=(p1p2[1]*p1p3[2])-(p1p2[2]*p1p3[1]);
-		v[1]=(p1p2[2]*p1p3[0])-(p1p3[0]*p1p2[2]);
-		v[2]=(p1p2[0]*p1p3[1])-(p1p2[1]*p1p3[0]);
-		
-		a=v[0];
-		b=v[1];
-		c=v[2];
-		d=((-1)*v[0]*p1[0])+((-1)*v[1]*p1[1])+((-1)*v[2]*p1[2]);
-	}
+		//ax+by+cz+d=0 solved the determinant
+		a=(p3[2]*p2[1])-(p3[2]*p1[1])-(p1[2]*p2[1])+(p1[2]*p1[1])-(p3[1]*p2[2])+(p3[1]*p1[2])+(p1[1]*p2[2])-(p1[1]*p1[2]);
+		b=(p3[0]*p2[2])-(p3[0]*p1[2])-(p1[0]*p2[2])+(p1[0]*p1[2])-(p3[2]*p2[0])+(p3[2]*p1[0])+(p1[2]*p2[0])-(p1[2]*p1[0]);
+		c=(p3[1]*p2[0])-(p3[1]*p1[0])-(p1[1]*p2[0])+(p1[1]*p1[0])-(p3[0]*p2[1])+(p3[0]*p1[1])+(p1[0]*p2[1])-(p1[0]*p1[1]);
+		d=((-1)*p3[2]*p1[0]*p2[1])+(p3[2]*p1[0]*p1[1])+(p1[2]*p1[0]*p2[1])-(p1[2]*p1[0]*p1[1])+
+			((-1)*p3[0]*p1[1]*p2[2])+(p3[0]*p1[1]*p1[2])+(p1[0]*p1[1]*p2[2])-(p1[0]*p1[1]*p1[2])+
+			((-1)*p3[1]*p1[2]*p2[0])+(p3[1]*p1[2]*p1[0])+(p1[1]*p1[2]*p2[0])-(p1[1]*p1[2]*p1[0])+
+			(p1[2]*p3[0]*p2[1])-(p1[2]*p3[0]*p1[1])-(p1[2]*p1[0]*p2[1])+(p1[2]*p1[0]*p1[1])+
+			(p1[0]*p3[1]*p2[2])-(p1[0]*p3[1]*p1[2])-(p1[0]*p1[1]*p2[2])+(p1[0]*p1[1]*p1[2])+
+			(p1[1]*p3[2]*p2[0])-(p1[1]*p3[2]*p1[0])-(p1[1]*p1[2]*p2[0])+(p1[1]*p1[2]*p1[0]);
+		}
 	
 	/**
 	 * Calculates the info from the solid plane boundary.
@@ -84,7 +75,7 @@ public class BSimSolidPlaneBoundary implements BSimDrawable {
 	public synchronized double[] calcInfoFromBoundary(double[] p) {
 		double[] info= {0.0,0.0,0.0,0.0};
 		double dist= 0.0;
-		dist = Math.abs((a*p[0])+(b*p[1])+(c*p[3])+d)/Math.sqrt(Math.pow(a, 2.0)+Math.pow(b, 2.0)+Math.pow(c, 2.0));
+		dist = Math.abs((a*p[0])+(b*p[1])+(c*p[2])+d)/Math.sqrt(Math.pow(a, 2.0)+Math.pow(b, 2.0)+Math.pow(c, 2.0));
 		info[0]=dist;		
 			
 		/*
