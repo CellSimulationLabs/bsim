@@ -11,11 +11,12 @@
 package bsim;
 
 import java.awt.Color;
+
 import java.util.Vector;
 
 import bsim.drawable.bacteria.BSimBacteriaCreate;
 import bsim.drawable.bead.BSimBeadsCreate;
-import bsim.drawable.boundary.BSimBoundaryCreate;
+import bsim.drawable.boundary.*;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.field.BSimChemicalFieldCreate;
 import bsim.drawable.visualaid.BSimVisualAidCreate;
@@ -275,16 +276,18 @@ public class BSimParameters {
 		return newVec;
 	}
 	
-	public Vector createNewSolidBoundariesVec() {
+	public Vector createNewSolidBoxBoundariesVec() {
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
 		
 		// Create a new solid boundary for every item in the list
 		for(int i=0; i<solidBoundaries.size(); i++){
-			newVec.add(BSimBoundaryCreate.createSolidBoundary((double[])solidBoundaries.elementAt(i)));
+			for(int j=0;j<6;j++)
+			{
+					newVec.add(BSimSolidPlaneBoundaryCreate.createSolidPlaneBoundary((double[])solidBoundaries.elementAt(i),j));
+			}
 		}
-		
 		// Return the new vector
 		return newVec;
 	}
