@@ -40,7 +40,7 @@ public class BSimBoundary implements BSimDrawable {
 		// Update the internal variables
 		p1[0] = newStartPoint[0];
 		p1[1] = newStartPoint[1];
-		p1[1] = newStartPoint[2];
+		p1[2] = newStartPoint[2];
 		p2[0] = newEndPoint[0];
 		p2[1] = newEndPoint[1];
 		p2[2] = newEndPoint[2];
