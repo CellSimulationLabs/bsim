@@ -222,7 +222,7 @@ public class BSimScene extends JPanel implements Runnable,
 		bacteria = params.createNewBacteriaVec(this);
 		
 		// Create both wrapping and solid boundaries
-		solidBoundaries = params.createNewSolidBoundariesVec();
+		solidBoundaries = params.createNewSolidBoxBoundariesVec();
 		wrapBoundaries = params.createNewWrapBoundariesVec();
 		
 		// Create any visual aids
