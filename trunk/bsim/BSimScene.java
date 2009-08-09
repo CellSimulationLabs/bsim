@@ -12,8 +12,9 @@
  * Authors: Thomas Gorochowski
  *          Ian Miles
  *          Charlie Harrison
+ *          Mattia Fazzini
  * Created: 12/07/2008
- * Updated: 25/08/2008
+ * Updated: 09/08/2009
  */
 package bsim;
 

@@ -8,8 +8,9 @@
  * Authors: Thomas Gorochowski
  *          Ian Miles
  *          Charlie Harrison
+ *          Mattia Fazzini(Update)
  * Created: 12/07/2008
- * Updated: 14/08/2008
+ * Updated: 07/08/2009
  */
 package bsim.drawable.bacteria;
 

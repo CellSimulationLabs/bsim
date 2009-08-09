@@ -7,8 +7,9 @@
  *
  * Authors: Thomas Gorochowski
  *          Ian Miles
+ *          Mattia Fazzini(Update)
  * Created: 12/07/2008
- * Updated: 20/07/2008
+ * Updated: 07/08/2009
  */
 package bsim.physics;
 

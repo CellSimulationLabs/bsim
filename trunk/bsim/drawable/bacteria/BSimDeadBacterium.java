@@ -4,8 +4,9 @@
  * Class that represents a bacterium that has died. It cannot produce any internal force.
  *
  * Authors: Thomas Gorochowski
+ * 			Mattia Fazzini(Update)
  * Created: 01/09/2008
- * Updated: 01/09/2008
+ * Updated: 07/08/2009
  */
 package bsim.drawable.bacteria;
 

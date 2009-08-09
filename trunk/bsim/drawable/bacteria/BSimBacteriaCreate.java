@@ -4,8 +4,9 @@
  * Class to hold static methods to generate inital bacteria starting conditions.
  *
  * Authors: Thomas Gorochowski
+ * 			Mattia Fazzini(Update)
  * Created: 20/07/2008
- * Updated: 25/08/2008
+ * Updated: 07/08/2009
  */
 package bsim.drawable.bacteria;
 

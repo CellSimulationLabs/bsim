@@ -4,8 +4,9 @@
  * Class to hold static methods to generate chemical fields of given properties.
  *
  * Authors: Thomas Gorochowski
+ * 			Mattia Fazzini
  * Created: 25/07/2008
- * Updated: 25/08/2008
+ * Updated: 07/08/2009
  */
 package bsim.drawable.field;
 

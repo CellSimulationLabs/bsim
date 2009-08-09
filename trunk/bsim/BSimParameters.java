@@ -5,8 +5,9 @@
  * 
  * Authors: Ian Miles
  *          Thomas Gorochowski (Updates)
+ *          Mattia Fazzini(Update)
  * Created: 05/08/2008
- * Updated: 22/08/2008
+ * Updated: 09/08/2009
  */
 package bsim;
 

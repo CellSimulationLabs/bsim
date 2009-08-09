@@ -8,8 +8,9 @@
  * the area) or conservation (keeping all chemicals within the field area).
  *
  * Authors: Thomas Gorochowski
+ * 			Mattia Fazzini(Update)
  * Created: 20/07/2008
- * Updated: 20/07/2008
+ * Updated: 07/08/2009
  */
 package bsim.drawable.field;
 
