@@ -364,9 +364,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		x2 = (int)(position[1] + (size/2.0)*(1+direction[1]) - (littleR/Math.sqrt(2.0)));
 		g.setColor(Color.RED);
 		g.fillOval(x1,x2,(int)(littleR*2.0),(int)(littleR*2.0));
-		//System.out.println(position[0]+" "+position[1]);
-		//System.out.println(centrePos[0]+" "+centrePos[1]);
-		
+		//System.out.println(position[0]+" "+position[1]+" "+position[2]);
+		//System.out.println(centrePos[0]+" "+centrePos[1]+" "+centrePos[2]);	
 	}
 	
 	
