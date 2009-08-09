@@ -292,14 +292,17 @@ public class BSimParameters {
 		return newVec;
 	}
 	
-	public Vector createNewWrapBoundariesVec() {
+	public Vector createNewWrapBoxBoundariesVec() {
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
 		
 		// Create a new solid boundary for every item in the list
 		for(int i=0; i<wrapBoundaries.size(); i++){
-			newVec.add(BSimBoundaryCreate.createWrapBoundary((double[])wrapBoundaries.elementAt(i)));
+			for(int j=0;j<6;j++)
+			{
+				newVec.add(BSimPlaneBoundaryCreate.createWrapPlaneBoundary((double[])wrapBoundaries.elementAt(i),j));
+			}
 		}
 		
 		// Return the new vector
