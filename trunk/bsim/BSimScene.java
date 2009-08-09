@@ -18,6 +18,7 @@
 package bsim;
 
 import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -31,7 +32,7 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 import bsim.drawable.BSimDrawable;
-import bsim.drawable.boundary.BSimWrapBoundary;
+import bsim.drawable.boundary.BSimWrapPlaneBoundary;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.visualaid.BSimVisualAid;
 import bsim.physics.BSimCollisionPhysics;
@@ -223,7 +224,7 @@ public class BSimScene extends JPanel implements Runnable,
 		
 		// Create both wrapping and solid boundaries
 		solidBoundaries = params.createNewSolidBoxBoundariesVec();
-		wrapBoundaries = params.createNewWrapBoundariesVec();
+		wrapBoundaries = params.createNewWrapBoxBoundariesVec();
 		
 		// Create any visual aids
 		visualAids = params.createNewVisualAidsVec(this);
@@ -301,7 +302,7 @@ public class BSimScene extends JPanel implements Runnable,
 		
 		// Perform necessary boundary operations
 		for (i = 0; i < wrapBoundaries.size(); i++) {
-			((BSimWrapBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
+			((BSimWrapPlaneBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
 		}
 		
 		// Update the fields
