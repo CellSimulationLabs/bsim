@@ -77,16 +77,29 @@ public class BSimSolidPlaneBoundary implements BSimDrawable {
 		double dist= 0.0;
 		dist = Math.abs((a*p[0])+(b*p[1])+(c*p[2])+d)/Math.sqrt(Math.pow(a, 2.0)+Math.pow(b, 2.0)+Math.pow(c, 2.0));
 		info[0]=dist;		
-			
-		/*
-		 * point on the plane where the perpendicular distance fall
-		 * 
-		 * ax+by+cz+d=0
-		 * x=x1+at
-		 * y=y1+bt
-		 * z=z2+ct
-		 * 
-		 */
+		//point that fall into the plane
+		double[] pp= {0.0,0.0,0.0};
+		pp=perpendicularPointFallIntoPlane(p);		
+		// Normalize the vector between the two points
+		info[1]=(pp[0] - p[0])/dist;
+		info[2]=(pp[1] - p[1])/dist;
+		info[3]=(pp[2] - p[2])/dist;
+		
+		return info;
+	}
+	
+	/*
+	 * Point that fall on the plane following the perpendicular distance
+	 * 
+	 * point on the plane where the perpendicular distance fall
+	 * 
+	 * ax+by+cz+d=0
+	 * x=x1+at
+	 * y=y1+bt
+	 * z=z2+ct
+	 * 
+	 */
+	public synchronized double[] perpendicularPointFallIntoPlane(double[] p) {
 		double t= ( ((-1)*a*p[0])+((-1)*b*p[1])+((-1)*c*p[2])+((-1)*d))/((a*a)+(b*b)+(c*c));
 		
 		//point into the plane
@@ -95,13 +108,10 @@ public class BSimSolidPlaneBoundary implements BSimDrawable {
 		pp[1]=p[1]+b*t;
 		pp[2]=p[2]+c*t;
 		
-		// Normalize the vector between the two points
-		info[1]=(pp[0] - p[0])/dist;
-		info[2]=(pp[1] - p[1])/dist;
-		info[3]=(pp[2] - p[2])/dist;
-		
-		return info;
+		return pp;
 	}
+	
+	
 	
 	/**
 	 * Standard get methods
