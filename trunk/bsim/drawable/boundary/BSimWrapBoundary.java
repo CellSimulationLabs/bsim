@@ -106,6 +106,7 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 	 * nearest end 
 	 */
 	public boolean isColliding(BSimParticle x) {
+		double[] direction =x.getDirection();
 		double[] point = x.getCentrePos();
 		double radius = x.getSize()/2;
 		double dist;
@@ -120,10 +121,22 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 		} else {
 			dist = perpDist;
 		}
-		
-		if (dist - radius < 0) return true;
+				
+		if (dist - radius < 0) {
+			return true;
+			
+		} else if (dist - 10 < 0) {
+			double[] vector = {point[0] + direction[0],point[1] + direction[1]};
+			double perpDistVector = distPointToLine(vector) * length;
+			
+			if (perpDistVector > perpDist) {
+				return true;
+			}
+			else return false;	
+		}
 		else return false;
 	}
+
 	
 	/**
 	 * Return the absolute value of the perpendicular distance between a point and the boundary as a 
