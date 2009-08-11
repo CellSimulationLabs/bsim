@@ -21,6 +21,10 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.Vector;
 
+import javax.vecmath.AxisAngle4d;
+import javax.vecmath.Matrix3d;
+import javax.vecmath.Vector3d;
+
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
@@ -174,21 +178,22 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		double[] curDirection = this.getDirection();
 		double[] newDirection = new double[3];
 
-		/*
-		 * 
-		 * 
-		 * TODO modify the tumbling iteration
-		 * 
-		 * 
-		 */
-		// Get the angle (direction)
-		double theta = Math.atan2(curDirection[1],curDirection[0]);
-
-		// Find and update the new direction of the bacterium
-		newDirection[0] = Math.cos(theta + tumbleSpeed);
-		newDirection[1] = Math.sin(theta + tumbleSpeed);
-		//TODO modify
-		newDirection[2] = curDirection[2];
+		// TODO make curDirection a vector in the first place
+		Vector3d curDirectionVector = new Vector3d(curDirection);
+		
+		// Obtain a random direction perpendicular to curDirection
+		Vector3d randomVector = new Vector3d(Math.random(),Math.random(),Math.random());
+		Vector3d crossVector = new Vector3d();
+		crossVector.cross(curDirectionVector, randomVector);		
+		
+		// Generate the rotation matrix for rotating about this direction by the tumble angle
+		Matrix3d r = new Matrix3d();
+		r.set(new AxisAngle4d(crossVector, tumbleSpeed));
+		
+		// Apply the rotation
+		Vector3d newDirectionVector = new Vector3d();		
+		r.transform(curDirectionVector,newDirectionVector);
+		newDirectionVector.get(newDirection);
 		
 		setDirection(newDirection);
 	}
@@ -203,11 +208,6 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 			// Change state; Switch from run to tumble
 
 			// Calculate tumble angle (only approximates distribution)
-			/*
-			 * 
-			 * not yet modified
-			 *
-			 */
 			double tumbleAngle = approxTumbleAngle();
 
 			// Update the state and other properties of the bacterium
