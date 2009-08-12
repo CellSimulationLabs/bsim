@@ -4,8 +4,9 @@
 * Class that holds static methods that are used by all components of the system.
 *
 * Authors: Thomas Gorochowski
+*			Mattia Fazzini(Update)	
 * Created: 20/07/2008
-* Updated: 20/07/2008
+* Updated: 12/08/2009
 */
 package bsim;
 
@@ -69,17 +70,17 @@ public class BSimUtils {
 	* to an object is assumed to equal drag.
 	* N.B. Units are S.I.; e.g. for F in micro Newtons, velocity is in microns per metre
 	*/
-	public static synchronized double[] force2Velocity2D(double[] F, double r, double visc) {
-		double[] v = new double[2];
+	public static synchronized double[] force2Velocity3D(double[] F, double r, double visc) {
+		double[] v = new double[3];
 		v[0] = F[0]/(6.0*Math.PI*r*visc);
 		v[1] = F[1]/(6.0*Math.PI*r*visc);
+		v[2] = F[2]/(6.0*Math.PI*r*visc);
 		return v;
 	}
 	
-	
-	public static synchronized boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
-		double centreDist = get2Ddist(a.getCentrePos(),b.getCentrePos());
-		double aRad = a.getRadius(), bRad = b.getRadius();
+	public static synchronized boolean particlesIntersecting(BSimParticle a, double[] centrePos, double radius) {
+		double centreDist = get3Ddist(a.getCentrePos(),centrePos);
+		double aRad = a.getRadius(), bRad = radius;
 		
 		if(centreDist < (aRad + bRad)) return true;
 		else return false;
@@ -89,11 +90,10 @@ public class BSimUtils {
 	/**
 	* Returns the distance between a pair of 2 dimensional points
 	*/
-	public static synchronized double get2Ddist(double[] a, double[] b) {
-		double distSqrd = Math.pow(a[0]-b[0],2) + Math.pow(a[1]-b[1],2);
+	public static synchronized double get3Ddist(double[] a, double[] b) {
+		double distSqrd = Math.pow(a[0]-b[0],2) + Math.pow(a[1]-b[1],2) + Math.pow(a[2]-b[2],2);
 		return Math.sqrt(distSqrd);
 	}
-	
 	
 	/**
 	* Returns a padded version of the number to a size of two
