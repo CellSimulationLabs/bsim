@@ -14,7 +14,7 @@
  *          Charlie Harrison
  *          Mattia Fazzini
  * Created: 12/07/2008
- * Updated: 09/08/2009
+ * Updated: 12/08/2009
  */
 package bsim;
 
@@ -33,6 +33,7 @@ import java.util.Vector;
 import javax.swing.JPanel;
 
 import bsim.drawable.BSimDrawable;
+import bsim.drawable.bacteria.*;
 import bsim.drawable.boundary.BSimWrapPlaneBoundary;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.visualaid.BSimVisualAid;
@@ -113,6 +114,8 @@ public class BSimScene extends JPanel implements Runnable,
 	public BSimParameters params;
 	
 	private boolean guiExists = false;
+	
+	public boolean reallocateNewForceMat = true;
 	
 	
 	/**
@@ -223,6 +226,8 @@ public class BSimScene extends JPanel implements Runnable,
 		beads = params.createNewBeadVec();
 		bacteria = params.createNewBacteriaVec(this);
 		
+		reallocateNewForceMat = true;
+		
 		// Create both wrapping and solid boundaries
 		solidBoundaries = params.createNewSolidBoxBoundariesVec();
 		wrapBoundaries = params.createNewWrapBoxBoundariesVec();
@@ -297,6 +302,21 @@ public class BSimScene extends JPanel implements Runnable,
 	
 	private void runAllUpdates(){
 		int i;
+		
+		//2009
+		if(timeStep>0){
+			BSimBacterium bact;
+			for(int k=0; k<bacteria.size();k++){
+				bact=null;
+				bact=(BSimBacterium)(bacteria.elementAt(k));
+				bact.increaseLifeTime();
+				bact.increaseSize();
+				if((bact.getLifeCycleTime())==(bact.getTg())){
+					bacteria.add(bact.replicate(this,params));
+					bact.newLifeCycle();
+				}
+			}
+		}
 		
 		// Update the properties for bacteria and beads
 		physics.updateProperties();
@@ -665,4 +685,7 @@ public class BSimScene extends JPanel implements Runnable,
 	public int getTransX (){ return transX; }
 	public int getTransY (){ return transY; }
 	public double getScale () { return (1.0/START_SCALE)*scale; }
+	public boolean getReallocateNewForceMat () { return reallocateNewForceMat; }
+	public void setReallocateNewForceMat (boolean b) { reallocateNewForceMat=b; }
+
 }
