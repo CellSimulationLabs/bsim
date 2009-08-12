@@ -62,6 +62,8 @@ public class BSimParameters {
 	public double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
 	
+	public double[] magnStrength = {0.0, 0.0, 0.0};
+	
 	public double   screenZoom       = 1, 
 	                screenMove[]     = {0.0, 0.0};
 	
@@ -85,8 +87,7 @@ public class BSimParameters {
 	public double   wellDepthBactBdry = 0.0;
 	
 	public double	reactForce = 0.0;
-	
-	
+		
 	public BSimParameters() {
 
 		// Create the vectors for the objects that will need to be created by the scene
@@ -161,6 +162,8 @@ public class BSimParameters {
 	
 	public double	getReactForce () { return reactForce; }
 	
+	public double[]	 getMagnStrength () {return magnStrength; }
+	
 	public double[]  getCfGoalDefine () { return cfGoalDefine; }
 	public double[]  getCfGoalSetup () { return cfGoalSetup; }
 	public double[]  getCfCoordDefine () { return cfCoordDefine; }
@@ -224,6 +227,8 @@ public class BSimParameters {
 	public void     setWellDepthBactBdry ( double x) { wellDepthBactBdry = x; }
 	
 	public void 	setReactForce ( double x) { reactForce = x; }
+	
+	public void		setMagnStrength (double[] x) {magnStrength = x; }
 	
 	public void     setCfGoalDefine ( double[] x) { cfGoalDefine = x; }
 	public void     setCfGoalSetup ( double[] x) { cfGoalSetup = x; }
