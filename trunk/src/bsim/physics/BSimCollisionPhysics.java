@@ -10,7 +10,7 @@
  *          Charlie Harrison
  *          Mattia Fazzini(Update)
  * Created: 13/08/2008
- * Updated: 07/08/2009
+ * Updated: 12/08/2009
  */
 package bsim.physics;
 
@@ -46,19 +46,17 @@ public class BSimCollisionPhysics extends BSimPhysics{
 	protected double wellDepthBactBdry; 
 
 	// Vector of resolved external force vectors on particles
-	protected double[][] externalForces;
-	protected boolean[][] collisionTypes;
+	protected double[][] externalForces = null;
+	protected boolean[][] collisionTypes = null;
 	
 	// Matrices used during calculations
-	protected double[][][] newForceMat;
+	protected double[][][] newForceMat = null;
 	
 	protected static BSimParameters params;
 	
 	public static int MAX_WORKER_THREADS = 1;
 	
 	public static int BOUNDARY_TYPE = -1;
-	
-	private boolean allocMem = true;
 	
 	private double reactForce = 0.0;
 	
@@ -88,7 +86,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		
 		MAX_WORKER_THREADS = params.getNumOfThreads();
 		
-		allocMem = true;
+		scene.setReallocateNewForceMat(true);
 	}
 	
 	
@@ -107,15 +105,21 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		int tTotal = n+m;
 		
 		// Check to see if memory needs to be allocated
-		if(allocMem){
+		if(scene.getReallocateNewForceMat()){
 			// Create the force matrix
+			//useful for the memory allocation and the garbage collector work
+			newForceMat = null;
 			newForceMat = new double[n+m][n+m+b][3];
 			// Create the boolean set to represent the collision types
+			//useful for the memory allocation and the garbage collector work
+			collisionTypes = null;
 			collisionTypes = new boolean[n+m][3];
 			// External Forces
+			//useful for the memory allocation and the garbage collector work
+			externalForces = null;
 			externalForces = new double[n+m][3];
 			// No new allocation required
-			allocMem = false;
+			scene.setReallocateNewForceMat(false);
 		}
 			
 		// Create array of worker threads
