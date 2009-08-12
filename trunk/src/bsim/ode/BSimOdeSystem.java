@@ -1,6 +1,13 @@
 /**
+ * BSimOdeSystem.java
+ * 
  * Interface used for defining a system of ODEs.
  * Defines the ODEs, the number of equations and the initial conditions.
+ * 
+ * Author: Antoni Matyjaszkiewicz
+ * 
+ * Created: 10/08/2008
+ * Updated: 12/08/2009
  */
 
 package bsim.ode;
@@ -8,7 +15,7 @@ package bsim.ode;
 //TODO Should this and single ode be an abstract class instead?
 //TODO Improve implementation of numEq, and ICs (like in single ode interface)
 
-public interface OdeEqSystem {
+public interface BSimOdeSystem {
 	
 	/** 
 	 * Define a system of derivatives
