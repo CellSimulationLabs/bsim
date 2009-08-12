@@ -10,7 +10,7 @@
  *          Charlie Harrison
  *          Mattia Fazzini(Update)
  * Created: 12/07/2008
- * Updated: 07/08/2009
+ * Updated: 12/08/2009
  */
 package bsim.drawable.bacteria;
 
@@ -29,6 +29,7 @@ import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.drawable.BSimDrawable;
+import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.logic.BSimLogic;
 import bsim.physics.BSimParticle;
@@ -79,20 +80,52 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	protected boolean memToReset = true;
 	
 	protected boolean runUp = false;
+	
+	public static int TRILINEAR_ELONGATION=1;
+	public static int BILINEAR_ELONGATION=2;
+	
+	protected int elongationType = 0;
+	protected double width = 0;
+	
+	//values in num of timestep
+	public int lifeTime = 0;	
+	public int lifeCycleTime = 0;
+	protected int tc = 0;
+	protected double timeC = 0;
+	protected int t2 = 0;
+	protected double time2 = 0;
+	protected int tg = 0;
+	protected double timeG = 0;
+	
+	protected double a1minute = 0;
+	protected double a2minute = 0;
+	protected double a3minute = 0;
+	protected double a1 = 0;
+	protected double a2 = 0;
+	protected double a3 = 0;
+	
+	protected double ltg = 0;
+	protected double ltc = 0;
+	protected double m1 = 0;
+	protected double m2 = 0;
+	protected double q1 = 0;
+	protected double q2 = 0;
+
 
 
 	/**
-	 * General constructor.
+	 * General constructor for a trilinear elongation bacteria.
 	 */
-	public BSimBacterium(double newSpeed, double newMass, double newSize,
+	public BSimBacterium(double newSpeed, double newMass,
+			double newL0, double newR, double newTC, double newT2, double newTG, double newa1, double newa2, double newa3, int newElongationType,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimParticle.PART_BACT);
-
+		super(newSpeed, newMass, newL0, newDirection, newPosition, BSimParticle.PART_BACT);
+		
 		// Update extended properties
 		forceMagnitudeDown = newForceMagnitudeDown;
 		forceMagnitudeUp = newForceMagnitudeUp;
@@ -115,10 +148,83 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 			readGammaVals();
 		}
 		
+		// It needs to be reset to the current concentration
+		memToReset = true;
+		
+		lifeTime=0;
+		lifeCycleTime=0;
+		width = newR;
+		timeC=newTC;
+		time2=newT2;
+		timeG=newTG;
+		//numb of time step in second
+		tc=(int)((timeC*60)/params.getDtSecs());
+		t2=(int)((time2*60)/params.getDtSecs());
+		tg=(int)((timeG*60)/params.getDtSecs());
+		a1minute=newa3;
+		a2minute=newa2;
+		a3minute=newa3;
+		//from minute to second
+		a1=a1minute/60;
+		a2=a1minute/60;
+		a3=a1minute/60;
+		elongationType = newElongationType;
+	}
+	
+	/**
+	 * General constructor for a bilinear elongation bacteria.
+	 */
+	public BSimBacterium(double newSpeed, double newMass,
+			double newL0, double newLTC, double newLTG, double newR, double newTC, double newTG, int newElongationType,
+			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
+			double newForceMagnitudeUp,
+			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
+		    BSimParameters newParams) {
+
+		// Call the parent constructor with the basic properties	
+		super(newSpeed, newMass, newL0, newDirection, newPosition, BSimParticle.PART_BACT);
+		
+		// Update extended properties
+		forceMagnitudeDown = newForceMagnitudeDown;
+		forceMagnitudeUp = newForceMagnitudeUp;
+		state          = newState;
+		tumbleSpeed    = newTumbleSpeed;
+		remDt          = newRemDt;
+		previousConc   = 0.0;
+		concMemory 	   = new Vector();
+		scene = newScene;
+		params = newParams;
+		
+		// Calcuate the run probabilities from the run lengths
+		isoRunProb = 1 - newScene.getDtSec()/params.getIsoRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getIsoRunLength());
+		upRunProb = 1 - newScene.getDtSec()/params.getUpRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getUpRunLength());
+		downRunProb = 1 - newScene.getDtSec()/params.getDownRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getDownRunLength());
+		
+		// Check to see if the gamma distribution has been read in 
+		if(gammaVals[0] == 0){
+			// Read distribution values from external text file
+			readGammaVals();
+		}
 		
 		// It needs to be reset to the current concentration
 		memToReset = true;
 		
+		
+		lifeTime=0;
+		lifeCycleTime=0;
+		ltc=newLTC;
+		ltg=newLTG;
+		width = newR;
+		timeC=newTC;
+		timeG=newTG;
+		//number of time step in second
+		tc=(int)((timeC*60)/params.getDtSecs());
+		tg=(int)((timeG*60)/params.getDtSecs());
+		m1 = (ltc-newL0)/((timeC*60)-0);
+		m2 = (ltg-ltc)/((timeG*60)-(timeC*60));
+		q1 = newL0;
+		q2 = ltg-(m2*(timeG*60));	
+		elongationType = newElongationType;
 	}
 
 
@@ -337,7 +443,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
     	
 		// Read in the file to the specified array
     	try {
-    		Scanner scan = new Scanner(new File("bsim/gammaVals.txt"));
+    		Scanner scan = new Scanner(new File("src/bsim/gammaVals.txt"));
     		while (scan.hasNextLine()) {
     			gammaVals[i] = Double.parseDouble(scan.nextLine());		 
     			i++;
@@ -346,6 +452,90 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
     		ex.printStackTrace();
     	}
     }
+    
+	/*
+	 * Function to increase Time
+	 */
+	public void increaseLifeTime(){
+		//increase lifeTime every timeStep
+		lifeTime++;
+		lifeCycleTime++;
+	}
+	
+	public void newLifeCycle(){
+		lifeCycleTime=0;
+	}
+    
+	/*
+	 * Function to increase the Size
+	 */
+	public void increaseSize(){
+		if(elongationType==BSimBacterium.TRILINEAR_ELONGATION){
+			if(lifeCycleTime>t2){
+				//third linear phase
+				size=(size)+((a3)*(params.getDtSecs()));
+				setPosition(position);
+			}
+			else{
+				if(lifeCycleTime>tc){
+					//second linear phase
+					size=(size)+((a2)*(params.getDtSecs()));
+					setPosition(position);
+				}
+				else{
+					//first linear phase
+					size=(size)+((a1)*(params.getDtSecs()));
+					setPosition(position);
+					
+				}
+			}
+		}
+		else{
+			if(lifeCycleTime>tc){
+				//second linear phase
+				size= (m2*(lifeCycleTime*params.getDtSecs()))+q2;
+				setPosition(position);
+			}
+			else{
+				//second linear phase
+				size=(m1*(lifeCycleTime*params.getDtSecs()))+q1;
+				setPosition(position);
+			}
+		}
+	}
+	
+	/*
+	 * Replication function
+	 */
+	public BSimBacterium replicate(BSimScene scene, BSimParameters params){
+		double[] newCentrePosBact2 = new double[3];
+		double[] newPosition = new double[3];
+		double beta = Math.atan2(direction[1],direction[0]);
+		double alpha = Math.acos((direction[2])/Math.sqrt(Math.pow(direction[0], 2.0)+Math.pow(direction[1], 2.0)+Math.pow(direction[2], 2.0)));
+		this.size=this.size/2;
+		newCentrePosBact2[0] = centrePos[0]+((this.size/2)*Math.sin(alpha)*Math.cos(beta));
+		newCentrePosBact2[1] = centrePos[1]+((this.size/2)*Math.sin(alpha)*Math.sin(beta));
+		newCentrePosBact2[2] = centrePos[2]+((this.size/2)*Math.cos(alpha));
+		newPosition[0]=newCentrePosBact2[0]-(this.size/2);
+		newPosition[1]=newCentrePosBact2[0]-(this.size/2);;
+		newPosition[2]=newCentrePosBact2[0]-(this.size/2);;
+		centrePos[0] = centrePos[0]-((this.size/2)*Math.sin(alpha)*Math.cos(beta));
+		centrePos[1] = centrePos[1]-((this.size/2)*Math.sin(alpha)*Math.sin(beta));
+		centrePos[2] = centrePos[2]-((this.size/2)*Math.cos(alpha));
+		setCentrePos(centrePos);
+		BSimBacterium newBact = null;
+		if(elongationType==BSimBacterium.TRILINEAR_ELONGATION){
+			//inherit the trilinear elongation
+			newBact = new BSimBacterium(this.speed, this.mass, this.size, this.width, this.timeC, this.time2, this.timeG, this.a1minute, this.a2minute, this.a3minute, this.elongationType, this.direction, newPosition, this.forceMagnitudeDown, this.forceMagnitudeUp, this.state, this.speed, this.remDt, scene, params);
+		}
+		else{
+			//inherit the bilinear elongation
+			newBact = new BSimBacterium(this.speed, this.speed, this.size, this.ltc, this.ltg, this.width, this.timeC, this.timeG, this.elongationType, this.direction, newPosition, this.forceMagnitudeDown, this.forceMagnitudeUp, this.state, this.speed, this.remDt, scene, params);
+		}
+		newBact.startNewPhase();
+		scene.setReallocateNewForceMat(true);
+		return newBact;
+	}
 
 
 	/**
@@ -359,12 +549,12 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		g.fillOval((int)position[0],(int)position[1],(int)(size),(int)(size));
 
 		// Draw an indicator of bacterium's direction
-		int x1,x2;
-		double littleR = size/5.0;
-		x1 = (int)(position[0] + (size/2.0)*(1+direction[0]) - (littleR/Math.sqrt(2.0)));
-		x2 = (int)(position[1] + (size/2.0)*(1+direction[1]) - (littleR/Math.sqrt(2.0)));
-		g.setColor(Color.RED);
-		g.fillOval(x1,x2,(int)(littleR*2.0),(int)(littleR*2.0));
+		//int x1,x2;
+		//double littleR = size/5.0;
+		//x1 = (int)(position[0] + (size/2.0)*(1+direction[0]) - (littleR/Math.sqrt(2.0)));
+		//x2 = (int)(position[1] + (size/2.0)*(1+direction[1]) - (littleR/Math.sqrt(2.0)));
+		//g.setColor(Color.RED);
+		//g.fillOval(x1,x2,(int)(littleR*2.0),(int)(littleR*2.0));
 		//System.out.println(position[0]+" "+position[1]+" "+position[2]);
 		//System.out.println(centrePos[0]+" "+centrePos[1]+" "+centrePos[2]);	
 	}
@@ -405,4 +595,6 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	public int getChemo (){ return chemo; }
 	public Vector getConcMemory() {return concMemory;}
 	public boolean getMemToReset() {return memToReset; }
+	public int getLifeCycleTime() {return lifeCycleTime;}
+	public int getTg() {return tg;}
 }
