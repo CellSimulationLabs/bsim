@@ -23,7 +23,7 @@
  * Author: Antoni Matyjaszkiewicz
  * 
  * Created: 10/08/2009
- * Updated: 12/08/2009
+ * Updated: 14/08/2009
  */
 
 package bsim.ode;
@@ -36,7 +36,7 @@ public class BSimOdeSolver {
 	 * Numerically solve a single ODE with Euler's method
 	 * y = euler(ODE, x, y, step_size)
 	*/ 
-	public double euler(BSimOdeSingle ode, double x, double y, double h){
+	public static double euler(BSimOdeSingle ode, double x, double y, double h){
 		// Next y value = time-step * (dy/dx)
 		y += h*ode.derivative(x, y);
 		
@@ -47,7 +47,7 @@ public class BSimOdeSolver {
 	 *  Numerically solve an ODE system with Euler's method
 	 *  y = euler(ODE_system, x, y_vector, step_size)
 	 */
-	public double[] euler(BSimOdeSystem odes, double x, double[] y, double h){
+	public static double[] euler(BSimOdeSystem odes, double x, double[] y, double h){
 		int numEq = odes.getNumEq();
 		double[] dydx = odes.derivativeSystem(x, y);
 		
@@ -66,7 +66,7 @@ public class BSimOdeSolver {
 	 * Numerically solve a single ODE with 2nd order Runge-Kutta method
 	 * y = rungeKutta23(ODE, x, y, step_size)
 	 */
-	public double rungeKutta23(BSimOdeSingle ode, double x, double y, double h){
+	public static double rungeKutta23(BSimOdeSingle ode, double x, double y, double h){
 		double k1 = 0.0, k2 = 0.0;
 		
 		// Intermediate trial step coefficients (k values)
@@ -83,7 +83,7 @@ public class BSimOdeSolver {
 	 * Numerically solve an ODE system with 2nd order Runge-Kutta method
 	 * y = rungeKutta23(ODE_system, x, y_vector, step_size)
 	 */
-	public double[] rungeKutta23(BSimOdeSystem odes, double x, double[] y, double h){
+	public static double[] rungeKutta23(BSimOdeSystem odes, double x, double[] y, double h){
 		int numEq = odes.getNumEq();
 		double[] dydx = new double[numEq];
 		double[] yNew = new double[numEq];
@@ -114,7 +114,7 @@ public class BSimOdeSolver {
 	 * Numerically solve a single ODE function with 4th order Runge-Kutta method
 	 * y = rungeKutta45(ODE, x, y, step_size)
 	 */
-	public double rungeKutta45(BSimOdeSingle ode, double x, double y, double h){
+	public static double rungeKutta45(BSimOdeSingle ode, double x, double y, double h){
 		double k1 = 0.0, k2 = 0.0, k3 = 0.0, k4 = 0.0;
 
 		// Intermediate trial step coefficients (k values)
@@ -133,7 +133,7 @@ public class BSimOdeSolver {
 	 *  Numerically solve an ODE system with 4th order Runge-Kutta method
 	 *  y = rungeKutta45(ODE_system, x, y_vector, step_size)
 	 */
-	public double[] rungeKutta45(BSimOdeSystem odes, double x, double[] y, double h){
+	public static double[] rungeKutta45(BSimOdeSystem odes, double x, double[] y, double h){
 		int numEq = odes.getNumEq();
 		double[] dydx = new double[numEq];
 		double[] yNew = new double[numEq];
