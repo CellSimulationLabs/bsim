@@ -62,6 +62,6 @@ public class BSimVesicle extends BSimParticle implements BSimLogic, BSimDrawable
 	public void redraw(Graphics g) {
 
 		g.setColor(Color.PINK);
-		g.fillOval((int)position[0],(int)position[1],(int)(size),(int)(size));
+		g.fillOval((int)position[0],(int)position[1],(int)(radius),(int)(radius));
 	}
 }
