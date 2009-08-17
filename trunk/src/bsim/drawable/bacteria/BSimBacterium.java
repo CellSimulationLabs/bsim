@@ -80,8 +80,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	
 	protected boolean runUp = false;
 	
-	protected double radiusGrowthRate = 0.001; // microns per second
-	protected double replicationRadius = 2*params.getBactRadius();
+	protected double radiusGrowthRate = 0.5; // microns per second
+	protected double replicationRadius;
 
 
 	/**
@@ -106,6 +106,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		concMemory 	   = new Vector();
 		scene = newScene;
 		params = newParams;
+		
+		replicationRadius = 2*newRadius;
 		
 		// Calcuate the run probabilities from the run lengths
 		isoRunProb = 1 - newScene.getDtSec()/params.getIsoRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getIsoRunLength());
@@ -394,7 +396,9 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		newPosition[0] = position[0] + radius*direction[0];
 		newPosition[1] = position[1] + radius*direction[1];
 		newPosition[2] = position[2] + radius*direction[2];
-
+		
+		radius = radius/2;
+		
 		// Create new bacterium TODO remDt?
 		newBact = new BSimBacterium(speed, mass, radius,
 				direction, newPosition,
