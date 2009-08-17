@@ -6,7 +6,7 @@
  * Authors: Thomas Gorochowski
  * 			Mattia Fazzini(Update)
  * Created: 01/09/2008
- * Updated: 12/08/2009
+ * Updated: 07/08/2009
  */
 package bsim.drawable.bacteria;
 
@@ -23,42 +23,20 @@ public class BSimDeadBacterium extends BSimBacterium implements BSimLogic, BSimD
 
 
 	/**
-	 * General constructor for trilinear elongation .
+	 * General constructor.
 	 */
-	
-	public BSimDeadBacterium(double newSpeed, double newMass,
-			double newL0, double newR, double newTC, double newT2, double newTG, double newa1, double newa2, double newa3, int newElongationType,
+	public BSimDeadBacterium(double newSpeed, double newMass, double newSize,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
-			double newForceMagnitudeUp,
+			 double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams) {
-		
-		super(newSpeed, newMass,
-		newL0, newR, newTC, newT2, newTG, newa1, newa2, newa3, newElongationType,
-		newDirection, newPosition, newForceMagnitudeDown,
-		newForceMagnitudeUp,
-		newState, newTumbleSpeed, newRemDt, newScene, 
-		newParams);
-			
+
+		// Call the parent constructor with the basic properties	
+		super(newSpeed, newMass, newSize, newDirection, newPosition, newForceMagnitudeDown,
+		newForceMagnitudeUp, newState,
+		      newTumbleSpeed, newRemDt, newScene, newParams);
 	}
-	
-	/**
-	 * General constructor for bilinear elongation .
-	 */
-	public BSimDeadBacterium(double newSpeed, double newMass,
-			double newL0, double newLTC, double newLTG, double newR, double newTC, double newTG, int newElongationType,
-			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
-			double newForceMagnitudeUp,
-			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    BSimParameters newParams) {
-		
-		super(newSpeed, newMass,
-				newL0, newLTC, newLTG, newR, newTC, newTG, newElongationType,
-				newDirection, newPosition, newForceMagnitudeDown,
-				newForceMagnitudeUp,
-				newState, newTumbleSpeed, newRemDt, newScene, 
-			    newParams);
-	}
+
 
 	/**
 	 * Implements the BSimLogic interface. In this case it merely carries out
@@ -72,21 +50,6 @@ public class BSimDeadBacterium extends BSimBacterium implements BSimLogic, BSimD
 		double[] f = {0.0, 0.0, 0.0};
 		
 		return  f;
-	}
-	
-	
-	/*
-	 * Function to increase the lifeTime
-	 * This method must be empty because a dead bacterium has no lifeTime anymore
-	 */
-	public void increaseLifeTime(){
-	}
-    
-	/*
-	 * Function to increase the Size
-	 * This method must be empty because a dead bacterium can not elongate anymore
-	 */
-	public void increaseSize(){
 	}
 	
 	
