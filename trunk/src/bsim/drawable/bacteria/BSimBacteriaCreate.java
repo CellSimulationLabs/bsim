@@ -94,8 +94,6 @@ public class BSimBacteriaCreate {
 					case 3: bactVec.add(new BSimCoordBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[9], args[10])); break;
 					// Bead sensing, co-ordinating and recruiting bacteria
 					case 4: bactVec.add(new BSimRecruitBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[9], args[10])); break;
-					// Dead bacteria
-					case 5: bactVec.add(new BSimDeadBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params)); break;
 				}
 			}
 		}
@@ -157,8 +155,6 @@ public class BSimBacteriaCreate {
 			case 3: newBact = new BSimCoordBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[5], args[6]); break;
 			// Bead sensing, co-ordinating and recruiting bacteria
 			case 4: newBact = new BSimRecruitBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[5], args[6]); break;
-			// Dead bacteria
-			case 5: newBact = new BSimDeadBacterium(newSpeed, newMass, newRadius, newDirection, newPosition, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params); break;
 		}
 		
 		return newBact;
