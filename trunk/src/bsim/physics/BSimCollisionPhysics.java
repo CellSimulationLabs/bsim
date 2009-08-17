@@ -315,15 +315,18 @@ public class BSimCollisionPhysics extends BSimPhysics{
 				// Resolve the forces for the current particle
 				
 				
-				if(i>=n && i<n+m){
-					//case if we are resolving a force for a beads
-					//considering the component of the vesicles for the beads
-					resolveExternalForces(newForceMat, i, vesiclesForcesBeads[i-n]); 
-				}
-				else{
+				if(i<n){
 					//in all the other cases
 					resolveExternalForces(newForceMat, i); 
 				}
+				else{
+					//case if we are resolving a force for a beads
+					//considering the component of the vesicles for the beads
+					resolveExternalForces(newForceMat, i, vesiclesForcesBeads[i-n]);
+					
+				}
+				
+				
 				// Find the internal force of the particle
 				if(i < n) {
 					// The current particle is a bacteria so call the required function
