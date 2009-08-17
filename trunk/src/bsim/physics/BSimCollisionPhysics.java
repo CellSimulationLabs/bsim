@@ -447,7 +447,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		private void linearMotion(BSimParticle x, double[] internalForce, int index) {
 			double[] totalForce = new double[3];
 			double[] velocity = new double[3];
-			double[] curPosition = x.getPosition();
+			double[] curPosition = x.getCentrePos();
 			double[] newPosition= new double[3];
 
 			// Calculate the total force for the particle
@@ -467,7 +467,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			(velocity[1]*(double)scene.getDtSec());
 			newPosition[2] = curPosition[2] + 
 			(velocity[2]*(double)scene.getDtSec());
-			x.setPosition(newPosition);
+			x.setCentrePos(newPosition);
 		}
 		
 		

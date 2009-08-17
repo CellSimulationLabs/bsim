@@ -80,7 +80,7 @@ public class BSimBeadFileExport extends BSimFileExport {
 			for(int i=0; i<beads.size(); i++){
 				
 				// Get the position of the bead and add to the output file
-				beadPos = ((BSimParticle)beads.elementAt(i)).getPosition();
+				beadPos = ((BSimParticle)beads.elementAt(i)).getCentrePos();
 				outStr += ", " + beadPos[0];
 				outStr += ", " + beadPos[1];
 				

@@ -25,8 +25,7 @@ public abstract class BSimParticle {
 	// General properties of all objects in a simulation
 	protected double size  = 0, // microns
 	                 mass  = 0, 
-	                 speed = 0; // microns per second
-	protected double position[]  = {0,0,0};
+	                 speed = 0; // microns per second	
 	protected double centrePos[] = {0,0,0};
 	protected double direction[] = {0,0,0};
 	
@@ -42,12 +41,9 @@ public abstract class BSimParticle {
 		direction[0] = newDirection[0];
 		direction[1] = newDirection[1];
 		direction[2] = newDirection[2];
-		position[0]  = newPosition[0];
-		position[1]  = newPosition[1];
-		position[2]  = newPosition[2];
-		centrePos[0] = newPosition[0] + (newSize/2.0);
-		centrePos[1] = newPosition[1] + (newSize/2.0);
-		centrePos[2] = newPosition[2] + (newSize/2.0);
+		centrePos[0] = newPosition[0];
+		centrePos[1] = newPosition[1];
+		centrePos[2] = newPosition[2];
 		
 		partType = newType;
 	}
@@ -61,18 +57,7 @@ public abstract class BSimParticle {
 	public void setMass(double m) {mass = m;}
 	public void setSpeed(double s) {speed = s;}
 	public void setType(int t) {partType = t;}
-	public void setPosition(double[] p) {
-		position[0] = p[0]; 
-		position[1] = p[1];
-		position[2] = p[2];
-		centrePos[0] = p[0] + size/2.0;
-		centrePos[1] = p[1] + size/2.0;
-		centrePos[2] = p[2] + size/2.0;
-	}
 	public void setCentrePos(double cp[]) {
-		position[0] = cp[0] - size/2.0; 
-		position[1] = cp[1] - size/2.0;
-		position[2] = cp[2] - size/2.0;
 		centrePos[0] = cp[0];
 		centrePos[1] = cp[1];
 		centrePos[2] = cp[2];
@@ -92,8 +77,7 @@ public abstract class BSimParticle {
 	public double getRadius() {return size/2.0;}
 	public double getMass () { return mass; }
 	public double getSpeed () { return speed; }
-	public int getType() {return partType;}
-	public double[] getPosition () { return position; }
+	public int getType() {return partType;}	
 	public double[] getCentrePos () { return centrePos; }
 	public double[] getDirection () { return direction; }
 	

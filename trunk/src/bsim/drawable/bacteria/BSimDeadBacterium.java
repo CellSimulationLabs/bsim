@@ -58,8 +58,8 @@ public class BSimDeadBacterium extends BSimBacterium implements BSimLogic, BSimD
 	 * of the bacteria.
 	 */
 	public void redraw(Graphics g) {
-
-		g.setColor(Color.GRAY);
-		g.fillOval((int)position[0],(int)position[1],(int)(size),(int)(size));
+//
+//		g.setColor(Color.GRAY);
+//		g.fillOval((int)position[0],(int)position[1],(int)(size),(int)(size));
 	}
 }
