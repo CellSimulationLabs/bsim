@@ -85,6 +85,10 @@ public class BSimParameters {
 	public double   wellDepthBeadBdry = 0.0;
 	public double   wellWidthBactBdry = 0.0;
 	public double   wellDepthBactBdry = 0.0;
+	public double   wellWidthVesBdry = 0.0;
+	public double   wellDepthVesBdry = 0.0;
+	public double   wellWidthVesBead = 0.0;
+	public double   wellDepthVesBead = 0.0;
 	
 	public double	reactForce = 0.0;
 		
@@ -158,6 +162,12 @@ public class BSimParameters {
 	public double   getWellDepthBeadBdry () { return wellDepthBeadBdry; }
 	public double   getWellDepthBactBdry () { return wellDepthBactBdry; }
 	
+	public double   getWellWidthVesBdry () { return wellWidthVesBdry; }
+	public double   getWellDepthVesBdry () { return wellDepthVesBdry; }
+	public double   getWellWidthVesBead () { return wellWidthVesBead; }
+	public double   getWellDepthVesBead () { return wellDepthVesBead; }
+	
+	
 	public double	getReactForce () { return reactForce; }
 	
 	public double[]	 getMagnStrength () {return magnStrength; }
@@ -221,6 +231,11 @@ public class BSimParameters {
 	public void     setWellDepthBeadBead ( double x) { wellDepthBeadBead = x; }
 	public void     setWellDepthBeadBdry ( double x) { wellDepthBeadBdry = x; }
 	public void     setWellDepthBactBdry ( double x) { wellDepthBactBdry = x; }
+	
+	public void     setWellWidthVesBdry (double x) { wellWidthVesBdry = x; }
+	public void     setWellDepthVesBdry (double x) { wellDepthVesBdry = x; }
+	public void     setWellWidthVesBead (double x) { wellWidthVesBead = x; }
+	public void     setWellDepthVesBead (double x) { wellDepthVesBead = x; }
 	
 	public void 	setReactForce ( double x) { reactForce = x; }
 	
