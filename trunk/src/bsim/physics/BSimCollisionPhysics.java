@@ -322,7 +322,12 @@ public class BSimCollisionPhysics extends BSimPhysics{
 				else{
 					//case if we are resolving a force for a beads
 					//considering the component of the vesicles for the beads
-					resolveExternalForces(newForceMat, i, vesiclesForcesBeads[i-n]);
+					if(vesiclesForcesBeads.length>0){
+						resolveExternalForces(newForceMat, i, vesiclesForcesBeads[i-n]);
+					}
+					else{
+						resolveExternalForces(newForceMat, i);
+					}
 					
 				}
 				
