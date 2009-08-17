@@ -282,7 +282,7 @@ public class BSimParameters {
 		return newVec;
 	}
 	
-	public Vector createNewSolidBoxBoundariesVec() {
+	public Vector createNewSolidPlaneBoundariesVec() {
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
@@ -298,7 +298,20 @@ public class BSimParameters {
 		return newVec;
 	}
 	
-	public Vector createNewWrapBoxBoundariesVec() {
+	public Vector createNewSolidBoxBoundariesVec() {
+		
+		// Vector to hold the new objects
+		Vector newVec = new Vector();
+		
+		// Create a new solid boundary for every item in the list
+		for(int i=0; i<solidBoundaries.size(); i++){
+					newVec.add(new BSimBoxBoundary((double[])solidBoundaries.elementAt(i)));
+		}
+		// Return the new vector
+		return newVec;
+	}
+	
+	public Vector createNewWrapPlaneBoundariesVec() {
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
@@ -311,6 +324,19 @@ public class BSimParameters {
 			}
 		}
 		
+		// Return the new vector
+		return newVec;
+	}
+	
+	public Vector createNewWrapBoxBoundariesVec() {
+		
+		// Vector to hold the new objects
+		Vector newVec = new Vector();
+		
+		// Create a new solid boundary for every item in the list
+		for(int i=0; i<wrapBoundaries.size(); i++){
+					newVec.add(new BSimBoxBoundary((double[])wrapBoundaries.elementAt(i)));
+		}
 		// Return the new vector
 		return newVec;
 	}
