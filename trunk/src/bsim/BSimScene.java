@@ -40,6 +40,8 @@ import bsim.drawable.visualaid.BSimVisualAid;
 import bsim.physics.BSimCollisionPhysics;
 import bsim.physics.BSimPhysics;
 
+import bsim.rendering.Processing;
+
 
 public class BSimScene extends JPanel implements Runnable,
                                                  MouseMotionListener,
@@ -79,8 +81,11 @@ public class BSimScene extends JPanel implements Runnable,
 	// Vectors holding all bacteria and beads in the simulation
 	private Vector bacteria;
 	private Vector beads;
+	private Vector vesicles;
 	private Vector solidBoundaries;
 	private Vector wrapBoundaries;
+	private Vector solidBoxes;
+	private Vector wrapBoxes;
 	private Vector visualAids;
 	
 	// Chemical fields required for the simulation
@@ -117,6 +122,12 @@ public class BSimScene extends JPanel implements Runnable,
 	
 	public boolean reallocateNewForceMat = true;
 	
+	public boolean reallocateNewFusionExists = true;
+	
+	public double[][] vesiclesForcesBeads = null;
+	
+	private Processing p = null;
+	
 	
 	/**
 	 * General constructor for use when GUI is present
@@ -147,8 +158,8 @@ public class BSimScene extends JPanel implements Runnable,
 		app = newApp;
 				
 		// Create the default physics engine for the simulation
-		physics = new BSimCollisionPhysics(this, params);
-		
+		physics = new BSimCollisionPhysics(this, params);	    
+	    
 		// Create initial bacteria and beads
 		resetScene(1);
 		
@@ -224,13 +235,16 @@ public class BSimScene extends JPanel implements Runnable,
 		
 		// Create the bacteria and bead sets
 		beads = params.createNewBeadVec();
-		bacteria = params.createNewBacteriaVec(this);
-		
+		bacteria = params.createNewBacteriaVec(this);	
 		reallocateNewForceMat = true;
 		
 		// Create both wrapping and solid boundaries
-		solidBoundaries = params.createNewSolidBoxBoundariesVec();
-		wrapBoundaries = params.createNewWrapBoxBoundariesVec();
+		solidBoundaries = params.createNewSolidPlaneBoundariesVec();
+		wrapBoundaries = params.createNewWrapPlaneBoundariesVec();
+		
+		// Create both wrapping and solid boxes
+		solidBoxes = params.createNewSolidBoxBoundariesVec();
+		wrapBoxes = params.createNewWrapBoxBoundariesVec();
 		
 		// Create any visual aids
 		visualAids = params.createNewVisualAidsVec(this);
@@ -239,6 +253,19 @@ public class BSimScene extends JPanel implements Runnable,
 		fGoal = params.createNewGoalChemicalField();
 		fCoordination = params.createNewCoordChemicalField();
 		fRecruitment = params.createNewRecruitChemicalField();
+		
+		//Processing Related
+		//remove the old Processing Applet
+		if(firstTime == 0){
+			remove(p);
+		}
+		//the last parameter is the frame rate
+	    p = new Processing(simWidth, simHeight, 25);    
+	    p.init();
+	    add(p);
+		p.setBacteria(bacteria);
+		p.setSolidBoxes(solidBoxes);
+		p.setWrapBoxes(wrapBoxes);
 		
 		// Repaint the graphics display
 		repaint();
@@ -283,6 +310,9 @@ public class BSimScene extends JPanel implements Runnable,
 				
 				// Update all the elements in the scene
 				runAllUpdates();
+				
+				
+				//pc.processingRendering();
 				
 				// Redraw the display
 				repaint();
@@ -441,7 +471,7 @@ public class BSimScene extends JPanel implements Runnable,
 	
 	/**
 	 * Redraws the screen and should remove need for double buffering.
-	 */
+	*/ 
 	public void update(Graphics g) {
 		redraw(g);
 	}
@@ -463,9 +493,12 @@ public class BSimScene extends JPanel implements Runnable,
 		int i;
 
 		// Fill the background and clear output
+		//g.setColor(bgColour);
 		g.setColor(bgColour);
 		g.fillRect(0,0,simWidth,simHeight);
 		
+		
+		/*
 		// Perform translations and scaling to the view
 		// TODO: Need to change this to use the centre of the screen for scaling not
 		//       the (0,0) co-ordinate
@@ -501,8 +534,9 @@ public class BSimScene extends JPanel implements Runnable,
 		for(i=0; i<visualAids.size(); i++) {
 			((BSimDrawable)visualAids.elementAt(i)).redraw(g);
 		}
+		*/
 	}
-
+	
 
 	/**
 	 * Skips the simulation forward a given number of frames. Intermediate frames still
@@ -672,6 +706,7 @@ public class BSimScene extends JPanel implements Runnable,
 	 */
 	public Vector getBacteria (){ return bacteria; }
 	public Vector getBeads (){ return beads; }
+	public Vector getVesicles (){ return vesicles; }
 	public Vector getSolidBoundaries (){ return solidBoundaries; }
 	public Vector getWrapBoundaries (){ return wrapBoundaries; }
 	public Vector getVisualAids (){ return visualAids; }
@@ -687,5 +722,9 @@ public class BSimScene extends JPanel implements Runnable,
 	public double getScale () { return (1.0/START_SCALE)*scale; }
 	public boolean getReallocateNewForceMat () { return reallocateNewForceMat; }
 	public void setReallocateNewForceMat (boolean b) { reallocateNewForceMat=b; }
+	public boolean getReallocateNewFusionExists () { return reallocateNewFusionExists; }
+	public void setReallocateNewFusionExists(boolean b) { reallocateNewFusionExists=b; }
+	public void setVesiclesForcesBeads(double[][] newVesiclesForcesBeads){vesiclesForcesBeads=newVesiclesForcesBeads;}
+	public double[][] getVesiclesForcesBeads(){return vesiclesForcesBeads;}
 
 }
