@@ -251,7 +251,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 							
 							// Distance from edge of particle to boundary
 							//TODO: check if is important the border width
-							edgeDist = bdryDist[0] - (partI.getSize()/2) - 5; // Boundaries are 4 microns in width
+							edgeDist = bdryDist[0] - (partI.getRadius()) - 5; // Boundaries are 4 microns in width
 							
 							relativePos[0] = bdryDist[1];
 							relativePos[1] = bdryDist[2];
@@ -275,7 +275,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 							// Bacteria or Bead Interaction
 							
 							centreDist = distBetweenPoints(partJ.getPosition(),partI.getPosition());
-							edgeDist = centreDist - (partI.getSize() + partJ.getSize())/2;
+							edgeDist = centreDist - (partI.getRadius() + partJ.getRadius());
 
 							// normalized vector from current particle to others
 							relativePos[0] = (partI.getPosition()[0] - partJ.getPosition()[0])/centreDist;

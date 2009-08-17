@@ -23,7 +23,7 @@ public abstract class BSimParticle {
 	protected int partType = PART_PART;
 	
 	// General properties of all objects in a simulation
-	protected double size  = 0, // microns
+	protected double radius  = 0, // microns
 	                 mass  = 0, 
 	                 speed = 0; // microns per second	
 	protected double position[] = {0,0,0};
@@ -32,12 +32,12 @@ public abstract class BSimParticle {
 	/**
 	 * General constructor.
 	 */
-	public BSimParticle(double newSpeed, double newMass, double newSize, 
+	public BSimParticle(double newSpeed, double newMass, double newRadius, 
 			double[] newDirection, double[] newPosition, int newType) {
 		super();
 		speed        = newSpeed;
 		mass         = newMass;
-		size         = newSize;
+		radius         = newRadius;
 		direction[0] = newDirection[0];
 		direction[1] = newDirection[1];
 		direction[2] = newDirection[2];
@@ -51,9 +51,8 @@ public abstract class BSimParticle {
 	
 	/**
 	 * Standard set methods for the class.
-	 */
-	public void setSize(double s) {size = s;}
-	public void setRadius(double r) {size = 2.0*r;}
+	 */	
+	public void setRadius(double r) {radius = r;}
 	public void setMass(double m) {mass = m;}
 	public void setSpeed(double s) {speed = s;}
 	public void setType(int t) {partType = t;}
@@ -72,9 +71,8 @@ public abstract class BSimParticle {
 	
 	/**
 	 * Standard get methods for the class.
-	 */
-	public double getSize () { return size; }
-	public double getRadius() {return size/2.0;}
+	 */	
+	public double getRadius() {return radius;}
 	public double getMass () { return mass; }
 	public double getSpeed () { return speed; }
 	public int getType() {return partType;}	

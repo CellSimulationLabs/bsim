@@ -84,14 +84,14 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(double newSpeed, double newMass, double newSize,
+	public BSimBacterium(double newSpeed, double newMass, double newRadius,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimParticle.PART_BACT);
+		super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimParticle.PART_BACT);
 
 		// Update extended properties
 		forceMagnitudeDown = newForceMagnitudeDown;

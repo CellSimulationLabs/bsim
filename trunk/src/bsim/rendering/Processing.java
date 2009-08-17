@@ -82,7 +82,7 @@ public class Processing extends PApplet {
 			pushMatrix();
 			translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
 			fill(0, 255, 0);
-			sphere((float)(bact.getSize()/2));
+			sphere((float)(bact.getRadius()));
 			popMatrix();
 		}
 	}

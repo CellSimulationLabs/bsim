@@ -48,7 +48,7 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 		super(newp1, newp2);   
 
 		// Call the parent constructor with the basic properties	
-		//super(newSpeed, newMass, newSize, newDirection, newPosition, BSimObject.OBTYPE_BACT);
+		//super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimObject.OBTYPE_BACT);
 		normVect = new double[2];
 		
 		normVect[0]   = p1[1] - p2[1];
@@ -108,7 +108,7 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 	public boolean isColliding(BSimParticle x) {
 		double[] direction =x.getDirection();
 		double[] point = x.getPosition();
-		double radius = x.getSize()/2;
+		double radius = x.getRadius();
 		double dist;
 		
 		double perpDist = distPointToLine(point) * length;
@@ -197,8 +197,8 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 		double[] offset = new double[2];
 		double[] newCentrePos = new double[2];
 		
-		offset[0] = wrapOffset[0] - x.getSize()*wrapOffset[0]/Math.abs(wrapOffset[0]);
-		offset[1] = wrapOffset[1] - x.getSize()*wrapOffset[1]/Math.abs(wrapOffset[1]);
+		offset[0] = wrapOffset[0] - x.getRadius()*2*wrapOffset[0]/Math.abs(wrapOffset[0]);
+		offset[1] = wrapOffset[1] - x.getRadius()*2*wrapOffset[1]/Math.abs(wrapOffset[1]);
 		
 		for (int i = 0; i<2; i++) if (Double.isNaN(offset[i])) offset[i] = 0;
 		

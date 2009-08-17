@@ -104,7 +104,7 @@ public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary implements BSi
 	 */
 	public boolean isColliding(BSimParticle x) {
 		double[] point = x.getPosition();
-		double radius = x.getSize()/2;
+		double radius = x.getRadius();
 		//this method is the inherit method
 		double[] info=calcInfoFromBoundary(point);
 		//info[0] is the perpendicular distance

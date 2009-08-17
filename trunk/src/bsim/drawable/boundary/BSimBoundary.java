@@ -122,7 +122,7 @@ public class BSimBoundary implements BSimDrawable {
 	public synchronized double distToBoundary(BSimParticle x) {
 
 		// Return the distance of the object to the bounday (we use edge of object not centre)
-		return calcDistFromBoundary(x.getPosition()) - (x.getSize() / 2);
+		return calcDistFromBoundary(x.getPosition()) - x.getRadius();
 	}
 
 	

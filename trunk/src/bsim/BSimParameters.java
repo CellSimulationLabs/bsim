@@ -26,9 +26,9 @@ import bsim.drawable.visualaid.BSimVisualAidCreate;
 public class BSimParameters {
 
 
-	public double   beadSize         = 10.0;	// microns (diameter)
+	public double   beadRadius       = 10.0;	// microns
 
-	public double   bactSize         = 1.4;	// microns (diameter)
+	public double   bactRadius       = 1.4;	// microns
 	public double   bactForceUp      = 0.4387; // micro newtons
 	public double   bactForceDown    = 0.41; // micro newtons
 	public double   bactSpeed        = 50.0; // microns per second
@@ -111,11 +111,9 @@ public class BSimParameters {
 	/**
 	 * Standard get methods.
 	 */
-	public double 	getDtSecs() {return dt;}
-	public double 	getBactSize() {return bactSize;}
-	public double	getBactRadius() {return bactSize/2.0;}
-	public double 	getBeadSize() {return beadSize;}
-	public double 	getBeadRadius() {return beadSize/2.0;}
+	public double 	getDtSecs() {return dt;}	
+	public double	getBactRadius() {return bactRadius;}	
+	public double 	getBeadRadius() {return beadRadius;}
 	public double 	getBactForceUp() {return bactForceUp;}
 	public double 	getBactForceDown() {return bactForceDown;}
 	public double 	getBactSpeed() {return bactSpeed;}
@@ -175,11 +173,9 @@ public class BSimParameters {
 	/**
 	 * Standard set methods.
 	 */
-	public void 	setDtSecs(double newDt) {dt = newDt;}
-	public void 	setBactSize(double s) {bactSize = s;}
-	public void		setBactRadius(double r) {bactSize = 2.0*r;}
-	public void 	setBeadSize(double s) {beadSize = s;}
-	public void 	setBeadRadius(double r) {beadSize = 2.0*r;}
+	public void 	setDtSecs(double newDt) {dt = newDt;}	
+	public void		setBactRadius(double r) {bactRadius = r;}	
+	public void 	setBeadRadius(double r) {beadRadius = r;}
 	public void 	setBactForceUp(double f) {bactForceUp = f;}
 	public void 	setBactForceDown(double f) {bactForceDown = f;}
 	public void 	setBactSpeed(double s) {bactSpeed = s;}
