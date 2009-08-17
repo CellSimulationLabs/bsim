@@ -5,6 +5,7 @@ import java.util.Vector;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.vesicles.BSimVesicle;
 import bsim.drawable.bead.BSimBead;
 import bsim.drawable.boundary.BSimSolidPlaneBoundary;
 import bsim.physics.BSimCollisionPhysics.BSimCollisionPhysicsThread;
@@ -19,12 +20,27 @@ public class BSimFusionPhysics extends BSimPhysics{
 	
 	// Matrices used during sticking process
 	protected double[][][] newForceMat = null;
-	protected boolean[] fusionExists = null;
+	
+	// Vector of resolved external force vectors on objects
 	protected boolean[][] collisionTypes = null;
 	protected double[][] externalForces = null;
+	
+	//vector used to check if a fusion is already happened
+	protected boolean[] fusionExists = null;
+	
+	//vector to store for every beads the external forces caused from the vesicles
 	protected double[][] vesiclesForcesBeads = null;
 	
-	private double reactForce = 0.0;
+	//reaction force
+	private double reactForce = 0.0;	
+	/**
+	 * Variables for interactive forces between objects; these govern the shape
+	 * of the potential function in the getReactionForce() method
+	 */
+	protected double wellWidthVesBdry;
+	protected double wellDepthVesBdry;
+	protected double wellWidthVesBead;
+	protected double wellDepthVesBead;
 	
 	
 	public BSimFusionPhysics(BSimScene newScene, BSimParameters p){
@@ -34,7 +50,10 @@ public class BSimFusionPhysics extends BSimPhysics{
 		params = p;
 		reactForce = params.getReactForce();
 		
-		//brownianForce = params.getReactForce();
+		wellWidthVesBdry = params.getWellWidthVesBdry();
+		wellDepthVesBdry = params.getWellDepthVesBdry();
+		wellWidthVesBead = params.getWellWidthVesBead();
+		wellDepthVesBead = params.getWellDepthVesBead();
 		
 		MAX_WORKER_THREADS = params.getNumOfThreads();
 		
@@ -61,18 +80,19 @@ public class BSimFusionPhysics extends BSimPhysics{
 		// Check to see if memory needs to be allocated
 		if(scene.getReallocateNewFusionExists()){
 			// Create the force matrix
-			//useful for the memory allocation and the garbage collector work
+			//useful for the memory allocation and the garbage collector works
 			newForceMat = null;
 			newForceMat = new double[l][m+b][3];
-			//useful for the memory allocation and the garbage collector work
+			//useful for the memory allocation and the garbage collector works
 			fusionExists = null;
 			fusionExists = new boolean[l];
-			//useful for the memory allocation and the garbage collector work
+			//useful for the memory allocation and the garbage collector works
 			collisionTypes = null;
-			collisionTypes = new boolean[m+b][2];
-			//useful for the memory allocation and the garbage collector work
+			collisionTypes = new boolean[l][2];
+			//useful for the memory allocation and the garbage collector works
 			externalForces = null;
 			externalForces = new double[n+m][3];
+			//useful for the memory allocation and the garbage collector works
 			vesiclesForcesBeads = null;
 			vesiclesForcesBeads = new double[m][3];
 			
@@ -80,18 +100,26 @@ public class BSimFusionPhysics extends BSimPhysics{
 			scene.setReallocateNewFusionExists(false);
 		}
 		
-		// Ensure forces components starts from zero
-		for(int k=0; k<m; k++){
-			vesiclesForcesBeads[k][0]=0;
-			vesiclesForcesBeads[k][1]=0;
-			vesiclesForcesBeads[k][2]=0;
+		// Ensure forces components starts from zero k is the number of beds
+		// for cycle not so heavy because the beads number is not huge 
+		for(i=0; i<m; i++){
+			vesiclesForcesBeads[i][0]=0;
+			vesiclesForcesBeads[i][1]=0;
+			vesiclesForcesBeads[i][2]=0;
 		}
 		
-			
+		// Ensure all flags start as false
+		//this might be heavy l=number of vesicles
+		for(i=0; i<l; i++){
+			fusionExists[i] = false;
+			collisionTypes[i][0] = false;
+			collisionTypes[i][1] = false;
+		}
+				
 		// Create array of worker threads
 		Thread[] workerThreads = new Thread[MAX_WORKER_THREADS];
 		
-		// Create each of the worker threads and set them runing.
+		// Create each of the worker threads and set them running.
 		for(i=0; i<MAX_WORKER_THREADS; i++) {
 			
 			// Calculate the start and end indexes for the partition
@@ -115,14 +143,15 @@ public class BSimFusionPhysics extends BSimPhysics{
 			} catch (InterruptedException ignore) { }
 		}
 		
-		//check if there is a fusion between two particle
+		//check if there is a fusion between vesicle-bacterium or vesicle-vesicle
 		for(i=0; i<l; i++) {
-			if(fusionExists[l]==true){
-				vesicles.removeElementAt(l);
+			if(fusionExists[i]==true){
+				vesicles.removeElementAt(i);
 				scene.setReallocateNewFusionExists(true);
 			}
 		}
 		
+		scene.setVesicles(vesicles);
 		scene.setVesiclesForcesBeads(vesiclesForcesBeads);
 		
 	}
@@ -167,9 +196,11 @@ public class BSimFusionPhysics extends BSimPhysics{
 			int l = vesicles.size();
 			int n = bacteria.size();
 			int m = beads.size();
-			int obTotal = n+l+m;
-			int fusionTotal = n+l;
 			int b = solidBoundaries.size();
+			//objects that are not a boundary
+			int obTotal = n+l+m;
+			//objects that have a fusion property
+			int fusionTotal = n+l;
 			BSimParticle partI, partJ;
 			BSimSolidPlaneBoundary bdry;
 			double[] bdryDist;
@@ -178,29 +209,19 @@ public class BSimFusionPhysics extends BSimPhysics{
 			double reactionForce;
 			BSimVesicle partVesicle;
 			BSimBacterium partBacterium;
-			//BSimBead partBead;
-			
 			// The internal force, generated by the particle
 			double internalForce[] = {0.0, 0.0, 0.0};
 
-			
-			// Ensure all flags start as false
-			for(int g=0; g<(n+m); g++){
-				fusionExists[g] = false;
-				collisionTypes[g][0] = false;
-				collisionTypes[g][1] = false;
-			}
-
 			// Get2Ddist on each pair; the matrix is symmetrical, so only calculate
 			// distance for one half, then replicate
-			//the external cycle is only on the vesicles
+			//the external cycle is only on the vesicle
 			for (int i=xStart; i<xEnd; i++) {
 				for (int j = 0; j<(n+l+m+b); j++) {
 					if(i==j){
 						continue;
 					}
 					//the first particle is always a vesicle
-					partI=(BSimParticle)(bacteria.elementAt(i));
+					partI=(BSimParticle)(vesicles.elementAt(i));
 					
 					// Decide from which population to get second particle
 					if (j<n) partJ = (BSimParticle)(bacteria.elementAt(j));
@@ -210,14 +231,12 @@ public class BSimFusionPhysics extends BSimPhysics{
 					
 					if(j >= (n+l) ){					
 						if(fusionExists[i]){
-							//a fusion exists between the i vesicle and a bacteria or another vesicle
-							//so we don t need to calculate the force matrix between the vesicle and the 
-							//other non fusion particles
+							//a fusion already exists between the i-vesicle and a bacterium or another vesicle
+							//so we don t need to calculate the force matrix
 							break;
 						}
 						else{
-							//the vesicle has no fusion with anything so we need to calculate the forces 
-							//with the non fusing objects
+							//the vesicle has no fused with anything so we need to calculate the external forces 
 							if(j >= (n+l+m) ){
 								//the interaction is with a boundary
 								bdry = (BSimSolidPlaneBoundary)(solidBoundaries.elementAt(j-(obTotal)));
@@ -264,13 +283,13 @@ public class BSimFusionPhysics extends BSimPhysics{
 								newForceMat[i][j-fusionTotal][1] = -relativePos[1]*reactionForce;
 								newForceMat[i][j-fusionTotal][2] = -relativePos[2]*reactionForce;
 								
-								//externalForces on the beads caused by the vesicles 
-								// i don t know if there is there is a minus or a plus when u add this component
-								vesiclesForcesBeads[j-(n+l)][0] = vesiclesForcesBeads[j-(n+l)][0]+newForceMat[i][j-fusionTotal][0];
-								vesiclesForcesBeads[j-(n+l)][1] = vesiclesForcesBeads[j-(n+l)][1]+newForceMat[i][j-fusionTotal][1];
-								vesiclesForcesBeads[j-(n+l)][2] = vesiclesForcesBeads[j-(n+l)][2]+newForceMat[i][j-fusionTotal][2];
-							
-								// Check for bacteria interactions
+								//externalForces on the beads caused by the vesicles
+								//
+								vesiclesForcesBeads[j-(fusionTotal)][0] = vesiclesForcesBeads[j-(fusionTotal)][0]+((-1)*newForceMat[i][j-fusionTotal][0]);
+								vesiclesForcesBeads[j-(fusionTotal)][1] = vesiclesForcesBeads[j-(fusionTotal)][1]+((-1)*newForceMat[i][j-fusionTotal][0]);
+								vesiclesForcesBeads[j-(fusionTotal)][2] = vesiclesForcesBeads[j-(fusionTotal)][2]+((-1)*newForceMat[i][j-fusionTotal][0]);
+								
+								
 								if((j < n+l+m) &&
 									(newForceMat[i][j-fusionTotal][0] != 0.0 || newForceMat[i][j-fusionTotal][1] != 0.0 || newForceMat[i][j-fusionTotal][2] != 0.0)){
 									// Force exists between a bacteria so update flag
@@ -302,9 +321,13 @@ public class BSimFusionPhysics extends BSimPhysics{
 							//first condition verify if there was a vesicle-bacteria fusion
 							//second condition vesicle-bacteria interaction
 							if( (!fusionExists[i]) && (j<n) ){
-								fusionExists[i]=true;
+								setFusionExistsValue(i);
 								partBacterium = (BSimBacterium)scene.getBacteria().elementAt(j);
-								partBacterium.addVesicleProperties(scene.getVesicles().elementAt(i));
+								partBacterium.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
+								//not sure that the following works fine but it might be correct
+								//if a vesicle is fused with something don t do any other calculation for this vesicle
+								//skip to the calculation for the next vesicle
+								break;
 								
 							}
 							
@@ -313,12 +336,14 @@ public class BSimFusionPhysics extends BSimPhysics{
 							//second condition verify if there was a vesicle-vesicle fusion
 							//third condition vesicle-vesicle interaction
 							if( (!fusionExists[i]) && (!fusionExists[j-n]) && (j>=n) ){
-								fusionExists[i]=true;
-								partVesicle = (BSimVesicles)scene.getVesicles().elementAt(j-n);
-								partVesicle.addVesicleProperties(scene.getVesicles().elementAt(i));
-								
-							}
-							
+								setFusionExistsValue(i);
+								partVesicle = (BSimVesicle)scene.getVesicles().elementAt(j-n);
+								partVesicle.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
+								//not sure that the following works fine but it might be correct
+								//if a vesicle is fused with something don t do any other calculation for this vesicle
+								//skip to the calculation for the next vesicle
+								break;								
+							}	
 						}
 					}
 				}	
@@ -338,8 +363,8 @@ public class BSimFusionPhysics extends BSimPhysics{
 				wellDepth = wellDepthVesBdry;
 			// Bacterium-Boundary interaction
 			}else if (((type1 == BSimParticle.PART_BEAD) && (type2 == BSimParticle.PART_VES))){
-					wellWidth = wellWidthVesBry;
-					wellDepth = wellDepthVesBry;
+					wellWidth = wellWidthVesBead;
+					wellDepth = wellDepthVesBead;
 			// Bead-Boundary interaction
 			} else { System.err.println("Type error in getReactionForce()"); System.exit(1);}
 			
@@ -429,12 +454,12 @@ public class BSimFusionPhysics extends BSimPhysics{
 			// Length = sqrt(a^2 + b^2 + z^2)
 			return Math.sqrt(Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2)+ Math.pow(p1[2] - p2[2], 2));
 		}
-		
-		
+	}
+	
 
-	}	
 	
-	
-	
-	
+	//this method must be synchronized
+	public synchronized void setFusionExistsValue(int i){
+		fusionExists[i]=true;
+	}
 }
