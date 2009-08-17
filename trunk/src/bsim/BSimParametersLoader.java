@@ -97,6 +97,12 @@ public class BSimParametersLoader {
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BDRY:")) p.setWellDepthBeadBdry((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BDRY:")) p.setWellWidthBactBdry((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BDRY:")) p.setWellDepthBactBdry((double)args[0]);
+		
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BDRY:")) p.setWellWidthVesBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BDRY:")) p.setWellDepthVesBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BEAD:")) p.setWellWidthVesBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BEAD:")) p.setWellDepthVesBead((double)args[0]);
+		
 		else if(line[0].equals("PHYSICS_REACT_FORCE:")) p.setReactForce((double)args[0]);
 		
 		else if(line[0].equals("CREATE_BOUNDARY_SOLID_BOX:")) p.addSolidBoundary(args);
