@@ -107,7 +107,7 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 	 */
 	public boolean isColliding(BSimParticle x) {
 		double[] direction =x.getDirection();
-		double[] point = x.getCentrePos();
+		double[] point = x.getPosition();
 		double radius = x.getSize()/2;
 		double dist;
 		
@@ -202,10 +202,10 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 		
 		for (int i = 0; i<2; i++) if (Double.isNaN(offset[i])) offset[i] = 0;
 		
-		newCentrePos[0] = x.getCentrePos()[0] + offset[0];
-		newCentrePos[1] = x.getCentrePos()[1] + offset[1];
+		newCentrePos[0] = x.getPosition()[0] + offset[0];
+		newCentrePos[1] = x.getPosition()[1] + offset[1];
 		
-		x.setCentrePos(newCentrePos);
+		x.setPosition(newCentrePos);
 	}
 	
 	

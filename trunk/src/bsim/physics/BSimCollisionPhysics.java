@@ -247,7 +247,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 							bdry = (BSimSolidPlaneBoundary)(solidBoundaries.elementAt(j-obTotal));
 							
 							// Calculate the boundary distance and unit vector
-							bdryDist = bdry.calcInfoFromBoundary(partI.getCentrePos());
+							bdryDist = bdry.calcInfoFromBoundary(partI.getPosition());
 							
 							// Distance from edge of particle to boundary
 							//TODO: check if is important the border width
@@ -274,13 +274,13 @@ public class BSimCollisionPhysics extends BSimPhysics{
 						else {
 							// Bacteria or Bead Interaction
 							
-							centreDist = distBetweenPoints(partJ.getCentrePos(),partI.getCentrePos());
+							centreDist = distBetweenPoints(partJ.getPosition(),partI.getPosition());
 							edgeDist = centreDist - (partI.getSize() + partJ.getSize())/2;
 
 							// normalized vector from current particle to others
-							relativePos[0] = (partI.getCentrePos()[0] - partJ.getCentrePos()[0])/centreDist;
-							relativePos[1] = (partI.getCentrePos()[1] - partJ.getCentrePos()[1])/centreDist;
-							relativePos[2] = (partI.getCentrePos()[2] - partJ.getCentrePos()[2])/centreDist;
+							relativePos[0] = (partI.getPosition()[0] - partJ.getPosition()[0])/centreDist;
+							relativePos[1] = (partI.getPosition()[1] - partJ.getPosition()[1])/centreDist;
+							relativePos[2] = (partI.getPosition()[2] - partJ.getPosition()[2])/centreDist;
 
 							reactionForce = getReactionForce(partJ.getType(),partI.getType(),edgeDist);
 
@@ -447,7 +447,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		private void linearMotion(BSimParticle x, double[] internalForce, int index) {
 			double[] totalForce = new double[3];
 			double[] velocity = new double[3];
-			double[] curPosition = x.getCentrePos();
+			double[] curPosition = x.getPosition();
 			double[] newPosition= new double[3];
 
 			// Calculate the total force for the particle
@@ -467,7 +467,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			(velocity[1]*(double)scene.getDtSec());
 			newPosition[2] = curPosition[2] + 
 			(velocity[2]*(double)scene.getDtSec());
-			x.setCentrePos(newPosition);
+			x.setPosition(newPosition);
 		}
 		
 		

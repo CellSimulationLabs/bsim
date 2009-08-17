@@ -103,7 +103,7 @@ public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary implements BSi
 	 * the minimum distance to the boundary which is always the perpendicular distance because we have a wrap box
 	 */
 	public boolean isColliding(BSimParticle x) {
-		double[] point = x.getCentrePos();
+		double[] point = x.getPosition();
 		double radius = x.getSize()/2;
 		//this method is the inherit method
 		double[] info=calcInfoFromBoundary(point);
@@ -121,7 +121,7 @@ public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary implements BSi
 		double[] newCentrePos = {0.0,0.0,0.0};
 		//point that fall into the plane
 		double pp[] = {0.0,0.0,0.0};
-		pp=perpendicularPointFallIntoPlane(x.getCentrePos());
+		pp=perpendicularPointFallIntoPlane(x.getPosition());
 		
 		//the new centre position depends on the faceNum
 		if(faceNum==0){			
@@ -155,7 +155,7 @@ public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary implements BSi
 			newCentrePos[2] = pp[2] + wrapOffset[2];
 		}
 		
-		x.setCentrePos(newCentrePos);
+		x.setPosition(newCentrePos);
 	}
 	
 	

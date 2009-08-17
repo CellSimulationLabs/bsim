@@ -75,7 +75,7 @@ public class BSimBacteriaFileExport extends BSimFileExport {
 			for(int i=0; i<bacteria.size(); i++){
 
 				// Get the position of the bacteria
-				bacteriaPos = ((BSimParticle)bacteria.elementAt(i)).getCentrePos();
+				bacteriaPos = ((BSimParticle)bacteria.elementAt(i)).getPosition();
 
 				xAv += bacteriaPos[0];
 				yAv += bacteriaPos[1];

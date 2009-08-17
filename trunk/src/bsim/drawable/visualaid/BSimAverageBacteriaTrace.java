@@ -64,8 +64,8 @@ public class BSimAverageBacteriaTrace implements BSimVisualAid, BSimDrawable {
 		
 		if(scene.getTimeStep() % frameSkip == 0){ 
 			for(int i=0; i < bacteria.size(); i++) {
-				xTot += ((BSimBacterium)bacteria.elementAt(i)).getCentrePos()[0];
-				yTot += ((BSimBacterium)bacteria.elementAt(i)).getCentrePos()[1];
+				xTot += ((BSimBacterium)bacteria.elementAt(i)).getPosition()[0];
+				yTot += ((BSimBacterium)bacteria.elementAt(i)).getPosition()[1];
 			}
 			meanX = xTot/bacteria.size();
 			meanY = yTot/bacteria.size();

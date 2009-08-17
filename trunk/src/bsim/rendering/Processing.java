@@ -80,7 +80,7 @@ public class Processing extends PApplet {
 		for(int i=0;i<bacteria.size();i++){
 			BSimBacterium bact = (BSimBacterium)bacteria.elementAt(i);
 			pushMatrix();
-			translate((float)bact.getCentrePos()[0], (float)bact.getCentrePos()[1],(float)bact.getCentrePos()[2]);
+			translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
 			fill(0, 255, 0);
 			sphere((float)(bact.getSize()/2));
 			popMatrix();

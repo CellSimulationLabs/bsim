@@ -59,7 +59,7 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 			beadContactTimer--;
 			
 			// Generate some co-ordination chemical (AHL) at current location
-			scene.getCoordinationField().addChemical (1.0, this.getCentrePos());
+			scene.getCoordinationField().addChemical (1.0, this.getPosition());
 		}
 		
 		if(contactBead){
@@ -85,7 +85,7 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		
 		// Check to see if the bacteria has been in contact with a bead
 		if(beadContactTimer > 0 || 
-		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold){
+		   scene.getCoordinationField().getConcentration(this.getPosition()) > coordThreshold){
 			// Perform the normal attraction to the goal chemoattractant
 			for(int i=0; i<concMemory.size();i++) {
 				if(i <= (longTermMemoryLength/params.getDtSecs())) {

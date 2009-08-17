@@ -26,7 +26,7 @@ public abstract class BSimParticle {
 	protected double size  = 0, // microns
 	                 mass  = 0, 
 	                 speed = 0; // microns per second	
-	protected double centrePos[] = {0,0,0};
+	protected double position[] = {0,0,0};
 	protected double direction[] = {0,0,0};
 	
 	/**
@@ -41,9 +41,9 @@ public abstract class BSimParticle {
 		direction[0] = newDirection[0];
 		direction[1] = newDirection[1];
 		direction[2] = newDirection[2];
-		centrePos[0] = newPosition[0];
-		centrePos[1] = newPosition[1];
-		centrePos[2] = newPosition[2];
+		position[0] = newPosition[0];
+		position[1] = newPosition[1];
+		position[2] = newPosition[2];
 		
 		partType = newType;
 	}
@@ -57,10 +57,10 @@ public abstract class BSimParticle {
 	public void setMass(double m) {mass = m;}
 	public void setSpeed(double s) {speed = s;}
 	public void setType(int t) {partType = t;}
-	public void setCentrePos(double cp[]) {
-		centrePos[0] = cp[0];
-		centrePos[1] = cp[1];
-		centrePos[2] = cp[2];
+	public void setPosition(double p[]) {
+		position[0] = p[0];
+		position[1] = p[1];
+		position[2] = p[2];
 	}
 	public void setDirection(double[] d) {
 		double[] normD = normalise3DVector(d);
@@ -78,7 +78,7 @@ public abstract class BSimParticle {
 	public double getMass () { return mass; }
 	public double getSpeed () { return speed; }
 	public int getType() {return partType;}	
-	public double[] getCentrePos () { return centrePos; }
+	public double[] getPosition () { return position; }
 	public double[] getDirection () { return direction; }
 	
 	

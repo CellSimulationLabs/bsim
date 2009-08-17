@@ -135,9 +135,9 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 			// Set the initial memory for the bacteria to current concentration of
 			// goal attractant
 			double curConc;
-			if(chemo == BAC_CHEMO_GOAL) curConc = scene.getGoalField().getConcentration(this.getCentrePos());
-			else if(chemo == BAC_CHEMO_RECRUIT) curConc = scene.getRecruitmentField().getConcentration(this.getCentrePos());
-			else curConc = scene.getGoalField().getConcentration(this.getCentrePos());
+			if(chemo == BAC_CHEMO_GOAL) curConc = scene.getGoalField().getConcentration(this.getPosition());
+			else if(chemo == BAC_CHEMO_RECRUIT) curConc = scene.getRecruitmentField().getConcentration(this.getPosition());
+			else curConc = scene.getGoalField().getConcentration(this.getPosition());
 			concMemory = new Vector();
 			for(int i=0; i<=(4.0 / params.getDtSecs()); i++) {concMemory.add(curConc);}
 			memToReset = false;
@@ -280,7 +280,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		else if(chemoState == BAC_CHEMO_RECRUIT) field = scene.getRecruitmentField();
 		else field = scene.getGoalField();
 		
-		currConc = field.getConcentration(this.getCentrePos());
+		currConc = field.getConcentration(this.getPosition());
 		
 		this.addToConcMemory(currConc);
 		

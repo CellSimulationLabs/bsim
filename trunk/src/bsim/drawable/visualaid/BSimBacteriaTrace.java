@@ -76,8 +76,8 @@ public class BSimBacteriaTrace implements BSimVisualAid, BSimDrawable {
 				trace = (Vector)traces.elementAt(j);
 				
 				double[] point = new double[2];
-				point[0] = ((BSimBacterium)bacteria.elementAt(j)).getCentrePos()[0];
-				point[1] = ((BSimBacterium)bacteria.elementAt(j)).getCentrePos()[1];
+				point[0] = ((BSimBacterium)bacteria.elementAt(j)).getPosition()[0];
+				point[1] = ((BSimBacterium)bacteria.elementAt(j)).getPosition()[1];
 				trace.add(0,(double[])point);
 			}
 		}

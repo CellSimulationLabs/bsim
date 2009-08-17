@@ -55,7 +55,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 		
 		// Need to check if a switch to chemo has been made.
 		if(beadContactTimer > 0 || 
-		   scene.getCoordinationField().getConcentration(this.getCentrePos()) > coordThreshold) {
+		   scene.getCoordinationField().getConcentration(this.getPosition()) > coordThreshold) {
 			newChemo = BAC_CHEMO_GOAL;
 		}
 		else{
@@ -72,7 +72,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 		
 		if(beadContactTimer > 0){
 				// Generate some recruitment chemical at current location
-				scene.getRecruitmentField().addChemical (1.0, this.getCentrePos());
+				scene.getRecruitmentField().addChemical (1.0, this.getPosition());
 		}
 		
 		return  super.runLogic(contactBac, contactBead, contactBoundary);
