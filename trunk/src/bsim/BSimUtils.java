@@ -78,13 +78,14 @@ public class BSimUtils {
 		return v;
 	}
 	
-	public static synchronized boolean particlesIntersecting(BSimParticle a, double[] position, double radius) {
-		double centreDist = get3Ddist(a.getPosition(),position);
-		double aRad = a.getRadius(), bRad = radius;
-		
-		if(centreDist < (aRad + bRad)) return true;
-		else return false;
-	}
+    public static synchronized boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
+        double centreDist = get3Ddist(a.getPosition(),b.getPosition());
+        double aRad = a.getRadius(), bRad = b.getRadius();
+        
+        if(centreDist < (aRad + bRad)) return true;
+        else return false;
+}
+
 	
 	
 	/**
