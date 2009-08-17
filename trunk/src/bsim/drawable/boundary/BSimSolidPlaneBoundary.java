@@ -79,11 +79,19 @@ public class BSimSolidPlaneBoundary implements BSimDrawable {
 		info[0]=dist;		
 		//point that fall into the plane
 		double[] pp= {0.0,0.0,0.0};
-		pp=perpendicularPointFallIntoPlane(p);		
-		// Normalize the vector between the two points
-		info[1]=(pp[0] - p[0])/dist;
-		info[2]=(pp[1] - p[1])/dist;
-		info[3]=(pp[2] - p[2])/dist;
+		pp=perpendicularPointFallIntoPlane(p);
+		
+		if(!Double.isNaN(dist)){
+			// Normalize the vector between the two points
+			info[1]=(pp[0] - p[0])/dist;
+			info[2]=(pp[1] - p[1])/dist;
+			info[3]=(pp[2] - p[2])/dist;
+		}
+		else{
+			info[1] = 0;
+			info[2] = 0;
+			info[3] = 0;
+		}
 		
 		return info;
 	}
