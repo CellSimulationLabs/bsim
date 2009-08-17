@@ -333,21 +333,17 @@ public class BSimScene extends JPanel implements Runnable,
 	private void runAllUpdates(){
 		int i;
 		
-		//2009
-		if(timeStep>0){
-			BSimBacterium bact;
-			for(int k=0; k<bacteria.size();k++){
-				bact=null;
-				bact=(BSimBacterium)(bacteria.elementAt(k));
-				bact.increaseLifeTime();
-				bact.increaseSize();
-				if((bact.getLifeCycleTime())==(bact.getTg())){
-					bacteria.add(bact.replicate(this,params));
-					bact.newLifeCycle();
-				}
+
+		// Growth and replication
+		BSimBacterium b;
+		for(int k=0; k<bacteria.size();k++){			
+			b = (BSimBacterium)(bacteria.elementAt(k));			
+			b.grow();
+			if(b.getRadius() > b.getReplicationRadius()){
+				bacteria.add(b.replicate(this, params));	
 			}
 		}
-		
+	
 		// Update the properties for bacteria and beads
 		physics.updateProperties();
 		

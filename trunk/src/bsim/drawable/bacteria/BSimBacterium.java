@@ -79,6 +79,9 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	protected boolean memToReset = true;
 	
 	protected boolean runUp = false;
+	
+	protected double radiusGrowthRate = 0.001; // microns per second
+	protected double replicationRadius = 2*params.getBactRadius();
 
 
 	/**
@@ -378,6 +381,31 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		concMemory.remove(0);
 		concMemory.add(currentConc);
 	}
+	
+	public void grow() {		
+		radius += radiusGrowthRate * params.getDtSecs();			
+	}
+	
+	public BSimBacterium replicate(BSimScene scene, BSimParameters params) {
+		BSimBacterium newBact = null;
+		
+		// Replicate along direction of movement
+		double[] newPosition = new double[3];
+		newPosition[0] = position[0] + radius*direction[0];
+		newPosition[1] = position[1] + radius*direction[1];
+		newPosition[2] = position[2] + radius*direction[2];
+
+		// Create new bacterium TODO remDt?
+		newBact = new BSimBacterium(speed, mass, radius,
+				direction, newPosition,
+				forceMagnitudeDown, forceMagnitudeUp, state,					
+				tumbleSpeed, remDt, 
+				scene, params);		
+		
+		scene.setReallocateNewForceMat(true);
+		
+		return newBact;
+	}
 	  
 	                                                  
 	/**
@@ -405,4 +433,6 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	public int getChemo (){ return chemo; }
 	public Vector getConcMemory() {return concMemory;}
 	public boolean getMemToReset() {return memToReset; }
+	public double getReplicationRadius() { return replicationRadius; }
+	
 }
