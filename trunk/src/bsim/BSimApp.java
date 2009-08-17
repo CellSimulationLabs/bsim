@@ -66,6 +66,7 @@ public class BSimApp extends JFrame{
 		scene = new BSimScene(simSem, this, params);
 		scene.setSize(new Dimension(params.getScreenWidth(), params.getScreenHeight()));
 		this.getContentPane().add(scene, BorderLayout.CENTER);
+		
 		// Create the toolbar and align to bottom of window
 		toolBar = new BSimToolbar(this, scene, params);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
