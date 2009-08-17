@@ -44,9 +44,8 @@ public class BSimVesicle extends BSimParticle implements BSimLogic, BSimDrawable
 	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
 	 * at a timestep is returned.
 	 */
-	public double[] runLogic ( boolean contactBac, 
-	                           boolean contactBead,
-	                           boolean contactBoundary ) {
+	public double[] runLogic ( boolean contactBead, 
+	                           boolean contactBoundary) {
 		
 		double[] f = {0.0, 0.0, 0.0};
 		
