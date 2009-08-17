@@ -62,6 +62,8 @@ public class BSimCollisionPhysics extends BSimPhysics{
 	
 	private double[] magnStrength = {0.0, 0.0, 0.0};
 	
+	private double[][] vesiclesForcesBeads=null;
+	
 	/**
 	 * Constructor for BSimCollisionPhysics class
 	 */	
@@ -121,6 +123,9 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			// No new allocation required
 			scene.setReallocateNewForceMat(false);
 		}
+		
+		//forces on the beads caused by the vesicles
+		vesiclesForcesBeads=scene.getVesiclesForcesBeads();
 			
 		// Create array of worker threads
 		Thread[] workerThreads = new Thread[MAX_WORKER_THREADS];
@@ -308,8 +313,17 @@ public class BSimCollisionPhysics extends BSimPhysics{
 				}
 			
 				// Resolve the forces for the current particle
-				resolveExternalForces(newForceMat, i); 
 				
+				
+				if(i>=n && i<n+m){
+					//case if we are resolving a force for a beads
+					//considering the component of the vesicles for the beads
+					resolveExternalForces(newForceMat, i, vesiclesForcesBeads[i-n]); 
+				}
+				else{
+					//in all the other cases
+					resolveExternalForces(newForceMat, i); 
+				}
 				// Find the internal force of the particle
 				if(i < n) {
 					// The current particle is a bacteria so call the required function
@@ -379,7 +393,7 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		
 		
 		/**
-		 * Find the resultant (net) external 2D force on an particle
+		 * Find the resultant (net) external 3D force on an particle
 		 */
 		private void resolveExternalForces(double[][][] forceMat, int i) {
 			// Find the size of the force matrix
@@ -390,6 +404,30 @@ public class BSimCollisionPhysics extends BSimPhysics{
 			forceXSum = 0;
 			forceYSum = 0;
 			forceZSum = 0;
+			
+
+			for (int j = 0; j < forceMatWidth; j++) {
+				forceXSum += forceMat[i][j][0];
+				forceYSum += forceMat[i][j][1];
+				forceZSum += forceMat[i][j][2];
+			}
+			externalForces[i][0] = forceXSum;
+			externalForces[i][1] = forceYSum;
+			externalForces[i][2] = forceZSum;
+		}
+		
+		/**
+		 * Find the resultant (net) external 3D force on an particle
+		 */
+		private void resolveExternalForces(double[][][] forceMat, int i, double[] vesiclesForces) {
+			// Find the size of the force matrix
+			int forceMatWidth = forceMat[0].length;
+			double forceXSum, forceYSum, forceZSum;
+
+			// For the chosen element, sum the components
+			forceXSum = 0 + vesiclesForces[0];
+			forceYSum = 0 + vesiclesForces[1];
+			forceZSum = 0 + vesiclesForces[2];
 			
 
 			for (int j = 0; j < forceMatWidth; j++) {
