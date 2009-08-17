@@ -722,5 +722,6 @@ public class BSimScene extends JPanel implements Runnable,
 	public void setReallocateNewFusionExists(boolean b) { reallocateNewFusionExists=b; }
 	public void setVesiclesForcesBeads(double[][] newVesiclesForcesBeads){vesiclesForcesBeads=newVesiclesForcesBeads;}
 	public double[][] getVesiclesForcesBeads(){return vesiclesForcesBeads;}
+	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}
 
 }
