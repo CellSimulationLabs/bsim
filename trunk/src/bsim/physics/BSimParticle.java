@@ -20,6 +20,8 @@ public abstract class BSimParticle {
 	public static int PART_PART = 0;
 	public static int PART_BACT = 1;
 	public static int PART_BEAD = 2;
+	public static int PART_VES = 3;
+	
 	protected int partType = PART_PART;
 	
 	// General properties of all objects in a simulation
