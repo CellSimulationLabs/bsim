@@ -406,6 +406,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 				tumbleSpeed, remDt, 
 				scene, params);		
 		
+		newBact.startNewPhase();
+		
 		scene.setReallocateNewForceMat(true);
 		
 		return newBact;
