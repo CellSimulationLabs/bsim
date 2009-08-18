@@ -217,7 +217,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 			//the external cycle is only on the vesicle
 			for (int i=xStart; i<xEnd; i++) {
 				for (int j = 0; j<(n+l+m+b); j++) {
-					if(i==j){
+					if(j==(i+n)){
 						continue;
 					}
 					//the first particle is always a vesicle
