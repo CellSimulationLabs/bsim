@@ -128,6 +128,10 @@ public class BSimScene extends JPanel implements Runnable,
 	
 	private Processing p = null;
 	
+	public boolean startVideo = false;
+	public boolean endVideo = false;
+	public String videoFileName = null;
+	
 	
 	/**
 	 * General constructor for use when GUI is present
@@ -260,7 +264,7 @@ public class BSimScene extends JPanel implements Runnable,
 			remove(p);
 		}
 		//the last parameter is the frame rate
-	    p = new Processing(simWidth, simHeight, 25);    
+	    p = new Processing(simWidth, simHeight, 25,this);    
 	    p.init();
 	    add(p);
 		p.setBacteria(bacteria);
@@ -706,6 +710,12 @@ public class BSimScene extends JPanel implements Runnable,
 	public Vector getSolidBoundaries (){ return solidBoundaries; }
 	public Vector getWrapBoundaries (){ return wrapBoundaries; }
 	public Vector getVisualAids (){ return visualAids; }
+	public boolean getStartVideo (){ return startVideo; }
+	public boolean getEndVideo (){ return endVideo; }
+	public String getVideoFileName (){ return videoFileName; }
+	public void setVideoFileName (String s){ videoFileName = s; }
+	public void setStartVideo (boolean b){ startVideo=b; }
+	public void setEndVideo (boolean b){ endVideo=b; }
 	public double getDtSec (){ return dt; }
 	public int getTimeStep (){ return timeStep; }
 	public double getDtMilli (){ return dt * 1000; }

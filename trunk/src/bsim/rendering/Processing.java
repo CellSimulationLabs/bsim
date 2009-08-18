@@ -8,11 +8,15 @@
 
 package bsim.rendering;
 
+import java.io.File;
+import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import processing.core.*;
+import processing.video.*;
 import peasy.*;
 
+import bsim.BSimScene;
 import bsim.drawable.bacteria.*;
 import bsim.drawable.boundary.*;
 
@@ -22,15 +26,21 @@ public class Processing extends PApplet {
 	public int w = 0;
 	public int frameForSec = 25;
 	protected PeasyCam cam = null;
+	protected MovieMaker mm;
+	protected boolean firstTime = true;
+	
+	public BSimScene scene=null;
 	public Vector bacteria=null;
 	public Vector solidBoxes=null;
 	public Vector wrapBoxes=null;
 	
 	// Constructor
-	public Processing(int l, int w, int newFrameForSec) {
-		this.l = l;
-		this.w = w;
+	public Processing(int newL, int newW, int newFrameForSec, BSimScene newScene) {
+		this.l = newL;
+		this.w = newW;
 		this.frameForSec = 25;
+		firstTime = true;
+		scene=newScene;
 		bacteria = new Vector();
 		solidBoxes = new Vector();
 		wrapBoxes = new Vector();
@@ -85,6 +95,21 @@ public class Processing extends PApplet {
 			sphere((float)(bact.getRadius()));
 			popMatrix();
 		}
+		
+		if(scene.getStartVideo()){
+			if(firstTime==true){
+				mm = new MovieMaker(this, width, height, scene.getVideoFileName(), frameForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
+				//mm = new MovieMaker(this, l, w, scene.getVideoFileName(),25, MovieMaker.JPEG, MovieMaker.BEST);
+				firstTime=false;
+			}
+			mm.addFrame();
+		}
+		if(scene.getEndVideo()){
+			mm.finish();
+			File file =  new File(scene.getVideoFileName()+".#res");
+			file.delete();
+			firstTime=true;
+		}
 	}
 	
 	public void setBacteria(Vector newBacteria)
@@ -101,4 +126,5 @@ public class Processing extends PApplet {
 	{
 		wrapBoxes = newWrapBoxes;
 	}
+	
 }

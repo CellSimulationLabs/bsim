@@ -190,24 +190,33 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			
 		//Record button
 		}else if (e.getSource() == btnRecord) {
+			
 			// Pause the current simulation first
-			playState = 0;
-			btnPlayPause.setIcon(iconPlay);
-			btnPlayPause.setText("Play");
-			app.pause();
+			//playState = 0;
+			//btnPlayPause.setIcon(iconPlay);
+			//btnPlayPause.setText("Play");
+			//app.pause();
 			
-			// Variable to check if cancel is pressed (also displays the file dialog)
-			int returnVal = fc.showSaveDialog(this);
 			
-			// If OK is pressed
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// Get the file that has been entered
-				File file = fc.getSelectedFile();
+			if(scene.getStartVideo()){
+				scene.setStartVideo(false);
+				scene.setEndVideo(true);
+			}
+			else{
+				// Variable to check if cancel is pressed (also displays the file dialog)
+				int returnVal = fc.showSaveDialog(this);
 				
-				// Pass the filename to the BSimApp to write movie to file
-				app.createMovie(file.getPath(), 
-					Integer.parseInt(txtRecLength.getText()), 
-					Integer.parseInt(txtRecFrameSkip.getText()));		
+				// If OK is pressed
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					// Get the file that has been entered
+					File file = fc.getSelectedFile();
+					String videoFileName = file.getPath();
+					file.delete();
+					file=null;
+					scene.setVideoFileName(videoFileName);
+					scene.setStartVideo(true);
+					scene.setEndVideo(false);
+				}
 			}
 		
 		// Screenshot button
