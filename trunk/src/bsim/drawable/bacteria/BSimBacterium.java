@@ -209,7 +209,12 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	 */
 	protected void startNewPhase() {
 
-		if (state == BAC_STATE_RUNNING) {
+		double[] directionParam = params.getConstantMagnField();
+		if (directionParam[0] != 0.0 || directionParam[1] != 0.0 || directionParam[2] != 0.0 ) {
+			this.setDirection(directionParam);
+			this.setState(BAC_STATE_RUNNING);
+			
+		} else if (state == BAC_STATE_RUNNING) {
 			// Change state; Switch from run to tumble
 
 			// Calculate tumble angle (only approximates distribution)

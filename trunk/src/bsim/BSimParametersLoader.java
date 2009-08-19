@@ -115,7 +115,8 @@ public class BSimParametersLoader {
 		else if(line[0].equals("FIELD_RECRUIT_DEFINE:")) p.setCfRecruitDefine(args);
 		else if(line[0].equals("FIELD_RECRUIT_SETUP:")) p.setCfRecruitSetup(args);
 		
-		else if(line[0].equals("MAGN_FIELD_STRENGTH")) p.setMagnStrength(args);
+		else if(line[0].equals("MAGN_FIELD_STRENGTH:")) p.setMagnStrength(args);
+		else if(line[0].equals("CONSTANT_MAGN_FIELD:")) p.setConstantMagnField(args);
 		
 		else if(line[0].equals("VISUAL_AID_BACTERIA_TRACE:")) p.addBacteriaTrace(args);
 		else if(line[0].equals("VISUAL_AID_AVG_BACTERIA_TRACE:")) p.addAvgBacteriaTrace(args);
