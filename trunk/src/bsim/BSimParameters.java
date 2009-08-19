@@ -29,8 +29,8 @@ public class BSimParameters {
 	public double   beadRadius       = 10.0;	// microns
 
 	public double   bactRadius       = 1.4;	// microns
-	public double   bactForceUp      = 0.4387; // micro newtons
-	public double   bactForceDown    = 0.41; // micro newtons
+	public double   bactForceUp      = 0.4387; // pico newtons
+	public double   bactForceDown    = 0.41; // pico newtons
 	public double   bactSpeed        = 50.0; // microns per second
 	
 	public double   runLengthUp      = 1.07;	// seconds
