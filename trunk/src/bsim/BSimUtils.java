@@ -55,29 +55,7 @@ public class BSimUtils {
 			(137.84*Math.pow(-x,2.0) + (177.58*-x) + 12.736);
 		}
 	}
-	
-	public static synchronized double dragForce(double speed, double radius, double visc)
-	{
-		return 6.0 * Math.PI * radius * speed * visc;
-	}
-	
-	public static synchronized double dragForceInv(double force, double radius, double visc) {
-		return force / ( 6.0 * Math.PI * radius * visc);
-	}
-	
-	/**
-	* Returns the 2D velocity vector of an object by solving Stokes' Law; force applied
-	* to an object is assumed to equal drag.
-	* N.B. Units are S.I.; e.g. for F in micro Newtons, velocity is in microns per metre
-	*/
-	public static synchronized double[] force2Velocity3D(double[] F, double r, double visc) {
-		double[] v = new double[3];
-		v[0] = F[0]/(6.0*Math.PI*r*visc);
-		v[1] = F[1]/(6.0*Math.PI*r*visc);
-		v[2] = F[2]/(6.0*Math.PI*r*visc);
-		return v;
-	}
-	
+		
     public static synchronized boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
         double centreDist = get3Ddist(a.getPosition(),b.getPosition());
         double aRad = a.getRadius(), bRad = b.getRadius();
