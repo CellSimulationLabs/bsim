@@ -481,8 +481,9 @@ public class BSimCollisionPhysics extends BSimPhysics{
 		
 		/**
 		 * Returns the 3D velocity vector of an particle by solving Stokes' Law; force applied
-		 * to an particle is assumed to equal drag.
-		 * N.B. Units are S.I.; e.g. for F in micro Newtons, velocity is in microns per metre
+		 * to an particle is assumed equal to drag.
+		 * To get a velocity in microns per second, supply a force in pN, a radius in microns 
+		 * and a viscosity in Pa s.
 		 */
 		public double[] force2Velocity3D(double[] F, double r, double visc) {
 			double[] v = new double[3];
