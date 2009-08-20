@@ -30,6 +30,7 @@ import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.drawable.BSimDrawable;
 import bsim.drawable.field.BSimChemicalField;
+import bsim.drawable.vesicle.BSimVesicle;
 import bsim.logic.BSimLogic;
 import bsim.physics.BSimParticle;
 
@@ -80,8 +81,11 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	
 	protected boolean runUp = false;
 	
-	protected double radiusGrowthRate = 0.1; // microns per second
+	protected double radiusGrowthRate = 0.001; // microns per second
 	protected double replicationRadius;
+	
+	protected boolean vesiculating;
+	protected double radiusOnVesiculationStart;
 
 
 	/**
@@ -390,10 +394,44 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	}
 	
 	public void grow() {		
-		radius += radiusGrowthRate * params.getDtSecs();			
-	}
+		radius += radiusGrowthRate * params.getDtSecs();
+		
+		double pStart = 0.1;
+		double pEnd = 0.1;		
+		
+		if (!vesiculating) { 
+			if(Math.random() < pStart*params.getDtSecs()) {
+				vesiculating = true;
+				radiusOnVesiculationStart = radius;
+			}
+		}
+		else {			
+			if(Math.random() < pEnd*params.getDtSecs()) {
+				double saOnStart = 4*Math.PI*Math.pow(radiusOnVesiculationStart,2);
+				double saOnEnd = 4*Math.PI*Math.pow(radius,2);
+				double vesicleRadius = Math.sqrt((saOnEnd - saOnStart)/4*Math.PI);
+				
+				double[] newPosition = new double[3];
+				newPosition[0] = position[0] + radius + vesicleRadius;
+				newPosition[1] = position[1];
+				newPosition[2] = position[2];
+				
+				radius = radiusOnVesiculationStart;
+				
+				BSimVesicle newVesicle = new BSimVesicle(speed, mass, vesicleRadius,
+						direction, newPosition,					
+						scene, params);	
+								
+				System.out.println(radius + " " + vesicleRadius);
+				scene.addVesicle(newVesicle);
+				scene.setReallocateNewForceMat(true);
+				scene.setReallocateNewFusionExists(true);				
+			}
+		}		
+							
+	}	
 	
-	public BSimBacterium replicate(BSimScene scene, BSimParameters params) {
+	public void replicate() {
 		BSimBacterium newBact = null;
 		
 		// Replicate along direction of movement
@@ -415,7 +453,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		
 		scene.setReallocateNewForceMat(true);
 		
-		return newBact;
+		scene.addBacterium(newBact);
 	}
 	  
 	                                                  

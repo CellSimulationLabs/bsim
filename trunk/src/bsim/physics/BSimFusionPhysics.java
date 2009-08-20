@@ -5,7 +5,7 @@ import java.util.Vector;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
-import bsim.drawable.vesicles.BSimVesicle;
+import bsim.drawable.vesicle.BSimVesicle;
 import bsim.drawable.bead.BSimBead;
 import bsim.drawable.boundary.BSimSolidPlaneBoundary;
 import bsim.physics.BSimCollisionPhysics.BSimCollisionPhysicsThread;
@@ -144,12 +144,15 @@ public class BSimFusionPhysics extends BSimPhysics{
 		}
 		
 		//check if there is a fusion between vesicle-bacterium or vesicle-vesicle
+		Vector vesiclesToRemove = new Vector();
 		for(i=0; i<l; i++) {
-			if(fusionExists[i]==true){
-				vesicles.removeElementAt(i);
-				scene.setReallocateNewFusionExists(true);
+			if(fusionExists[i]){
+				vesiclesToRemove.add(vesicles.elementAt(i));				
 			}
-		}
+		}		
+		vesicles.removeAll(vesiclesToRemove);
+		scene.setReallocateNewFusionExists(true);
+		
 		
 		scene.setVesicles(vesicles);
 		scene.setVesiclesForcesBeads(vesiclesForcesBeads);
@@ -181,6 +184,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 			// Update the internal variables
 			xStart = newXStart;
 			xEnd = newXEnd;
+			vesicles = newVesicles;
 			bacteria = newBacteria;
 			beads = newBeads;
 			solidBoundaries = newSolidBoundaries;
@@ -323,6 +327,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (j<n) ){
 								setFusionExistsValue(i);
 								partBacterium = (BSimBacterium)scene.getBacteria().elementAt(j);
+								System.out.println("vesicle-bacterium fusion");
 								//partBacterium.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle
@@ -338,6 +343,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (!fusionExists[j-n]) && (j>=n) ){
 								setFusionExistsValue(i);
 								partVesicle = (BSimVesicle)scene.getVesicles().elementAt(j-n);
+								System.out.println("vesicle-vesicle fusion");
 								//partVesicle.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle

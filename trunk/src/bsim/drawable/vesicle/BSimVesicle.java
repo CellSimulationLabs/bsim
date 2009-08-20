@@ -1,54 +1,52 @@
-package bsim.drawable.vesicles;
+package bsim.drawable.vesicle;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Random;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.drawable.BSimDrawable;
-import bsim.drawable.bacteria.BSimBacterium;
 import bsim.logic.BSimLogic;
 import bsim.physics.BSimParticle;
 
-public class BSimVesicle extends BSimParticle implements BSimLogic, BSimDrawable {
+public class BSimVesicle extends BSimParticle implements BSimDrawable {
 	
 	// The simulation scene that will be updated
 	protected BSimScene scene;
 	// Parameters for the simulation
 	protected BSimParameters params;
-	//value of the Brownian force;
-	protected double amplitude = 0;
 
 	/**
 	 * General constructor.
 	 */
 	public BSimVesicle(double newSpeed, double newMass,
-			double newSize, double[] newDirection, double[] newPosition, 
-			BSimScene newScene, BSimParameters newParams, double newAmplitude) {
+			double newRadius, double[] newDirection, double[] newPosition, 
+			BSimScene newScene, BSimParameters newParams) {
 		
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newSize, newDirection, newPosition, BSimParticle.PART_VES);
+		super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimParticle.PART_VES);
 		
 		// The simulation scene that will be updated
 		scene = newScene;
 		// Parameters for the simulation
 		params = newParams;
-		//value of the Brownian force;
-		amplitude = newAmplitude;
 
 		
 	}
 	
-	/**
-	 * Implements the BSimLogic interface. In this case it merely carries out
-	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
-	 * at a timestep is returned.
-	 */
+
 	public double[] runLogic ( boolean contactBead, 
-	                           boolean contactBoundary,
-	                           boolean contact) {
+	                           boolean contactBoundary) {
 		
-		double[] f = {0.0, 0.0, 0.0};
+		Random r = new Random();
+		
+		double resistance = 6.0*Math.PI*(radius*Math.pow(10, -6))*params.getViscosity();
+		double boltzmann = 1.38 * Math.pow(10,-23);
+		double temperature = 300;
+		double amplitude = Math.sqrt(2*resistance*boltzmann*temperature/params.getDtSecs())*Math.pow(10,12);
+		
+		double[] f = {r.nextGaussian()*amplitude, r.nextGaussian()*amplitude, r.nextGaussian()*amplitude};
 		
 		return  f;
 	}

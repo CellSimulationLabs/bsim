@@ -6,10 +6,10 @@ import java.util.Vector;
 import processing.core.*;
 import processing.video.MovieMaker;
 import peasy.*;
-
 import bsim.BSimScene;
-import bsim.drawable.bacteria.*;
-import bsim.drawable.boundary.*;
+import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.boundary.BSimBoxBoundary;
+import bsim.drawable.vesicle.BSimVesicle;
 
 
 
@@ -35,6 +35,7 @@ public class Processing extends PApplet {
 	
 	//simulation objects
 	public Vector bacteria=null;
+	public Vector vesicles=null;
 	public Vector solidBoxes=null;
 	public Vector wrapBoxes=null;
 	
@@ -44,7 +45,7 @@ public class Processing extends PApplet {
 	public Processing(BSimScene newScene) {
 		//core of the simulation
 		scene=newScene;
-			
+				
 		//PApplet parameters
 		w = scene.getParams().getScreenWidth();
 		h = scene.getParams().getScreenHeight();
@@ -58,10 +59,9 @@ public class Processing extends PApplet {
 		
 		//object into the simulation
 		bacteria = scene.getBacteria();
+		vesicles= scene.getVesicles();
 		solidBoxes = scene.getSolidBoxes();
 		wrapBoxes = scene.getWrapBoxes();
-		
-
 	}
 
 	// Yes, this is the P5 setup()
@@ -126,6 +126,15 @@ public class Processing extends PApplet {
 			drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
 			popMatrix();
 		}		
+		
+		for(int i=0;i<vesicles.size();i++){
+			BSimVesicle vesicle = (BSimVesicle)vesicles.elementAt(i);
+			pushMatrix();
+			translate((float)vesicle.getPosition()[0], (float)vesicle.getPosition()[1],(float)vesicle.getPosition()[2]);
+			fill(255, 0, 0);
+			sphere((float)(100*vesicle.getRadius()));			
+			popMatrix();
+		}
 		
 		if(scene.getStartVideo()){
 			loadPixels();

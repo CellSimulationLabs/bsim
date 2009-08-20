@@ -20,10 +20,10 @@ package bsim;
 
 import java.awt.Color;
 
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
@@ -33,14 +33,15 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import bsim.drawable.BSimDrawable;
-import bsim.drawable.bacteria.*;
+import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.bead.BSimBead;
 import bsim.drawable.boundary.BSimWrapPlaneBoundary;
 import bsim.drawable.field.BSimChemicalField;
+import bsim.drawable.vesicle.BSimVesicle;
 import bsim.drawable.visualaid.BSimVisualAid;
 import bsim.physics.BSimCollisionPhysics;
+import bsim.physics.BSimFusionPhysics;
 import bsim.physics.BSimPhysics;
-
 import bsim.rendering.Processing;
 
 
@@ -97,7 +98,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private int timeStep = 0;
 	
 	// The physics engine used for the current simulation
-	private BSimPhysics physics;
+	private BSimCollisionPhysics physics;
+	private BSimFusionPhysics fusion;
 	
 	// Thread to run the simulation in
 	private Thread simThread;
@@ -160,7 +162,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		app = newApp;
 				
 		// Create the default physics engine for the simulation
-		physics = new BSimCollisionPhysics(this, params);	    
+		physics = new BSimCollisionPhysics(this, params);
+		fusion = new BSimFusionPhysics(this, params);
 	    
 		// Create initial bacteria and beads
 		resetScene(1);
@@ -194,6 +197,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				
 		// Create the default physics engine for the simulation
 		physics = new BSimCollisionPhysics(this, params);
+		fusion = new BSimFusionPhysics(this, params);
 		
 		// Create initial bacteria and beads
 		resetScene(1);
@@ -226,6 +230,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 		// Create the default physics engine for the simulation based on the updated parameters
 		physics = new BSimCollisionPhysics(this, params);
+		fusion = new BSimFusionPhysics(this, params);
 
 		// Move back to first time-step 
 		timeStep = 0;
@@ -237,7 +242,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		
 		// Create the bacteria and bead sets
 		beads = params.createNewBeadVec();
-		bacteria = params.createNewBacteriaVec(this);	
+		bacteria = params.createNewBacteriaVec(this);
+		vesicles = new Vector();
 		reallocateNewForceMat = true;
 		
 		// Create both wrapping and solid boundaries
@@ -274,7 +280,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			resizeBug = true;
 			app.resize(simWidth, simHeight+96);
 		}
-		
+				
 		// Repaint the graphics display
 		repaint();
 	}
@@ -348,11 +354,12 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			b = (BSimBacterium)(bacteria.elementAt(k));			
 			b.grow();
 			if(b.getRadius() > b.getReplicationRadius()){
-				bacteria.add(b.replicate(this, params));	
+				b.replicate();	
 			}
 		}
 	
 		// Update the properties for bacteria and beads
+		if (vesicles.size() > 0) fusion.updateProperties();
 		physics.updateProperties();
 		
 		// Perform necessary boundary operations
@@ -565,8 +572,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	 * Standard get methods for the class.
 	 */
 	public Vector getBacteria (){ return bacteria; }
+	public void addBacterium (BSimBacterium b){ bacteria.add(b); }
 	public Vector getBeads (){ return beads; }
+	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
+	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
 	public Vector getSolidBoundaries (){ return solidBoundaries; }
 	public Vector getWrapBoundaries (){ return wrapBoundaries; }
 	public Vector getSolidBoxes (){ return solidBoxes; }
