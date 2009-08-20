@@ -38,7 +38,7 @@ public class BSimParameters {
 	public double   runLengthIso     = 0.86; // seconds
 	
 	public double   visc             = Math.pow(10.0,-3.0); // Pascal seconds
-	public int      screenWidth      = 1000; // pixels
+	public int      screenWidth      = 1025; // pixels
 	public int      screenHeight     = 700; // pixels
 
 	public double   dt               = 0.005; // seconds (was 0.01 but too big), jumpping boundaries

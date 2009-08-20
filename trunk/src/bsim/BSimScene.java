@@ -268,11 +268,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 
 		if(resizeBug){
 			resizeBug = false;
-			app.resize(simWidth+39, simHeight+89);
+			app.resize(simWidth, simHeight+95);
 		}
 		else{
 			resizeBug = true;
-			app.resize(simWidth+40, simHeight+90);
+			app.resize(simWidth, simHeight+96);
 		}
 		
 		// Repaint the graphics display
@@ -289,6 +289,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		params = newParams;
 		
 		orgSimWidth = params.getScreenWidth();
+		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
+			orgSimWidth = BSimToolbar.BSimToolbarWidth;
+		}
 		orgSimHeight = params.getScreenHeight();
 		
 		// Reset the scene to recreate all objects and ensure local variables are consistent

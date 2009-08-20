@@ -24,6 +24,8 @@ import javax.swing.JToolBar;
 
 public class BSimToolbar extends JToolBar implements ActionListener{
 
+	public final static int BSimToolbarWidth = 1025;
+	
 	// Other BSim references
 	private BSimApp app;
 	private BSimScene scene;
