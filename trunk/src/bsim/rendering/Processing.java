@@ -1,6 +1,17 @@
+/**
+ * Processing.java
+ * 
+ * This class uses the Processing library functions to draw the scene.
+ * 
+ * Authors:	Mattia Fazzini
+ * 			Antoni Matyjaszkiewicz
+ * Created:	17/8/09
+ * Updated:	20/8/09
+ */
+
+
 package bsim.rendering;
 
-import java.io.File;
 import java.util.Vector;
 
 import processing.core.*;
@@ -10,7 +21,7 @@ import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.boundary.BSimBoxBoundary;
 import bsim.drawable.vesicle.BSimVesicle;
-
+import bsim.drawable.field.BSimChemicalField;
 
 
 public class Processing extends PApplet {
@@ -39,13 +50,21 @@ public class Processing extends PApplet {
 	public Vector solidBoxes=null;
 	public Vector wrapBoxes=null;
 	
-	PFont myFont;
+	public BSimChemicalField fGoal = null;
+	public double[][][] theField;
+	// The number of x,y,z boxes used for display
+	public int nBoxX = 20, nBoxY = 20, nBoxZ = 20;
+	public int fieldDimX, fieldDimY, fieldDimZ;
+	public double conc;
+	public double[] boxPos = new double[3];
+	public boolean fieldIsDisplayed = false;
 	
+	PFont myFont;
 
 	public Processing(BSimScene newScene) {
 		//core of the simulation
 		scene=newScene;
-				
+			
 		//PApplet parameters
 		w = scene.getParams().getScreenWidth();
 		h = scene.getParams().getScreenHeight();
@@ -62,6 +81,29 @@ public class Processing extends PApplet {
 		vesicles= scene.getVesicles();
 		solidBoxes = scene.getSolidBoxes();
 		wrapBoxes = scene.getWrapBoxes();
+		
+		//Chemical field bits
+		fGoal = scene.getGoalField();
+		fieldIsDisplayed = (boolean)fGoal.getIsDisplayed();
+		fieldDimX = fGoal.getField().length;
+		fieldDimY = fGoal.getField()[0].length;
+		fieldDimZ = fGoal.getField()[0][0].length;
+		
+		if(fieldDimX<nBoxX){
+			nBoxX = fieldDimX;
+		}
+		if(fieldDimY<nBoxY){
+			nBoxY = fieldDimY;
+		}
+		if(fieldDimZ<nBoxZ){
+			nBoxZ = fieldDimZ;
+		}
+		// This will cause the number of boxes displayed to be exactly equal to those in the chemical
+		// field calculations. WARNING this is VERY slow for a large number of boxes so better to
+		// just keep display box number constant as above.
+//		nBoxX = fGoal.getField().length;
+//		nBoxY = fGoal.getField()[0].length;
+//		nBoxZ = fGoal.getField()[0][0].length;
 	}
 
 	// Yes, this is the P5 setup()
@@ -113,7 +155,45 @@ public class Processing extends PApplet {
 			noStroke();
 			popMatrix();
 		}
-		
+		//TODO: should have all 3 (more?) chemical fields and combine for drawing (how slow...)
+		// Draw chemical before drawing bacteria, or they all disappear into the fog!
+		if(fieldIsDisplayed){
+			theField = fGoal.getField();
+			noStroke();
+			BSimBoxBoundary sb= (BSimBoxBoundary)solidBoxes.elementAt(0);
+			for (int i=0; i<nBoxX; i++){
+				for(int j=0; j<nBoxY; j++){
+					for(int k=0; k<nBoxZ;k++){
+						boxPos[0] = (i + 0.5)*sb.getLength()/nBoxX;
+						boxPos[1] = (j + 0.5)*sb.getWidth()/nBoxY;
+						boxPos[2] = (k + 0.5)*sb.getDepth()/nBoxZ;
+						
+						// This seems to work... but only for evenly divisible by nBox.. grrr
+						// TODO: lots of optimisation and fixing
+						conc = 0;
+						for(int bi = floor((float)i*(float)fieldDimX/(float)nBoxX); bi<ceil(((float)i+1.0f)*(float)fieldDimX/(float)nBoxX); bi++){
+							for(int bj = floor((float)j*(float)fieldDimY/(float)nBoxY); bj<ceil(((float)j+1.0f)*(float)fieldDimY/(float)nBoxY); bj++){
+								for(int bk = floor((float)k*(float)fieldDimZ/(float)nBoxZ); bk<ceil(((float)k+1.0f)*(float)fieldDimZ/(float)nBoxZ); bk++){
+									conc += theField[bi][bj][bk];
+								}
+							}
+						}
+						conc = conc/(((float)fieldDimX/(float)nBoxX)*((float)fieldDimY/(float)nBoxY)*((float)fieldDimZ/(float)nBoxZ));
+						
+						// Cheat (this won't look so good if for example a bacteria 
+						// releases a small amount of chemical as it is not an average for the box):
+//						conc = fGoal.getConcentration(boxPos);
+						
+						fill((255*(float)conc), 0, 0,(25*(float)conc));
+						pushMatrix();
+						translate((float)boxPos[0], (float)boxPos[1], (float)boxPos[2]);
+						box((float)sb.getLength()/nBoxX,(float)sb.getWidth()/nBoxY, (float)sb.getDepth()/nBoxZ);
+						popMatrix();
+					}
+				}
+			}
+		}
+	
 		for(int i=0;i<bacteria.size();i++){
 			BSimBacterium bact = (BSimBacterium)bacteria.elementAt(i);
 			pushMatrix();
@@ -148,7 +228,6 @@ public class Processing extends PApplet {
 		}
 	}
 	
-	
 	//the RodShape is drawn along the y axis
 	public void drawRodShape(float radius, float diameter, int sides) {
 		  float angle = 0;
@@ -173,7 +252,7 @@ public class Processing extends PApplet {
 		  sphere(radius);
 		  popMatrix();
 	}
-	
+		
 	public void createMovie(String videoFileName){		
 		mm = new MovieMaker(this, width, height, videoFileName, frameRecordForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
 	}

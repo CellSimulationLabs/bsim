@@ -248,44 +248,44 @@ public class BSimChemicalField implements BSimDrawable {
 	public void redraw (Graphics g) {
 
 		// Check to see if the field is displayed and redraw
-		if(isDisplayed) {
-
-			// Get the components of the colour
-			// Required because alpha needs to be varied later on
-			float rComp = (float)(colour.getRed()/255.0);
-			float gComp = (float)(colour.getGreen()/255.0);
-			float bComp = (float)(colour.getBlue()/255.0);
-			float aComp  = 0;
-			
-			int fWidth, fHeight, fDepth;
-
-			// Loop through all x and y boxes
-			for(int x=0; x<xBoxes; x++) {
-				for(int y=0; y<yBoxes; y++) {
-					for(int z=0; z<zBoxes; z++) {
-
-					fWidth = (int)boxWidth;
-					fHeight = (int)boxHeight;
-					fDepth = (int) boxDepth;
-					
-						// Check to see if the field is visible (i.e. not 0 concentration)
-						if(field[x][y][z] != 0.0f){
-							
-							aComp = (float)(field[x][y][z] * maxCon);
-							
-							// Set the colour of the field (alpha is the concentration)
-							g.setColor(new Color(rComp, gComp, bComp, aComp));
-	
-							// Draw a box of the field
-							g.fillRect((int)(startPos[0] + (x * boxWidth)), 
-									(int)(startPos[1] + (y * boxHeight)), 
-									fWidth, fHeight);
-							// Draw a cubic stuff?
-						}
-					}
-				}
-			}
-		}
+//		if(isDisplayed) {
+//
+//			// Get the components of the colour
+//			// Required because alpha needs to be varied later on
+//			float rComp = (float)(colour.getRed()/255.0);
+//			float gComp = (float)(colour.getGreen()/255.0);
+//			float bComp = (float)(colour.getBlue()/255.0);
+//			float aComp  = 0;
+//			
+//			int fWidth, fHeight, fDepth;
+//
+//			// Loop through all x and y boxes
+//			for(int x=0; x<xBoxes; x++) {
+//				for(int y=0; y<yBoxes; y++) {
+//					for(int z=0; z<zBoxes; z++) {
+//
+//					fWidth = (int)boxWidth;
+//					fHeight = (int)boxHeight;
+//					fDepth = (int) boxDepth;
+//					
+//						// Check to see if the field is visible (i.e. not 0 concentration)
+//						if(field[x][y][z] != 0.0f){
+//							
+//							aComp = (float)(field[x][y][z] * maxCon);
+//							
+//							// Set the colour of the field (alpha is the concentration)
+//							g.setColor(new Color(rComp, gComp, bComp, aComp));
+//	
+//							// Draw a box of the field
+//							g.fillRect((int)(startPos[0] + (x * boxWidth)), 
+//									(int)(startPos[1] + (y * boxHeight)), 
+//									fWidth, fHeight);
+//							// Draw a cubic stuff?
+//						}
+//					}
+//				}
+//			}
+//		}
 	}
 
 
@@ -634,4 +634,5 @@ public class BSimChemicalField implements BSimDrawable {
 	public double getRate (){ return rate; }
 	public double[][][] getField (){ return field; }
 	public double getThreshold() {return threshold;}
+	public boolean getIsDisplayed() {return isDisplayed;}
 }
