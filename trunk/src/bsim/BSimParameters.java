@@ -68,6 +68,13 @@ public class BSimParameters {
 	public double   screenZoom       = 1, 
 	                screenMove[]     = {0.0, 0.0};
 	
+	//parameters needed to control the processing camera
+	public double   minimumDistance  = 0.001;
+	public double   maximumDistance  = 1500;
+	public double   defaultDistance  = 1000;
+	public int      frameForSec      = 25;
+	public int      frameRecordForSec= 25;
+	
 	public int      dataFramesSkip   = 1;
 	public int      videoFramesSkip  = 1;
 	public int      simRuns          = 1;
@@ -141,7 +148,15 @@ public class BSimParameters {
 	public Vector   getClocks() { return vaClocks; }
 	public Vector	getScales() { return vaScales; }
 	
-	public double	geScreenZoom() {return screenZoom;}
+	public double	getScreenZoom() {return screenZoom;}
+	
+	//parameters needed to control the processing camera
+	public double   getMinimumDistance() {return minimumDistance;}
+	public double   getMaximumDistance() {return maximumDistance;}
+	public double   getDefaultDistance() {return defaultDistance;}
+	public int      getFrameForSec() {return frameForSec;}
+	public int      getFrameRecordForSec() {return frameRecordForSec;}
+	
 	public double[]	getScreenMove() {return screenMove;}
 	public int		getDataFramesSkip() {return dataFramesSkip;}
 	public int		getVideoFramesSkip() {return videoFramesSkip;}
@@ -221,6 +236,13 @@ public class BSimParameters {
 	public void  	setRecordVideo(boolean x) { recordVideo = x;}
 	public void	 	setExportDir(String x) { exportDir = x;}
 	public void 	setNumOfThreads(int x) { numOfThreads = x;}
+	
+	//parameters needed to control the processing camera
+	public void     setMinimumDistance( double x) {minimumDistance = x;}
+	public void     setMaximumDistance( double x) {maximumDistance = x;}
+	public void     setDefaultDistance( double x) {defaultDistance = x;}
+	public void     setFrameForSec(int x) {frameForSec = x;}
+	public void     setFrameRecordForSec(int x) {frameRecordForSec = x;}
 	
 	public void     setWellWidthBactBact ( double x) { wellWidthBactBact = x; }
 	public void     setWellWidthBactBead ( double x) { wellWidthBactBead = x; }

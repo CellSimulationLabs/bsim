@@ -32,23 +32,23 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private int playState = 0;
 	
 	// GUI objects
-	private JButton btnPlayPause, btnReset, btnRecord,
-		btnPan, btnZoom, btnScreenshot, btnLoadSim;
-	private JTextField txtRecLength, txtRecFrameSkip;
-	private JLabel labRecLength, labRecFrameSkip, labTime;
+	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot, btnLoadSim;
+	private JLabel labTime;
 	private JFileChooser fc;
 	
 	// Images used on the buttons
-	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("icons/PauseSmall.gif"));
-	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("icons/PlaySmall.gif"));
-	private static final ImageIcon iconToStart = new ImageIcon(BSimToolbar.class.getResource("icons/ToStartSmall.gif"));
-	private static final ImageIcon iconRecord = new ImageIcon(BSimToolbar.class.getResource("icons/RecordSmall.gif"));
-	private static final ImageIcon iconZoomIn = new ImageIcon(BSimToolbar.class.getResource("icons/ZoomInSmall.gif"));
-	private static final ImageIcon iconZoomAct = new ImageIcon(BSimToolbar.class.getResource("icons/ZoomActSmall.gif"));
-	private static final ImageIcon iconPanIn = new ImageIcon(BSimToolbar.class.getResource("icons/PanInSmall.gif"));
-	private static final ImageIcon iconPanAct = new ImageIcon(BSimToolbar.class.getResource("icons/PanActSmall.gif"));
-	private static final ImageIcon iconScreenshot = new ImageIcon(BSimToolbar.class.getResource("icons/ScreenshotSmall.gif"));
-	private static final ImageIcon iconLoadSim = new ImageIcon(BSimToolbar.class.getResource("icons/PrefsSmall.gif"));
+	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("icons/play.png"));
+	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("icons/pause.png"));
+	private static final ImageIcon iconReset = new ImageIcon(BSimToolbar.class.getResource("icons/reset.png"));
+	private static final ImageIcon iconLoad = new ImageIcon(BSimToolbar.class.getResource("icons/load.png"));
+	private static final ImageIcon iconSaveRecord = new ImageIcon(BSimToolbar.class.getResource("icons/saveRecord.png"));
+	private static final ImageIcon iconStartRecord = new ImageIcon(BSimToolbar.class.getResource("icons/startRecord.png"));
+	private static final ImageIcon iconEndRecord = new ImageIcon(BSimToolbar.class.getResource("icons/endRecord.png"));
+	private static final ImageIcon iconStartRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("icons/startRecordDisabled.png"));
+	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("icons/endRecordDisabled.png"));
+	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("icons/saveScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("icons/takeScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("icons/takeScreenshotDisabled.png"));
 	
 	private static BSimParameters params;
 	
@@ -65,7 +65,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		
 		// Create the toolbar and make it floatable
 		setupToolBar();
-		setFloatable(true);
+		setFloatable(true);		
 	}
 	
 	
@@ -77,57 +77,54 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		fc = new JFileChooser();
 		
 		// Create GUI controls with initial properties
-		btnPlayPause = new JButton("Play ");
+		btnPlayPause = new JButton("Play");
 		btnPlayPause.setIcon(iconPlay);
 		btnPlayPause.addActionListener(this);
-		btnReset = new JButton("Reset ");
-		btnReset.setIcon(iconToStart);
+		btnReset = new JButton("Reset");
+		btnReset.setIcon(iconReset);
 		btnReset.addActionListener(this);
-		labTime = new JLabel("Time: 00:00:00");
-		btnPan = new JButton();
-		btnPan.setIcon(iconPanAct);
-		btnPan.addActionListener(this);
-		btnZoom = new JButton();
-		btnZoom.setIcon(iconZoomIn);
-		btnZoom.addActionListener(this);
-		labRecLength = new JLabel("Movie Length:");
-		txtRecLength = new JTextField("100", 4);
-		labRecFrameSkip = new JLabel("Skip:");
-		txtRecFrameSkip = new JTextField("10", 4);
-		btnRecord = new JButton("Record... ");
-		btnRecord.setIcon(iconRecord);
-		btnRecord.addActionListener(this);
-		btnScreenshot = new JButton("Screenshot... ");
-		btnScreenshot.setIcon(iconScreenshot);
-		btnScreenshot.addActionListener(this);
-		btnLoadSim = new JButton("Load Simulation... ");
-		btnLoadSim.setIcon(iconLoadSim);
+		btnLoadSim = new JButton("Load Simulation");
+		btnLoadSim.setIcon(iconLoad);
 		btnLoadSim.addActionListener(this);
+		labTime = new JLabel("Time: 00:00:00");
+		btnSaveScreenshot = new JButton("Screenshot");
+		btnSaveScreenshot.setIcon(iconSaveScreenshot);
+		btnSaveScreenshot.addActionListener(this);
+		btnTakeScreenshot = new JButton("Save Screenshot");
+		btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
+		btnTakeScreenshot.addActionListener(this);
+		btnSaveRecord = new JButton("Record");
+		btnSaveRecord.setIcon(iconSaveRecord);
+		btnSaveRecord.addActionListener(this);
+		btnStartRecord = new JButton("Start Record");
+		btnStartRecord.setIcon(iconStartRecordDisabled);
+		btnStartRecord.addActionListener(this);
+		btnEndRecord = new JButton("End Record");
+		btnEndRecord.setIcon(iconEndRecordDisabled);
+		btnEndRecord.addActionListener(this);
 		
 		
 		// Add objects to the toolbar
 		// Playback controls
 		this.add(btnPlayPause);
 		this.add(btnReset);
+		// Parameters
+		this.add(btnLoadSim);
 		this.addSeparator();
 		this.add(labTime);
 		this.addSeparator();
-		// Display controls
-		this.add(btnPan);
-		this.add(btnZoom);
+		// Screenshot controls
+		this.add(btnSaveScreenshot);
+		this.add(btnTakeScreenshot);
+		btnTakeScreenshot.setEnabled(false);
 		this.addSeparator();
 		// Movie record controls
-		this.add(labRecLength);
-		this.add(txtRecLength);
-		this.add(labRecFrameSkip);
-		this.add(txtRecFrameSkip);
-		this.add(btnRecord);
-		this.addSeparator();
-		// Screenshot controls
-		this.add(btnScreenshot);
-		this.addSeparator();
-		// Parameters
-		this.add(btnLoadSim);
+		this.add(btnSaveRecord);
+		this.add(btnStartRecord);
+		this.add(btnEndRecord);		
+		btnStartRecord.setEnabled(false);
+		btnEndRecord.setEnabled(false);
+		
 	}
 	
 	
@@ -139,13 +136,9 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		super.setEnabled(enabled);
 		btnPlayPause.setEnabled(enabled);
 		btnReset.setEnabled(enabled);
-		txtRecLength.setEnabled(enabled);
-		txtRecFrameSkip.setEnabled(enabled);
-		btnRecord.setEnabled(enabled);
-		btnPan.setEnabled(enabled);
-		btnZoom.setEnabled(enabled);
-		btnScreenshot.setEnabled(enabled);
 		btnLoadSim.setEnabled(enabled);
+		btnSaveScreenshot.setEnabled(enabled);
+		btnSaveRecord.setEnabled(enabled);
 	}
 	
 	
@@ -189,75 +182,58 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			app.reset();
 			
 		//Record button
-		}else if (e.getSource() == btnRecord) {
-			
-			// Pause the current simulation first
-			//playState = 0;
-			//btnPlayPause.setIcon(iconPlay);
-			//btnPlayPause.setText("Play");
-			//app.pause();
-			
-			
-			if(scene.getStartVideo()){
-				scene.setStartVideo(false);
-				scene.setEndVideo(true);
-			}
-			else{
-				// Variable to check if cancel is pressed (also displays the file dialog)
-				int returnVal = fc.showSaveDialog(this);
-				
-				// If OK is pressed
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					// Get the file that has been entered
-					File file = fc.getSelectedFile();
-					String videoFileName = file.getPath();
-					file.delete();
-					file=null;
-					scene.setVideoFileName(videoFileName);
-					scene.setStartVideo(true);
-					scene.setEndVideo(false);
-				}
-			}
-		
-		// Screenshot button
-		}else if(s == btnScreenshot){
-			// Pause the current simulation first
-			playState = 0;
-			btnPlayPause.setIcon(iconPlay);
-			btnPlayPause.setText("Play");
-			app.pause();
-			
+		}else if (e.getSource() == btnSaveRecord) {		
 			// Variable to check if cancel is pressed (also displays the file dialog)
 			int returnVal = fc.showSaveDialog(this);
-			
+				
 			// If OK is pressed
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Get the file that has been entered
 				File file = fc.getSelectedFile();
-				
-				// Pass the filename to the BSimApp to write movie to file
-				app.createImage(file.getPath());		
+				String videoFileName = file.getPath();
+				videoFileName = videoFileName + ".mov";
+				file.delete();
+				file=null;
+				btnSaveRecord.setEnabled(false);
+				btnStartRecord.setEnabled(true);
+				btnStartRecord.setIcon(iconStartRecord);
+				scene.getProcessing().createMovie(videoFileName);
 			}
-		
-		// Pan button
-		}else if(s == btnPan){
-			// Set the scene view state
-			scene.setViewState(scene.VIEW_PAN);
-			
-			// Update the buttons to show pan being active
-			btnZoom.setIcon(iconZoomIn);
-			btnPan.setIcon(iconPanAct);
-		
-		// Zoom button
-		}else if(s == btnZoom){
-			// Set the scene view state
-			scene.setViewState(scene.VIEW_ZOOM);
-			
-			// Update the buttons to show zoom being active
-			btnZoom.setIcon(iconZoomAct);
-			btnPan.setIcon(iconPanIn);
-		
-		// Load Simulation
+		}else if (e.getSource() == btnStartRecord) {		
+			btnStartRecord.setEnabled(false);
+			btnStartRecord.setIcon(iconStartRecordDisabled);
+			btnEndRecord.setEnabled(true);
+			btnEndRecord.setIcon(iconEndRecord);
+			scene.setStartVideo(true);
+		}else if (e.getSource() == btnEndRecord) {		
+			btnEndRecord.setEnabled(false);
+			btnEndRecord.setIcon(iconEndRecordDisabled);
+			scene.setStartVideo(false);
+			scene.setEndVideo(true);
+			btnSaveRecord.setEnabled(true);
+		}else if(s == btnSaveScreenshot){
+			//Screenshot
+			int returnVal = fc.showSaveDialog(this);
+				
+			// If OK is pressed
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				// Get the file that has been entered
+				File file = fc.getSelectedFile();
+				String imageFileName = file.getPath();
+				imageFileName = imageFileName + ".png";
+				file.delete();
+				file=null;
+				scene.setImageFileName(imageFileName);
+				btnTakeScreenshot.setEnabled(true);
+				btnTakeScreenshot.setIcon(iconTakeScreenshot);
+				btnSaveScreenshot.setEnabled(false);
+			}
+		}else if(s == btnTakeScreenshot){
+			scene.getProcessing().takeImage(scene.getImageFileName());
+			btnTakeScreenshot.setEnabled(false);
+			btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
+			btnSaveScreenshot.setEnabled(true);		
+		//Load simulation
 		}else if(s == btnLoadSim) {
 			// Pause the current simulation first
 			playState = 0;

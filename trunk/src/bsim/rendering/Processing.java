@@ -1,67 +1,94 @@
-/*
- *  Kite class
- * 
- *  By extending PApplet you can use your sweet old P5
- *  calls in a regular Java App. Pretty nice indeed!
- *
- */
-
 package bsim.rendering;
 
 import java.io.File;
-import java.util.GregorianCalendar;
 import java.util.Vector;
 
 import processing.core.*;
-import processing.video.*;
+import processing.video.MovieMaker;
 import peasy.*;
 
 import bsim.BSimScene;
 import bsim.drawable.bacteria.*;
 import bsim.drawable.boundary.*;
 
+
+
 public class Processing extends PApplet {
 	
-	public int l = 0;
-	public int w = 0;
-	public int frameForSec = 25;
-	protected PeasyCam cam = null;
-	protected MovieMaker mm;
-	protected boolean firstTime = true;
+	//Papplet parameters
+	public int w;
+	public int h;
+	public int frameForSec;
+	public int frameRecordForSec;
+	public double minDistance;
+	public double maxDistance;
+	public double defaultDistance;
 	
+	//object to handle the simulation camera
+	protected PeasyCam cam = null;
+	
+	//object used to start a video recording
+	protected MovieMaker mm = null;	
+	
+	//core of the simulation
 	public BSimScene scene=null;
+	
+	//simulation objects
 	public Vector bacteria=null;
 	public Vector solidBoxes=null;
 	public Vector wrapBoxes=null;
 	
-	// Constructor
-	public Processing(int newL, int newW, int newFrameForSec, BSimScene newScene) {
-		this.l = newL;
-		this.w = newW;
-		this.frameForSec = 25;
-		firstTime = true;
+	PFont myFont;
+	
+
+	public Processing(BSimScene newScene) {
+		//core of the simulation
 		scene=newScene;
-		bacteria = new Vector();
-		solidBoxes = new Vector();
-		wrapBoxes = new Vector();
+			
+		//PApplet parameters
+		w = scene.getParams().getScreenWidth();
+		h = scene.getParams().getScreenHeight();
+		frameForSec = scene.getParams().getFrameForSec();
+		frameRecordForSec = scene.getParams().getFrameRecordForSec();
+		
+		//camera parameters
+		minDistance = scene.getParams().getMinimumDistance();
+		maxDistance =	scene.getParams().getMaximumDistance();
+		defaultDistance = scene.getParams().getDefaultDistance();
+		
+		//object into the simulation
+		bacteria = scene.getBacteria();
+		solidBoxes = scene.getSolidBoxes();
+		wrapBoxes = scene.getWrapBoxes();
+		
+
 	}
 
 	// Yes, this is the P5 setup()
 	public void setup() {
-		size(l, w, P3D);
+		size(w, h, P3D);
 		//frame for sec
 		frameRate(frameForSec);
 		//noStroke() must be here so every object will be draw without stroke
 		noStroke();
-		//Peasy Cam
-		cam = new PeasyCam(this, 100);
-		cam.setMinimumDistance(20);
-		cam.setMaximumDistance(1000);
+		//Peasy Cam usage
+		cam = new PeasyCam(this, (float) defaultDistance);
+		cam.setMinimumDistance((float) minDistance);
+		cam.setMaximumDistance((float) maxDistance);
+		
+		myFont = createFont("FFScala", 20);
+		textFont(myFont);
 	}
 
 	public void draw() {
 		lights();
 		background(0);
+		
+		//simulation time
+		fill(255, 255, 255);
+		textMode(SCREEN);
+		text(scene.getFormatedTime(), 10, 30);
+		
 		
 		for(int i=0;i<solidBoxes.size();i++){
 			BSimBoxBoundary sb= (BSimBoxBoundary)solidBoxes.elementAt(i);
@@ -92,39 +119,57 @@ public class Processing extends PApplet {
 			pushMatrix();
 			translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
 			fill(0, 255, 0);
-			sphere((float)(bact.getRadius()));
+			//fix the rotation on the axis
+			rotateX((float)Math.acos(Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0))/Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0)+Math.pow(bact.getDirection()[2],2.0))));
+			rotateZ((float)Math.acos(bact.getDirection()[1]/Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0))));
+			//radius of the roadShape, diameter (including caps), how many face has the cylinder.
+			drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
 			popMatrix();
-		}
+		}		
 		
 		if(scene.getStartVideo()){
-			if(firstTime==true){
-				mm = new MovieMaker(this, width, height, scene.getVideoFileName(), frameForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
-				//mm = new MovieMaker(this, l, w, scene.getVideoFileName(),25, MovieMaker.JPEG, MovieMaker.BEST);
-				firstTime=false;
-			}
-			mm.addFrame();
+			loadPixels();
+			mm.addFrame(pixels,width,height);
+			updatePixels();
 		}
+		
 		if(scene.getEndVideo()){
+			scene.setEndVideo(false);
 			mm.finish();
-			File file =  new File(scene.getVideoFileName()+".#res");
-			file.delete();
-			firstTime=true;
 		}
 	}
 	
-	public void setBacteria(Vector newBacteria)
-	{
-		bacteria = newBacteria;
+	
+	//the RodShape is drawn along the y axis
+	public void drawRodShape(float radius, float diameter, int sides) {
+		  float angle = 0;
+		  float angleIncrement = TWO_PI / sides;
+		  beginShape(QUAD_STRIP);
+		  for (int i = 0; i < sides + 1; ++i) {
+		    vertex(radius*cos(angle), 0-(diameter/2)+radius, radius*sin(angle));
+		    vertex(radius*cos(angle), 0+(diameter/2)-radius, radius*sin(angle));
+		    angle += angleIncrement;
+		  }
+		  endShape();
+		  
+		  //bottom cap
+		  pushMatrix();
+		  translate(0,0-(diameter/2)+radius,0);
+		  sphere(radius);
+		  popMatrix();
+		  
+		  //top cap
+		  pushMatrix();
+		  translate(0,0+(diameter/2)-radius,0);
+		  sphere(radius);
+		  popMatrix();
 	}
 	
-	public void setSolidBoxes(Vector newSolidBoxes)
-	{
-		solidBoxes = newSolidBoxes;
+	public void createMovie(String videoFileName){		
+		mm = new MovieMaker(this, width, height, videoFileName, frameRecordForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
 	}
 	
-	public void setWrapBoxes(Vector newWrapBoxes)
-	{
-		wrapBoxes = newWrapBoxes;
+	public void takeImage(String imageFileName){
+		save(imageFileName);
 	}
-	
 }

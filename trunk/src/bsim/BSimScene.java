@@ -20,6 +20,7 @@ package bsim;
 
 import java.awt.Color;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -43,10 +44,7 @@ import bsim.physics.BSimPhysics;
 import bsim.rendering.Processing;
 
 
-public class BSimScene extends JPanel implements Runnable,
-                                                 MouseMotionListener,
-										         MouseListener,
-										         ComponentListener{
+public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	// Variables and constants for the animation state
@@ -126,11 +124,15 @@ public class BSimScene extends JPanel implements Runnable,
 	
 	public double[][] vesiclesForcesBeads = null;
 	
-	private Processing p = null;
+	public Processing p = null;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;
-	public String videoFileName = null;
+	
+	public String imageFileName = null;
+	
+	
+	public boolean resizeBug = true;
 	
 	
 	/**
@@ -143,10 +145,6 @@ public class BSimScene extends JPanel implements Runnable,
 		this.addComponentListener(this);
 		
 		guiExists = true;
-		
-		// Add mouse listeners to the panel (for zoom and pan control)
-		this.addMouseListener(this);
-		this.addMouseMotionListener(this);
 		
 		params = newParams;
 		dt = params.getDtSecs();
@@ -224,7 +222,7 @@ public class BSimScene extends JPanel implements Runnable,
 		transY = (int)newTrans[1];
 		
 		// Update the scale
-		scale = (int)(START_SCALE * params.geScreenZoom());
+		scale = (int)(START_SCALE * params.getScreenZoom());
 	
 		// Create the default physics engine for the simulation based on the updated parameters
 		physics = new BSimCollisionPhysics(this, params);
@@ -264,12 +262,18 @@ public class BSimScene extends JPanel implements Runnable,
 			remove(p);
 		}
 		//the last parameter is the frame rate
-	    p = new Processing(simWidth, simHeight, 25,this);    
+	    p = new Processing(this);    
 	    p.init();
-	    add(p);
-		p.setBacteria(bacteria);
-		p.setSolidBoxes(solidBoxes);
-		p.setWrapBoxes(wrapBoxes);
+	    add(p,BorderLayout.CENTER);
+
+		if(resizeBug){
+			resizeBug = false;
+			app.resize(simWidth+39, simHeight+89);
+		}
+		else{
+			resizeBug = true;
+			app.resize(simWidth+40, simHeight+90);
+		}
 		
 		// Repaint the graphics display
 		repaint();
@@ -315,10 +319,7 @@ public class BSimScene extends JPanel implements Runnable,
 				// Update all the elements in the scene
 				runAllUpdates();
 				
-				
-				//pc.processingRendering();
-				
-				// Redraw the display
+				// Redraw the backgroundDisplay
 				repaint();
 				
 				// Update the time-step
@@ -490,51 +491,9 @@ public class BSimScene extends JPanel implements Runnable,
 	 * Draws the current simulation to a given graphics context.
 	 */
 	public void drawFrame(Graphics g) {
-		int i;
-
-		// Fill the background and clear output
-		//g.setColor(bgColour);
+		//Fill the background and clear output
 		g.setColor(bgColour);
 		g.fillRect(0,0,simWidth,simHeight);
-		
-		
-		/*
-		// Perform translations and scaling to the view
-		// TODO: Need to change this to use the centre of the screen for scaling not
-		//       the (0,0) co-ordinate
-		g.translate(transX, transY);
-		Graphics2D g2d = (Graphics2D)g;
-		g2d.scale((1.0/START_SCALE)*scale,(1.0/START_SCALE)*scale);
-		
-		// Draw fields first so that they are in the background
-		// Update the fields
-		fGoal.redraw(g);
-		fRecruitment.redraw(g);
-		fCoordination.redraw(g);
-		
-		// Get each bead and bead to draw itself
-		for(i=0; i < beads.size(); i++) {
-			((BSimDrawable)(beads.elementAt(i))).redraw(g);
-		}
-		
-		// Get each bacteria and bead to draw itself
-		for(i=0; i < bacteria.size(); i++) {
-			((BSimDrawable)(bacteria.elementAt(i))).redraw(g);
-		}
-		
-		// Draw the boundaries
-		for(i=0; i < solidBoundaries.size(); i++) {
-			((BSimDrawable)solidBoundaries.elementAt(i)).redraw(g);
-		}
-		for(i=0; i < wrapBoundaries.size(); i++) {
-			((BSimDrawable)wrapBoundaries.elementAt(i)).redraw(g);
-		}
-		
-		// Draw all the visual aids
-		for(i=0; i<visualAids.size(); i++) {
-			((BSimDrawable)visualAids.elementAt(i)).redraw(g);
-		}
-		*/
 	}
 	
 
@@ -565,108 +524,6 @@ public class BSimScene extends JPanel implements Runnable,
 	public void setViewState(int newState){
 		viewState = newState;
 	}
-	
-	
-	/**
-	 * Handle the mousePressed event.
-	 */
-	public void mousePressed(MouseEvent e){
-		// Record the starting point (required for comparison by later events)
-		startX = e.getX();
-		startY = e.getY();
-
-		// Handle Pan event
-		if(e.getButton() == MouseEvent.BUTTON1  && viewState == VIEW_PAN){
-			// Update the initial translation point
-			button = 1;	
-			transXo = transX;
-			transYo = transY;
-		}
-		
-		// Handle Zoom event
-		if(e.getButton() == MouseEvent.BUTTON1  && viewState == VIEW_ZOOM){
-			// Update the initial scale
-			button = 1;
-			scaleO = scale;
-		}
-	}
-
-
-	/**
-	 * Handle the mouseReleased event.
-	 */
-	public void mouseReleased(MouseEvent e){
-		// Update the mouse pressed variable
-		button = 0;
-	}
-
-
-	/**
-	 * Handle the mouseDragged event.
-	 */
-	public void mouseDragged(MouseEvent e){
-		// Handle Pan event
-		if(button == 1  && viewState == VIEW_PAN){
-			// Update translation (relative to initial mouse down point)
-			transX = transXo + (e.getX() - startX);
-			transY = transYo + (e.getY() - startY);
-			
-			// Update the parameters
-			params.setScreenMove(transX, transY);
-			
-			// Update display
-			repaint();
-		}
-		
-		// Handle Zoom event
-		if(button == 1  && viewState == VIEW_ZOOM){
-			// Update scaling (relative to inital mouse down point)
-			scale = scaleO + 2*(e.getY() - startY);
-			
-			// Ensure scale never becomes zero
-			if(scale < 1){
-				scale = 1;
-			}
-			
-			// Update the parameters
-			params.setScreenZoom((1.0/START_SCALE)*scale);
-			
-			// Update display
-			repaint();
-		}
-	}
-
-
-	/**
-	 * Handle the mouseClicked event.
-	 */
-	public void mouseClicked(MouseEvent e){
-		if(e.getClickCount() > 1){
-			if(e.getButton() == MouseEvent.BUTTON1 && viewState == VIEW_PAN){
-				transX = 0;
-				transY = 0;
-				repaint();
-			}
-			if(e.getButton() == MouseEvent.BUTTON1  && viewState == VIEW_ZOOM){
-				scale = START_SCALE;
-				repaint();
-			}
-		}
-	}	
-   
-
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void mouseMoved(MouseEvent e){}
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void mouseEntered(MouseEvent e){}
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void mouseExited(MouseEvent e){}
 	
 	
 	/**
@@ -709,13 +566,15 @@ public class BSimScene extends JPanel implements Runnable,
 	public Vector getVesicles (){ return vesicles; }
 	public Vector getSolidBoundaries (){ return solidBoundaries; }
 	public Vector getWrapBoundaries (){ return wrapBoundaries; }
+	public Vector getSolidBoxes (){ return solidBoxes; }
+	public Vector getWrapBoxes (){ return wrapBoxes; }
 	public Vector getVisualAids (){ return visualAids; }
 	public boolean getStartVideo (){ return startVideo; }
 	public boolean getEndVideo (){ return endVideo; }
-	public String getVideoFileName (){ return videoFileName; }
-	public void setVideoFileName (String s){ videoFileName = s; }
 	public void setStartVideo (boolean b){ startVideo=b; }
 	public void setEndVideo (boolean b){ endVideo=b; }
+	public String getImageFileName (){ return imageFileName; }
+	public void setImageFileName (String s){ imageFileName=s; }	
 	public double getDtSec (){ return dt; }
 	public int getTimeStep (){ return timeStep; }
 	public double getDtMilli (){ return dt * 1000; }
@@ -733,5 +592,7 @@ public class BSimScene extends JPanel implements Runnable,
 	public void setVesiclesForcesBeads(double[][] newVesiclesForcesBeads){vesiclesForcesBeads=newVesiclesForcesBeads;}
 	public double[][] getVesiclesForcesBeads(){return vesiclesForcesBeads;}
 	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}
+	public BSimParameters getParams(){return params;}
+	public Processing getProcessing(){return p;}
 
 }

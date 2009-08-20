@@ -302,7 +302,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							
 							// The current particle is a vesicle so call the required function
 							partVesicle = (BSimVesicle)scene.getVesicles().elementAt(i);
-							internalForce = partVesicle.runLogic(collisionTypes[i][0], collisionTypes[i][1]);
+							//internalForce = partVesicle.runLogic(collisionTypes[i][0], collisionTypes[i][1]);
 							linearMotion(partVesicle,internalForce, i);
 							
 						}
@@ -323,7 +323,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (j<n) ){
 								setFusionExistsValue(i);
 								partBacterium = (BSimBacterium)scene.getBacteria().elementAt(j);
-								partBacterium.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
+								//partBacterium.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle
 								//skip to the calculation for the next vesicle
@@ -338,7 +338,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (!fusionExists[j-n]) && (j>=n) ){
 								setFusionExistsValue(i);
 								partVesicle = (BSimVesicle)scene.getVesicles().elementAt(j-n);
-								partVesicle.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
+								//partVesicle.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle
 								//skip to the calculation for the next vesicle

@@ -45,7 +45,8 @@ public class BSimVesicle extends BSimParticle implements BSimLogic, BSimDrawable
 	 * at a timestep is returned.
 	 */
 	public double[] runLogic ( boolean contactBead, 
-	                           boolean contactBoundary) {
+	                           boolean contactBoundary,
+	                           boolean contact) {
 		
 		double[] f = {0.0, 0.0, 0.0};
 		

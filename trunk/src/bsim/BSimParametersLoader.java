@@ -87,6 +87,12 @@ public class BSimParametersLoader {
 		else if(line[0].equals("SCREEN_ZOOM:")) p.setScreenZoom((double)args[0]);
 		else if(line[0].equals("SCREEN_MOVE:")) p.setScreenMove((double)args[0], (double)args[1]);
 		
+		else if(line[0].equals("SCREEN_MINIMUM_DISTANCE:")) p.setMinimumDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_MAXIMUM_DISTANCE:")) p.setMaximumDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_DEFAULT_DISTANCE:")) p.setDefaultDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_FRAME_FOR_SECOND:")) p.setFrameForSec((int)args[0]);
+		else if(line[0].equals("SCREEN_FRAME_RECORD_FOR_SECOND:")) p.setFrameRecordForSec((int)args[0]);
+		
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BACT:")) p.setWellWidthBactBact((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BACT:")) p.setWellDepthBactBact((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) p.setWellWidthBactBead((double)args[0]);
