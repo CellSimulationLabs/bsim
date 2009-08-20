@@ -80,7 +80,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	
 	protected boolean runUp = false;
 	
-	protected double radiusGrowthRate = 0.5; // microns per second
+	protected double radiusGrowthRate = 0.1; // microns per second
 	protected double replicationRadius;
 
 
