@@ -6,7 +6,7 @@
  * Authors:	Mattia Fazzini
  * 			Antoni Matyjaszkiewicz
  * Created:	17/8/09
- * Updated:	20/8/09
+ * Updated:	21/8/09
  */
 
 
@@ -14,9 +14,11 @@ package bsim.rendering;
 
 import java.util.Vector;
 
+import javax.vecmath.Vector3f;
 import processing.core.*;
 import processing.video.MovieMaker;
 import peasy.*;
+
 import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.boundary.BSimBoxBoundary;
@@ -196,14 +198,26 @@ public class Processing extends PApplet {
 	
 		for(int i=0;i<bacteria.size();i++){
 			BSimBacterium bact = (BSimBacterium)bacteria.elementAt(i);
+			//TODO: clean up variables for the rotation part to speed up a bit
+			Vector3f worldY = new Vector3f(0,1,0);
+			Vector3f bacDirVector = new Vector3f((float)(bact.getDirection()[0]), (float)(bact.getDirection()[1]), (float)(bact.getDirection()[2]));
+			Vector3f bacRotVector = new Vector3f();
+			bacRotVector.cross(worldY,bacDirVector);
+			//normalising slows us down... but method breaks without normalising so obviously some vectors have not been normalised by this point
+			bacDirVector.normalize();
+			bacRotVector.normalize();
 			pushMatrix();
-			translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
-			fill(0, 255, 0);
-			//fix the rotation on the axis
-			rotateX((float)Math.acos(Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0))/Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0)+Math.pow(bact.getDirection()[2],2.0))));
-			rotateZ((float)Math.acos(bact.getDirection()[1]/Math.sqrt(Math.pow(bact.getDirection()[0],2.0)+Math.pow(bact.getDirection()[1],2.0))));
-			//radius of the roadShape, diameter (including caps), how many face has the cylinder.
-			drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
+				translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
+				fill(0, 255, 0);		
+				//fix the rotation on the axis
+				//pushMatrix();
+					rotate(worldY.angle(bacDirVector), bacRotVector.x, bacRotVector.y, bacRotVector.z);
+					drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
+				//popMatrix();
+				//Draw the direction
+				//translate(bacDirVector.x, bacDirVector.y,bacDirVector.z);
+				//fill(255,0,0);
+				//sphere(0.25f);
 			popMatrix();
 		}		
 		
@@ -232,23 +246,25 @@ public class Processing extends PApplet {
 	public void drawRodShape(float radius, float diameter, int sides) {
 		  float angle = 0;
 		  float angleIncrement = TWO_PI / sides;
+		  // save a bunch of calculations:
+		  float diameterRatio = -(diameter/2)+radius;
 		  beginShape(QUAD_STRIP);
 		  for (int i = 0; i < sides + 1; ++i) {
-		    vertex(radius*cos(angle), 0-(diameter/2)+radius, radius*sin(angle));
-		    vertex(radius*cos(angle), 0+(diameter/2)-radius, radius*sin(angle));
+		    vertex(radius*cos(angle), 0 + diameterRatio, radius*sin(angle));
+		    vertex(radius*cos(angle), 0 - diameterRatio, radius*sin(angle));
 		    angle += angleIncrement;
 		  }
 		  endShape();
 		  
 		  //bottom cap
 		  pushMatrix();
-		  translate(0,0-(diameter/2)+radius,0);
+		  translate(0,0 + diameterRatio,0);
 		  sphere(radius);
 		  popMatrix();
 		  
 		  //top cap
 		  pushMatrix();
-		  translate(0,0+(diameter/2)-radius,0);
+		  translate(0,0 - diameterRatio,0);
 		  sphere(radius);
 		  popMatrix();
 	}
