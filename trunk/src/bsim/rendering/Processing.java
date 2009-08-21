@@ -127,13 +127,7 @@ public class Processing extends PApplet {
 	public void draw() {
 		lights();
 		background(0);
-		
-		//simulation time
-		fill(255, 255, 255);
-		textMode(SCREEN);
-		text(scene.getFormatedTime(), 10, 30);
-		
-		
+				
 		for(int i=0;i<solidBoxes.size();i++){
 			BSimBoxBoundary sb= (BSimBoxBoundary)solidBoxes.elementAt(i);
 			double[] centrePos= sb.getCentrePos();
@@ -229,6 +223,12 @@ public class Processing extends PApplet {
 			sphere((float)(100*vesicle.getRadius()));			
 			popMatrix();
 		}
+		
+		//Draw text last so it is on top
+		//simulation time
+		fill(255, 255, 255);
+		textMode(SCREEN);
+		text(scene.getFormatedTime(), 10, 30);
 		
 		if(scene.getStartVideo()){
 			loadPixels();
