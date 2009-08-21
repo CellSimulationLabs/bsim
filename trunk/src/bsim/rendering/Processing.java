@@ -17,7 +17,7 @@ import java.util.Vector;
 import javax.vecmath.Vector3f;
 import processing.core.*;
 import processing.video.MovieMaker;
-import peasy.*;
+import camera.*;
 
 import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
@@ -38,10 +38,10 @@ public class Processing extends PApplet {
 	public double defaultDistance;
 	
 	//object to handle the simulation camera
-	protected PeasyCam cam = null;
+	public PeasyCam cam = null;
 	
 	//object used to start a video recording
-	protected MovieMaker mm = null;	
+	public MovieMaker mm = null;	
 	
 	//core of the simulation
 	public BSimScene scene=null;
@@ -103,9 +103,9 @@ public class Processing extends PApplet {
 		// This will cause the number of boxes displayed to be exactly equal to those in the chemical
 		// field calculations. WARNING this is VERY slow for a large number of boxes so better to
 		// just keep display box number constant as above.
-//		nBoxX = fGoal.getField().length;
-//		nBoxY = fGoal.getField()[0].length;
-//		nBoxZ = fGoal.getField()[0][0].length;
+		//nBoxX = fGoal.getField().length;
+		//nBoxY = fGoal.getField()[0].length;
+		//nBoxZ = fGoal.getField()[0][0].length;
 	}
 
 	// Yes, this is the P5 setup()
@@ -119,7 +119,7 @@ public class Processing extends PApplet {
 		cam = new PeasyCam(this, (float) defaultDistance);
 		cam.setMinimumDistance((float) minDistance);
 		cam.setMaximumDistance((float) maxDistance);
-		
+		//simulation time font
 		myFont = createFont("FFScala", 20);
 		textFont(myFont);
 	}
@@ -178,7 +178,7 @@ public class Processing extends PApplet {
 						
 						// Cheat (this won't look so good if for example a bacteria 
 						// releases a small amount of chemical as it is not an average for the box):
-//						conc = fGoal.getConcentration(boxPos);
+						// conc = fGoal.getConcentration(boxPos);
 						
 						fill((255*(float)conc), 0, 0,(25*(float)conc));
 						pushMatrix();
@@ -219,8 +219,8 @@ public class Processing extends PApplet {
 			BSimVesicle vesicle = (BSimVesicle)vesicles.elementAt(i);
 			pushMatrix();
 			translate((float)vesicle.getPosition()[0], (float)vesicle.getPosition()[1],(float)vesicle.getPosition()[2]);
-			fill(255, 0, 0);
-			sphere((float)(100*vesicle.getRadius()));			
+			fill(255, 131, 223);
+			sphere((float)(vesicle.getRadius()));			
 			popMatrix();
 		}
 		
@@ -228,17 +228,24 @@ public class Processing extends PApplet {
 		//simulation time
 		fill(255, 255, 255);
 		textMode(SCREEN);
-		text(scene.getFormatedTime(), 10, 30);
+		text(scene.getFormatedTime(), 10, 30);	
 		
-		if(scene.getStartVideo()){
-			loadPixels();
-			mm.addFrame(pixels,width,height);
-			updatePixels();
-		}
-		
-		if(scene.getEndVideo()){
-			scene.setEndVideo(false);
-			mm.finish();
+		if(scene.getGuiExists()){
+			if(scene.getStartVideo()){
+				loadPixels();
+				if(mm!=null){
+					mm.addFrame();		
+				}
+				updatePixels();
+			}
+			
+			if(scene.getEndVideo()){
+				if(mm!=null){
+					mm.finish();
+					scene.setEndVideo(false);
+					scene.setWaitingForVideoClosing(false);
+				}
+			}
 		}
 	}
 	
@@ -270,10 +277,22 @@ public class Processing extends PApplet {
 	}
 		
 	public void createMovie(String videoFileName){		
-		mm = new MovieMaker(this, width, height, videoFileName, frameRecordForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
+		mm = new MovieMaker(this, w, h, videoFileName, frameRecordForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
+		scene.setWaitingForVideoOpening(false);
 	}
 	
 	public void takeImage(String imageFileName){
 		save(imageFileName);
+	}
+	
+	public void addMovieFrame(){
+		loadPixels();
+		mm.addFrame();
+		updatePixels();
+	}
+	
+	public void closeMovie(){
+		mm.finish();
+		scene.setWaitingForVideoClosing(false);
 	}
 }

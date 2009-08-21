@@ -352,6 +352,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		// Read in the file to the specified array
     	try {
     		Scanner scan = new Scanner(new File("src/bsim/gammaVals.txt"));
+    		//Using my version of BSimBatch on my laptop
+    		//Scanner scan = new Scanner(new File("./gammaVals.txt"));
     		while (scan.hasNextLine()) {
     			gammaVals[i] = Double.parseDouble(scan.nextLine());		 
     			i++;
@@ -422,7 +424,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 						direction, newPosition,					
 						scene, params);	
 								
-				System.out.println(radius + " " + vesicleRadius);
+				//System.out.println(radius + " " + vesicleRadius);
 				scene.addVesicle(newVesicle);
 				scene.setReallocateNewForceMat(true);
 				scene.setReallocateNewFusionExists(true);				

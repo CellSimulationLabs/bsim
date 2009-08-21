@@ -91,7 +91,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 			collisionTypes = new boolean[l][2];
 			//useful for the memory allocation and the garbage collector works
 			externalForces = null;
-			externalForces = new double[n+m][3];
+			externalForces = new double[l][3];
 			//useful for the memory allocation and the garbage collector works
 			vesiclesForcesBeads = null;
 			vesiclesForcesBeads = new double[m][3];
@@ -147,11 +147,11 @@ public class BSimFusionPhysics extends BSimPhysics{
 		Vector vesiclesToRemove = new Vector();
 		for(i=0; i<l; i++) {
 			if(fusionExists[i]){
-				vesiclesToRemove.add(vesicles.elementAt(i));				
+				vesiclesToRemove.add(vesicles.elementAt(i));
+				scene.setReallocateNewFusionExists(true);
 			}
 		}		
 		vesicles.removeAll(vesiclesToRemove);
-		scene.setReallocateNewFusionExists(true);
 		
 		
 		scene.setVesicles(vesicles);
@@ -306,7 +306,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							
 							// The current particle is a vesicle so call the required function
 							partVesicle = (BSimVesicle)scene.getVesicles().elementAt(i);
-							//internalForce = partVesicle.runLogic(collisionTypes[i][0], collisionTypes[i][1]);
+							internalForce = partVesicle.runLogic(collisionTypes[i][0], collisionTypes[i][1]);
 							linearMotion(partVesicle,internalForce, i);
 							
 						}
@@ -327,7 +327,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (j<n) ){
 								setFusionExistsValue(i);
 								partBacterium = (BSimBacterium)scene.getBacteria().elementAt(j);
-								System.out.println("vesicle-bacterium fusion");
+								//System.out.println("vesicle-bacterium fusion");
 								//partBacterium.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle
@@ -343,7 +343,7 @@ public class BSimFusionPhysics extends BSimPhysics{
 							if( (!fusionExists[i]) && (!fusionExists[j-n]) && (j>=n) ){
 								setFusionExistsValue(i);
 								partVesicle = (BSimVesicle)scene.getVesicles().elementAt(j-n);
-								System.out.println("vesicle-vesicle fusion");
+								//System.out.println("vesicle-vesicle fusion");
 								//partVesicle.addVesicleProperties((BSimVesicle)scene.getVesicles().elementAt(i));
 								//not sure that the following works fine but it might be correct
 								//if a vesicle is fused with something don t do any other calculation for this vesicle
@@ -424,8 +424,6 @@ public class BSimFusionPhysics extends BSimPhysics{
 			
 			// Calculate the velocity using Stoke's rule
 			velocity = force2Velocity3D(totalForce, x.getRadius(), params.getViscosity());
-			
-			//System.out.println("RRAAHHH" + velocity[0] + " " + velocity[1] + "    " + totalForce[0] + " " + totalForce[1]);
 			
 			// Calculate the new position and update the particle
 			newPosition[0] = curPosition[0] + 

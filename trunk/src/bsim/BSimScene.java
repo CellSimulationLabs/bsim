@@ -118,7 +118,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	// Parameters for the scene
 	public BSimParameters params;
 	
-	private boolean guiExists = false;
+	public boolean guiExists = false;
 	
 	public boolean reallocateNewForceMat = true;
 	
@@ -135,6 +135,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	public boolean resizeBug = true;
+	private int bSimWidth = BSimToolbar.BSimToolbarWidth;
+	
+	//BSimBatch parameter for waiting the rigth closing of the file
+	public boolean waitingForVideoClosing = true;
+	public boolean waitingForVideoOpening = true;
 	
 	
 	/**
@@ -162,8 +167,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		app = newApp;
 				
 		// Create the default physics engine for the simulation
-		physics = new BSimCollisionPhysics(this, params);
 		fusion = new BSimFusionPhysics(this, params);
+		physics = new BSimCollisionPhysics(this, params);
+		
 	    
 		// Create initial bacteria and beads
 		resetScene(1);
@@ -196,8 +202,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		app = null;
 				
 		// Create the default physics engine for the simulation
-		physics = new BSimCollisionPhysics(this, params);
 		fusion = new BSimFusionPhysics(this, params);
+		physics = new BSimCollisionPhysics(this, params);
+		
 		
 		// Create initial bacteria and beads
 		resetScene(1);
@@ -215,6 +222,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		// Update the simulation widths and the window size
 		simWidth = orgSimWidth;
 		simHeight = orgSimHeight;	
+		
 		if (guiExists){
 			app.setSize(new Dimension(simWidth, simHeight));
 		}	
@@ -262,24 +270,42 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		fCoordination = params.createNewCoordChemicalField();
 		fRecruitment = params.createNewRecruitChemicalField();
 		
-		//Processing Related
-		//remove the old Processing Applet
-		if(firstTime == 0){
-			remove(p);
-		}
-		//the last parameter is the frame rate
-	    p = new Processing(this);    
-	    p.init();
-	    add(p,BorderLayout.CENTER);
-
-		if(resizeBug){
-			resizeBug = false;
-			app.resize(simWidth, simHeight+95);
+		//part of processing used in the BSimApp
+		if(guiExists){
+			//Processing Related
+			//remove the old Processing Applet
+			if(firstTime == 0){
+				remove(p);
+			}
+			//the last parameter is the frame rate
+		    p = new Processing(this);    
+		    p.init();
+		    add(p,BorderLayout.CENTER);
+		    
+			if(resizeBug){
+				if(bSimWidth<BSimToolbar.BSimToolbarWidth){	
+					app.resize(simWidth, simHeight+95);
+				}
+				else{
+					app.resize(simWidth+39, simHeight+95);
+				}
+				resizeBug = false;
+			}
+			else{
+				if(bSimWidth<BSimToolbar.BSimToolbarWidth){	
+					app.resize(simWidth, simHeight+96);
+				}
+				else{
+					app.resize(simWidth+40, simHeight+96);
+				}
+				resizeBug = true;
+			}
 		}
 		else{
-			resizeBug = true;
-			app.resize(simWidth, simHeight+96);
-		}
+			//part for BSimBach
+			p = new Processing(this);    
+		    p.init();
+		}		
 				
 		// Repaint the graphics display
 		repaint();
@@ -293,8 +319,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		
 		// Update the parameter object
 		params = newParams;
-		
 		orgSimWidth = params.getScreenWidth();
+		bSimWidth = orgSimWidth;
 		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
 			orgSimWidth = BSimToolbar.BSimToolbarWidth;
 		}
@@ -607,5 +633,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}
 	public BSimParameters getParams(){return params;}
 	public Processing getProcessing(){return p;}
+	public boolean getWaitingForVideoClosing(){return waitingForVideoClosing;}
+	public void setWaitingForVideoClosing(boolean b){waitingForVideoClosing=b;}
+	public boolean getWaitingForVideoOpening(){return waitingForVideoOpening;}
+	public void setWaitingForVideoOpening(boolean b){waitingForVideoOpening=b;}
+	public boolean getGuiExists(){return guiExists;}
 
 }

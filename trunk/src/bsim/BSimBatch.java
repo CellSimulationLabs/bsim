@@ -79,7 +79,7 @@ public class BSimBatch{
 	public void runBatch(){	
 		
 		// Create the quicktime output stream and the image to hold each frame
-		QuickTimeOutputStream movOut = null;
+		//QuickTimeOutputStream movOut = null;
 	    Graphics2D g = null;
 		
 		// Build the time stamp of the whole batch (this helps to keep batches together)
@@ -137,36 +137,32 @@ public class BSimBatch{
 			
 			try {
 		        
-				if(movieOutput){
-					// The quicktime output (format is JPG by default, PNG also supported)
-					movOut = new QuickTimeOutputStream(new File(filenameMovie), 
-						QuickTimeOutputStream.VideoFormat.JPG);
-			        // Set the video quality
-					movOut.setVideoCompressionQuality(1f);
-			        // Set the number of frames per second
-					movOut.setTimeScale(30); // 30 fps
+				int frameRate = 0;
+				
+				if(movieOutput){				
+					//call the method to create the video inside Processing
+					scene.setWaitingForVideoOpening(true);
+					scene.getProcessing().createMovie(filenameMovie);
+					while(scene.getWaitingForVideoOpening()){}
+					//frame for sec in the video
+					int frameForSec = params.getFrameRecordForSec();
+					//time step in un sec
+					int timeStepSec=(int) (1/params.getDtSecs()); 
+					//one frame Rate in confront of timeStep
+					frameRate  = timeStepSec/frameForSec;
+					
 				}
 
 				// Run the scene for the length specified
 				for(int t=0; t<lenOfSim; t++){
 					
 					if(movieOutput){
-						// Check to see if the frame should be skipped for the movie
-						// We do not want all frames as movies become huge
-						if(t % movFrameSkip == 0){
-							// Create the image required to hold the output
-					        BufferedImage img = new BufferedImage(params.getScreenWidth(), 
-								params.getScreenHeight(), 
-								BufferedImage.TYPE_INT_RGB);
-							g = img.createGraphics();
-
-							// Draw the frame to the graphics context
-							scene.drawFrame((Graphics)g);
-
-							// Write the frame to the file
-				            movOut.writeFrame(img, 1);
+						if(t % frameRate == 0){
+							scene.getProcessing().addMovieFrame();
 						}
 					}
+					
+					
 		
 					// Move to the next frame
 					if(t == 0){
@@ -179,23 +175,12 @@ public class BSimBatch{
 					}
 				}
 				
-				if(movieOutput){ movOut.close(); }
-				
-			} catch (IOException ex) { ex.printStackTrace();  
-		    // Handle any existing problems that arise
-			} finally {
-		        if(movieOutput){
-					if (g != null) {
-			            g.dispose();
-			        }
-			        if (movOut != null) {
-						try{
-							movOut.close();
-						} catch (IOException ex) { ex.printStackTrace(); }
-			        }
+				if(movieOutput){
+					scene.getProcessing().closeMovie();
+					while(scene.getWaitingForVideoClosing()){}
 				}
-		    }
-			
+				
+			} catch (Exception ex) { ex.printStackTrace();}			
 			// Finalise the current run (close open files, etc)
 			finaliseCurrent();
 		}
@@ -261,5 +246,7 @@ public class BSimBatch{
 			System.err.println("Error writing to file (BSimBatch.main)");
 			e.printStackTrace();
 		}
+		
+		System.out.println("Finish");
 	}
 }

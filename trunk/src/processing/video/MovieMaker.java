@@ -228,7 +228,7 @@ public class MovieMaker {
     try {
       String path = parent.savePath(filename);
       movFile = new QTFile(new File(path));
-      movie = Movie.createMovieFile(movFile, StdQTConstants.kMoviePlayer, StdQTConstants.createMovieFileDeleteCurFile);
+      movie = Movie.createMovieFile(movFile, StdQTConstants.kMoviePlayer, StdQTConstants.createMovieFileDontCreateResFile);
       int timeScale = TIME_SCALE; // 100 units per second
       videoTrack = movie.addTrack(width, height, 0);
       videoMedia = new VideoMedia(videoTrack, timeScale);
