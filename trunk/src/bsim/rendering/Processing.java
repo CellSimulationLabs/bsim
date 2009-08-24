@@ -15,6 +15,8 @@ package bsim.rendering;
 import java.util.Vector;
 
 import javax.vecmath.Vector3f;
+
+import peasy.PeasyCam;
 import processing.core.*;
 import processing.video.MovieMaker;
 import camera.*;
