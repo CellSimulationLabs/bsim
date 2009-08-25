@@ -17,15 +17,14 @@ import java.util.Vector;
 import javax.vecmath.Vector3f;
 
 import peasy.PeasyCam;
-import processing.core.*;
+import processing.core.PApplet;
+import processing.core.PFont;
 import processing.video.MovieMaker;
-import camera.*;
-
 import bsim.BSimScene;
 import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.boundary.BSimBoxBoundary;
-import bsim.drawable.vesicle.BSimVesicle;
 import bsim.drawable.field.BSimChemicalField;
+import bsim.drawable.vesicle.BSimVesicle;
 
 
 public class Processing extends PApplet {
