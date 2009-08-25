@@ -91,14 +91,14 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(double newSpeed, double newMass, double newRadius,
+	public BSimBacterium(double newSpeed, double newRadius,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimParticle.PART_BACT);
+		super(newSpeed, newRadius, newDirection, newPosition, BSimParticle.PART_BACT);
 
 		// Update extended properties
 		forceMagnitudeDown = newForceMagnitudeDown;
@@ -420,7 +420,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 				
 				radius = radiusOnVesiculationStart;
 				
-				BSimVesicle newVesicle = new BSimVesicle(speed, mass, vesicleRadius,
+				BSimVesicle newVesicle = new BSimVesicle(speed, vesicleRadius,
 						direction, newPosition,					
 						scene, params);	
 								
@@ -445,7 +445,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		radius = radius/2;
 		
 		// Create new bacterium TODO remDt?
-		newBact = new BSimBacterium(speed, mass, radius,
+		newBact = new BSimBacterium(speed, radius,
 				direction, newPosition,
 				forceMagnitudeDown, forceMagnitudeUp, state,					
 				tumbleSpeed, remDt, 

@@ -20,12 +20,12 @@ public class BSimVesicle extends BSimParticle implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
-	public BSimVesicle(double newSpeed, double newMass,
-			double newRadius, double[] newDirection, double[] newPosition, 
+	public BSimVesicle(double newSpeed, double newRadius, 
+			double[] newDirection, double[] newPosition, 
 			BSimScene newScene, BSimParameters newParams) {
 		
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimParticle.PART_VES);
+		super(newSpeed, newRadius, newDirection, newPosition, BSimParticle.PART_VES);
 		
 		// The simulation scene that will be updated
 		scene = newScene;

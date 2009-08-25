@@ -48,7 +48,7 @@ public class BSimWrapBoundary extends BSimBoundary implements BSimDrawable {
 		super(newp1, newp2);   
 
 		// Call the parent constructor with the basic properties	
-		//super(newSpeed, newMass, newRadius, newDirection, newPosition, BSimObject.OBTYPE_BACT);
+		//super(newSpeed, newRadius, newDirection, newPosition, BSimObject.OBTYPE_BACT);
 		normVect = new double[2];
 		
 		normVect[0]   = p1[1] - p2[1];

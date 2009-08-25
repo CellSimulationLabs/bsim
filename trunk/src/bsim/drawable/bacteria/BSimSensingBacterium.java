@@ -28,14 +28,14 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic, BS
 	/**
 	 * General constructor.
 	 */
-	public BSimSensingBacterium(double newSpeed, double newMass, double newRadius,
+	public BSimSensingBacterium(double newSpeed, double newRadius,
 			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams, double newSwitchSpeed) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newMass, newRadius, newDirection, newPosition, newForceMagnitudeDown,
+		super(newSpeed, newRadius, newDirection, newPosition, newForceMagnitudeDown,
 		      newForceMagnitudeUp, newState, newTumbleSpeed, newRemDt, newScene, newParams);
 		
 		switchSpeed = newSwitchSpeed;
