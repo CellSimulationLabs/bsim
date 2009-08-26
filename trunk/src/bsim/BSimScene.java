@@ -355,17 +355,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	private void runAllUpdates(){
-	
-		// Growth and replication
-//		BSimBacterium b;
-//		for(int k=0; k<bacteria.size();k++){			
-//			b = (BSimBacterium)(bacteria.elementAt(k));			
-//			b.grow();
-//			if(b.getRadius() > b.getReplicationRadius()){
-//				b.replicate();	
-//			}
-//		}
-			
+				
 		// Update the properties for bacteria and beads		
 		Vector<BSimParticle> particles = new Vector();
 		particles.addAll(bacteria);
@@ -380,19 +370,19 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		for (int i = 0; i < particles.size(); i++) {
 			for (int j = i+1; j < obstacles.size(); j++) {
 				if (obstacles.get(j) instanceof BSimBacterium){
-					particles.get(i).collide((BSimBacterium)obstacles.get(j));
+					particles.get(i).interaction((BSimBacterium)obstacles.get(j));
 				}
 				else if (obstacles.get(j) instanceof BSimBead){
-					particles.get(i).collide((BSimBead)obstacles.get(j));
+					particles.get(i).interaction((BSimBead)obstacles.get(j));
 				}
 				else if (obstacles.get(j) instanceof BSimVesicle){
-					particles.get(i).collide((BSimVesicle)obstacles.get(j));
+					particles.get(i).interaction((BSimVesicle)obstacles.get(j));
 				}
 			}		
 		}
 		
 		for(BSimParticle p : particles) {
-			p.step();
+			p.action();
 			p.updatePosition();
 		}
 						

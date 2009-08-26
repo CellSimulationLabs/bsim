@@ -29,24 +29,30 @@ public abstract class BSimParticle {
 	protected double visc = 1e-3;
 	protected double dt = 0.01;
 	
-	
-	/**
-	 * General constructor.
-	 */
 	public BSimParticle(Point3d newPosition, double newRadius) {
 		super();	
 		position.set(newPosition);		
 		radius = newRadius;
 	}
-		
+	
+	/*
+	 * Update the position of the particle according to Stokes' law	
+	 */
 	public void updatePosition() {
 		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
 	}
-		
-	public void collide(BSimBacterium b) { }	
-	public void collide(BSimBead b) { }
-	public void collide(BSimVesicle v) { }	
-	public void step() { }
+
+	/*
+	 * Interactions with other obstacles: reaction forces, fusions, etc 
+	 */
+	public void interaction(BSimBacterium b) { }	
+	public void interaction(BSimBead b) { }
+	public void interaction(BSimVesicle v) { }
+	
+	/*
+	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
+	 */		
+	public void action() { }
 	
 	public Point3d getPosition() { return position; }	
 	public Vector3d getForce() { return force; }

@@ -34,7 +34,7 @@ public class BSimVesicle extends BSimParticle {
 	}
 	
 
-	public void step() {
+	public void action() {
 		
 		Random r = new Random();
 		

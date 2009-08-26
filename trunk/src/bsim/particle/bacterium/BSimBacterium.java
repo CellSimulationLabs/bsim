@@ -130,7 +130,7 @@ public class BSimBacterium extends BSimParticle {
 	}
 
 
-	public void step() {
+	public void action() {		
 
 		if(memToReset){
 			// Set the initial memory for the bacteria to current concentration of
@@ -145,6 +145,10 @@ public class BSimBacterium extends BSimParticle {
 		}
 		
 		this.force.set(iterateBacterium());
+		
+		grow();
+		if(getRadius() > getReplicationRadius()) replicate();
+			
 	}
 
 

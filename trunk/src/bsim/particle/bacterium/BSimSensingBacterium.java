@@ -44,19 +44,19 @@ public class BSimSensingBacterium extends BSimBacterium {
 
 
 
-	public void collide(BSimBead bead) {		
+	public void interaction(BSimBead bead) {		
 		// If there is contact with a bead
 		if(bead.getPosition().distance(this.position) < 0){
 			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
 		}
-		super.collide(bead);
+		super.interaction(bead);
 	}
 	
-	public void step() {
+	public void action() {
 		if(beadContactTimer > 0){
 			beadContactTimer--;
 		}		
-		super.step();
+		super.action();
 	}
 
 	

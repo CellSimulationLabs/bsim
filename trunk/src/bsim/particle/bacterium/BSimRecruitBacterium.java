@@ -42,7 +42,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium  {
 	}
 
 
-	public void step () {
+	public void action () {
 		
 		int newChemo = 0;
 		
@@ -68,7 +68,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium  {
 				scene.getRecruitmentField().addChemical (1.0, this.getPosition());
 		}
 		
-		super.step();
+		super.action();
 	}
 
 	

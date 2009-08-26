@@ -54,7 +54,7 @@ public class BSimRepBacterium extends BSimBacterium {
 
 	}
 
-	public void step() {
+	public void action() {
 
 		double h = super.scene.getDtSec();
 		int tIndex = super.scene.getTimeStep();
@@ -76,7 +76,7 @@ public class BSimRepBacterium extends BSimBacterium {
 			super.scene.getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
 		}
 		
-		super.step();
+		super.action();
 
 	}
 

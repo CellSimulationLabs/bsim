@@ -45,11 +45,11 @@ public class BSimCoordBacterium extends BSimSensingBacterium {
 		coordThreshold = newCoordThreshold;
 	}
 
-	public void step() {		
+	public void action() {		
 		if(beadContactTimer > 0){
 			scene.getCoordinationField().addChemical (1.0, this.getPosition());
 		}
-		super.step();
+		super.action();
 	}
 
 	
