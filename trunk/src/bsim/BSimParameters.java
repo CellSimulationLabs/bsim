@@ -65,7 +65,6 @@ public class BSimParameters {
 	public double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};	
 	
 	public double[] magnStrength = {0.0, 0.0, 0.0};
-	public double[]	constantMagnField = {0.0, 0.0, 0.0};
 	
 	public double   screenZoom       = 1, 
 	                screenMove[]     = {0.0, 0.0};
@@ -189,7 +188,6 @@ public class BSimParameters {
 	public double	getReactForce () { return reactForce; }
 	
 	public double[]	 getMagnStrength () {return magnStrength; }
-	public double[]  getConstantMagnField () {return constantMagnField; }
 	
 	public double[]  getCfGoalDefine () { return cfGoalDefine; }
 	public double[]  getCfGoalSetup () { return cfGoalSetup; }
@@ -266,7 +264,6 @@ public class BSimParameters {
 	public void 	setReactForce ( double x) { reactForce = x; }
 	
 	public void		setMagnStrength (double[] x) {magnStrength = x; }
-	public void 	setConstantMagnField (double[] x) {constantMagnField = x; } 
 	
 	public void     setCfGoalDefine ( double[] x) { cfGoalDefine = x; }
 	public void     setCfGoalSetup ( double[] x) { cfGoalSetup = x; }

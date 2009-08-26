@@ -26,10 +26,6 @@ public class BSimBacteriaCreate {
 	 * checking of overlapping beads is performed meaning initial simulation output 
 	 * should be investigated if strange movement occurs.
 	 */
-	
-	// Parameters for the simulation
-	protected BSimParameters params;
-	
 	public static Vector createBacteriaSet (double[] args, BSimScene scene, BSimParameters params) {
 		
 		// Variables for each bead property
@@ -62,22 +58,14 @@ public class BSimBacteriaCreate {
 			newPosition[1] = args[1] + (args[4] * Math.random());
 			newPosition[2] = args[2] + (args[5] * Math.random());
 			
-			double[] directionParam = params.getConstantMagnField();
-			if (directionParam[0] != 0.0 || directionParam[1] != 0.0 || directionParam[2] != 0.0 ) {
-				
-				newDirection[0] = directionParam[0];
-				newDirection[1] = directionParam[1];
-				newDirection[2] = directionParam[2];
-			} else {
-				dx = (2.0 * Math.random()) - 1.0;
-				dy = (2.0 * Math.random()) - 1.0;
-				dz = (2.0 * Math.random()) - 1.0;
+			dx = (2.0 * Math.random()) - 1.0;
+			dy = (2.0 * Math.random()) - 1.0;
+			dz = (2.0 * Math.random()) - 1.0;
 
-				newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-				newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-				newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			}
-			
+			newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+			newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+			newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+
 			newForceUp = params.getBactForceUp();
 			newForceDown = params.getBactForceDown();
 
@@ -142,22 +130,14 @@ public class BSimBacteriaCreate {
 			newRadius = args[3];
 		}
 				
-		double[] directionParam = params.getConstantMagnField();
-		if (directionParam[0] != 0.0 || directionParam[1] != 0.0 || directionParam[2] != 0.0 ) {
-			
-			newDirection[0] = directionParam[0];
-			newDirection[1] = directionParam[1];
-			newDirection[2] = directionParam[2];
-		} else {
-			dx = (2.0 * Math.random()) - 1.0;
-			dy = (2.0 * Math.random()) - 1.0;
-			dz = (2.0 * Math.random()) - 1.0;
+		dx = (2.0 * Math.random()) - 1.0;
+		dy = (2.0 * Math.random()) - 1.0;
+		dz = (2.0 * Math.random()) - 1.0;
 
-			newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-		}
-		
+		newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+		newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+		newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+
 		newForceUp = params.getBactForceUp();
 		newForceDown = params.getBactForceDown();
 
