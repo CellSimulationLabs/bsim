@@ -36,13 +36,6 @@ public abstract class BSimParticle {
 	}
 	
 	/*
-	 * Update the position of the particle according to Stokes' law	
-	 */
-	public void updatePosition() {
-		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
-	}
-
-	/*
 	 * Interactions with other obstacles: reaction forces, fusions, etc 
 	 */
 	public void interaction(BSimBacterium b) { }	
@@ -53,6 +46,13 @@ public abstract class BSimParticle {
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
 	 */		
 	public void action() { }
+	
+	/*
+	 * Update the position of the particle according to Stokes' law	
+	 */
+	public void updatePosition() {
+		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
+	}
 	
 	public Point3d getPosition() { return position; }	
 	public Vector3d getForce() { return force; }
