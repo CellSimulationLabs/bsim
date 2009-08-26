@@ -20,12 +20,11 @@ public class BSimVesicle extends BSimParticle implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
-	public BSimVesicle(double newSpeed, double newRadius, 
-			double[] newDirection, double[] newPosition, 
+	public BSimVesicle(double[] newPosition, double newRadius, 
 			BSimScene newScene, BSimParameters newParams) {
 		
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newRadius, newDirection, newPosition, BSimParticle.PART_VES);
+		super(newPosition, newRadius);
 		
 		// The simulation scene that will be updated
 		scene = newScene;
@@ -60,7 +59,7 @@ public class BSimVesicle extends BSimParticle implements BSimDrawable {
 	 */
 	public void redraw(Graphics g) {
 
-		g.setColor(Color.PINK);
-		g.fillOval((int)position[0],(int)position[1],(int)(radius),(int)(radius));
+//		g.setColor(Color.PINK);
+//		g.fillOval((int)position[0],(int)position[1],(int)(radius),(int)(radius));
 	}
 }

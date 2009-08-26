@@ -51,7 +51,7 @@ public class BSimBeadsCreate {
 			// Create the type of bead required
 			switch((int)args[7]){
 				// Standard bead
-				case 1: beadVec.add(new BSimBead(newSpeed, newRadius, newDirection, newPosition)); break;
+				case 1: beadVec.add(new BSimBead(newPosition, newRadius)); break;
 			}
 		}
 
@@ -83,6 +83,6 @@ public class BSimBeadsCreate {
 		newSpeed = 0.0;
 		
 		// Return the new bead
-		return new BSimBead(newSpeed, newRadius, newDirection, newPosition);
+		return new BSimBead(newPosition, newRadius);
 	}
 }

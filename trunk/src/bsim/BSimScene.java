@@ -39,9 +39,7 @@ import bsim.drawable.boundary.BSimWrapPlaneBoundary;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.vesicle.BSimVesicle;
 import bsim.drawable.visualaid.BSimVisualAid;
-import bsim.physics.BSimCollisionPhysics;
-import bsim.physics.BSimFusionPhysics;
-import bsim.physics.BSimPhysics;
+import bsim.physics.BSimParticle;
 import bsim.rendering.Processing;
 
 
@@ -96,10 +94,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private double dt; //= 0.01;
 	// Number of time steps that have occured in current simulation
 	private int timeStep = 0;
-	
-	// The physics engine used for the current simulation
-	private BSimCollisionPhysics physics;
-	private BSimFusionPhysics fusion;
 	
 	// Thread to run the simulation in
 	private Thread simThread;
@@ -166,10 +160,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		simSem = newSimSem;
 		app = newApp;
 				
-		// Create the default physics engine for the simulation
-		fusion = new BSimFusionPhysics(this, params);
-		physics = new BSimCollisionPhysics(this, params);
-		
 	    
 		// Create initial bacteria and beads
 		resetScene(1);
@@ -200,10 +190,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		// Update the internal variables
 		simSem = null;
 		app = null;
-				
-		// Create the default physics engine for the simulation
-		fusion = new BSimFusionPhysics(this, params);
-		physics = new BSimCollisionPhysics(this, params);
 		
 		
 		// Create initial bacteria and beads
@@ -236,10 +222,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		// Update the scale
 		scale = (int)(START_SCALE * params.getScreenZoom());
 	
-		// Create the default physics engine for the simulation based on the updated parameters
-		physics = new BSimCollisionPhysics(this, params);
-		fusion = new BSimFusionPhysics(this, params);
-
 		// Move back to first time-step 
 		timeStep = 0;
 		
@@ -371,27 +353,51 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	private void runAllUpdates(){
-		int i;
-		
-
-		// Growth and replication
-		BSimBacterium b;
-		for(int k=0; k<bacteria.size();k++){			
-			b = (BSimBacterium)(bacteria.elementAt(k));			
-			b.grow();
-			if(b.getRadius() > b.getReplicationRadius()){
-				b.replicate();	
-			}
-		}
 	
-		// Update the properties for bacteria and beads
-		if (vesicles.size() > 0) fusion.updateProperties();
-		physics.updateProperties();
+		// Growth and replication
+//		BSimBacterium b;
+//		for(int k=0; k<bacteria.size();k++){			
+//			b = (BSimBacterium)(bacteria.elementAt(k));			
+//			b.grow();
+//			if(b.getRadius() > b.getReplicationRadius()){
+//				b.replicate();	
+//			}
+//		}
+			
+		// Update the properties for bacteria and beads		
+		Vector<BSimParticle> particles = new Vector();
+		particles.addAll(bacteria);
+		particles.addAll(beads);
+		particles.addAll(vesicles);
 		
-		// Perform necessary boundary operations
-		for (i = 0; i < wrapBoundaries.size(); i++) {
-			((BSimWrapPlaneBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
+		Vector obstacles = new Vector();
+		obstacles.addAll(bacteria);
+		obstacles.addAll(beads);
+		obstacles.addAll(vesicles);
+		
+		for (int i = 0; i < particles.size(); i++) {
+			for (int j = i+1; j < obstacles.size(); j++) {
+				if (obstacles.get(j) instanceof BSimBacterium){
+					particles.get(i).collide((BSimBacterium)obstacles.get(j));
+				}
+				else if (obstacles.get(j) instanceof BSimBead){
+					particles.get(i).collide((BSimBead)obstacles.get(j));
+				}
+				else if (obstacles.get(j) instanceof BSimVesicle){
+					particles.get(i).collide((BSimVesicle)obstacles.get(j));
+				}
+			}		
 		}
+		
+		for(BSimParticle p : particles) {
+			p.deNovo();
+			p.updatePosition();
+		}
+						
+//		// Perform necessary boundary operations
+//		for (int i = 0; i < wrapBoundaries.size(); i++) {
+//			((BSimWrapPlaneBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
+//		}
 		
 		// Update the fields
 		fGoal.updateField();
@@ -399,9 +405,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		fCoordination.updateField();
 		
 		// Update the visual aids
-		for(i=0; i<visualAids.size(); i++) {
-			((BSimVisualAid)visualAids.elementAt(i)).updateState();
-		}	
+//		for(int i=0; i<visualAids.size(); i++) {
+//			((BSimVisualAid)visualAids.elementAt(i)).updateState();
+//		}	
 	}
 	
 	

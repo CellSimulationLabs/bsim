@@ -37,6 +37,7 @@ import bsim.physics.BSimParticle;
 
 public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawable {
 
+	protected double[] direction;
 	// Propulsive force that the bacterium can produce; this is a function of
 	// size, as well as viscosity and speed (which are fixed)
 	protected double forceMagnitudeDown = 0.0;
@@ -91,16 +92,16 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(double newSpeed, double newRadius,
-			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
-			double newForceMagnitudeUp,
-			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    BSimParameters newParams) {
+	public BSimBacterium(double[] newPosition, double newRadius,
+			double[] newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
+			int newState, double newTumbleSpeed, int newRemDt, 
+			BSimScene newScene, BSimParameters newParams) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newRadius, newDirection, newPosition, BSimParticle.PART_BACT);
+		super(newPosition, newRadius);
 
 		// Update extended properties
+		direction = newDirection;
 		forceMagnitudeDown = newForceMagnitudeDown;
 		forceMagnitudeUp = newForceMagnitudeUp;
 		state          = newState;
@@ -184,27 +185,21 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	 * Iterate a bacterium's tumbling phase
 	 */
 	protected void iterateTumble() {
-		double[] curDirection = this.getDirection();
-		double[] newDirection = new double[3];
-
-		// TODO make curDirection a vector in the first place
-		Vector3d curDirectionVector = new Vector3d(curDirection);
-		
+		 			
 		// Obtain a random direction perpendicular to curDirection
+		Vector3d directionVector = new Vector3d(direction);
 		Vector3d randomVector = new Vector3d(Math.random(),Math.random(),Math.random());
 		Vector3d crossVector = new Vector3d();
-		crossVector.cross(curDirectionVector, randomVector);		
+		crossVector.cross(directionVector, randomVector);		
 		
 		// Generate the rotation matrix for rotating about this direction by the tumble angle
 		Matrix3d r = new Matrix3d();
 		r.set(new AxisAngle4d(crossVector, tumbleSpeed));
 		
-		// Apply the rotation
-		Vector3d newDirectionVector = new Vector3d();		
-		r.transform(curDirectionVector,newDirectionVector);
-		newDirectionVector.get(newDirection);
+		// Apply the rotation			
+		r.transform(directionVector);
+		directionVector.get(direction);
 		
-		setDirection(newDirection);
 	}
 
 
@@ -215,7 +210,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 
 		double[] directionParam = params.getConstantMagnField();
 		if (directionParam[0] != 0.0 || directionParam[1] != 0.0 || directionParam[2] != 0.0 ) {
-			this.setDirection(directionParam);
+			direction = directionParam;
 			this.setState(BAC_STATE_RUNNING);
 			
 		} else if (state == BAC_STATE_RUNNING) {
@@ -412,16 +407,10 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 				double saOnStart = 4*Math.PI*Math.pow(radiusOnVesiculationStart,2);
 				double saOnEnd = 4*Math.PI*Math.pow(radius,2);
 				double vesicleRadius = Math.sqrt((saOnEnd - saOnStart)/4*Math.PI);
-				
-				double[] newPosition = new double[3];
-				newPosition[0] = position[0] + radius + vesicleRadius;
-				newPosition[1] = position[1];
-				newPosition[2] = position[2];
-				
+								
 				radius = radiusOnVesiculationStart;
 				
-				BSimVesicle newVesicle = new BSimVesicle(speed, vesicleRadius,
-						direction, newPosition,					
+				BSimVesicle newVesicle = new BSimVesicle(this.getPosition(), vesicleRadius,										
 						scene, params);	
 								
 				//System.out.println(radius + " " + vesicleRadius);
@@ -435,20 +424,13 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	
 	public void replicate() {
 		BSimBacterium newBact = null;
-		
-		// Replicate along direction of movement
-		double[] newPosition = new double[3];
-		newPosition[0] = position[0] + radius*direction[0];
-		newPosition[1] = position[1] + radius*direction[1];
-		newPosition[2] = position[2] + radius*direction[2];
-		
+				
 		radius = radius/2;
 		
 		// Create new bacterium TODO remDt?
-		newBact = new BSimBacterium(speed, radius,
-				direction, newPosition,
-				forceMagnitudeDown, forceMagnitudeUp, state,					
-				tumbleSpeed, remDt, 
+		newBact = new BSimBacterium(this.getPosition(), radius,
+				direction, forceMagnitudeDown, forceMagnitudeUp, 
+				state, tumbleSpeed, remDt, 
 				scene, params);		
 		
 		newBact.startNewPhase();
@@ -485,5 +467,6 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	public Vector getConcMemory() {return concMemory;}
 	public boolean getMemToReset() {return memToReset; }
 	public double getReplicationRadius() { return replicationRadius; }
+	public double[] getDirection (){ return direction; }
 	
 }

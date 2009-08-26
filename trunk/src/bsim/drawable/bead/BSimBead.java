@@ -23,11 +23,10 @@ public class BSimBead extends BSimParticle implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
-	public BSimBead(double newSpeed, double newRadius, 
-			double[] newDirection, double[] newPosition) {
+	public BSimBead(double[] newPosition, double newRadius) {
 				
 		// Call the parent constructor
-		super(newSpeed, newRadius, newDirection, newPosition, BSimParticle.PART_BEAD);
+		super(newPosition, newRadius);
 	}
 	
 	

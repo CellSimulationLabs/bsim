@@ -31,14 +31,13 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 	/**
 	 * General constructor.
 	 */
-	public BSimCoordBacterium(double newSpeed, double newRadius,
-			double[] newDirection, double[] newPosition, double newForceMagnitudeDown,
-			double newForceMagnitudeUp,
+	public BSimCoordBacterium(double[] newPosition, double newRadius,
+			double[] newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams, double newSwitchSpeed, double newCoordThreshold) {
 
 		// Call the parent constructor with the basic properties	
-		super(newSpeed, newRadius, newDirection, newPosition, newForceMagnitudeDown,
+		super(newPosition, newRadius, newDirection, newForceMagnitudeDown,
 		newForceMagnitudeUp, newState,
 		      newTumbleSpeed, newRemDt, newScene, newParams, newSwitchSpeed);
 		

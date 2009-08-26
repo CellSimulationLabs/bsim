@@ -13,88 +13,49 @@
  */
 package bsim.physics;
 
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
+import bsim.drawable.bacteria.BSimBacterium;
+import bsim.drawable.bead.BSimBead;
+import bsim.drawable.vesicle.BSimVesicle;
 
-public abstract class BSimParticle {
+public abstract class BSimParticle {		
+
+	protected Point3d position = new Point3d(); // microns		
+	protected Vector3d force = new Vector3d(); // piconewtons
+	protected double radius; // microns	
 	
-	public static int PART_PART = 0;
-	public static int PART_BACT = 1;
-	public static int PART_BEAD = 2;
-	public static int PART_VES = 3;
+	protected double visc = 1e-3;
+	protected double dt = 0.01;
 	
-	protected int partType = PART_PART;
-	
-	// General properties of all objects in a simulation
-	protected double radius  = 0, // microns	                 
-	                 speed = 0; // microns per second	
-	protected double position[] = {0,0,0};
-	protected double direction[] = {0,0,0};
 	
 	/**
 	 * General constructor.
 	 */
-	public BSimParticle(double newSpeed, double newRadius, 
-			double[] newDirection, double[] newPosition, int newType) {
-		super();
-		speed        = newSpeed;		
-		radius         = newRadius;
-		direction[0] = newDirection[0];
-		direction[1] = newDirection[1];
-		direction[2] = newDirection[2];
-		position[0] = newPosition[0];
-		position[1] = newPosition[1];
-		position[2] = newPosition[2];
-		
-		partType = newType;
+	public BSimParticle(double[] newPosition, double newRadius) {
+		super();	
+		position.set(newPosition);		
+		radius = newRadius;
 	}
 		
-	
-	/**
-	 * Standard set methods for the class.
-	 */	
-	public void setRadius(double r) {radius = r;}	
-	public void setSpeed(double s) {speed = s;}
-	public void setType(int t) {partType = t;}
-	public void setPosition(double p[]) {
-		position[0] = p[0];
-		position[1] = p[1];
-		position[2] = p[2];
+	public void updatePosition() {
+		System.out.println(position);
+		System.out.println(force);
+		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
 	}
-	public void setDirection(double[] d) {
-		double[] normD = normalise3DVector(d);
-		direction[0] = normD[0]; 
-		direction[1] = normD[1];
-		direction[2] = normD[2];
-	}
-	
-	
-	/**
-	 * Standard get methods for the class.
-	 */	
-	public double getRadius() {return radius;}	
-	public double getSpeed () { return speed; }
-	public int getType() {return partType;}	
-	public double[] getPosition () { return position; }
-	public double[] getDirection () { return direction; }
-	
-	
-	/**
-	 * Normalises the length of a given 3D vector.
-	 */
-	private double[] normalise3DVector(double[] newVector) {
 		
-		// Variables holding normalising constants
-		double xPow2 = Math.pow(newVector[0],2.0);
-		double yPow2 = Math.pow(newVector[1],2.0);
-		double zPow2 = Math.pow(newVector[2],2.0);
-		
-		// Calculate the normalised components
-		newVector[0] = newVector[0] / Math.sqrt(xPow2 + yPow2 + zPow2);
-		newVector[1] = newVector[1] / Math.sqrt(xPow2 + yPow2 + zPow2);
-		newVector[2] = newVector[2] / Math.sqrt(xPow2 + yPow2 + zPow2);
-		
-		// Return the new normalised vector
-		return newVector;
-	}
+	public void collide(BSimBacterium b) { }	
+	public void collide(BSimBead b) { }
+	public void collide(BSimVesicle v) { }	
+	public void deNovo() { }
+	
+	public double[] getPosition() { double[] p = new double[3]; position.get(p); return p; }	
+	public double[] getForce() { double[] f = new double[3]; force.get(f); return f; }
+	public double getRadius() { return radius; }
+	public void setPosition(double[] p) { position.set(p); }
+	public void setForce(double[] f) { force.set(f); }
+	public void setRadius(double r) { this.radius = r; }
+	
 }
 
