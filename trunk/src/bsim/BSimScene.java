@@ -72,10 +72,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private Vector bacteria;
 	private Vector beads;
 	private Vector vesicles;
-	private Vector solidBoundaries;
-	private Vector wrapBoundaries;
-	private Vector solidBoxes;
-	private Vector wrapBoxes;
+	private Vector boxes;
 	private Vector visualAids;
 	
 	// Chemical fields required for the simulation
@@ -230,13 +227,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
 		
-		// Create both wrapping and solid boundaries
-		solidBoundaries = params.createNewSolidPlaneBoundariesVec();
-		wrapBoundaries = params.createNewWrapPlaneBoundariesVec();
-		
-		// Create both wrapping and solid boxes
-		solidBoxes = params.createNewSolidBoxBoundariesVec();
-		wrapBoxes = params.createNewWrapBoxBoundariesVec();
+		// Create boxes
+		boxes = params.createNewBoxesVec();
 		
 		// Create any visual aids
 		visualAids = params.createNewVisualAidsVec(this);
@@ -602,10 +594,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
-	public Vector getSolidBoundaries (){ return solidBoundaries; }
-	public Vector getWrapBoundaries (){ return wrapBoundaries; }
-	public Vector getSolidBoxes (){ return solidBoxes; }
-	public Vector getWrapBoxes (){ return wrapBoxes; }
+	public Vector getBoxes (){ return boxes; }
 	public Vector getVisualAids (){ return visualAids; }
 	public boolean getStartVideo (){ return startVideo; }
 	public boolean getEndVideo (){ return endVideo; }

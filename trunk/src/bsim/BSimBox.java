@@ -1,17 +1,17 @@
 /**
- * BSimSolidBoxBoundary.java
+ * BSimBox.java
  *
- * Class that represents a box of the simulation boundaries.
+ * Class that represents a box.
  *
  * Authors: Mattia Fazzini
  * Created: 13/08/2009
  */
-package bsim.boundary;
+package bsim;
 
 import java.awt.Graphics;
 
 
-public class BSimBoxBoundary {
+public class BSimBox {
 
 	
 	//plane points
@@ -24,7 +24,7 @@ public class BSimBoxBoundary {
 	/**
 	 * General constructor.
 	 */
-	public BSimBoxBoundary(double[] args) {
+	public BSimBox(double[] args) {
 		
 		// Update the internal variables
 		p1[0] = args[0];
@@ -57,7 +57,7 @@ public class BSimBoxBoundary {
 	
 	
 	/**
-	 * Draw the boundary.
+	 * Draw the box.
 	 */
 	public void redraw(Graphics g) {
 	}

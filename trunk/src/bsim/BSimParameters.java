@@ -14,8 +14,6 @@ package bsim;
 import java.awt.Color;
 import java.util.Vector;
 
-import bsim.boundary.BSimBoxBoundary;
-import bsim.boundary.BSimPlaneBoundaryCreate;
 import bsim.field.BSimChemicalField;
 import bsim.field.BSimChemicalFieldCreate;
 import bsim.particle.bacterium.BSimBacteriaCreate;
@@ -41,14 +39,13 @@ public class BSimParameters {
 	public int      screenWidth      = 1025; // pixels
 	public int      screenHeight     = 700; // pixels
 
-	public double   dt               = 0.005; // seconds (was 0.01 but too big), jumpping boundaries
+	public double   dt               = 0.001; // seconds
 	
 	public Vector   bacteriaSingles, 
 	                bacteriaSets, 
 	                beadSingles, 
 	                beadSets, 
-	                solidBoundaries,
-	                wrapBoundaries,
+	                boxes,	                
 	                vaBacteriaTraces,
 	                vaAvgBacteriaTraces,
 	                vaBeadTraces,
@@ -108,8 +105,7 @@ public class BSimParameters {
 		bacteriaSets = new Vector();
 		beadSingles = new Vector();
 		beadSets = new Vector();
-		solidBoundaries = new Vector();
-        wrapBoundaries = new Vector();
+		boxes = new Vector();        
         vaBacteriaTraces = new Vector();
         vaAvgBacteriaTraces = new Vector();
         vaBeadTraces = new Vector();
@@ -140,8 +136,7 @@ public class BSimParameters {
 	public Vector 	getSingleBead() { return beadSingles; }
 	public Vector 	getBacteriaSet() { return bacteriaSets; }
 	public Vector 	getBeadSet() { return beadSets; }
-	public Vector   getSolidBoundaries() { return solidBoundaries; }
-	public Vector   getWrapBoundaries() { return wrapBoundaries; }
+	public Vector   getBoxes() { return boxes; }	
 	
 	public Vector   getBacteriaTraces() { return vaBacteriaTraces; }
 	public Vector   getAvgBacteriaTraces() { return vaAvgBacteriaTraces; }
@@ -218,8 +213,7 @@ public class BSimParameters {
 	public void 	addBacteriaSet(double[] b) { bacteriaSets.add(b); }
 	public void 	addBeadSet(double[] p) { beadSets.add(p); }
 	
-	public void 	addSolidBoundary(double[] p) { solidBoundaries.add(p); }
-	public void 	addWrapBoundary(double[] p) { wrapBoundaries.add(p); }
+	public void 	addBox(double[] p) { boxes.add(p); }	
 	
 	public void 	addBacteriaTrace(double[] p) { vaBacteriaTraces.add(p); }
 	public void 	addAvgBacteriaTrace(double[] p) { vaAvgBacteriaTraces.add(p); }
@@ -318,66 +312,20 @@ public class BSimParameters {
 		// Return the new vector
 		return newVec;
 	}
-	
-	public Vector createNewSolidPlaneBoundariesVec() {
+		
+	public Vector createNewBoxesVec() {
 		
 		// Vector to hold the new objects
 		Vector newVec = new Vector();
 		
-		// Create a new solid boundary for every item in the list
-		for(int i=0; i<solidBoundaries.size(); i++){
-			for(int j=0;j<6;j++)
-			{
-					newVec.add(BSimPlaneBoundaryCreate.createSolidPlaneBoundary((double[])solidBoundaries.elementAt(i),j));
-			}
+		// Create a new box for every item in the list
+		for(int i=0; i<boxes.size(); i++){
+					newVec.add(new BSimBox((double[])boxes.elementAt(i)));
 		}
 		// Return the new vector
 		return newVec;
 	}
-	
-	public Vector createNewSolidBoxBoundariesVec() {
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new solid boundary for every item in the list
-		for(int i=0; i<solidBoundaries.size(); i++){
-					newVec.add(new BSimBoxBoundary((double[])solidBoundaries.elementAt(i)));
-		}
-		// Return the new vector
-		return newVec;
-	}
-	
-	public Vector createNewWrapPlaneBoundariesVec() {
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new solid boundary for every item in the list
-		for(int i=0; i<wrapBoundaries.size(); i++){
-			for(int j=0;j<6;j++)
-			{
-				newVec.add(BSimPlaneBoundaryCreate.createWrapPlaneBoundary((double[])wrapBoundaries.elementAt(i),j));
-			}
-		}
-		
-		// Return the new vector
-		return newVec;
-	}
-	
-	public Vector createNewWrapBoxBoundariesVec() {
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new solid boundary for every item in the list
-		for(int i=0; i<wrapBoundaries.size(); i++){
-					newVec.add(new BSimBoxBoundary((double[])wrapBoundaries.elementAt(i)));
-		}
-		// Return the new vector
-		return newVec;
-	}
-	
+			
 	public Vector createNewVisualAidsVec(BSimScene scene) {
 		int i;
 		

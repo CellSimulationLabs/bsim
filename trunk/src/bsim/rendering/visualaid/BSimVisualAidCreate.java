@@ -1,5 +1,5 @@
 /**
- * BSimBoundaryCreate.java
+ * BSimVisualAidCreate.java
  *
  * Class to hold static methods to generate the different visual aid types.
  *
