@@ -28,6 +28,12 @@
 
 package bsim.ode;
 
+/*
+ * Most likely these will have to be updated or overloaded (some more)
+ * to be able to cope with stochastic odes [honeycutt: stochastic rk algorithms]
+ * as it looks like this is the phase where random variables must be integrated.
+ */
+
 public class BSimOdeSolver {
 	// ----------------- Euler solvers ------------------
 	// --------------------------------------------------

@@ -20,11 +20,11 @@ public interface BSimOdeSingle {
 	 * Define a derivative in terms of its dependent variable y 
 	 * and independent variable x
 	 */
-	double derivative(double x, double y);
+	public double derivative(double x, double y);
 	
 	/**
 	 * Return the initial condition for the IVP i.e. y(0)
 	 */ 
-	double getIC();
+	public double getIC();
 	
 }

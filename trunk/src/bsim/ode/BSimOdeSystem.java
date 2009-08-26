@@ -22,17 +22,17 @@ public interface BSimOdeSystem {
 	 * dy[0] = ..., dy[1] = ..., etc
 	 * then return dy[]
 	 */
-	double[] derivativeSystem(double x, double[] y);
+	public double[] derivativeSystem(double x, double[] y);
 	
     /**
      * Should return the number of equations in the system
      * (Corresponding to the number in derivativeSystem)
      */
-	int getNumEq();
+	public int getNumEq();
 	
 	/**
 	 *  Returns the initial conditions: y1(0), y2(0), etc..
 	 */
-	double[] getICs();
+	public double[] getICs();
 	
 }
