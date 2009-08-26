@@ -1,4 +1,4 @@
-package bsim.drawable.vesicle;
+package bsim.particle.vesicle;
 
 import java.awt.Graphics;
 import java.util.Random;
@@ -7,10 +7,9 @@ import javax.vecmath.Point3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
 
-public class BSimVesicle extends BSimParticle implements BSimDrawable {
+public class BSimVesicle extends BSimParticle {
 	
 	// The simulation scene that will be updated
 	protected BSimScene scene;

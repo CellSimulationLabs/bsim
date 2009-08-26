@@ -10,7 +10,7 @@
 */
 package bsim;
 
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
 
 
 public class BSimUtils {

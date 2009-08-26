@@ -10,7 +10,7 @@
  * Created: 28/08/2008
  * Updated: 28/08/2008
  */
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 
@@ -19,11 +19,10 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic, BSimDrawable {
+public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic {
 
 	
 	// Threshold for detecting co-ordination signal (AHL)

@@ -8,17 +8,16 @@
  * Created: 12/07/2008
  * Updated: 19/07/2008
  */
-package bsim.drawable.bead;
+package bsim.particle.bead;
 
 import java.awt.Graphics;
 
 import javax.vecmath.Point3d;
 
-import bsim.drawable.BSimDrawable;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
 
 
-public class BSimBead extends BSimParticle implements BSimDrawable {
+public class BSimBead extends BSimParticle {
 	
 	
 	/**

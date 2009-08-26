@@ -9,18 +9,17 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.drawable.visualaid;
+package bsim.rendering.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
-import bsim.drawable.bacteria.BSimBacterium;
+import bsim.particle.bacterium.BSimBacterium;
 
 
-public class BSimAverageBacteriaTrace implements BSimVisualAid, BSimDrawable {
+public class BSimAverageBacteriaTrace implements BSimVisualAid {
 	
 	// Variables for tracing mean bacteria position 
 	private int frameCount = 0;

@@ -28,11 +28,11 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import bsim.drawable.bacteria.BSimBacterium;
-import bsim.drawable.bead.BSimBead;
-import bsim.drawable.field.BSimChemicalField;
-import bsim.drawable.vesicle.BSimVesicle;
-import bsim.physics.BSimParticle;
+import bsim.field.BSimChemicalField;
+import bsim.particle.BSimParticle;
+import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bead.BSimBead;
+import bsim.particle.vesicle.BSimVesicle;
 import bsim.rendering.Processing;
 
 

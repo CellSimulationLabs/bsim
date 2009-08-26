@@ -8,7 +8,7 @@
  * Created: 14/08/2008
  * Updated: 14/08/2008
  */
-package bsim.drawable.visualaid;
+package bsim.rendering.visualaid;
 
 
 

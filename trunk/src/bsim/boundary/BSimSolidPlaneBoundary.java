@@ -8,15 +8,13 @@
  * Created: 08/08/2009
  * Updated: 08/08/2009
  */
-package bsim.drawable.boundary;
+package bsim.boundary;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
-import bsim.drawable.BSimDrawable;
 
-
-public class BSimSolidPlaneBoundary implements BSimDrawable {
+public class BSimSolidPlaneBoundary {
 
 	
 	//plane points

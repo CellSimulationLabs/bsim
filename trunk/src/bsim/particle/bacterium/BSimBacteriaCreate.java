@@ -8,7 +8,7 @@
  * Created: 20/07/2008
  * Updated: 07/08/2009
  */
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.util.Vector;
 
@@ -18,7 +18,7 @@ import javax.vecmath.Vector3d;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
 
 
 public class BSimBacteriaCreate {

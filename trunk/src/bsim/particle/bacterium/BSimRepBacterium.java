@@ -11,7 +11,7 @@
  * Created: 13/08/2009
  */
 
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 import java.util.Random;

@@ -14,13 +14,13 @@ package bsim;
 import java.awt.Color;
 import java.util.Vector;
 
-import bsim.drawable.bacteria.BSimBacteriaCreate;
-import bsim.drawable.bead.BSimBeadsCreate;
-import bsim.drawable.boundary.BSimBoxBoundary;
-import bsim.drawable.boundary.BSimPlaneBoundaryCreate;
-import bsim.drawable.field.BSimChemicalField;
-import bsim.drawable.field.BSimChemicalFieldCreate;
-import bsim.drawable.visualaid.BSimVisualAidCreate;
+import bsim.boundary.BSimBoxBoundary;
+import bsim.boundary.BSimPlaneBoundaryCreate;
+import bsim.field.BSimChemicalField;
+import bsim.field.BSimChemicalFieldCreate;
+import bsim.particle.bacterium.BSimBacteriaCreate;
+import bsim.particle.bead.BSimBeadsCreate;
+import bsim.rendering.visualaid.BSimVisualAidCreate;
 
 
 public class BSimParameters {

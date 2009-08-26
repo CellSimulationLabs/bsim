@@ -7,7 +7,7 @@
  * Created: 08/08/2009
  * Updated: 08/08/2009
  */
-package bsim.drawable.boundary;
+package bsim.boundary;
 
 
 public class BSimPlaneBoundaryCreate {

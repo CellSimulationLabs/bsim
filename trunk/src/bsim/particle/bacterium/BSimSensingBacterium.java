@@ -8,7 +8,7 @@
  * Created: 28/08/2008
  * Updated: 28/08/2008
  */
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 
@@ -17,11 +17,10 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimSensingBacterium extends BSimBacterium implements BSimLogic, BSimDrawable {
+public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 
 	protected int beadContactTimer = 0;
 	

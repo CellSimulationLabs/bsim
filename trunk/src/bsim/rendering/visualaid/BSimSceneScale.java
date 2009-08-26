@@ -1,13 +1,13 @@
 /**
- * BSimSceneClock.java
+ * BSimSceneScale.java
  *
- * Class that displays a clock on a simulations top left corner
+ * Class that displays a scale on the simulation
  *
  * Authors: Thomas Gorochowski
- * Created: 14/08/2008
- * Updated: 24/08/2008
+ * Created: 28/08/2008
+ * Updated: 28/08/2008
  */
-package bsim.drawable.visualaid;
+package bsim.rendering.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,23 +16,33 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
 
 
-public class BSimSceneClock implements BSimVisualAid, BSimDrawable {
+public class BSimSceneScale implements BSimVisualAid {
 	
 	
 	// Simulation scene to gain access to bacertia
 	private BSimScene scene;
 	
+	private double[] pos;
+	
+	private double scaleLen = 0.0;
 	
 	/**
 	 * General constructor
 	 */
-	public BSimSceneClock (BSimScene newScene) {
+	public BSimSceneScale (BSimScene newScene, double p1x, double p1y, double newScaleLen) {
 		
 		// Update the internal variables
 		scene = newScene;
+		
+		// Set the position of the scale (not in simulation co-ordinate space)
+		pos = new double[2];
+		pos[0] = p1x;
+		pos[1] = p1y;
+		
+		// Update the scale length
+		scaleLen = newScaleLen;
 	}
 	
 	
@@ -72,8 +82,16 @@ public class BSimSceneClock implements BSimVisualAid, BSimDrawable {
 		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
 		                           RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		
-		// Draw the time to the output
-		g.drawString(scene.getFormatedTimeSecs(), 100, 100);
+		
+		// Draw the scale
+		int screenLen = (int)(scaleLen * scene.getScale()); 
+		
+		g.drawLine((int)pos[0], (int)pos[1]-4, (int)pos[0]+screenLen, (int)pos[1]-4);
+		g.drawLine((int)pos[0], (int)pos[1] - 6, (int)pos[0], (int)pos[1]-2);
+		g.drawLine((int)pos[0]+screenLen, (int)pos[1] - 6, (int)pos[0]+screenLen, (int)pos[1]-2);
+		
+		// Draw the string
+		g.drawString("" + scaleLen + " microns", (int)pos[0]+screenLen+5, (int)pos[1]);
 		
 		// Reset the transform on the graphics context
 		g2d.setTransform(saveXform);

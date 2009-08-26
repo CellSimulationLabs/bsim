@@ -6,14 +6,12 @@
  * Authors: Mattia Fazzini
  * Created: 13/08/2009
  */
-package bsim.drawable.boundary;
+package bsim.boundary;
 
 import java.awt.Graphics;
 
-import bsim.drawable.BSimDrawable;
 
-
-public class BSimBoxBoundary implements BSimDrawable {
+public class BSimBoxBoundary {
 
 	
 	//plane points

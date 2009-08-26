@@ -8,7 +8,7 @@
  * Created: 25/07/2008
  * Updated: 07/08/2009
  */
-package bsim.drawable.field;
+package bsim.field;
 
 import java.awt.Color;
 

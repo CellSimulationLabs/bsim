@@ -12,7 +12,7 @@
  * Created: 12/07/2008
  * Updated: 07/08/2009
  */
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 import java.io.File;
@@ -28,14 +28,13 @@ import javax.vecmath.Vector3d;
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
-import bsim.drawable.BSimDrawable;
-import bsim.drawable.field.BSimChemicalField;
-import bsim.drawable.vesicle.BSimVesicle;
+import bsim.field.BSimChemicalField;
 import bsim.logic.BSimLogic;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
+import bsim.particle.vesicle.BSimVesicle;
 
 
-public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawable {
+public class BSimBacterium extends BSimParticle implements BSimLogic {
 
 	protected Vector3d direction;
 	// Propulsive force that the bacterium can produce; this is a function of

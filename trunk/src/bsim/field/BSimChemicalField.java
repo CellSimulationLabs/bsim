@@ -13,7 +13,7 @@
  * Created: 20/07/2008
  * Updated: 26/08/2009
  */
-package bsim.drawable.field;
+package bsim.field;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,10 +21,9 @@ import java.awt.Graphics;
 import javax.vecmath.Point3d;
 
 import bsim.BSimParameters;
-import bsim.drawable.BSimDrawable;
 
 
-public class BSimChemicalField implements BSimDrawable {
+public class BSimChemicalField {
 
 	// The type of field
 	// TYPE_FIXED  = fixed field (no diffusion)

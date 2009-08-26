@@ -14,7 +14,7 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
 
 
 public class BSimBeadFileExport extends BSimFileExport {

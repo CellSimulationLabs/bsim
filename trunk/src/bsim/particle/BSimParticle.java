@@ -11,14 +11,14 @@
  * Created: 12/07/2008
  * Updated: 07/08/2009
  */
-package bsim.physics;
+package bsim.particle;
 
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
-import bsim.drawable.bacteria.BSimBacterium;
-import bsim.drawable.bead.BSimBead;
-import bsim.drawable.vesicle.BSimVesicle;
+import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bead.BSimBead;
+import bsim.particle.vesicle.BSimVesicle;
 
 public abstract class BSimParticle {		
 

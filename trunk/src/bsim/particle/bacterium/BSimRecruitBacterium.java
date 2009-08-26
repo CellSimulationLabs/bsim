@@ -11,7 +11,7 @@
  * Created: 01/09/2008
  * Updated: 01/09/2008
  */
-package bsim.drawable.bacteria;
+package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 
@@ -20,11 +20,10 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.drawable.BSimDrawable;
 import bsim.logic.BSimLogic;
 
 
-public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic, BSimDrawable {
+public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic {
 
 	protected boolean foundRecruit = false;
 

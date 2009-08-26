@@ -12,7 +12,7 @@
  * Created: 09/08/2009
  * Updated: 09/08/2009
  */
-package bsim.drawable.boundary;
+package bsim.boundary;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -22,12 +22,11 @@ import java.awt.Stroke;
 import java.awt.geom.Line2D;
 import java.util.Vector;
 
-import bsim.drawable.BSimDrawable;
-import bsim.drawable.bacteria.BSimBacterium;
-import bsim.drawable.bead.BSimBead;
-import bsim.physics.BSimParticle;
+import bsim.particle.BSimParticle;
+import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bead.BSimBead;
 
-public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary implements BSimDrawable {
+public class BSimWrapPlaneBoundary extends BSimSolidPlaneBoundary {
 	// offset where the particle is placed in confront of the  corresponding point on the corresponding plane 
 	private double[] wrapOffset = {0.0,0.0,0.0};
 	
