@@ -89,6 +89,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private BSimChemicalField fGoal;
 	private BSimChemicalField fRecruitment;
 	private BSimChemicalField fCoordination;
+	private BSimChemicalField fQuorum;
 	
 	// Time related variables
 	private double dt; //= 0.01;
@@ -251,6 +252,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		fGoal = params.createNewGoalChemicalField();
 		fCoordination = params.createNewCoordChemicalField();
 		fRecruitment = params.createNewRecruitChemicalField();
+		fQuorum = params.createNewQuorumChemicalField();
 		
 		//part of processing used in the BSimApp
 		if(guiExists){
@@ -403,6 +405,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		fGoal.updateField();
 		fRecruitment.updateField();
 		fCoordination.updateField();
+		fQuorum.updateField();
 		
 		// Update the visual aids
 //		for(int i=0; i<visualAids.size(); i++) {
@@ -627,6 +630,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public BSimChemicalField getGoalField (){ return fGoal; }
 	public BSimChemicalField getRecruitmentField (){ return fRecruitment; }
 	public BSimChemicalField getCoordinationField (){ return fCoordination; }
+	public BSimChemicalField getQuorumField() { return fQuorum; }
 	public int getTransX (){ return transX; }
 	public int getTransY (){ return transY; }
 	public double getScale () { return (1.0/START_SCALE)*scale; }

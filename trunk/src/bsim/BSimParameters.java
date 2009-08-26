@@ -61,6 +61,8 @@ public class BSimParameters {
 	public double[] cfCoordSetup = {0, 0, 0, 0, 0, 0};
 	public double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
+	public double[] cfQuorumDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	public double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};	
 	
 	public double[] magnStrength = {0.0, 0.0, 0.0};
 	public double[]	constantMagnField = {0.0, 0.0, 0.0};
@@ -272,7 +274,9 @@ public class BSimParameters {
 	public void     setCfCoordSetup ( double[] x) { cfCoordSetup = x; }
 	public void     setCfRecruitDefine ( double[] x) { cfRecruitDefine = x; }
 	public void     setCfRecruitSetup ( double[] x) { cfRecruitSetup = x; }
-	
+	public void     setCfQuorumDefine ( double[] x) { cfQuorumDefine = x; }
+	public void     setCfQuorumSetup ( double[] x) { cfQuorumSetup = x; }
+
 	
 	/**
 	 * Create methods to create the sets of items that are required by the scene.
@@ -422,6 +426,13 @@ public class BSimParameters {
 		
 		// Create the new chemical field
 		return BSimChemicalFieldCreate.createChemicalField (cfRecruitDefine, cfRecruitSetup, 
+		                                               new Color(0.1f, 0.8f, 0.1f), this);
+	}
+	
+	public BSimChemicalField createNewQuorumChemicalField() {
+		
+		// Create the new chemical field
+		return BSimChemicalFieldCreate.createChemicalField (cfQuorumDefine, cfQuorumSetup, 
 		                                               new Color(0.1f, 0.8f, 0.1f), this);
 	}
 }
