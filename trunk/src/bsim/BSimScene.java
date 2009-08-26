@@ -14,7 +14,7 @@
  *          Charlie Harrison
  *          Mattia Fazzini
  * Created: 12/07/2008
- * Updated: 12/08/2009
+ * Updated: 26/08/2009
  */
 package bsim;
 
@@ -247,15 +247,16 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		fRecruitment = params.createNewRecruitChemicalField();
 		fQuorum = params.createNewQuorumChemicalField();
 		
-		//part of processing used in the BSimApp
+		// Processing related activity
 		if(guiExists){
-			//Processing Related
-			//remove the old Processing Applet
 			if(firstTime == 0){
+				// Remove the PApplet from the display
 				remove(p);
+				// Kill the (PApplet's) animation thread and free resources
+				p.destroy();
 			}
-			//the last parameter is the frame rate
-		    p = new Processing(this);    
+		    p = new Processing(this);
+		    // Initialise new animation thread and PApplet
 		    p.init();
 		    add(p,BorderLayout.CENTER);
 		    
@@ -279,11 +280,17 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			}
 		}
 		else{
-			//part for BSimBach
+			// Equivalent process for BSimBatch
+			// This may not be necessary...
+			if(firstTime == 0){
+				remove(p);
+				p.destroy();
+			}
+			// BSimBatch part
 			p = new Processing(this);    
 		    p.init();
-		}		
-				
+		}
+
 		// Repaint the graphics display
 		repaint();
 	}
