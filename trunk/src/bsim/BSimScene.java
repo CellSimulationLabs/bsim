@@ -18,27 +18,20 @@
  */
 package bsim;
 
-import java.awt.Color;
-
-
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.util.Vector;
 
 import javax.swing.JPanel;
 
 import bsim.drawable.bacteria.BSimBacterium;
 import bsim.drawable.bead.BSimBead;
-import bsim.drawable.boundary.BSimWrapPlaneBoundary;
 import bsim.drawable.field.BSimChemicalField;
 import bsim.drawable.vesicle.BSimVesicle;
-import bsim.drawable.visualaid.BSimVisualAid;
 import bsim.physics.BSimParticle;
 import bsim.rendering.Processing;
 

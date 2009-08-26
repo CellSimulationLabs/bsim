@@ -26,6 +26,7 @@ package processing.video;
 
 import java.io.File;
 
+import processing.core.PApplet;
 import quicktime.Errors;
 import quicktime.QTException;
 import quicktime.QTSession;
@@ -47,8 +48,6 @@ import quicktime.std.movies.media.VideoMedia;
 import quicktime.util.QTHandle;
 import quicktime.util.QTUtils;
 import quicktime.util.RawEncodedImage;
-
-import processing.core.*;
 
 
 /**

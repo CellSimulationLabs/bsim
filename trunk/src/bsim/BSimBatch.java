@@ -9,18 +9,14 @@
  */
 package bsim;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Vector;
 
 import bsim.export.BSimBacteriaFileExport;
 import bsim.export.BSimBeadFileExport;
 import bsim.export.BSimExport;
-import bsim.export.QuickTimeOutputStream;
 
 
 public class BSimBatch{
