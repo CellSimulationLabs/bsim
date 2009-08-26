@@ -45,9 +45,8 @@ public class BSimBatch{
 	 */
 	public BSimBatch(File f){
 		
-		// Create a parameter file loader and read into our local variable
-		BSimParametersLoader paramLoader = new BSimParametersLoader(f);
-		params = paramLoader.parseFile();
+		// Create a parameter file loader and read into our local variable		
+		params = new BSimParameters(f);
 		
 		// Update the batch variables
 		numOfRuns = params.getSimRuns();

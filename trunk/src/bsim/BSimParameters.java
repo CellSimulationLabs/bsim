@@ -12,6 +12,9 @@
 package bsim;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import java.util.Vector;
 
 import bsim.field.BSimChemicalField;
@@ -41,15 +44,15 @@ public class BSimParameters {
 
 	public double   dt               = 0.001; // seconds
 	
-	public Vector   bacteriaSingles, 
-	                bacteriaSets, 
-	                beadSingles, 
-	                beadSets, 	                	               
-	                vaBacteriaTraces,
-	                vaAvgBacteriaTraces,
-	                vaBeadTraces,
-	                vaClocks,
-					vaScales;
+	public Vector bacteriaSingles 	  = new Vector(); 
+	public Vector bacteriaSets 		  = new Vector();
+	public Vector beadSingles 		  = new Vector();
+	public Vector beadSets			  = new Vector(); 	              	               
+	public Vector vaBacteriaTraces 	  = new Vector();
+	public Vector vaAvgBacteriaTraces = new Vector();
+	public Vector vaBeadTraces 		  = new Vector();
+	public Vector vaClocks 			  = new Vector();
+	public Vector vaScales			  = new Vector();
 
 	public double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
@@ -99,24 +102,130 @@ public class BSimParameters {
 	
 	public double	reactForce = 0.0;
 		
-	public BSimParameters() {
-
-		// Create the vectors for the objects that will need to be created by the scene
-		bacteriaSingles = new Vector();
-		bacteriaSets = new Vector();
-		beadSingles = new Vector();
-		beadSets = new Vector();		       
-        vaBacteriaTraces = new Vector();
-        vaAvgBacteriaTraces = new Vector();
-        vaBeadTraces = new Vector();
-        vaClocks = new Vector();
-		vaScales = new Vector();
+	
+	public BSimParameters() {	
+	}
 		
-		// need to join bactForce,bactSpeed, size & visc
-		// - maybe make speed (or force ) a function of force (or speed) , viscosity and size?
+	public BSimParameters(File f) {
+		
+		Scanner scanner;
+		int lineCounter = 1;
+		try { scanner = new Scanner(f);
+			try {
+				while(scanner.hasNextLine()) {
+					processLine(scanner.nextLine().split("\t"), lineCounter);
+					lineCounter++;
+				}
+			} finally { scanner.close(); }
+		} catch(FileNotFoundException e) {System.err.println("Parameter file not found"); }
+		
+	}
+		
+	private void processLine(String[] line, int lineNo) {
+		double[] args = parseLine(line);
+				
+		if     (line[0].equals("DT:")) setDtSecs(args[0]);
+		
+		else if(line[0].equals("BEAD_RADIUS:")) setBeadRadius(args[0]);
+		else if(line[0].equals("CREATE_BEAD_SINGLE:")) addSingleBead(args);
+		else if(line[0].equals("CREATE_BEAD_SET:"))	addBeadSet(args);
+
+		else if(line[0].equals("BACTERIA_RADIUS:")) setBactRadius(args[0]);
+		else if(line[0].equals("CREATE_BACTERIUM_SINGLE:")) addSingleBacterium(args);
+		else if(line[0].equals("CREATE_BACTERIA_SET:")) addBacteriaSet(args);
+		else if(line[0].equals("BACTERIA_FORCE_UP:")) setBactForceUp(args[0]);
+		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) setBactForceDown(args[0]);		
+		else if(line[0].equals("UP_RUN_LENGTH:")) setUpRunLength(args[0]);
+		else if(line[0].equals("DOWN_RUN_LENGTH:")) setDownRunLength(args[0]);
+		else if(line[0].equals("ISO_RUN_LENGTH:")) setIsoRunLength(args[0]);
+			
+		else if(line[0].equals("VISCOSITY:")) setViscosity(args[0]);
+		
+		else if(line[0].equals("SCREEN_HEIGHT:")) setScreenHeight((int)args[0]);
+		else if(line[0].equals("SCREEN_WIDTH:")) setScreenWidth((int)args[0]);
+		else if(line[0].equals("SCREEN_ZOOM:")) setScreenZoom((double)args[0]);
+		else if(line[0].equals("SCREEN_MOVE:")) setScreenMove((double)args[0], (double)args[1]);
+		
+		else if(line[0].equals("SCREEN_MINIMUM_DISTANCE:")) setMinimumDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_MAXIMUM_DISTANCE:")) setMaximumDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_DEFAULT_DISTANCE:")) setDefaultDistance((double)args[0]);
+		else if(line[0].equals("SCREEN_FRAME_FOR_SECOND:")) setFrameForSec((int)args[0]);
+		else if(line[0].equals("SCREEN_FRAME_RECORD_FOR_SECOND:")) setFrameRecordForSec((int)args[0]);
+		
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BACT:")) setWellWidthBactBact((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BACT:")) setWellDepthBactBact((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) setWellWidthBactBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) setWellDepthBactBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BEAD:")) setWellWidthBeadBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BEAD:")) setWellDepthBeadBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BDRY:")) setWellWidthBeadBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BDRY:")) setWellDepthBeadBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BDRY:")) setWellWidthBactBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BDRY:")) setWellDepthBactBdry((double)args[0]);
+		
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BDRY:")) setWellWidthVesBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BDRY:")) setWellDepthVesBdry((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BEAD:")) setWellWidthVesBead((double)args[0]);
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BEAD:")) setWellDepthVesBead((double)args[0]);
+		
+		else if(line[0].equals("PHYSICS_REACT_FORCE:")) setReactForce((double)args[0]);				
+		
+		else if(line[0].equals("FIELD_GOAL_DEFINE:")) setCfGoalDefine(args);
+		else if(line[0].equals("FIELD_GOAL_SETUP:")) setCfGoalSetup(args);
+		else if(line[0].equals("FIELD_COORD_DEFINE:")) setCfCoordDefine(args);
+		else if(line[0].equals("FIELD_COORD_SETUP:")) setCfCoordSetup(args);
+		else if(line[0].equals("FIELD_RECRUIT_DEFINE:")) setCfRecruitDefine(args);
+		else if(line[0].equals("FIELD_RECRUIT_SETUP:")) setCfRecruitSetup(args);
+		else if(line[0].equals("FIELD_QUORUM_DEFINE:")) setCfQuorumDefine(args);
+		else if(line[0].equals("FIELD_QUORUM_SETUP:")) setCfQuorumSetup(args);
+		
+		else if(line[0].equals("BOUNDING_BOX_DEFINE:")) setBoundingBoxDefine(args);
+		
+		else if(line[0].equals("MAGN_FIELD_STRENGTH")) setMagnStrength(args);
+		
+		else if(line[0].equals("VISUAL_AID_BACTERIA_TRACE:")) addBacteriaTrace(args);
+		else if(line[0].equals("VISUAL_AID_AVG_BACTERIA_TRACE:")) addAvgBacteriaTrace(args);
+		else if(line[0].equals("VISUAL_AID_BEAD_TRACE:")) addBeadTrace(args);
+		else if(line[0].equals("VISUAL_AID_CLOCK:")) addClock(args);
+		else if(line[0].equals("VISUAL_AID_SCALE:")) addScale(args);
+		
+		else if(line[0].equals("VIDEO_FRAMES_SKIP:")) setVideoFramesSkip((int)args[0]);
+		else if(line[0].equals("RECORD_VIDEO:")) {
+			if((int)args[0] == 1) setRecordVideo(true);
+			else setRecordVideo(false);
+		}
+		
+		else if(line[0].equals("DATA_FRAMES_SKIP:")) setDataFramesSkip((int)args[0]);
+		
+		else if(line[0].equals("SIMULATION_LENGTH:")) setSimLength((int)args[0]);
+		else if(line[0].equals("SIMULATION_RUNS:")) setSimRuns((int)args[0]);
+		
+		else if(line[0].equals("EXPORT_DIR:")) setExportDir(line[1]);
+		else if(line[0].equals("NUMBER_OF_THREADS:")) setNumOfThreads((int)args[0]);
+		
+		else if(line[0].equals("***"))  {} // Do nothing
+		else System.err.println("Line " + lineNo + " not Read in Parameter File");
 	}
 	
-	
+			
+	/**
+	 * Convert array of Strings into an array of doubles
+	 */
+	double[] parseLine(String[] line) {
+		// Parse each line converting what can into doubles
+		double[] parsedLine = new double[line.length-1];
+		for(int i=1; i<line.length; i++) {
+			try{
+				parsedLine[i-1] = Double.parseDouble(line[i]);
+			}
+			catch(Exception e){
+				// Could not convert type so leave as null;
+				parsedLine[i-1] = 0.0;
+			}
+		}
+		return parsedLine;
+	}
+		
 	/**
 	 * Standard get methods.
 	 */

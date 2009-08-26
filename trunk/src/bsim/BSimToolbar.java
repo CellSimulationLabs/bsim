@@ -249,13 +249,12 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Get the file that has been entered
 				File file = fc.getSelectedFile();
-				
-				BSimParametersLoader paramLoader = new BSimParametersLoader(file);
+								
 				BSimParameters oldParams = params;
 				
 				try{
 					// Pass the filename to the BSimApp to write movie to file
-					BSimParameters newParams = paramLoader.parseFile();
+					BSimParameters newParams = new BSimParameters(file);
 					scene.updateParams(newParams);
 					params = newParams;
 				} catch (Exception ex) { 
