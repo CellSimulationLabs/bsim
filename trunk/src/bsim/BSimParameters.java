@@ -44,8 +44,7 @@ public class BSimParameters {
 	public Vector   bacteriaSingles, 
 	                bacteriaSets, 
 	                beadSingles, 
-	                beadSets, 
-	                boxes,	                
+	                beadSets, 	                	               
 	                vaBacteriaTraces,
 	                vaAvgBacteriaTraces,
 	                vaBeadTraces,
@@ -59,7 +58,9 @@ public class BSimParameters {
 	public double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
 	public double[] cfQuorumDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};	
+	public double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};
+	
+	public double[] boundingBoxDefine = {0, 0, 0, 0, 0, 0};	
 	
 	public double[] magnStrength = {0.0, 0.0, 0.0};
 	
@@ -104,8 +105,7 @@ public class BSimParameters {
 		bacteriaSingles = new Vector();
 		bacteriaSets = new Vector();
 		beadSingles = new Vector();
-		beadSets = new Vector();
-		boxes = new Vector();        
+		beadSets = new Vector();		       
         vaBacteriaTraces = new Vector();
         vaAvgBacteriaTraces = new Vector();
         vaBeadTraces = new Vector();
@@ -135,8 +135,7 @@ public class BSimParameters {
 	public Vector 	getSingleBacteria() { return bacteriaSingles; }
 	public Vector 	getSingleBead() { return beadSingles; }
 	public Vector 	getBacteriaSet() { return bacteriaSets; }
-	public Vector 	getBeadSet() { return beadSets; }
-	public Vector   getBoxes() { return boxes; }	
+	public Vector 	getBeadSet() { return beadSets; }	
 	
 	public Vector   getBacteriaTraces() { return vaBacteriaTraces; }
 	public Vector   getAvgBacteriaTraces() { return vaAvgBacteriaTraces; }
@@ -191,6 +190,8 @@ public class BSimParameters {
 	public double[]  getCfRecruitDefine () { return cfRecruitDefine; }
 	public double[]  getCfRecruitSetup () { return cfRecruitSetup; }
 	
+	public double[]  getBoundingBoxDefine( double[] x) { return boundingBoxDefine; }
+	
 	
 	/**
 	 * Standard set methods.
@@ -212,9 +213,7 @@ public class BSimParameters {
 	public void 	addSingleBead(double[] p) { beadSingles.add(p); }
 	public void 	addBacteriaSet(double[] b) { bacteriaSets.add(b); }
 	public void 	addBeadSet(double[] p) { beadSets.add(p); }
-	
-	public void 	addBox(double[] p) { boxes.add(p); }	
-	
+		
 	public void 	addBacteriaTrace(double[] p) { vaBacteriaTraces.add(p); }
 	public void 	addAvgBacteriaTrace(double[] p) { vaAvgBacteriaTraces.add(p); }
 	public void 	addBeadTrace(double[] p) { vaBeadTraces.add(p); }
@@ -267,6 +266,8 @@ public class BSimParameters {
 	public void     setCfRecruitSetup ( double[] x) { cfRecruitSetup = x; }
 	public void     setCfQuorumDefine ( double[] x) { cfQuorumDefine = x; }
 	public void     setCfQuorumSetup ( double[] x) { cfQuorumSetup = x; }
+	
+	public void     setBoundingBoxDefine( double[] x) { boundingBoxDefine = x; }
 
 	
 	/**
@@ -312,20 +313,7 @@ public class BSimParameters {
 		// Return the new vector
 		return newVec;
 	}
-		
-	public Vector createNewBoxesVec() {
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new box for every item in the list
-		for(int i=0; i<boxes.size(); i++){
-					newVec.add(new BSimBox((double[])boxes.elementAt(i)));
-		}
-		// Return the new vector
-		return newVec;
-	}
-			
+					
 	public Vector createNewVisualAidsVec(BSimScene scene) {
 		int i;
 		
@@ -379,5 +367,11 @@ public class BSimParameters {
 		// Create the new chemical field
 		return BSimChemicalFieldCreate.createChemicalField (cfQuorumDefine, cfQuorumSetup, 
 		                                               new Color(0.1f, 0.8f, 0.1f), this);
+	}
+	
+	public BSimBoundingBox createNewBoundingBox() {
+		
+		// Create the new bounding box
+		return new BSimBoundingBox(boundingBoxDefine);
 	}
 }

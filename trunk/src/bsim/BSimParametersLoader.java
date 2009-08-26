@@ -108,9 +108,7 @@ public class BSimParametersLoader {
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BEAD:")) p.setWellWidthVesBead((double)args[0]);
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BEAD:")) p.setWellDepthVesBead((double)args[0]);
 		
-		else if(line[0].equals("PHYSICS_REACT_FORCE:")) p.setReactForce((double)args[0]);
-		
-		else if(line[0].equals("CREATE_BOX:")) p.addBox(args);		
+		else if(line[0].equals("PHYSICS_REACT_FORCE:")) p.setReactForce((double)args[0]);				
 		
 		else if(line[0].equals("FIELD_GOAL_DEFINE:")) p.setCfGoalDefine(args);
 		else if(line[0].equals("FIELD_GOAL_SETUP:")) p.setCfGoalSetup(args);
@@ -120,7 +118,8 @@ public class BSimParametersLoader {
 		else if(line[0].equals("FIELD_RECRUIT_SETUP:")) p.setCfRecruitSetup(args);
 		else if(line[0].equals("FIELD_QUORUM_DEFINE:")) p.setCfQuorumDefine(args);
 		else if(line[0].equals("FIELD_QUORUM_SETUP:")) p.setCfQuorumSetup(args);
-
+		
+		else if(line[0].equals("BOUNDING_BOX_DEFINE:")) p.setBoundingBoxDefine(args);
 		
 		else if(line[0].equals("MAGN_FIELD_STRENGTH")) p.setMagnStrength(args);
 		

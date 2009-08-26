@@ -1,7 +1,7 @@
 /**
- * BSimBox.java
+ * BSimBoundingBox.java
  *
- * Class that represents a box.
+ * Class that represents a bounding box.
  *
  * Authors: Mattia Fazzini
  * Created: 13/08/2009
@@ -11,7 +11,7 @@ package bsim;
 import java.awt.Graphics;
 
 
-public class BSimBox {
+public class BSimBoundingBox {
 
 	
 	//plane points
@@ -24,7 +24,7 @@ public class BSimBox {
 	/**
 	 * General constructor.
 	 */
-	public BSimBox(double[] args) {
+	public BSimBoundingBox(double[] args) {
 		
 		// Update the internal variables
 		p1[0] = args[0];

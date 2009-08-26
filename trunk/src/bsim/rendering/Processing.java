@@ -20,7 +20,7 @@ import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.video.MovieMaker;
-import bsim.BSimBox;
+import bsim.BSimBoundingBox;
 import bsim.BSimScene;
 import bsim.field.BSimChemicalField;
 import bsim.particle.bacterium.BSimBacterium;
@@ -50,7 +50,7 @@ public class Processing extends PApplet {
 	//simulation objects
 	public Vector bacteria=null;
 	public Vector vesicles=null;
-	public Vector boxes=null;
+	public BSimBoundingBox boundingBox=null;
 	
 	public BSimChemicalField fGoal = null;
 	public double[][][] theField;
@@ -81,7 +81,7 @@ public class Processing extends PApplet {
 		//object into the simulation
 		bacteria = scene.getBacteria();
 		vesicles= scene.getVesicles();
-		boxes = scene.getBoxes();		
+		boundingBox = scene.getBoundingBox();		
 		
 		//Chemical field bits
 		fGoal = scene.getGoalField();
@@ -127,30 +127,29 @@ public class Processing extends PApplet {
 		lights();
 		background(0);
 				
-		for(int i=0;i<boxes.size();i++){
-			BSimBox sb= (BSimBox)boxes.elementAt(i);
-			double[] centrePos= sb.getCentrePos();
+					
+			double[] centrePos= boundingBox.getCentrePos();
 			pushMatrix();
 			translate((float)centrePos[0],(float)centrePos[1],(float)centrePos[2]);
 			stroke(255);
 			noFill();
-			box((float)sb.getLength(), (float)sb.getWidth(), (float)sb.getDepth());
+			box((float)boundingBox.getLength(), (float)boundingBox.getWidth(), (float)boundingBox.getDepth());
 			noStroke();
 			popMatrix();
-		}
+		
 		
 		//TODO: should have all 3 (more?) chemical fields and combine for drawing (how slow...)
 		// Draw chemical before drawing bacteria, or they all disappear into the fog!
 		if(fieldIsDisplayed){
 			theField = fGoal.getField();
 			noStroke();
-			BSimBox sb= (BSimBox)boxes.elementAt(0);
+			
 			for (int i=0; i<nBoxX; i++){
 				for(int j=0; j<nBoxY; j++){
 					for(int k=0; k<nBoxZ;k++){
-						boxPos[0] = (i + 0.5)*sb.getLength()/nBoxX;
-						boxPos[1] = (j + 0.5)*sb.getWidth()/nBoxY;
-						boxPos[2] = (k + 0.5)*sb.getDepth()/nBoxZ;
+						boxPos[0] = (i + 0.5)*boundingBox.getLength()/nBoxX;
+						boxPos[1] = (j + 0.5)*boundingBox.getWidth()/nBoxY;
+						boxPos[2] = (k + 0.5)*boundingBox.getDepth()/nBoxZ;
 						
 						// This seems to work... but only for evenly divisible by nBox.. grrr
 						// TODO: lots of optimisation and fixing
@@ -171,7 +170,7 @@ public class Processing extends PApplet {
 						fill((255*(float)conc), 0, 0,(25*(float)conc));
 						pushMatrix();
 						translate((float)boxPos[0], (float)boxPos[1], (float)boxPos[2]);
-						box((float)sb.getLength()/nBoxX,(float)sb.getWidth()/nBoxY, (float)sb.getDepth()/nBoxZ);
+						box((float)boundingBox.getLength()/nBoxX,(float)boundingBox.getWidth()/nBoxY, (float)boundingBox.getDepth()/nBoxZ);
 						popMatrix();
 					}
 				}

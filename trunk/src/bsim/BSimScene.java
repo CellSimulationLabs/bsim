@@ -71,9 +71,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	// Vectors holding all bacteria and beads in the simulation
 	private Vector bacteria;
 	private Vector beads;
-	private Vector vesicles;
-	private Vector boxes;
+	private Vector vesicles;	
 	private Vector visualAids;
+	
+	private BSimBoundingBox boundingBox;
 	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
@@ -227,8 +228,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
 		
-		// Create boxes
-		boxes = params.createNewBoxesVec();
+		// Create bounding box
+		boundingBox = params.createNewBoundingBox();
 		
 		// Create any visual aids
 		visualAids = params.createNewVisualAidsVec(this);
@@ -594,7 +595,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
-	public Vector getBoxes (){ return boxes; }
+	public BSimBoundingBox getBoundingBox (){ return boundingBox; }
 	public Vector getVisualAids (){ return visualAids; }
 	public boolean getStartVideo (){ return startVideo; }
 	public boolean getEndVideo (){ return endVideo; }
