@@ -11,7 +11,7 @@
  * 			Mattia Fazzini(Update)
  * 			Antoni Matyjaszkiewicz (Update)
  * Created: 20/07/2008
- * Updated: 14/08/2009
+ * Updated: 26/08/2009
  */
 package bsim.drawable.field;
 
@@ -23,7 +23,6 @@ import bsim.drawable.BSimDrawable;
 
 
 public class BSimChemicalField implements BSimDrawable {
-
 
 	// The type of field
 	// TYPE_FIXED  = fixed field (no diffusion)
@@ -246,46 +245,6 @@ public class BSimChemicalField implements BSimDrawable {
 	 * Draw the field to a given graphics context.
 	 */
 	public void redraw (Graphics g) {
-
-		// Check to see if the field is displayed and redraw
-//		if(isDisplayed) {
-//
-//			// Get the components of the colour
-//			// Required because alpha needs to be varied later on
-//			float rComp = (float)(colour.getRed()/255.0);
-//			float gComp = (float)(colour.getGreen()/255.0);
-//			float bComp = (float)(colour.getBlue()/255.0);
-//			float aComp  = 0;
-//			
-//			int fWidth, fHeight, fDepth;
-//
-//			// Loop through all x and y boxes
-//			for(int x=0; x<xBoxes; x++) {
-//				for(int y=0; y<yBoxes; y++) {
-//					for(int z=0; z<zBoxes; z++) {
-//
-//					fWidth = (int)boxWidth;
-//					fHeight = (int)boxHeight;
-//					fDepth = (int) boxDepth;
-//					
-//						// Check to see if the field is visible (i.e. not 0 concentration)
-//						if(field[x][y][z] != 0.0f){
-//							
-//							aComp = (float)(field[x][y][z] * maxCon);
-//							
-//							// Set the colour of the field (alpha is the concentration)
-//							g.setColor(new Color(rComp, gComp, bComp, aComp));
-//	
-//							// Draw a box of the field
-//							g.fillRect((int)(startPos[0] + (x * boxWidth)), 
-//									(int)(startPos[1] + (y * boxHeight)), 
-//									fWidth, fHeight);
-//							// Draw a cubic stuff?
-//						}
-//					}
-//				}
-//			}
-//		}
 	}
 
 
@@ -574,7 +533,7 @@ public class BSimChemicalField implements BSimDrawable {
 		}
 		else{
 
-			// Find the square that the position falls in and get the concentration
+			// Find the box that the position falls in and get the concentration
 			int xNum = (int)((position[0] - startPos[0])/boxWidth);
 			int yNum = (int)((position[1] - startPos[1])/boxHeight);
 			int zNum = (int)((position[2] - startPos[2])/boxDepth);
@@ -582,7 +541,7 @@ public class BSimChemicalField implements BSimDrawable {
 
 			// Weight the new concentration by the volume of the box
 			//not sure about this
-			newCon = con + (amount/(width/height/depth));
+			newCon = con + amount/(width/height/depth);
 
 			// Ensure that concentration does not exceed 1
 			if(newCon > 1.0) {
@@ -594,6 +553,44 @@ public class BSimChemicalField implements BSimDrawable {
 		}
 	}
 
+	
+	/**
+	 * Take an amount of chemical from a given point in simulation space.
+	 * Useful if, for example, the chemical has diffused into a cell.
+	 * 
+	 * NOTE: perhaps this could be incorporated into addChemical instead?
+	 */
+	public void removeChemical (double amount, double[] position){
+
+		// Variable to hold the found concentration
+		double con, newCon;
+
+		// Check to see if the position falls in the field
+		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
+				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)  || position[2]>(startPos[2] + depth)) {
+			// Outside the bound of the field so do nothing
+		}
+		else{
+
+			// Find the box that the position falls in and get the concentration
+			int xNum = (int)((position[0] - startPos[0])/boxWidth);
+			int yNum = (int)((position[1] - startPos[1])/boxHeight);
+			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			con = field[xNum][yNum][zNum];
+
+			// Weight the new concentration by the volume of the box
+			//not sure about this
+			newCon = con - amount/(width/height/depth);
+
+			// Ensure that concentration does not exceed 1
+			if(newCon < 0.0) {
+				newCon = 0.0;
+			}
+
+			// Update the field
+			field[xNum][yNum][zNum] = newCon;
+		}
+	}
 
 	/**
 	 * Get the concentration at a given point. The co-ordinates are of the simulation
@@ -634,5 +631,5 @@ public class BSimChemicalField implements BSimDrawable {
 	public double getRate (){ return rate; }
 	public double[][][] getField (){ return field; }
 	public double getThreshold() {return threshold;}
-	public boolean getIsDisplayed() {return isDisplayed;}
+	public boolean getDisplayed() {return isDisplayed;}
 }
