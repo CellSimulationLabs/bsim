@@ -14,11 +14,13 @@
 package bsim.drawable.bacteria;
 
 import java.awt.Graphics;
+import java.util.Random;
+
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import java.util.Random;
-
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 
@@ -35,8 +37,8 @@ public class BSimRepBacterium extends BSimBacterium {
 	/**
 	 * General constructor.
 	 */
-	public BSimRepBacterium(double[] newPosition, double newRadius,
-			double[] newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
+	public BSimRepBacterium(Point3d newPosition, double newRadius,
+			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
 			BSimScene newScene, BSimParameters newParams) {
 
@@ -55,7 +57,7 @@ public class BSimRepBacterium extends BSimBacterium {
 	/**
 	 * Implements the BSimLogic interface.
 	 */
-	public double[] runLogic(boolean contactBac, boolean contactBead,
+	public Vector3d runLogic(boolean contactBac, boolean contactBead,
 			boolean contactBoundary) {
 
 		/*

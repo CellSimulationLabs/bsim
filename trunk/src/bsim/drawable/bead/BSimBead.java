@@ -10,8 +10,9 @@
  */
 package bsim.drawable.bead;
 
-import java.awt.Color;
 import java.awt.Graphics;
+
+import javax.vecmath.Point3d;
 
 import bsim.drawable.BSimDrawable;
 import bsim.physics.BSimParticle;
@@ -23,7 +24,7 @@ public class BSimBead extends BSimParticle implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
-	public BSimBead(double[] newPosition, double newRadius) {
+	public BSimBead(Point3d newPosition, double newRadius) {
 				
 		// Call the parent constructor
 		super(newPosition, newRadius);

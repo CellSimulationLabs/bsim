@@ -18,6 +18,8 @@ package bsim.drawable.field;
 import java.awt.Color;
 import java.awt.Graphics;
 
+import javax.vecmath.Point3d;
+
 import bsim.BSimParameters;
 import bsim.drawable.BSimDrawable;
 
@@ -45,7 +47,7 @@ public class BSimChemicalField implements BSimDrawable {
 	protected double rate = 0.0;
 
 	// Position of the field in the simulation space
-	protected double[] startPos;
+	protected Point3d startPos;
 	protected double width, height, depth;
 
 	// Number of discrete divisions along each axis
@@ -88,7 +90,7 @@ public class BSimChemicalField implements BSimDrawable {
 	 * General constructor.
 	 */
 	public BSimChemicalField (int newFieldType, int newBoundaryType, double newRate, 
-			double[] newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
+			Point3d newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
 			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour,
 			BSimParameters p){
 
@@ -521,22 +523,22 @@ public class BSimChemicalField implements BSimDrawable {
 	 * The amount is the increased concentration, this can be greater than 1
 	 * if your field boxes are greater than a unit square.
 	 */
-	public void addChemical (double amount, double[] position){
+	public void addChemical (double amount, Point3d position){
 
 		// Variable to hold the found concentration
 		double con, newCon;
 
 		// Check to see if the position falls in the field
-		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
-				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)  || position[2]>(startPos[2] + depth)) {
+		if(position.x<startPos.x || position.y<startPos.y || position.z<startPos.z ||
+				position.x>(startPos.x + width) || position.y>(startPos.y + height)  || position.z>(startPos.z + depth)) {
 			// Outside the bound of the field so do nothing
 		}
 		else{
 
 			// Find the box that the position falls in and get the concentration
-			int xNum = (int)((position[0] - startPos[0])/boxWidth);
-			int yNum = (int)((position[1] - startPos[1])/boxHeight);
-			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			int xNum = (int)((position.x - startPos.x)/boxWidth);
+			int yNum = (int)((position.y - startPos.y)/boxHeight);
+			int zNum = (int)((position.z - startPos.z)/boxDepth);
 			con = field[xNum][yNum][zNum];
 
 			// Weight the new concentration by the volume of the box
@@ -560,22 +562,22 @@ public class BSimChemicalField implements BSimDrawable {
 	 * 
 	 * NOTE: perhaps this could be incorporated into addChemical instead?
 	 */
-	public void removeChemical (double amount, double[] position){
+	public void removeChemical (double amount, Point3d position){
 
 		// Variable to hold the found concentration
 		double con, newCon;
 
 		// Check to see if the position falls in the field
-		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
-				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height)  || position[2]>(startPos[2] + depth)) {
+		if(position.x<startPos.x || position.y<startPos.y || position.z<startPos.z ||
+				position.x>(startPos.x + width) || position.y>(startPos.y + height)  || position.z>(startPos.z + depth)) {
 			// Outside the bound of the field so do nothing
 		}
 		else{
 
 			// Find the box that the position falls in and get the concentration
-			int xNum = (int)((position[0] - startPos[0])/boxWidth);
-			int yNum = (int)((position[1] - startPos[1])/boxHeight);
-			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			int xNum = (int)((position.x - startPos.x)/boxWidth);
+			int yNum = (int)((position.y - startPos.y)/boxHeight);
+			int zNum = (int)((position.z - startPos.z)/boxDepth);
 			con = field[xNum][yNum][zNum];
 
 			// Weight the new concentration by the volume of the box
@@ -597,14 +599,14 @@ public class BSimChemicalField implements BSimDrawable {
 	 * space and therefore if they fall outside the range of the field zero will be
 	 * returned.
 	 */
-	public double getConcentration (double[] position) {
+	public double getConcentration (Point3d position) {
 
 		// Variable to hold the found concentration
 		double con;
 
 		// Check to see if the position falls in the field
-		if(position[0]<startPos[0] || position[1]<startPos[1] || position[2]<startPos[2] ||
-				position[0]>(startPos[0] + width) || position[1]>(startPos[1] + height) || position[2]>(startPos[2] + depth)) {
+		if(position.x<startPos.x || position.y<startPos.y || position.z<startPos.z ||
+				position.x>(startPos.x + width) || position.y>(startPos.y + height) || position.z>(startPos.z + depth)) {
 
 			// Outside the bound of the field so return 0
 			con = 0.0;
@@ -612,9 +614,9 @@ public class BSimChemicalField implements BSimDrawable {
 		else{
 
 			// Find the square that the position falls in and return concentration
-			int xNum = (int)((position[0] - startPos[0])/boxWidth);
-			int yNum = (int)((position[1] - startPos[1])/boxHeight);
-			int zNum = (int)((position[2] - startPos[2])/boxDepth);
+			int xNum = (int)((position.x - startPos.x)/boxWidth);
+			int yNum = (int)((position.y - startPos.y)/boxHeight);
+			int zNum = (int)((position.z - startPos.z)/boxDepth);
 			con = field[xNum][yNum][zNum];
 		}
 

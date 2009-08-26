@@ -87,7 +87,7 @@ public class Processing extends PApplet {
 		
 		//Chemical field bits
 		fGoal = scene.getGoalField();
-		fieldIsDisplayed = (boolean)fGoal.getIsDisplayed();
+		fieldIsDisplayed = (boolean)fGoal.getDisplayed();
 		fieldDimX = fGoal.getField().length;
 		fieldDimY = fGoal.getField()[0].length;
 		fieldDimZ = fGoal.getField()[0][0].length;
@@ -195,14 +195,14 @@ public class Processing extends PApplet {
 			BSimBacterium bact = (BSimBacterium)bacteria.elementAt(i);
 			//TODO: clean up variables for the rotation part to speed up a bit
 			Vector3f worldY = new Vector3f(0,1,0);
-			Vector3f bacDirVector = new Vector3f((float)(bact.getDirection()[0]), (float)(bact.getDirection()[1]), (float)(bact.getDirection()[2]));
+			Vector3f bacDirVector = new Vector3f(bact.getDirection());
 			Vector3f bacRotVector = new Vector3f();
 			bacRotVector.cross(worldY,bacDirVector);
 			//normalising slows us down... but method breaks without normalising so obviously some vectors have not been normalised by this point
 			bacDirVector.normalize();
 			bacRotVector.normalize();
 			pushMatrix();
-				translate((float)bact.getPosition()[0], (float)bact.getPosition()[1],(float)bact.getPosition()[2]);
+				translate((float)bact.getPosition().x, (float)bact.getPosition().y,(float)bact.getPosition().z);
 				fill(0, 255, 0);		
 				//fix the rotation on the axis
 				//pushMatrix();
@@ -219,7 +219,7 @@ public class Processing extends PApplet {
 		for(int i=0;i<vesicles.size();i++){
 			BSimVesicle vesicle = (BSimVesicle)vesicles.elementAt(i);
 			pushMatrix();
-			translate((float)vesicle.getPosition()[0], (float)vesicle.getPosition()[1],(float)vesicle.getPosition()[2]);
+			translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
 			fill(255, 131, 223);
 			sphere((float)(vesicle.getRadius()));			
 			popMatrix();

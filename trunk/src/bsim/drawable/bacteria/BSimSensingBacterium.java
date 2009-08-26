@@ -10,8 +10,10 @@
  */
 package bsim.drawable.bacteria;
 
-import java.awt.Color;
 import java.awt.Graphics;
+
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
@@ -28,8 +30,8 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic, BS
 	/**
 	 * General constructor.
 	 */
-	public BSimSensingBacterium(double[] newPosition, double newRadius,
-			double[] newDirection, double newForceMagnitudeDown,
+	public BSimSensingBacterium(Point3d newPosition, double newRadius,
+			Vector3d newDirection, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams, double newSwitchSpeed) {
@@ -47,7 +49,7 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic, BS
 	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
 	 * at a timestep is returned.
 	 */
-	public double[] runLogic ( boolean contactBac, 
+	public Vector3d runLogic ( boolean contactBac, 
 	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		

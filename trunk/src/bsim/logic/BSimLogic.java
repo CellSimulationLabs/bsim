@@ -10,10 +10,12 @@
  */
 package bsim.logic;
 
+import javax.vecmath.Vector3d;
+
 
 public interface BSimLogic {
 
-	public abstract double[] runLogic ( boolean contactBac, 
+	public abstract Vector3d runLogic ( boolean contactBac, 
 	                                    boolean contactBead,
 	                                    boolean contactBoundary);
 

@@ -12,6 +12,9 @@ package bsim.drawable.bacteria;
 
 import java.util.Vector;
 
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
+
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
@@ -31,8 +34,8 @@ public class BSimBacteriaCreate {
 		// Variables for each bead property
 		double newSpeed = params.getBactSpeed();		
 		double newRadius = params.getBactRadius();
-		double[] newPosition = new double[3];
-		double[] newDirection = new double[3];
+		Point3d newPosition;
+		Vector3d newDirection;
 		double newForceUp, newForceDown;
 		double dx,dy,dz;
 		double newTumbleSpeed;
@@ -54,17 +57,21 @@ public class BSimBacteriaCreate {
 			boolean invalidPlacement = false;
 			
 			// Randomly select a new position for the bacterium
-			newPosition[0] = args[0] + (args[3] * Math.random());
-			newPosition[1] = args[1] + (args[4] * Math.random());
-			newPosition[2] = args[2] + (args[5] * Math.random());
+			newPosition = new Point3d(
+					args[0] + (args[3] * Math.random()),
+					args[1] + (args[4] * Math.random()),
+					args[2] + (args[5] * Math.random())
+				);
 			
 			dx = (2.0 * Math.random()) - 1.0;
 			dy = (2.0 * Math.random()) - 1.0;
 			dz = (2.0 * Math.random()) - 1.0;
 
-			newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-			newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+			newDirection = new Vector3d(
+							dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0))),
+							dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0))),
+							dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)))
+						);
 
 			newForceUp = params.getBactForceUp();
 			newForceDown = params.getBactForceDown();
@@ -112,11 +119,8 @@ public class BSimBacteriaCreate {
 		// Variables for each bacterium property
 		double newSpeed = params.getBactSpeed();
 		double newRadius = params.getBactRadius();
-		double[] newPosition = new double[3];
-		newPosition[0] = args[0];
-		newPosition[1] = args[1];
-		newPosition[2] = args[2];		
-		double[] newDirection = {0,0,0};
+		Point3d newPosition;;		
+		Vector3d newDirection;
 		double newForceUp, newForceDown;		
 		double dx,dy,dz;
 		double newTumbleSpeed;
@@ -129,14 +133,18 @@ public class BSimBacteriaCreate {
 		else{
 			newRadius = args[3];
 		}
+		
+		newPosition = new Point3d(args[0], args[1], args[2]);
 				
 		dx = (2.0 * Math.random()) - 1.0;
 		dy = (2.0 * Math.random()) - 1.0;
 		dz = (2.0 * Math.random()) - 1.0;
 
-		newDirection[0] = dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-		newDirection[1] = dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
-		newDirection[2] = dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)));
+		newDirection = new Vector3d(
+				dx / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0))),
+				dy / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0))),
+				dz / (Math.sqrt(Math.pow(dx,2.0) + Math.pow(dy,2.0)+ Math.pow(dz,2.0)))
+		);
 
 		newForceUp = params.getBactForceUp();
 		newForceDown = params.getBactForceDown();

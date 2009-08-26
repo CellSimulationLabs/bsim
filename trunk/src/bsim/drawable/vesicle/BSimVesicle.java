@@ -1,13 +1,13 @@
 package bsim.drawable.vesicle;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
+
+import javax.vecmath.Point3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.drawable.BSimDrawable;
-import bsim.logic.BSimLogic;
 import bsim.physics.BSimParticle;
 
 public class BSimVesicle extends BSimParticle implements BSimDrawable {
@@ -20,7 +20,7 @@ public class BSimVesicle extends BSimParticle implements BSimDrawable {
 	/**
 	 * General constructor.
 	 */
-	public BSimVesicle(double[] newPosition, double newRadius, 
+	public BSimVesicle(Point3d newPosition, double newRadius, 
 			BSimScene newScene, BSimParameters newParams) {
 		
 		// Call the parent constructor with the basic properties	

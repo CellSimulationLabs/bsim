@@ -33,15 +33,13 @@ public abstract class BSimParticle {
 	/**
 	 * General constructor.
 	 */
-	public BSimParticle(double[] newPosition, double newRadius) {
+	public BSimParticle(Point3d newPosition, double newRadius) {
 		super();	
 		position.set(newPosition);		
 		radius = newRadius;
 	}
 		
 	public void updatePosition() {
-		System.out.println(position);
-		System.out.println(force);
 		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
 	}
 		
@@ -50,11 +48,11 @@ public abstract class BSimParticle {
 	public void collide(BSimVesicle v) { }	
 	public void deNovo() { }
 	
-	public double[] getPosition() { double[] p = new double[3]; position.get(p); return p; }	
-	public double[] getForce() { double[] f = new double[3]; force.get(f); return f; }
+	public Point3d getPosition() { return position; }	
+	public Vector3d getForce() { return force; }
 	public double getRadius() { return radius; }
-	public void setPosition(double[] p) { position.set(p); }
-	public void setForce(double[] f) { force.set(f); }
+	public void setPosition(Point3d p) { position.set(p); }
+	public void setForce(Vector3d f) { force.set(f); }
 	public void setRadius(double r) { this.radius = r; }
 	
 }

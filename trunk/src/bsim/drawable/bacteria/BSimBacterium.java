@@ -14,7 +14,6 @@
  */
 package bsim.drawable.bacteria;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import java.util.Vector;
 
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -37,7 +37,7 @@ import bsim.physics.BSimParticle;
 
 public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawable {
 
-	protected double[] direction;
+	protected Vector3d direction;
 	// Propulsive force that the bacterium can produce; this is a function of
 	// size, as well as viscosity and speed (which are fixed)
 	protected double forceMagnitudeDown = 0.0;
@@ -92,8 +92,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(double[] newPosition, double newRadius,
-			double[] newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
+	public BSimBacterium(Point3d newPosition, double newRadius,
+			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
 			BSimScene newScene, BSimParameters newParams) {
 
@@ -137,7 +137,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
 	 * at a timestep is returned.
 	 */
-	public double[] runLogic ( boolean contactBac, 
+	public Vector3d runLogic ( boolean contactBac, 
 	                           boolean contactBead,
 	                           boolean contactBoundary ) {
 		
@@ -160,7 +160,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * Iterate the motion of the bacterium.
 	 */
-	protected double[] iterateBacterium() {
+	protected Vector3d iterateBacterium() {
 
 		// Check to see if current phase still has remaining time; if not start new phase
 		if (this.remDt == 0) startNewPhase();
@@ -173,7 +173,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		}
 
 		// Find the swimming force vector of the bacterium, if any
-		double[] internalForce = {0.0, 0.0, 0.0};
+		Vector3d internalForce = new Vector3d();
 
 		if (this.state == BAC_STATE_RUNNING) internalForce = this.doRun();
 		
@@ -271,13 +271,13 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	/**
 	 * Decide whether to continue run
 	 */
-	protected double[] doRun() {
+	protected Vector3d doRun() {
 		
 		int chemoState = chemo;
 		double prevConc = previousConc;
 		BSimChemicalField field;
 		double currConc, prob;
-		double[] internalForce = new double[3];
+		Vector3d internalForce = new Vector3d();
 
 		// Check the chemotaxis state, i.e. which to follow - goal or recruitment
 		if(chemoState == BAC_CHEMO_GOAL) field = scene.getGoalField();
@@ -293,19 +293,12 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 		// Test whether to continue or terminate run
 		if(Math.random()<prob) {	// CONTINUE RUN
 			if(runUp){
-				internalForce[0] = direction[0] * forceMagnitudeUp;
-				internalForce[1] = direction[1] * forceMagnitudeUp;
-				internalForce[2] = direction[2] * forceMagnitudeUp;
+				internalForce.scale(forceMagnitudeUp, direction);
 			}
 			else{
-				internalForce[0] = direction[0] * forceMagnitudeDown;
-				internalForce[1] = direction[1] * forceMagnitudeDown;
-				internalForce[2] = direction[2] * forceMagnitudeDown;
+				internalForce.scale(forceMagnitudeDown, direction);
 			}
 		} else {					// TERMINATE RUN
-			internalForce[0] = 0.0;
-			internalForce[1] = 0.0;
-			internalForce[2] = 0.0;
 			startNewPhase();
 		}
 		this.setLastConc(currConc);
@@ -405,7 +398,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 								
 				radius = radiusOnVesiculationStart;
 				
-				BSimVesicle newVesicle = new BSimVesicle(this.getPosition(), vesicleRadius,										
+				BSimVesicle newVesicle = new BSimVesicle(position, vesicleRadius,										
 						scene, params);	
 								
 				//System.out.println(radius + " " + vesicleRadius);
@@ -462,6 +455,6 @@ public class BSimBacterium extends BSimParticle implements BSimLogic, BSimDrawab
 	public Vector getConcMemory() {return concMemory;}
 	public boolean getMemToReset() {return memToReset; }
 	public double getReplicationRadius() { return replicationRadius; }
-	public double[] getDirection (){ return direction; }
+	public Vector3d getDirection (){ return direction; }
 	
 }

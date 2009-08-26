@@ -12,6 +12,8 @@ package bsim.drawable.field;
 
 import java.awt.Color;
 
+import javax.vecmath.Point3d;
+
 import bsim.BSimParameters;
 
 
@@ -20,11 +22,8 @@ public class BSimChemicalFieldCreate {
 	public static BSimChemicalField createChemicalField (double[] define, double[] setup, 
 	                                                     Color col, BSimParameters params) {
 		
-		// Create an array for the start position
-		double[] startPos = new double[3];
-		startPos[0] = define[0];
-		startPos[1] = define[1];
-		startPos[1] = define[2];
+		// Create an array for the start position		
+		Point3d startPos = new Point3d(define[0], define[1], define[2]);
 		
 		// Create the new chemical field
 		BSimChemicalField newField = new BSimChemicalField((int)define[10], 

@@ -12,6 +12,8 @@ package bsim.drawable.bead;
 
 import java.util.Vector;
 
+import javax.vecmath.Point3d;
+
 import bsim.BSimParameters;
 
 
@@ -28,7 +30,7 @@ public class BSimBeadsCreate {
 		// Variables for each bead property
 		double[] newDirection = {0,0,0};
 		double newRadius, newSpeed;
-		double[] newPosition = new double[3];
+		Point3d newPosition;
 		Vector beadVec = new Vector();
 		
 		if(args[8] == 0) {
@@ -44,9 +46,12 @@ public class BSimBeadsCreate {
 		for(int i=0; i<args[6]; i++){
 			
 			// Randomly select a new position for the bead
-			newPosition[0] = args[0] + (args[3] * Math.random());
-			newPosition[1] = args[1] + (args[4] * Math.random());
-			newPosition[2] = args[2] + (args[5] * Math.random());
+			newPosition = new Point3d(
+					args[0] + (args[3] * Math.random()),
+					args[1] + (args[4] * Math.random()),
+					args[2] + (args[5] * Math.random())
+				);
+
 			
 			// Create the type of bead required
 			switch((int)args[7]){
@@ -68,10 +73,9 @@ public class BSimBeadsCreate {
 		// Variables for each bead property
 		double[] newDirection = {0,0,0};
 		double newRadius, newSpeed;
-		double[] newPosition = new double[3];
-		newPosition[0] = args[0];
-		newPosition[1] = args[1];
-		newPosition[2] = args[2];
+		Point3d newPosition;
+		
+		newPosition = new Point3d(args[0], args[1], args[2]);
 		
 		if(args[3] == 0) {
 			newRadius = params.getBeadRadius();
