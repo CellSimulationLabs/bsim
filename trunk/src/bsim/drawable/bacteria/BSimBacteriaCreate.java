@@ -31,8 +31,7 @@ public class BSimBacteriaCreate {
 	 */
 	public static Vector createBacteriaSet (double[] args, BSimScene scene, BSimParameters params) {
 		
-		// Variables for each bead property
-		double newSpeed = params.getBactSpeed();		
+		// Variables for each bead property		
 		double newRadius = params.getBactRadius();
 		Point3d newPosition;
 		Vector3d newDirection;
@@ -48,9 +47,7 @@ public class BSimBacteriaCreate {
 		}
 		else{
 			newRadius = args[8];
-		}
-		
-		newSpeed = params.getBactSpeed();
+		}		
 		
 		// Loop through the number of bacteria to create
 		for(int i=0; i<args[6]; i++){
@@ -117,7 +114,6 @@ public class BSimBacteriaCreate {
 	public static BSimBacterium createBacterium (double[] args, BSimScene scene, BSimParameters params) {
 		
 		// Variables for each bacterium property
-		double newSpeed = params.getBactSpeed();
 		double newRadius = params.getBactRadius();
 		Point3d newPosition;;		
 		Vector3d newDirection;

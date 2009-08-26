@@ -28,8 +28,7 @@ public class BSimBeadsCreate {
 	public static Vector createBeadSet (double[] args, BSimParameters params) {
 		
 		// Variables for each bead property
-		double[] newDirection = {0,0,0};
-		double newRadius, newSpeed;
+		double newRadius;
 		Point3d newPosition;
 		Vector beadVec = new Vector();
 		
@@ -38,9 +37,7 @@ public class BSimBeadsCreate {
 		}
 		else{
 			newRadius = args[8];
-		}
-				
-		newSpeed = 0.0;
+		}				
 		
 		// Loop through the number of beads to create
 		for(int i=0; i<args[6]; i++){
@@ -71,8 +68,7 @@ public class BSimBeadsCreate {
 	public static BSimBead createBead (double[] args, BSimParameters params) {
 		
 		// Variables for each bead property
-		double[] newDirection = {0,0,0};
-		double newRadius, newSpeed;
+		double newRadius;
 		Point3d newPosition;
 		
 		newPosition = new Point3d(args[0], args[1], args[2]);
@@ -84,8 +80,6 @@ public class BSimBeadsCreate {
 			newRadius = args[3];
 		}
 			
-		newSpeed = 0.0;
-		
 		// Return the new bead
 		return new BSimBead(newPosition, newRadius);
 	}

@@ -74,8 +74,7 @@ public class BSimParametersLoader {
 		else if(line[0].equals("CREATE_BACTERIUM_SINGLE:")) p.addSingleBacterium(args);
 		else if(line[0].equals("CREATE_BACTERIA_SET:")) p.addBacteriaSet(args);
 		else if(line[0].equals("BACTERIA_FORCE_UP:")) p.setBactForceUp(args[0]);
-		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) p.setBactForceDown(args[0]);
-		else if(line[0].equals("BACTERIA_SPEED:")) p.setBactSpeed(args[0]);
+		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) p.setBactForceDown(args[0]);		
 		else if(line[0].equals("UP_RUN_LENGTH:")) p.setUpRunLength(args[0]);
 		else if(line[0].equals("DOWN_RUN_LENGTH:")) p.setDownRunLength(args[0]);
 		else if(line[0].equals("ISO_RUN_LENGTH:")) p.setIsoRunLength(args[0]);
