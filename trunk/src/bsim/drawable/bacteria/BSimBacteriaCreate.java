@@ -105,6 +105,8 @@ public class BSimBacteriaCreate {
 					case 3: bactVec.add(new BSimCoordBacterium(newPosition, newRadius, newDirection, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[9], args[10])); break;
 					// Bead sensing, co-ordinating and recruiting bacteria
 					case 4: bactVec.add(new BSimRecruitBacterium(newPosition, newRadius, newDirection, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params, args[9], args[10])); break;
+					// GRN bacs (test)
+					case 5: bactVec.add(new BSimRepBacterium(newPosition, newRadius, newDirection, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params)); break;
 				}
 			}
 		}
