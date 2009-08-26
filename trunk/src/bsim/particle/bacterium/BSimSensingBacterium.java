@@ -17,10 +17,10 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.logic.BSimLogic;
+import bsim.particle.bead.BSimBead;
 
 
-public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
+public class BSimSensingBacterium extends BSimBacterium {
 
 	protected int beadContactTimer = 0;
 	
@@ -43,24 +43,20 @@ public class BSimSensingBacterium extends BSimBacterium implements BSimLogic {
 	}
 
 
-	/**
-	 * Implements the BSimLogic interface. In this case it merely carries out
-	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
-	 * at a timestep is returned.
-	 */
-	public Vector3d runLogic ( boolean contactBac, 
-	                           boolean contactBead,
-	                           boolean contactBoundary ) {
-		
-		if(beadContactTimer > 0){
-			beadContactTimer--;
-		}
-		
-		if(contactBead){
+
+	public void collide(BSimBead bead) {		
+		// If there is contact with a bead
+		if(bead.getPosition().distance(this.position) < 0){
 			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
 		}
-		
-		return super.runLogic(contactBac, contactBead, contactBoundary);
+		super.collide(bead);
+	}
+	
+	public void step() {
+		if(beadContactTimer > 0){
+			beadContactTimer--;
+		}		
+		super.step();
 	}
 
 	

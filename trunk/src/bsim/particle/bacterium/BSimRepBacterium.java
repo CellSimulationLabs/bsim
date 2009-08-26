@@ -54,18 +54,8 @@ public class BSimRepBacterium extends BSimBacterium {
 
 	}
 
-	/**
-	 * Implements the BSimLogic interface.
-	 */
-	public Vector3d runLogic(boolean contactBac, boolean contactBead,
-			boolean contactBoundary) {
+	public void step() {
 
-		/*
-		 *  For now, put the GRN stuff in here
-		 *  This might be a bad idea as it is only run in physics so seems
-		 *  kind of unrelated even though the interface and structure implies
-		 *  it should be more general.
-		 */
 		double h = super.scene.getDtSec();
 		int tIndex = super.scene.getTimeStep();
 		double tNow = tIndex * h;
@@ -86,7 +76,7 @@ public class BSimRepBacterium extends BSimBacterium {
 			super.scene.getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
 		}
 		
-		return super.runLogic(contactBac, contactBead, contactBoundary);
+		super.step();
 
 	}
 

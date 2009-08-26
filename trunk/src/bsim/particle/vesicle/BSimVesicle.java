@@ -34,8 +34,7 @@ public class BSimVesicle extends BSimParticle {
 	}
 	
 
-	public double[] runLogic ( boolean contactBead, 
-	                           boolean contactBoundary) {
+	public void step() {
 		
 		Random r = new Random();
 		
@@ -46,7 +45,7 @@ public class BSimVesicle extends BSimParticle {
 		
 		double[] f = {r.nextGaussian()*amplitude, r.nextGaussian()*amplitude, r.nextGaussian()*amplitude};
 		
-		return  f;
+		this.force.set(f);
 	}
 	
 	

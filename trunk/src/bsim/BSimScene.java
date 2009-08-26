@@ -385,7 +385,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		}
 		
 		for(BSimParticle p : particles) {
-			p.deNovo();
+			p.step();
 			p.updatePosition();
 		}
 						

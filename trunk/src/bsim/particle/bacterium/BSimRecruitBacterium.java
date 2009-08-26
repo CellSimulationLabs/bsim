@@ -20,10 +20,9 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.logic.BSimLogic;
 
 
-public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogic {
+public class BSimRecruitBacterium extends BSimCoordBacterium  {
 
 	protected boolean foundRecruit = false;
 
@@ -43,14 +42,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 	}
 
 
-	/**
-	 * Implements the BSimLogic interface. In this case it merely carries out
-	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
-	 * at a timestep is returned.
-	 */
-	public Vector3d runLogic ( boolean contactBac, 
-	                           boolean contactBead,
-	                           boolean contactBoundary ) {
+	public void step () {
 		
 		int newChemo = 0;
 		
@@ -76,7 +68,7 @@ public class BSimRecruitBacterium extends BSimCoordBacterium implements BSimLogi
 				scene.getRecruitmentField().addChemical (1.0, this.getPosition());
 		}
 		
-		return  super.runLogic(contactBac, contactBead, contactBoundary);
+		super.step();
 	}
 
 	

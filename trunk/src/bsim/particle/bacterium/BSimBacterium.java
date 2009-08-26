@@ -29,12 +29,11 @@ import bsim.BSimParameters;
 import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.field.BSimChemicalField;
-import bsim.logic.BSimLogic;
 import bsim.particle.BSimParticle;
 import bsim.particle.vesicle.BSimVesicle;
 
 
-public class BSimBacterium extends BSimParticle implements BSimLogic {
+public class BSimBacterium extends BSimParticle {
 
 	protected Vector3d direction;
 	// Propulsive force that the bacterium can produce; this is a function of
@@ -131,15 +130,8 @@ public class BSimBacterium extends BSimParticle implements BSimLogic {
 	}
 
 
-	/**
-	 * Implements the BSimLogic interface. In this case it merely carries out
-	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
-	 * at a timestep is returned.
-	 */
-	public Vector3d runLogic ( boolean contactBac, 
-	                           boolean contactBead,
-	                           boolean contactBoundary ) {
-		
+	public void step() {
+
 		if(memToReset){
 			// Set the initial memory for the bacteria to current concentration of
 			// goal attractant
@@ -152,7 +144,7 @@ public class BSimBacterium extends BSimParticle implements BSimLogic {
 			memToReset = false;
 		}
 		
-		return iterateBacterium();
+		this.force.set(iterateBacterium());
 	}
 
 

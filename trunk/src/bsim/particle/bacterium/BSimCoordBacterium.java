@@ -19,10 +19,10 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.logic.BSimLogic;
+import bsim.particle.bead.BSimBead;
 
 
-public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogic {
+public class BSimCoordBacterium extends BSimSensingBacterium {
 
 	
 	// Threshold for detecting co-ordination signal (AHL)
@@ -45,28 +45,11 @@ public class BSimCoordBacterium extends BSimSensingBacterium implements BSimLogi
 		coordThreshold = newCoordThreshold;
 	}
 
-
-	/**
-	 * Implements the BSimLogic interface. In this case it merely carries out
-	 * the standard chemotaxis toward fGoal gradient. The internal force of the bacterium
-	 * at a timestep is returned.
-	 */
-	public Vector3d runLogic ( boolean contactBac, 
-	                           boolean contactBead,
-	                           boolean contactBoundary ) {
-		
+	public void step() {		
 		if(beadContactTimer > 0){
-			beadContactTimer--;
-			
-			// Generate some co-ordination chemical (AHL) at current location
 			scene.getCoordinationField().addChemical (1.0, this.getPosition());
 		}
-		
-		if(contactBead){
-			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
-		}
-		
-		return  super.runLogic(contactBac, contactBead, contactBoundary);
+		super.step();
 	}
 
 	

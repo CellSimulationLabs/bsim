@@ -46,7 +46,7 @@ public abstract class BSimParticle {
 	public void collide(BSimBacterium b) { }	
 	public void collide(BSimBead b) { }
 	public void collide(BSimVesicle v) { }	
-	public void deNovo() { }
+	public void step() { }
 	
 	public Point3d getPosition() { return position; }	
 	public Vector3d getForce() { return force; }
