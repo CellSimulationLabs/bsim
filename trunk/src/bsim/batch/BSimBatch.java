@@ -7,13 +7,16 @@
  * Created: 18/08/2008
  * Updated: 18/08/2008
  */
-package bsim;
+package bsim.batch;
 
 import java.awt.Graphics2D;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Vector;
 
+import bsim.BSimParameters;
+import bsim.BSimScene;
+import bsim.BSimUtils;
 import bsim.export.BSimBacteriaFileExport;
 import bsim.export.BSimBeadFileExport;
 import bsim.export.BSimExport;

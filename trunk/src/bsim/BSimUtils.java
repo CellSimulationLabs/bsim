@@ -65,15 +65,6 @@ public class BSimUtils {
 }
 
 	
-	
-	/**
-	* Returns the distance between a pair of 2 dimensional points
-	*/
-	public static synchronized double get3Ddist(double[] a, double[] b) {
-		double distSqrd = Math.pow(a[0]-b[0],2) + Math.pow(a[1]-b[1],2) + Math.pow(a[2]-b[2],2);
-		return Math.sqrt(distSqrd);
-	}
-	
 	/**
 	* Returns a padded version of the number to a size of two
 	*/

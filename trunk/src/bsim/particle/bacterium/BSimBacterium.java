@@ -329,7 +329,7 @@ public class BSimBacterium extends BSimParticle {
     	
 		// Read in the file to the specified array
     	try {
-    		Scanner scan = new Scanner(new File("src/bsim/gammaVals.txt"));
+    		Scanner scan = new Scanner(new File("src/bsim/resource/gammaVals.txt"));
     		//Using my version of BSimBatch on my laptop
     		//Scanner scan = new Scanner(new File("./gammaVals.txt"));
     		while (scan.hasNextLine()) {

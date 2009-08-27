@@ -19,7 +19,6 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
-import bsim.particle.bead.BSimBead;
 
 
 public class BSimCoordBacterium extends BSimSensingBacterium {

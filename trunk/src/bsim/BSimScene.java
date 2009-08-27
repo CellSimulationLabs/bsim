@@ -28,12 +28,15 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import bsim.app.BSimApp;
+import bsim.app.BSimSemaphore;
+import bsim.app.BSimToolbar;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
-import bsim.rendering.Processing;
+import bsim.render.BSimProcessingRenderer;
 
 
 public class BSimScene extends JPanel implements Runnable, ComponentListener{
@@ -112,7 +115,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	public double[][] vesiclesForcesBeads = null;
 	
-	public Processing p = null;
+	public BSimProcessingRenderer p = null;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;
@@ -248,7 +251,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				// Kill the (PApplet's) animation thread and free resources
 				p.destroy();
 			}
-		    p = new Processing(this);
+		    p = new BSimProcessingRenderer(this);
 		    // Initialise new animation thread and PApplet
 		    p.init();
 		    add(p,BorderLayout.CENTER);
@@ -280,7 +283,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				p.destroy();
 			}
 			// BSimBatch part
-			p = new Processing(this);    
+			p = new BSimProcessingRenderer(this);    
 		    p.init();
 		}
 
@@ -622,7 +625,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public double[][] getVesiclesForcesBeads(){return vesiclesForcesBeads;}
 	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}
 	public BSimParameters getParams(){return params;}
-	public Processing getProcessing(){return p;}
+	public BSimProcessingRenderer getProcessing(){return p;}
 	public boolean getWaitingForVideoClosing(){return waitingForVideoClosing;}
 	public void setWaitingForVideoClosing(boolean b){waitingForVideoClosing=b;}
 	public boolean getWaitingForVideoOpening(){return waitingForVideoOpening;}

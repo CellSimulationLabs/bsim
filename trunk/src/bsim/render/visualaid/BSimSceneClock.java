@@ -7,7 +7,7 @@
  * Created: 14/08/2008
  * Updated: 24/08/2008
  */
-package bsim.rendering.visualaid;
+package bsim.render.visualaid;
 
 import java.awt.Color;
 import java.awt.Graphics;

@@ -8,7 +8,7 @@
  * Created: 12/07/2008
  * Updated: 24/08/2008
  */
-package bsim;
+package bsim.app;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -22,6 +22,8 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 
+import bsim.BSimParameters;
+import bsim.BSimScene;
 import bsim.export.PngEncoder;
 import bsim.export.QuickTimeOutputStream;
 

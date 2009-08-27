@@ -21,7 +21,7 @@ import bsim.field.BSimChemicalField;
 import bsim.field.BSimChemicalFieldCreate;
 import bsim.particle.bacterium.BSimBacteriaCreate;
 import bsim.particle.bead.BSimBeadsCreate;
-import bsim.rendering.visualaid.BSimVisualAidCreate;
+import bsim.render.visualaid.BSimVisualAidCreate;
 
 
 public class BSimParameters {

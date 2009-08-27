@@ -11,7 +11,7 @@
  * Created: 13/07/2008
  * Updated: 15/07/2008
  */
-package bsim;
+package bsim.app;
 
 public class BSimSemaphore{
 	

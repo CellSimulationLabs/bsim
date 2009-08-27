@@ -10,7 +10,7 @@
  */
 
 
-package bsim.rendering;
+package bsim.render;
 
 import java.util.Vector;
 
@@ -27,7 +27,7 @@ import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.vesicle.BSimVesicle;
 
 
-public class Processing extends PApplet {
+public class BSimProcessingRenderer extends PApplet {
 	
 	//Papplet parameters
 	public int w;
@@ -63,7 +63,7 @@ public class Processing extends PApplet {
 	
 	PFont myFont;
 
-	public Processing(BSimScene newScene) {
+	public BSimProcessingRenderer(BSimScene newScene) {
 		//core of the simulation
 		scene=newScene;
 			
