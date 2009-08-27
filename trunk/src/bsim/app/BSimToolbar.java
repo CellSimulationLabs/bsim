@@ -41,18 +41,18 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private JFileChooser fc;
 	
 	// Images used on the buttons
-	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("../resource/play.png"));
-	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("../resource/pause.png"));
-	private static final ImageIcon iconReset = new ImageIcon(BSimToolbar.class.getResource("../resource/reset.png"));
-	private static final ImageIcon iconLoad = new ImageIcon(BSimToolbar.class.getResource("../resource/load.png"));
-	private static final ImageIcon iconSaveRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/saveRecord.png"));
-	private static final ImageIcon iconStartRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/startRecord.png"));
-	private static final ImageIcon iconEndRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/endRecord.png"));
-	private static final ImageIcon iconStartRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/startRecordDisabled.png"));
-	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/endRecordDisabled.png"));
-	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/saveScreenshot.png"));
-	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/takeScreenshot.png"));
-	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/takeScreenshotDisabled.png"));
+	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/play.png"));
+	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/pause.png"));
+	private static final ImageIcon iconReset = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/reset.png"));
+	private static final ImageIcon iconLoad = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/load.png"));
+	private static final ImageIcon iconSaveRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/saveRecord.png"));
+	private static final ImageIcon iconStartRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/startRecord.png"));
+	private static final ImageIcon iconEndRecord = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/endRecord.png"));
+	private static final ImageIcon iconStartRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/startRecordDisabled.png"));
+	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/endRecordDisabled.png"));
+	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/saveScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/takeScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/takeScreenshotDisabled.png"));
 	
 	private static BSimParameters params;
 	
