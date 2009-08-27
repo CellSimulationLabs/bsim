@@ -145,6 +145,8 @@ public class BSimBacterium extends BSimParticle {
 		}
 		
 		this.force.set(iterateBacterium());
+		this.direction.set(force);
+		this.direction.normalize();
 		
 		grow();
 		if(getRadius() > getReplicationRadius()) replicate();
@@ -180,20 +182,18 @@ public class BSimBacterium extends BSimParticle {
 	 * Iterate a bacterium's tumbling phase
 	 */
 	protected void iterateTumble() {
-		 			
-		// Obtain a random direction perpendicular to curDirection
-		Vector3d directionVector = new Vector3d(direction);
+		
+		// Obtain a random direction perpendicular to curDirection		
 		Vector3d randomVector = new Vector3d(Math.random(),Math.random(),Math.random());
 		Vector3d crossVector = new Vector3d();
-		crossVector.cross(directionVector, randomVector);		
+		crossVector.cross(direction, randomVector);		
 		
 		// Generate the rotation matrix for rotating about this direction by the tumble angle
 		Matrix3d r = new Matrix3d();
 		r.set(new AxisAngle4d(crossVector, tumbleSpeed));
 		
 		// Apply the rotation			
-		r.transform(directionVector);
-		directionVector.get(direction);
+		r.transform(direction);		
 		
 	}
 
