@@ -13,7 +13,6 @@
  */
 package bsim.particle;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.particle.bacterium.BSimBacterium;
@@ -22,14 +21,14 @@ import bsim.particle.vesicle.BSimVesicle;
 
 public abstract class BSimParticle {		
 
-	protected Point3d position = new Point3d(); // microns		
-	protected Vector3d force = new Vector3d(); // piconewtons
-	protected double radius; // microns	
+	private Vector3d position = new Vector3d(); // microns		
+	private Vector3d force = new Vector3d(); // piconewtons
+	private double radius; // microns	
 	
-	protected double visc = 1e-3;
-	protected double dt = 0.01;
+	private double visc = 1e-3;
+	private double dt = 0.01;
 	
-	public BSimParticle(Point3d newPosition, double newRadius) {
+	public BSimParticle(Vector3d newPosition, double newRadius) {
 		super();	
 		position.set(newPosition);		
 		radius = newRadius;
@@ -38,28 +37,40 @@ public abstract class BSimParticle {
 	/*
 	 * Interactions with other obstacles: reaction forces, fusions, etc 
 	 */
-	public void interaction(BSimBacterium b) { }	
-	public void interaction(BSimBead b) { }
-	public void interaction(BSimVesicle v) { }
+	public abstract void interaction(BSimBacterium b);	
+	public abstract void interaction(BSimBead b);
+	public abstract void interaction(BSimVesicle v);
 	
 	/*
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
 	 */		
-	public void action() { }
+	public abstract void action();
 	
 	/*
 	 * Update the position of the particle according to Stokes' law	
 	 */
 	public void updatePosition() {
-		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);		
+		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);
+		force.set(0,0,0);
 	}
-	
-	public Point3d getPosition() { return position; }	
+		
+	public Vector3d getPosition() { return position; }	
 	public Vector3d getForce() { return force; }
 	public double getRadius() { return radius; }
-	public void setPosition(Point3d p) { position.set(p); }
-	public void setForce(Vector3d f) { force.set(f); }
-	public void setRadius(double r) { this.radius = r; }
+	public void addForce(Vector3d f) { force.add(f); }
+	public void setRadius(double r) { radius = r; }
+	
+	public static double distance(BSimParticle a, BSimParticle b) {
+		Vector3d d = new Vector3d();
+        d.sub(a.getPosition(), b.getPosition());
+        return d.length();
+	}
+	
+    public static boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
+        if(distance(a,b) < (a.radius + b.radius)) return true;
+        else return false;
+}
+	
 	
 }
 

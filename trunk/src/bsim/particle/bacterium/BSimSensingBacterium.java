@@ -12,11 +12,11 @@ package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimScene;
+import bsim.particle.BSimParticle;
 import bsim.particle.bead.BSimBead;
 
 
@@ -29,7 +29,7 @@ public class BSimSensingBacterium extends BSimBacterium {
 	/**
 	 * General constructor.
 	 */
-	public BSimSensingBacterium(Point3d newPosition, double newRadius,
+	public BSimSensingBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
@@ -46,7 +46,7 @@ public class BSimSensingBacterium extends BSimBacterium {
 
 	public void interaction(BSimBead bead) {		
 		// If there is contact with a bead
-		if(bead.getPosition().distance(this.position) < 0){
+		if(BSimParticle.particlesIntersecting(this,bead)){
 			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
 		}
 		super.interaction(bead);

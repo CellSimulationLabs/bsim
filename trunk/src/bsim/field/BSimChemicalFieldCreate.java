@@ -12,7 +12,7 @@ package bsim.field;
 
 import java.awt.Color;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 
@@ -23,7 +23,7 @@ public class BSimChemicalFieldCreate {
 	                                                     Color col, BSimParameters params) {
 		
 		// Create an array for the start position		
-		Point3d startPos = new Point3d(define[0], define[1], define[2]);
+		Vector3d startPos = new Vector3d(define[0], define[1], define[2]);
 		
 		// Create the new chemical field
 		BSimChemicalField newField = new BSimChemicalField((int)define[10], 

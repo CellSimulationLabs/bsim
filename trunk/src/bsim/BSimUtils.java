@@ -10,6 +10,8 @@
 */
 package bsim;
 
+import javax.vecmath.Vector3d;
+
 import bsim.particle.BSimParticle;
 
 
@@ -55,16 +57,7 @@ public class BSimUtils {
 			(137.84*Math.pow(-x,2.0) + (177.58*-x) + 12.736);
 		}
 	}
-		
-    public static synchronized boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
-        double centreDist = a.getPosition().distance(b.getPosition());
-        double aRad = a.getRadius(), bRad = b.getRadius();
-        
-        if(centreDist < (aRad + bRad)) return true;
-        else return false;
-}
-
-	
+			
 	/**
 	* Returns a padded version of the number to a size of two
 	*/

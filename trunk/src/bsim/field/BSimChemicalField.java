@@ -18,7 +18,7 @@ package bsim.field;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 
@@ -46,7 +46,7 @@ public class BSimChemicalField {
 	protected double rate = 0.0;
 
 	// Position of the field in the simulation space
-	protected Point3d startPos;
+	protected Vector3d startPos;
 	protected double width, height, depth;
 
 	// Number of discrete divisions along each axis
@@ -89,7 +89,7 @@ public class BSimChemicalField {
 	 * General constructor.
 	 */
 	public BSimChemicalField (int newFieldType, int newBoundaryType, double newRate, 
-			Point3d newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
+			Vector3d newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
 			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour,
 			BSimParameters p){
 
@@ -522,7 +522,7 @@ public class BSimChemicalField {
 	 * The amount is the increased concentration, this can be greater than 1
 	 * if your field boxes are greater than a unit square.
 	 */
-	public void addChemical (double amount, Point3d position){
+	public void addChemical (double amount, Vector3d position){
 
 		// Variable to hold the found concentration
 		double con, newCon;
@@ -561,7 +561,7 @@ public class BSimChemicalField {
 	 * 
 	 * NOTE: perhaps this could be incorporated into addChemical instead?
 	 */
-	public void removeChemical (double amount, Point3d position){
+	public void removeChemical (double amount, Vector3d position){
 
 		// Variable to hold the found concentration
 		double con, newCon;
@@ -598,7 +598,7 @@ public class BSimChemicalField {
 	 * space and therefore if they fall outside the range of the field zero will be
 	 * returned.
 	 */
-	public double getConcentration (Point3d position) {
+	public double getConcentration (Vector3d position) {
 
 		// Variable to hold the found concentration
 		double con;

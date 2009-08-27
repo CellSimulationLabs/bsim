@@ -14,7 +14,6 @@ package bsim.particle.bacterium;
 
 import java.awt.Graphics;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -31,7 +30,7 @@ public class BSimCoordBacterium extends BSimSensingBacterium {
 	/**
 	 * General constructor.
 	 */
-	public BSimCoordBacterium(Point3d newPosition, double newRadius,
+	public BSimCoordBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
 		    BSimParameters newParams, double newSwitchSpeed, double newCoordThreshold) {

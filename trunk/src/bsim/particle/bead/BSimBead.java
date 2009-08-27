@@ -12,9 +12,11 @@ package bsim.particle.bead;
 
 import java.awt.Graphics;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimParticle;
+import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.vesicle.BSimVesicle;
 
 
 public class BSimBead extends BSimParticle {
@@ -23,12 +25,17 @@ public class BSimBead extends BSimParticle {
 	/**
 	 * General constructor.
 	 */
-	public BSimBead(Point3d newPosition, double newRadius) {
+	public BSimBead(Vector3d newPosition, double newRadius) {
 				
 		// Call the parent constructor
 		super(newPosition, newRadius);
 	}
 	
+	
+	public void interaction(BSimBacterium bact) {}
+	public void interaction(BSimBead bead) {}	
+	public void interaction(BSimVesicle vesicle) {}
+	public void action() {}
 	
 	/**
 	 * Redraws the bead.

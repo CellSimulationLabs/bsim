@@ -12,7 +12,7 @@ package bsim.particle.bead;
 
 import java.util.Vector;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 
@@ -29,7 +29,7 @@ public class BSimBeadsCreate {
 		
 		// Variables for each bead property
 		double newRadius;
-		Point3d newPosition;
+		Vector3d newPosition;
 		Vector beadVec = new Vector();
 		
 		if(args[8] == 0) {
@@ -43,7 +43,7 @@ public class BSimBeadsCreate {
 		for(int i=0; i<args[6]; i++){
 			
 			// Randomly select a new position for the bead
-			newPosition = new Point3d(
+			newPosition = new Vector3d(
 					args[0] + (args[3] * Math.random()),
 					args[1] + (args[4] * Math.random()),
 					args[2] + (args[5] * Math.random())
@@ -69,9 +69,9 @@ public class BSimBeadsCreate {
 		
 		// Variables for each bead property
 		double newRadius;
-		Point3d newPosition;
+		Vector3d newPosition;
 		
-		newPosition = new Point3d(args[0], args[1], args[2]);
+		newPosition = new Vector3d(args[0], args[1], args[2]);
 		
 		if(args[3] == 0) {
 			newRadius = params.getBeadRadius();

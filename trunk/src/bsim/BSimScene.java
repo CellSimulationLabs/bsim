@@ -357,22 +357,19 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		particles.addAll(bacteria);
 		particles.addAll(beads);
 		particles.addAll(vesicles);
-		
-		Vector obstacles = new Vector();
-		obstacles.addAll(bacteria);
-		obstacles.addAll(beads);
-		obstacles.addAll(vesicles);
-		
-		for (int i = 0; i < particles.size(); i++) {
-			for (int j = i+1; j < obstacles.size(); j++) {
-				if (obstacles.get(j) instanceof BSimBacterium){
-					particles.get(i).interaction((BSimBacterium)obstacles.get(j));
-				}
-				else if (obstacles.get(j) instanceof BSimBead){
-					particles.get(i).interaction((BSimBead)obstacles.get(j));
-				}
-				else if (obstacles.get(j) instanceof BSimVesicle){
-					particles.get(i).interaction((BSimVesicle)obstacles.get(j));
+				
+		for(BSimParticle p : particles) {
+			for(BSimParticle q : particles) {
+				if(p != q) {
+					if (q instanceof BSimBacterium){
+						p.interaction((BSimBacterium)q);
+					}
+					else if (q instanceof BSimBead){
+						p.interaction((BSimBead)q);
+					}
+					else if (q instanceof BSimVesicle){
+						p.interaction((BSimVesicle)q);
+					}
 				}
 			}		
 		}

@@ -12,7 +12,6 @@ package bsim.particle.bacterium;
 
 import java.util.Vector;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -33,7 +32,7 @@ public class BSimBacteriaCreate {
 		
 		// Variables for each bead property		
 		double newRadius = params.getBactRadius();
-		Point3d newPosition;
+		Vector3d newPosition;
 		Vector3d newDirection;
 		double newForceUp, newForceDown;
 		double dx,dy,dz;
@@ -54,7 +53,7 @@ public class BSimBacteriaCreate {
 			boolean invalidPlacement = false;
 			
 			// Randomly select a new position for the bacterium
-			newPosition = new Point3d(
+			newPosition = new Vector3d(
 					args[0] + (args[3] * Math.random()),
 					args[1] + (args[4] * Math.random()),
 					args[2] + (args[5] * Math.random())
@@ -80,7 +79,7 @@ public class BSimBacteriaCreate {
 			BSimBacterium thisBacterium = new BSimBacterium(newPosition, newRadius, newDirection, newForceDown, newForceUp, BSimBacterium.BAC_STATE_RUNNING, newTumbleSpeed, newRemDt, scene, params);
 			
 			for(int j=0; j<beadVec.size(); j++) {
-				if(BSimUtils.particlesIntersecting((BSimParticle)beadVec.elementAt(j), (BSimParticle)thisBacterium)) {
+				if(BSimParticle.particlesIntersecting((BSimParticle)beadVec.elementAt(j), (BSimParticle)thisBacterium)) {
 					i = i-1;
 					invalidPlacement = true;
 				}
@@ -115,7 +114,7 @@ public class BSimBacteriaCreate {
 		
 		// Variables for each bacterium property
 		double newRadius = params.getBactRadius();
-		Point3d newPosition;;		
+		Vector3d newPosition;;		
 		Vector3d newDirection;
 		double newForceUp, newForceDown;		
 		double dx,dy,dz;
@@ -130,7 +129,7 @@ public class BSimBacteriaCreate {
 			newRadius = args[3];
 		}
 		
-		newPosition = new Point3d(args[0], args[1], args[2]);
+		newPosition = new Vector3d(args[0], args[1], args[2]);
 				
 		dx = (2.0 * Math.random()) - 1.0;
 		dy = (2.0 * Math.random()) - 1.0;

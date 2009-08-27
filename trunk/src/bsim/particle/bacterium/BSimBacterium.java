@@ -22,7 +22,7 @@ import java.util.Vector;
 
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -30,6 +30,7 @@ import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
+import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 
 
@@ -73,6 +74,10 @@ public class BSimBacterium extends BSimParticle {
 	protected static double upRunProb;
 	protected static double downRunProb;
 	
+	protected static double wellWidth;
+	protected static double wellDepth;
+	protected static double reactForce;
+	
 	// Parameters for the simulation
 	protected BSimParameters params;
 	
@@ -90,7 +95,7 @@ public class BSimBacterium extends BSimParticle {
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(Point3d newPosition, double newRadius,
+	public BSimBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
 			BSimScene newScene, BSimParameters newParams) {
@@ -117,6 +122,10 @@ public class BSimBacterium extends BSimParticle {
 		upRunProb = 1 - newScene.getDtSec()/params.getUpRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getUpRunLength());
 		downRunProb = 1 - newScene.getDtSec()/params.getDownRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getDownRunLength());
 		
+		wellWidth = params.getWellWidthBactBead();
+		wellDepth = params.getWellDepthBactBead();
+		reactForce = params.getReactForce();
+		
 		// Check to see if the gamma distribution has been read in 
 		if(gammaVals[0] == 0){
 			// Read distribution values from external text file
@@ -130,6 +139,28 @@ public class BSimBacterium extends BSimParticle {
 	}
 
 
+	public void interaction(BSimBacterium bacterium) {}	
+	
+	public void interaction(BSimBead bead) {
+		Vector3d d = new Vector3d();
+		d.sub(bead.getPosition(), this.getPosition());	
+		double m = beadForceMagnitude(d.length());
+		d.normalize();
+		d.scale(m);
+		this.addForce(d);
+		d.negate();
+		bead.addForce(d);
+	}	
+	
+	private double beadForceMagnitude(double d) {
+		if (d>wellWidth || d == 0) return 0;
+		else if(d>(wellWidth/2.0)) return -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
+		else if(d>=0.0) return -(d*2.0*wellDepth/wellWidth);		
+		else return d * reactForce;
+	}	
+	
+	public void interaction(BSimVesicle vesicle) {}	
+	
 	public void action() {		
 
 		if(memToReset){
@@ -144,15 +175,14 @@ public class BSimBacterium extends BSimParticle {
 			memToReset = false;
 		}
 		
-		this.force.set(iterateBacterium());
-		this.direction.set(force);
-		this.direction.normalize();
+		this.addForce(iterateBacterium());
+		direction.set(getForce());
+		direction.normalize();
 		
 		grow();
-		if(getRadius() > getReplicationRadius()) replicate();
+		if(getRadius() > replicationRadius) replicate();
 			
 	}
-
 
 	/**
 	 * Iterate the motion of the bacterium.
@@ -374,7 +404,7 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	public void grow() {		
-		radius += radiusGrowthRate * params.getDtSecs();
+		setRadius(getRadius() + radiusGrowthRate * params.getDtSecs());
 		
 		double pStart = 0.1;
 		double pEnd = 0.1;		
@@ -382,18 +412,18 @@ public class BSimBacterium extends BSimParticle {
 		if (!vesiculating) { 
 			if(Math.random() < pStart*params.getDtSecs()) {
 				vesiculating = true;
-				radiusOnVesiculationStart = radius;
+				radiusOnVesiculationStart = getRadius();
 			}
 		}
 		else {			
 			if(Math.random() < pEnd*params.getDtSecs()) {
 				double saOnStart = 4*Math.PI*Math.pow(radiusOnVesiculationStart,2);
-				double saOnEnd = 4*Math.PI*Math.pow(radius,2);
+				double saOnEnd = 4*Math.PI*Math.pow(getRadius(),2);
 				double vesicleRadius = Math.sqrt((saOnEnd - saOnStart)/4*Math.PI);
 								
-				radius = radiusOnVesiculationStart;
+				setRadius(radiusOnVesiculationStart);
 				
-				BSimVesicle newVesicle = new BSimVesicle(position, vesicleRadius,										
+				BSimVesicle newVesicle = new BSimVesicle(getPosition(), vesicleRadius,										
 						scene, params);	
 								
 				//System.out.println(radius + " " + vesicleRadius);
@@ -408,10 +438,10 @@ public class BSimBacterium extends BSimParticle {
 	public void replicate() {
 		BSimBacterium newBact = null;
 				
-		radius = radius/2;
+		setRadius(getRadius()/2);
 		
 		// Create new bacterium TODO remDt?
-		newBact = new BSimBacterium(this.getPosition(), radius,
+		newBact = new BSimBacterium(this.getPosition(), getRadius(),
 				direction, forceMagnitudeDown, forceMagnitudeUp, 
 				state, tumbleSpeed, remDt, 
 				scene, params);		

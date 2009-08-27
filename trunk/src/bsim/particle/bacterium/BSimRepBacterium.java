@@ -16,7 +16,6 @@ package bsim.particle.bacterium;
 import java.awt.Graphics;
 import java.util.Random;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -37,7 +36,7 @@ public class BSimRepBacterium extends BSimBacterium {
 	/**
 	 * General constructor.
 	 */
-	public BSimRepBacterium(Point3d newPosition, double newRadius,
+	public BSimRepBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
 			BSimScene newScene, BSimParameters newParams) {
