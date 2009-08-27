@@ -31,10 +31,6 @@ public class BSimBead extends BSimParticle {
 		super(newPosition, newRadius);
 	}
 	
-	
-	public void interaction(BSimBacterium bact) {}
-	public void interaction(BSimBead bead) {}	
-	public void interaction(BSimVesicle vesicle) {}
 	public void action() {}
 	
 	/**

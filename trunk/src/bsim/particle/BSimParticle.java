@@ -16,6 +16,7 @@ package bsim.particle;
 import javax.vecmath.Vector3d;
 
 import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bacterium.BSimSensingBacterium;
 import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 
@@ -27,6 +28,9 @@ public abstract class BSimParticle {
 	
 	private double visc = 1e-3;
 	private double dt = 0.01;
+	private static double reactForce = 15;
+	private static double wellWidth = 1;
+	private static double wellDepth = 1;
 	
 	public BSimParticle(Vector3d newPosition, double newRadius) {
 		super();	
@@ -35,11 +39,38 @@ public abstract class BSimParticle {
 	}
 	
 	/*
-	 * Interactions with other obstacles: reaction forces, fusions, etc 
-	 */
-	public abstract void interaction(BSimBacterium b);	
-	public abstract void interaction(BSimBead b);
-	public abstract void interaction(BSimVesicle v);
+	* Interactions between particles: reaction forces, fusions, etc 
+	*/
+	public static void interaction(BSimBacterium p, BSimBacterium q) {
+		double d = distance(p, q);
+		if(d < 0) reaction(p,q,d*reactForce);		
+	}	
+    
+	public static void interaction(BSimBacterium bacterium, BSimBead bead) {
+		
+		double d = distance(bacterium, bead);
+		double magnitude; 		
+		if (d>wellWidth || d == 0) magnitude = 0;
+		else if(d>(wellWidth/2.0)) magnitude = -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
+		else if(d>=0.0) magnitude = -(d*2.0*wellDepth/wellWidth);		
+		else magnitude = d * reactForce;
+		
+		if(bacterium instanceof BSimSensingBacterium && magnitude != 0) {
+			((BSimSensingBacterium)bacterium).setBeadContactTimer();
+		}
+		
+		reaction(bacterium, bead, magnitude);
+	}		
+	
+	public static void interaction(BSimBead p, BSimBead q) {
+		double d = distance(p, q);
+		if(d < 0) reaction(p,q,d*reactForce);		
+	}
+	
+	public static void interaction(BSimBead bead, BSimVesicle vesicle) {
+		double d = distance(bead, vesicle);
+		if(d < 0) reaction(bead,vesicle,d*reactForce);		
+	}
 	
 	/*
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
@@ -70,7 +101,20 @@ public abstract class BSimParticle {
         if(distance(a,b) < (a.radius + b.radius)) return true;
         else return false;
 }
-	
-	
+        	
+    /*
+     * Applies a force on p of magnitude m towards p,
+     * and a force on q of magnitude m towards q.
+     */
+	public static void reaction(BSimParticle p, BSimParticle q, double m) {
+		Vector3d f = new Vector3d();
+		f.sub(p.getPosition(), q.getPosition());			
+		f.normalize();
+		f.scale(m);
+		p.addForce(f);
+		f.negate();
+		q.addForce(f);
+	}
+		
 }
 

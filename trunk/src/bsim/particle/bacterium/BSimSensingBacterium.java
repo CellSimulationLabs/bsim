@@ -42,16 +42,6 @@ public class BSimSensingBacterium extends BSimBacterium {
 		switchSpeed = newSwitchSpeed;
 	}
 
-
-
-	public void interaction(BSimBead bead) {		
-		// If there is contact with a bead
-		if(BSimParticle.particlesIntersecting(this,bead)){
-			beadContactTimer = (int)(switchSpeed / params.getDtSecs());
-		}
-		super.interaction(bead);
-	}
-	
 	public void action() {
 		if(beadContactTimer > 0){
 			beadContactTimer--;
@@ -102,7 +92,10 @@ public class BSimSensingBacterium extends BSimBacterium {
 			return isoRunProb;
 		}
 	}
-	
+		
+	public void setBeadContactTimer() {
+		beadContactTimer = (int)(switchSpeed / params.getDtSecs());
+	}	
 	
 	/**
 	 * Redraws the bacterium. A small red circle is also drawn to represent the direction

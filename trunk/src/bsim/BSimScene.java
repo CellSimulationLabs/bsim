@@ -72,9 +72,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private int orgSimHeight = 0;
 	
 	// Vectors holding all bacteria and beads in the simulation
-	private Vector bacteria;
-	private Vector beads;
-	private Vector vesicles;	
+	private Vector<BSimBacterium> bacteria;
+	private Vector<BSimBead> beads;
+	private Vector<BSimVesicle> vesicles;	
 	private Vector visualAids;
 	
 	private BSimBoundingBox boundingBox;
@@ -351,30 +351,22 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	private void runAllUpdates(){
-				
-		// Update the properties for bacteria and beads		
-		Vector<BSimParticle> particles = new Vector();
-		particles.addAll(bacteria);
-		particles.addAll(beads);
-		particles.addAll(vesicles);
-				
-		for(BSimParticle p : particles) {
-			for(BSimParticle q : particles) {
-				if(p != q) {
-					if (q instanceof BSimBacterium){
-						p.interaction((BSimBacterium)q);
-					}
-					else if (q instanceof BSimBead){
-						p.interaction((BSimBead)q);
-					}
-					else if (q instanceof BSimVesicle){
-						p.interaction((BSimVesicle)q);
-					}
-				}
+						
+		for(BSimBacterium bacterium : bacteria) {
+			for(BSimBead bead : beads) {
+					BSimParticle.interaction(bacterium, bead);
 			}		
 		}
 		
-		for(BSimParticle p : particles) {
+		for(BSimBacterium p : bacteria) {
+			p.action();
+			p.updatePosition();
+		}		
+		for(BSimBead p : beads) {
+			p.action();
+			p.updatePosition();
+		}		
+		for(BSimVesicle p : vesicles) {
 			p.action();
 			p.updatePosition();
 		}

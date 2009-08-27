@@ -34,19 +34,6 @@ public class BSimVesicle extends BSimParticle {
 
 		
 	}
-	
-	/*
-	 * See BSimBacterium#interaction(BSimBead bead)
-	 */
-	public void interaction(BSimBacterium bact) {}
-	
-	/*
-	 * See BSimBead#interaction(BSimVesicle vesicle)
-	 */
-	public void interaction(BSimBead bead) {}
-	
-	public void interaction(BSimVesicle vesicle) {}
-	
 
 	public void action() {
 		

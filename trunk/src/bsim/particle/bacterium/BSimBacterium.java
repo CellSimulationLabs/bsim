@@ -138,28 +138,6 @@ public class BSimBacterium extends BSimParticle {
 		
 	}
 
-
-	public void interaction(BSimBacterium bacterium) {}	
-	
-	public void interaction(BSimBead bead) {
-		Vector3d d = new Vector3d();
-		d.sub(bead.getPosition(), this.getPosition());	
-		double m = beadForceMagnitude(d.length());
-		d.normalize();
-		d.scale(m);
-		this.addForce(d);
-		d.negate();
-		bead.addForce(d);
-	}	
-	
-	private double beadForceMagnitude(double d) {
-		if (d>wellWidth || d == 0) return 0;
-		else if(d>(wellWidth/2.0)) return -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
-		else if(d>=0.0) return -(d*2.0*wellDepth/wellWidth);		
-		else return d * reactForce;
-	}	
-	
-	public void interaction(BSimVesicle vesicle) {}	
 	
 	public void action() {		
 
