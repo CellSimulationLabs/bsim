@@ -1,16 +1,21 @@
 #!/bin/zsh
 
+# Delete and re-create the build directory
+cd ..
+rm -rf build
+mkdir build
 
-cd ../../
+# Compile the source
+cd src/
+find bsim -name \*.java -print > file.list
+javac -classpath ../lib/ -d ../build/ @file.list
 
-javac -d ./build/ bsim/*.java 
-javac -d ./build/ bsim/logic/*.java
-javac -d ./build/ bsim/object/*.java
-javac -d ./build/ bsim/physics/*.java
-javac -d ./build/ bsim/export/*.java
+# Copy resources to the new build
+cp -R ./bsim/resource ../build/bsim/resource
 
-cd build
+# Generate the jar file
+cd ../build
+jar cmf ../scripts/mainClass.txt BSim.jar bsim/
 
-jar cmf ./scripts/mainClass.txt BSim.jar bsim/
-
-cd scripts
+# Return to calling directory
+cd ../scripts
