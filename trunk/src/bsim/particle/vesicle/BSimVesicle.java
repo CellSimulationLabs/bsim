@@ -48,16 +48,5 @@ public class BSimVesicle extends BSimParticle {
 		this.addForce(f);
 	}
 	
-	
-	
-	
-	/**
-	 * Redraws the vesicle. A small red circle is also drawn to represent the direction
-	 * of the vesicle.
-	 */
-	public void redraw(Graphics g) {
 
-//		g.setColor(Color.PINK);
-//		g.fillOval((int)position[0],(int)position[1],(int)(radius),(int)(radius));
-	}
 }

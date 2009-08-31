@@ -79,11 +79,6 @@ public class BSimRepBacterium extends BSimBacterium {
 
 	}
 
-	/**
-	 * Redraws the bacterium.
-	 */
-	public void redraw(Graphics g) {
-	}
 	
 	/**
 	 * Returns the current y vector.

@@ -33,13 +33,4 @@ public class BSimBead extends BSimParticle {
 	
 	public void action() {}
 	
-	/**
-	 * Redraws the bead.
-	 */
-	public void redraw(Graphics g) {
-//		
-//		// Draw the bead on the given graphics context
-//		g.setColor(Color.RED);
-//		g.fillOval((int)position[0],(int)position[1],(int)size,(int)size);
-	}
 }

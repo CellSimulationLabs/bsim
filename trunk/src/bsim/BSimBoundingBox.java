@@ -55,10 +55,4 @@ public class BSimBoundingBox {
 		return centrePos; 
 		}
 	
-	
-	/**
-	 * Draw the box.
-	 */
-	public void redraw(Graphics g) {
-	}
 }

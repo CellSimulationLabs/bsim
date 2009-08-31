@@ -349,27 +349,6 @@ public class BSimBacterium extends BSimParticle {
     	}
     }
 
-
-	/**
-	 * Redraws the bacterium. A small red circle is also drawn to represent the direction
-	 * of the bacteria.
-	 */
-	public void redraw(Graphics g) {
-
-		// Draw the main shape of bacterium
-//		g.setColor(Color.GREEN);
-//		g.fillOval((int)position[0],(int)position[1],(int)(size),(int)(size));
-//
-//		// Draw an indicator of bacterium's direction
-//		int x1,x2;
-//		double littleR = size/5.0;
-//		x1 = (int)(position[0] + (size/2.0)*(1+direction[0]) - (littleR/Math.sqrt(2.0)));
-//		x2 = (int)(position[1] + (size/2.0)*(1+direction[1]) - (littleR/Math.sqrt(2.0)));
-//		g.setColor(Color.RED);
-//		g.fillOval(x1,x2,(int)(littleR*2.0),(int)(littleR*2.0));
-		//System.out.println(position[0]+" "+position[1]+" "+position[2]);
-		//System.out.println(centrePos[0]+" "+centrePos[1]+" "+centrePos[2]);	
-	}
 	
 	
 	/**
