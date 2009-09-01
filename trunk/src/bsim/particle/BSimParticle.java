@@ -79,6 +79,7 @@ public abstract class BSimParticle {
 	
 	/*
 	 * Update the position of the particle according to Stokes' law	
+	 * Payable in force, yarr
 	 */
 	public void updatePosition() {
 		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);
