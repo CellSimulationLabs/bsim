@@ -27,10 +27,7 @@ public class BSimBatch{
 	
 	// The simulation scene
 	private BSimScene scene;
-	
-	// Parameters for the batch
-	private BSimParameters params;
-	
+		
 	// Vector of all the export plug-ins that are working in the current scene
 	private Vector exportPlugins;
 	
@@ -49,15 +46,15 @@ public class BSimBatch{
 	public BSimBatch(File f){
 		
 		// Create a parameter file loader and read into our local variable		
-		params = new BSimParameters(f);
+		new BSimParameters(f);
 		
 		// Update the batch variables
-		numOfRuns = params.getSimRuns();
-		lenOfSim = params.getSimLength();
-		movFrameSkip = params.getVideoFramesSkip();
-		txtFrameSkip = params.getDataFramesSkip();
-		movieOutput = params.getRecordVideo();
-		pathToExport = params.getExportDir();
+		numOfRuns = BSimParameters.simRuns;
+		lenOfSim = BSimParameters.simLength;
+		movFrameSkip = BSimParameters.videoFramesSkip;
+		txtFrameSkip = BSimParameters.dataFramesSkip;
+		movieOutput = BSimParameters.recordVideo;
+		pathToExport = BSimParameters.exportDir;
 		
 		// Check that path is valid and that it exists, if not create
 		File testPath = new File(pathToExport);
@@ -67,7 +64,7 @@ public class BSimBatch{
 		}
 		
 		// Create the simulation scene
-		scene = new BSimScene(params);
+		scene = new BSimScene();
 	}
 	
 	
@@ -143,9 +140,9 @@ public class BSimBatch{
 					scene.getProcessing().createMovie(filenameMovie);
 					while(scene.getWaitingForVideoOpening()){}
 					//frame for sec in the video
-					int frameForSec = params.getFrameRecordForSec();
+					int frameForSec = BSimParameters.frameRecordForSec;
 					//time step in un sec
-					int timeStepSec=(int) (1/params.getDtSecs()); 
+					int timeStepSec=(int) (1/BSimParameters.dt); 
 					//one frame Rate in confront of timeStep
 					frameRate  = timeStepSec/frameForSec;
 					
@@ -193,7 +190,7 @@ public class BSimBatch{
 		// Cycle through each of the export plugins
 		for(int i=0; i<exportPlugins.size(); i++){
 			// Finish the export
-			((BSimExport)exportPlugins.elementAt(i)).finishExport(scene, params);
+			((BSimExport)exportPlugins.elementAt(i)).finishExport(scene);
 		}
 	}
 		
@@ -209,7 +206,7 @@ public class BSimBatch{
 			// export the latest frames data.
 			for(int i=0; i<exportPlugins.size(); i++){
 				// Export the current frame
-				((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene, params);
+				((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene);
 			}
 		}
 		
@@ -219,7 +216,7 @@ public class BSimBatch{
 		// Export the next frames data
 		for(int i=0; i<exportPlugins.size(); i++){
 			// Export the current frame
-			((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene, params);
+			((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene);
 		}	
 	}
 	

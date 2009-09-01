@@ -42,10 +42,7 @@ public class BSimApp extends JFrame{
 	
 	// Variables required for the progress bar when saving a movie
 	private int pMin, pMax, pCur;
-	private ProgressMonitor pBar; 
-	
-	public static BSimParameters params;
-	
+	private ProgressMonitor pBar; 	
 	
 	/**
 	 * General constructor.
@@ -55,25 +52,22 @@ public class BSimApp extends JFrame{
 		
 		// Semaphore used for animation loop control (notifiable object)
 		simSem = new BSimSemaphore();
-		
-		// Initialise class holding parameter values
-		params = new BSimParameters();
-		
+				
 		// Setup the frame and its contents
 		this.setTitle("BSim");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		// Create the BSim scene and fill centre of frame
-		scene = new BSimScene(simSem, this, params);
-		scene.setSize(new Dimension(params.getScreenWidth(), params.getScreenHeight()));
+		scene = new BSimScene(simSem, this);
+		scene.setSize(new Dimension(BSimParameters.screenWidth, BSimParameters.screenHeight));
 		this.getContentPane().add(scene, BorderLayout.CENTER);
 		
 		// Create the toolbar and align to bottom of window
-		toolBar = new BSimToolbar(this, scene, params);
+		toolBar = new BSimToolbar(this, scene);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
 		// Set the initial window size and display
-		this.setSize(params.getScreenWidth(),params.getScreenHeight());
+		this.setSize(BSimParameters.screenWidth,BSimParameters.screenHeight);
 		this.setVisible(true);
 	}
 	

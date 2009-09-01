@@ -32,12 +32,12 @@ public class BSimRecruitBacterium extends BSimCoordBacterium  {
 			Vector3d newDirection,  double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    BSimParameters newParams, double newSwitchSpeed, double newCoordThreshold) {
+		    double newSwitchSpeed, double newCoordThreshold) {
 
 		// Call the parent constructor with the basic properties	
 		super(newPosition, newRadius, newDirection, newForceMagnitudeDown,
 		newForceMagnitudeUp, newState,
-		      newTumbleSpeed, newRemDt, newScene, newParams, newSwitchSpeed, newCoordThreshold);
+		      newTumbleSpeed, newRemDt, newScene, newSwitchSpeed, newCoordThreshold);
 	}
 
 
@@ -86,12 +86,12 @@ public class BSimRecruitBacterium extends BSimCoordBacterium  {
 		
 		// Perform the normal attraction to the goal chemoattractant
 		for(int i=0; i<concMemory.size();i++) {
-			if(i <= (longTermMemoryLength/params.getDtSecs())) {
+			if(i <= (longTermMemoryLength/BSimParameters.dt)) {
 				longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
 			} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
 		}
-		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/params.getDtSecs()));
-		longTermMean = longTermCounter / (longTermMemoryLength/params.getDtSecs());
+		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/BSimParameters.dt));
+		longTermMean = longTermCounter / (longTermMemoryLength/BSimParameters.dt);
 	
 		if(shortTermMean - longTermMean > sensitivity) {
 			foundRecruit = true;

@@ -52,20 +52,17 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/endRecordDisabled.png"));
 	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/saveScreenshot.png"));
 	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/takeScreenshot.png"));
-	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/takeScreenshotDisabled.png"));
-	
-	private static BSimParameters params;
+	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("../resource/icons/takeScreenshotDisabled.png"));	
 	
 	/**
 	 * Creates a new toolbar for a given BSimApp and BSimScene.
 	 */
-	public BSimToolbar(BSimApp newApp, BSimScene newScene, BSimParameters newParams){
+	public BSimToolbar(BSimApp newApp, BSimScene newScene){
 		super();
 		
 		// Update internal variables
 		app = newApp;
 		scene = newScene;
-		params = newParams;
 		
 		// Create the toolbar and make it floatable
 		setupToolBar();
@@ -252,19 +249,14 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				// Get the file that has been entered
 				File file = fc.getSelectedFile();
-								
-				BSimParameters oldParams = params;
-				
+										
 				try{
 					// Pass the filename to the BSimApp to write movie to file
-					BSimParameters newParams = new BSimParameters(file);
-					scene.updateParams(newParams);
-					params = newParams;
+					new BSimParameters(file);
+					scene.updateParams();					
 				} catch (Exception ex) { 
 					System.err.println("Error Loading Simulation (See stack trace)");
 					ex.printStackTrace();
-					// Use the old parameter file
-					scene.updateParams(oldParams);
 				}
 			}
 		}

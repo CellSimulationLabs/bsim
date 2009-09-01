@@ -33,11 +33,11 @@ public class BSimSensingBacterium extends BSimBacterium {
 			Vector3d newDirection, double newForceMagnitudeDown,
 			double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    BSimParameters newParams, double newSwitchSpeed) {
+		    double newSwitchSpeed) {
 
 		// Call the parent constructor with the basic properties	
 		super(newPosition, newRadius, newDirection, newForceMagnitudeDown,
-		      newForceMagnitudeUp, newState, newTumbleSpeed, newRemDt, newScene, newParams);
+		      newForceMagnitudeUp, newState, newTumbleSpeed, newRemDt, newScene);
 		
 		switchSpeed = newSwitchSpeed;
 	}
@@ -67,12 +67,12 @@ public class BSimSensingBacterium extends BSimBacterium {
 		if(beadContactTimer > 0){
 			// Perform the normal attraction to the goal chemoattractant
 			for(int i=0; i<concMemory.size();i++) {
-				if(i <= (longTermMemoryLength/params.getDtSecs())) {
+				if(i <= (longTermMemoryLength/BSimParameters.dt)) {
 					longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
 				} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
 			}
-			shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/params.getDtSecs()));
-			longTermMean = longTermCounter / (longTermMemoryLength/params.getDtSecs());
+			shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/BSimParameters.dt));
+			longTermMean = longTermCounter / (longTermMemoryLength/BSimParameters.dt);
 		
 			if(shortTermMean - longTermMean > sensitivity) {
 				runUp = true;
@@ -94,7 +94,7 @@ public class BSimSensingBacterium extends BSimBacterium {
 	}
 		
 	public void setBeadContactTimer() {
-		beadContactTimer = (int)(switchSpeed / params.getDtSecs());
+		beadContactTimer = (int)(switchSpeed / BSimParameters.dt);
 	}	
 	
 }

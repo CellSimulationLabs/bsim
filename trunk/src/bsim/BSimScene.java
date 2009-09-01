@@ -109,7 +109,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private static double COORD_THRESHOLD = 0.0001;
 	
 	// Parameters for the scene
-	public BSimParameters params;
 	
 	public boolean guiExists = false;
 	
@@ -138,7 +137,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	/**
 	 * General constructor for use when GUI is present
 	 */
-	public BSimScene(BSimSemaphore newSimSem, BSimApp newApp, BSimParameters newParams)
+	public BSimScene(BSimSemaphore newSimSem, BSimApp newApp)
 	{
 		super();
 		
@@ -146,14 +145,13 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		
 		guiExists = true;
 		
-		params = newParams;
-		dt = params.getDtSecs();
+		dt = BSimParameters.dt;
 		
-		simWidth = params.getScreenWidth();
-		simHeight = params.getScreenHeight();
+		simWidth = BSimParameters.screenWidth;
+		simHeight = BSimParameters.screenHeight;
 		
-		orgSimWidth = params.getScreenWidth();
-		orgSimHeight = params.getScreenHeight();
+		orgSimWidth = BSimParameters.screenWidth;
+		orgSimHeight = BSimParameters.screenHeight;
 		
 		// Update the internal variables
 		simSem = newSimSem;
@@ -173,18 +171,17 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	/**
 	 * General constructor for use with no GUI
 	 */
-	public BSimScene(BSimParameters newParams)
+	public BSimScene()
 	{
 		super();
 		
-		params = newParams;
-		dt = params.getDtSecs();
+		dt = BSimParameters.dt;
 		
-		simWidth = params.getScreenWidth();
-		simHeight = params.getScreenHeight();
+		simWidth = BSimParameters.screenWidth;
+		simHeight = BSimParameters.screenHeight;
 		
-		orgSimWidth = params.getScreenWidth();
-		orgSimHeight = params.getScreenHeight();
+		orgSimWidth = BSimParameters.screenWidth;
+		orgSimHeight = BSimParameters.screenHeight;
 		
 		// Update the internal variables
 		simSem = null;
@@ -202,7 +199,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private void resetScene(int firstTime) {
 		
 		// Update dt
-		dt = params.getDtSecs();
+		dt = BSimParameters.dt;
 		
 		// Update the simulation widths and the window size
 		simWidth = orgSimWidth;
@@ -214,12 +211,12 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		this.setSize(new Dimension(simWidth, simHeight));
 		
 		// Update the translation
-		double[] newTrans = params.getScreenMove();
+		double[] newTrans = BSimParameters.screenMove;
 		transX = (int)newTrans[0];
 		transY = (int)newTrans[1];
 		
 		// Update the scale
-		scale = (int)(START_SCALE * params.getScreenZoom());
+		scale = (int)(START_SCALE * BSimParameters.screenZoom);
 	
 		// Move back to first time-step 
 		timeStep = 0;
@@ -230,31 +227,31 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		}
 		
 		// Create the bacteria and bead sets	
-		for(double[] args : params.getSingleBead()){
-			beads.add(BSimBeadsCreate.createBead(args, params));
+		for(double[] args : BSimParameters.beadSingles){
+			beads.add(BSimBeadsCreate.createBead(args));
 		}	
-		for(double[] args : params.getBeadSet()){
-			beads.addAll(BSimBeadsCreate.createBeadSet(args, params));
+		for(double[] args : BSimParameters.beadSets){
+			beads.addAll(BSimBeadsCreate.createBeadSet(args));
 		}
-		for(double[] args : params.getSingleBacteria()){
-			bacteria.add(BSimBacteriaCreate.createBacterium(args, this, params));
+		for(double[] args : BSimParameters.bacteriaSingles){
+			bacteria.add(BSimBacteriaCreate.createBacterium(args, this));
 		}		
-		for(double[] args : params.getBacteriaSet()){
-			bacteria.addAll(BSimBacteriaCreate.createBacteriaSet(args, this, params));
+		for(double[] args : BSimParameters.bacteriaSets){
+			bacteria.addAll(BSimBacteriaCreate.createBacteriaSet(args, this));
 		}
 				
 		// Create each of the three chemical fields
-		fGoal = 		BSimChemicalFieldCreate.createChemicalField(params.getCfGoalDefine(), params.getCfGoalSetup(),
-                new Color(0.8f, 0.1f, 0.1f), params);
-		fCoordination = BSimChemicalFieldCreate.createChemicalField (params.getCfCoordDefine(), params.getCfCoordSetup(), 
-                new Color(0.1f, 0.1f, 0.8f), params);
-		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (params.getCfRecruitDefine(), params.getCfRecruitSetup(), 
-                new Color(0.1f, 0.8f, 0.1f), params);
-		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (params.getCfQuorumDefine(), params.getCfQuorumSetup(), 
-                new Color(0.1f, 0.8f, 0.1f), params);
+		fGoal = 		BSimChemicalFieldCreate.createChemicalField(BSimParameters.cfGoalDefine, BSimParameters.cfGoalSetup,
+                new Color(0.8f, 0.1f, 0.1f));
+		fCoordination = BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfCoordDefine, BSimParameters.cfCoordSetup, 
+                new Color(0.1f, 0.1f, 0.8f));
+		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfRecruitDefine, BSimParameters.cfRecruitSetup, 
+                new Color(0.1f, 0.8f, 0.1f));
+		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfQuorumDefine, BSimParameters.cfQuorumSetup, 
+                new Color(0.1f, 0.8f, 0.1f));
 		
 		// Create bounding box		
-		boundingBox = new BSimBoundingBox(params.getBoundingBoxDefine());
+		boundingBox = new BSimBoundingBox(BSimParameters.boundingBoxDefine);
 		
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
@@ -311,16 +308,15 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	/**
 	 * Update the parameters that are used
 	 */
-	public void updateParams (BSimParameters newParams) {
+	public void updateParams () {
 		
-		// Update the parameter object
-		params = newParams;
-		orgSimWidth = params.getScreenWidth();
+		// Update the parameter object		
+		orgSimWidth = BSimParameters.screenWidth;
 		bSimWidth = orgSimWidth;
 		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
 			orgSimWidth = BSimToolbar.BSimToolbarWidth;
 		}
-		orgSimHeight = params.getScreenHeight();
+		orgSimHeight = BSimParameters.screenHeight;
 		
 		// Reset the scene to recreate all objects and ensure local variables are consistent
 		this.reset();
@@ -571,8 +567,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		if(e.getComponent() == this){
 			
 			// Update the parameters
-			params.setScreenWidth(getWidth());
-			params.setScreenHeight(getHeight());
+			BSimParameters.screenWidth = getWidth();
+			BSimParameters.screenHeight = getHeight();
 			
 			// Update the local variables
 			simWidth = getWidth();
@@ -628,8 +624,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void setReallocateNewFusionExists(boolean b) { reallocateNewFusionExists=b; }
 	public void setVesiclesForcesBeads(double[][] newVesiclesForcesBeads){vesiclesForcesBeads=newVesiclesForcesBeads;}
 	public double[][] getVesiclesForcesBeads(){return vesiclesForcesBeads;}
-	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}
-	public BSimParameters getParams(){return params;}
+	public void setVesicles( Vector newVesicles){vesicles=newVesicles;}	
 	public BSimProcessingRenderer getProcessing(){return p;}
 	public boolean getWaitingForVideoClosing(){return waitingForVideoClosing;}
 	public void setWaitingForVideoClosing(boolean b){waitingForVideoClosing=b;}

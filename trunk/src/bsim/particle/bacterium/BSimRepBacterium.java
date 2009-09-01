@@ -39,11 +39,11 @@ public class BSimRepBacterium extends BSimBacterium {
 	public BSimRepBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
-			BSimScene newScene, BSimParameters newParams) {
+			BSimScene newScene) {
 
 		// Call the parent constructor with the basic properties	
 		super(newPosition, newRadius, newDirection,newForceMagnitudeDown, newForceMagnitudeUp,
-				newState, newTumbleSpeed, newRemDt, newScene, newParams);
+				newState, newTumbleSpeed, newRemDt, newScene);
 
 		repGRN = new QuorumRepressilator();
 		repGRN.generateBeta();

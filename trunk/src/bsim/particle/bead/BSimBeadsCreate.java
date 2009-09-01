@@ -25,7 +25,7 @@ public class BSimBeadsCreate {
 	 * checking of overlapping beads is performed meaning initial simulation output 
 	 * should be investigated if strange movement occurs.
 	 */
-	public static Vector createBeadSet (double[] args, BSimParameters params) {
+	public static Vector createBeadSet (double[] args) {
 		
 		// Variables for each bead property
 		double newRadius;
@@ -33,7 +33,7 @@ public class BSimBeadsCreate {
 		Vector beadVec = new Vector();
 		
 		if(args[8] == 0) {
-			newRadius = params.getBeadRadius();
+			newRadius = BSimParameters.beadRadius;
 		}
 		else{
 			newRadius = args[8];
@@ -65,7 +65,7 @@ public class BSimBeadsCreate {
 	/**
 	 * Create a single bead with given parameters.
 	 */
-	public static BSimBead createBead (double[] args, BSimParameters params) {
+	public static BSimBead createBead (double[] args) {
 		
 		// Variables for each bead property
 		double newRadius;
@@ -74,7 +74,7 @@ public class BSimBeadsCreate {
 		newPosition = new Vector3d(args[0], args[1], args[2]);
 		
 		if(args[3] == 0) {
-			newRadius = params.getBeadRadius();
+			newRadius = BSimParameters.beadRadius;
 		}
 		else{
 			newRadius = args[3];

@@ -77,10 +77,7 @@ public class BSimChemicalField {
 	
 	// The minimum change in concentration that bacteria can detect 
 	protected double threshold;
-	
-	// Parameters for the simulation
-	protected BSimParameters params;
-	
+		
 	// Max number of threads to create
 	protected int MAX_WORKER_THREADS = 2;
 
@@ -90,13 +87,10 @@ public class BSimChemicalField {
 	 */
 	public BSimChemicalField (int newFieldType, int newBoundaryType, double newRate, 
 			Vector3d newStartPos, double newWidth, double newHeight, double newDepth, int newXBoxes,
-			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour,
-			BSimParameters p){
+			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour){
 
-		// Set all internal variables
-		
-		params = p;
-		MAX_WORKER_THREADS = params.getNumOfThreads();
+
+		MAX_WORKER_THREADS = BSimParameters.numOfThreads;
 
 		fieldType = newFieldType;
 		boundaryType = newBoundaryType;

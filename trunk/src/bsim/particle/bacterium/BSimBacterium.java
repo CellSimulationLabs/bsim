@@ -74,9 +74,6 @@ public class BSimBacterium extends BSimParticle {
 	protected static double upRunProb;
 	protected static double downRunProb;
 		
-	// Parameters for the simulation
-	protected BSimParameters params;
-	
 	protected boolean memToReset = true;
 	
 	protected boolean runUp = false;
@@ -94,7 +91,7 @@ public class BSimBacterium extends BSimParticle {
 	public BSimBacterium(Vector3d newPosition, double newRadius,
 			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
 			int newState, double newTumbleSpeed, int newRemDt, 
-			BSimScene newScene, BSimParameters newParams) {
+			BSimScene newScene) {
 
 		// Call the parent constructor with the basic properties	
 		super(newPosition, newRadius);
@@ -108,15 +105,14 @@ public class BSimBacterium extends BSimParticle {
 		remDt          = newRemDt;
 		previousConc   = 0.0;
 		concMemory 	   = new Vector();
-		scene = newScene;
-		params = newParams;
+		scene = newScene;		
 		
 		replicationRadius = 2*newRadius;
 		
 		// Calcuate the run probabilities from the run lengths
-		isoRunProb = 1 - newScene.getDtSec()/params.getIsoRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getIsoRunLength());
-		upRunProb = 1 - newScene.getDtSec()/params.getUpRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getUpRunLength());
-		downRunProb = 1 - newScene.getDtSec()/params.getDownRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getDownRunLength());
+		isoRunProb = 1 - newScene.getDtSec()/BSimParameters.runLengthIso; //Math.pow(0.5, newScene.getDtSec()/params.getIsoRunLength());
+		upRunProb = 1 - newScene.getDtSec()/BSimParameters.runLengthUp; //Math.pow(0.5, newScene.getDtSec()/params.getUpRunLength());
+		downRunProb = 1 - newScene.getDtSec()/BSimParameters.runLengthDown; //Math.pow(0.5, newScene.getDtSec()/params.getDownRunLength());
 				
 		// Check to see if the gamma distribution has been read in 
 		if(gammaVals[0] == 0){
@@ -141,7 +137,7 @@ public class BSimBacterium extends BSimParticle {
 			else if(chemo == BAC_CHEMO_RECRUIT) curConc = scene.getRecruitmentField().getConcentration(this.getPosition());
 			else curConc = scene.getGoalField().getConcentration(this.getPosition());
 			concMemory = new Vector();
-			for(int i=0; i<=(4.0 / params.getDtSecs()); i++) {concMemory.add(curConc);}
+			for(int i=0; i<=(4.0 / BSimParameters.dt); i++) {concMemory.add(curConc);}
 			memToReset = false;
 		}
 		
@@ -240,13 +236,13 @@ public class BSimBacterium extends BSimParticle {
 		double sensitivity = 0.000001;
 		
 		for(int i=0; i<concMemory.size();i++) {
-			if(i <= (longTermMemoryLength/params.getDtSecs())) {
+			if(i <= (longTermMemoryLength/BSimParameters.dt)) {
 				longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
 			} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
 		}
 		
-		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/params.getDtSecs()));
-		longTermMean = longTermCounter / (longTermMemoryLength/params.getDtSecs());
+		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/BSimParameters.dt));
+		longTermMean = longTermCounter / (longTermMemoryLength/BSimParameters.dt);
 		
 		if(shortTermMean - longTermMean > sensitivity) {
 			runUp = true;
@@ -353,27 +349,26 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	public void grow() {		
-		setRadius(getRadius() + radiusGrowthRate * params.getDtSecs());
+		setRadius(getRadius() + radiusGrowthRate * BSimParameters.dt);
 		
 		double pStart = 0.1;
 		double pEnd = 0.1;		
 		
 		if (!vesiculating) { 
-			if(Math.random() < pStart*params.getDtSecs()) {
+			if(Math.random() < pStart*BSimParameters.dt) {
 				vesiculating = true;
 				radiusOnVesiculationStart = getRadius();
 			}
 		}
 		else {			
-			if(Math.random() < pEnd*params.getDtSecs()) {
+			if(Math.random() < pEnd*BSimParameters.dt) {
 				double saOnStart = 4*Math.PI*Math.pow(radiusOnVesiculationStart,2);
 				double saOnEnd = 4*Math.PI*Math.pow(getRadius(),2);
 				double vesicleRadius = Math.sqrt((saOnEnd - saOnStart)/4*Math.PI);
 								
 				setRadius(radiusOnVesiculationStart);
 				
-				BSimVesicle newVesicle = new BSimVesicle(getPosition(), vesicleRadius,										
-						scene, params);	
+				BSimVesicle newVesicle = new BSimVesicle(getPosition(), vesicleRadius);	
 								
 				//System.out.println(radius + " " + vesicleRadius);
 				scene.addVesicle(newVesicle);
@@ -392,8 +387,7 @@ public class BSimBacterium extends BSimParticle {
 		// Create new bacterium TODO remDt?
 		newBact = new BSimBacterium(this.getPosition(), getRadius(),
 				direction, forceMagnitudeDown, forceMagnitudeUp, 
-				state, tumbleSpeed, remDt, 
-				scene, params);		
+				state, tumbleSpeed, remDt, scene);		
 		
 		newBact.startNewPhase();
 		

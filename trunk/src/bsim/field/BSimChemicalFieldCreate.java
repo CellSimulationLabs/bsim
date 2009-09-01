@@ -20,7 +20,7 @@ import bsim.BSimParameters;
 public class BSimChemicalFieldCreate {
 	
 	public static BSimChemicalField createChemicalField (double[] define, double[] setup, 
-	                                                     Color col, BSimParameters params) {
+	                                                     Color col) {
 		
 		// Create an array for the start position		
 		Vector3d startPos = new Vector3d(define[0], define[1], define[2]);
@@ -29,7 +29,7 @@ public class BSimChemicalFieldCreate {
 		BSimChemicalField newField = new BSimChemicalField((int)define[10], 
 											(int)define[11], define[12], startPos, define[3], 
 											define[4],	define[5], (int)define[6], (int)define[7], (int)define[8],
-											params.getDtSecs(), define[9], col, params);
+											BSimParameters.dt, define[9], col);
 		
 		// Update if the field has an initial distribution
 		if(setup[1] == 1) { newField.setAsLinear(BSimChemicalField.LINEAR_X, setup[2], setup[3]); }
