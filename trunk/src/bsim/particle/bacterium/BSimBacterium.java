@@ -73,11 +73,7 @@ public class BSimBacterium extends BSimParticle {
 	protected static double isoRunProb;
 	protected static double upRunProb;
 	protected static double downRunProb;
-	
-	protected static double wellWidth;
-	protected static double wellDepth;
-	protected static double reactForce;
-	
+		
 	// Parameters for the simulation
 	protected BSimParameters params;
 	
@@ -121,11 +117,7 @@ public class BSimBacterium extends BSimParticle {
 		isoRunProb = 1 - newScene.getDtSec()/params.getIsoRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getIsoRunLength());
 		upRunProb = 1 - newScene.getDtSec()/params.getUpRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getUpRunLength());
 		downRunProb = 1 - newScene.getDtSec()/params.getDownRunLength(); //Math.pow(0.5, newScene.getDtSec()/params.getDownRunLength());
-		
-		wellWidth = params.getWellWidthBactBead();
-		wellDepth = params.getWellDepthBactBead();
-		reactForce = params.getReactForce();
-		
+				
 		// Check to see if the gamma distribution has been read in 
 		if(gammaVals[0] == 0){
 			// Read distribution values from external text file
