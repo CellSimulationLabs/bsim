@@ -11,17 +11,10 @@
  */
 package bsim;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
-
-import bsim.field.BSimChemicalField;
-import bsim.field.BSimChemicalFieldCreate;
-import bsim.particle.bacterium.BSimBacteriaCreate;
-import bsim.particle.bead.BSimBeadsCreate;
-import bsim.render.visualaid.BSimVisualAidCreate;
 
 
 public class BSimParameters {
