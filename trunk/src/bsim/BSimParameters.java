@@ -17,8 +17,6 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
 
-import quicktime.std.clocks.Clock;
-
 import bsim.field.BSimChemicalField;
 import bsim.field.BSimChemicalFieldCreate;
 import bsim.particle.bacterium.BSimBacteriaCreate;
