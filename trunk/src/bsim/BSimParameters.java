@@ -27,80 +27,80 @@ import bsim.render.visualaid.BSimVisualAidCreate;
 public class BSimParameters {
 
 
-	public double   beadRadius       = 10.0;	// microns
+	private static double   beadRadius       = 10.0;	// microns
 
-	public double   bactRadius       = 1.4;	// microns
-	public double   bactForceUp      = 0.4387; // pico newtons
-	public double   bactForceDown    = 0.41; // pico newtons
-	public double   bactSpeed        = 50.0; // microns per second
+	private static double   bactRadius       = 1.4;	// microns
+	private static double   bactForceUp      = 0.4387; // pico newtons
+	private static double   bactForceDown    = 0.41; // pico newtons
+	private static double   bactSpeed        = 50.0; // microns per second
 	
-	public double   runLengthUp      = 1.07;	// seconds
-	public double   runLengthDown    = 0.8;	// seconds
-	public double   runLengthIso     = 0.86; // seconds
+	private static double   runLengthUp      = 1.07;	// seconds
+	private static double   runLengthDown    = 0.8;	// seconds
+	private static double   runLengthIso     = 0.86; // seconds
 	
-	public double   visc             = Math.pow(10.0,-3.0); // Pascal seconds
-	public int      screenWidth      = 1025; // pixels
-	public int      screenHeight     = 700; // pixels
+	private static double   visc             = Math.pow(10.0,-3.0); // Pascal seconds
+	private static int      screenWidth      = 1025; // pixels
+	private static int      screenHeight     = 700; // pixels
 
-	public double   dt               = 0.001; // seconds
+	private static double   dt               = 0.001; // seconds
 	
-	public Vector<double[]> bacteriaSingles 	  = new Vector(); 
-	public Vector<double[]> bacteriaSets 		  = new Vector();
-	public Vector<double[]> beadSingles 		  = new Vector();
-	public Vector<double[]> beadSets			  = new Vector(); 	              	               
-	public Vector<double[]> vaBacteriaTraces 	  = new Vector();
-	public Vector<double[]> vaAvgBacteriaTraces   = new Vector();
-	public Vector<double[]> vaBeadTraces 		  = new Vector();
-	public Vector<double[]> vaClocks 			  = new Vector();
-	public Vector<double[]> vaScales			  = new Vector();
+	private static Vector<double[]> bacteriaSingles 	  = new Vector(); 
+	private static Vector<double[]> bacteriaSets 		  = new Vector();
+	private static Vector<double[]> beadSingles 		  = new Vector();
+	private static Vector<double[]> beadSets			  = new Vector(); 	              	               
+	private static Vector<double[]> vaBacteriaTraces 	  = new Vector();
+	private static Vector<double[]> vaAvgBacteriaTraces   = new Vector();
+	private static Vector<double[]> vaBeadTraces 		  = new Vector();
+	private static Vector<double[]> vaClocks 			  = new Vector();
+	private static Vector<double[]> vaScales			  = new Vector();
 
-	public double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
-	public double[] cfCoordDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public double[] cfCoordSetup = {0, 0, 0, 0, 0, 0};
-	public double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
-	public double[] cfQuorumDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};
+	private static double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	private static double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
+	private static double[] cfCoordDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	private static double[] cfCoordSetup = {0, 0, 0, 0, 0, 0};
+	private static double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	private static double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
+	private static double[] cfQuorumDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
+	private static double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};
 	
-	public double[] boundingBoxDefine = {0, 0, 0, 0, 0, 0};	
+	private static double[] boundingBoxDefine = {0, 0, 0, 0, 0, 0};	
 	
-	public double[] magnStrength = {0.0, 0.0, 0.0};
+	private static double[] magnStrength = {0.0, 0.0, 0.0};
 	
-	public double   screenZoom       = 1, 
+	private static double   screenZoom       = 1, 
 	                screenMove[]     = {0.0, 0.0};
 	
 	//parameters needed to control the processing camera
-	public double   minimumDistance  = 0.001;
-	public double   maximumDistance  = 1500;
-	public double   defaultDistance  = 1000;
-	public int      frameForSec      = 25;
-	public int      frameRecordForSec= 25;
+	private static double   minimumDistance  = 0.001;
+	private static double   maximumDistance  = 1500;
+	private static double   defaultDistance  = 1000;
+	private static int      frameForSec      = 25;
+	private static int      frameRecordForSec= 25;
 	
-	public int      dataFramesSkip   = 1;
-	public int      videoFramesSkip  = 1;
-	public int      simRuns          = 1;
-	public int      simLength        = 1;
-	public boolean  recordVideo      = true;
-	public String   exportDir;
-	public int      numOfThreads     = 2;
+	private static int      dataFramesSkip   = 1;
+	private static int      videoFramesSkip  = 1;
+	private static int      simRuns          = 1;
+	private static int      simLength        = 1;
+	private static boolean  recordVideo      = true;
+	private static String   exportDir;
+	private static int      numOfThreads     = 2;
 	
-	public double   wellWidthBactBact = 0.0;
-	public double   wellDepthBactBact = 0.0;
-	public double   wellWidthBactBead = 0.0;
-	public double   wellDepthBactBead = 0.0;
-	public double   wellWidthBeadBead = 0.0;
-	public double   wellDepthBeadBead = 0.0;
-	public double   wellWidthBeadBdry = 0.0;
-	public double   wellDepthBeadBdry = 0.0;
-	public double   wellWidthBactBdry = 0.0;
-	public double   wellDepthBactBdry = 0.0;
-	public double   wellWidthVesBdry = 0.0;
-	public double   wellDepthVesBdry = 0.0;
-	public double   wellWidthVesBead = 0.0;
-	public double   wellDepthVesBead = 0.0;
+	private static double   wellWidthBactBact = 0.0;
+	private static double   wellDepthBactBact = 0.0;
+	private static double   wellWidthBactBead = 0.0;
+	private static double   wellDepthBactBead = 0.0;
+	private static double   wellWidthBeadBead = 0.0;
+	private static double   wellDepthBeadBead = 0.0;
+	private static double   wellWidthBeadBdry = 0.0;
+	private static double   wellDepthBeadBdry = 0.0;
+	private static double   wellWidthBactBdry = 0.0;
+	private static double   wellDepthBactBdry = 0.0;
+	private static double   wellWidthVesBdry = 0.0;
+	private static double   wellDepthVesBdry = 0.0;
+	private static double   wellWidthVesBead = 0.0;
+	private static double   wellDepthVesBead = 0.0;
 	
-	public double	reactForce = 0.0;
+	private static double	reactForce = 0.0;
 		
 	
 	public BSimParameters() {	
@@ -298,8 +298,10 @@ public class BSimParameters {
 	public double[]  getCfCoordSetup () { return cfCoordSetup; }
 	public double[]  getCfRecruitDefine () { return cfRecruitDefine; }
 	public double[]  getCfRecruitSetup () { return cfRecruitSetup; }
+	public double[]  getCfQuorumDefine () { return cfQuorumDefine; }
+	public double[]  getCfQuorumSetup () { return cfQuorumSetup; }
 	
-	public double[]  getBoundingBoxDefine( double[] x) { return boundingBoxDefine; }
+	public double[]  getBoundingBoxDefine() { return boundingBoxDefine; }
 	
 	
 	/**

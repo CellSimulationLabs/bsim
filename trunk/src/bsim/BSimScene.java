@@ -244,17 +244,17 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		}
 				
 		// Create each of the three chemical fields
-		fGoal = 		BSimChemicalFieldCreate.createChemicalField(params.cfGoalDefine, params.cfGoalSetup,
+		fGoal = 		BSimChemicalFieldCreate.createChemicalField(params.getCfGoalDefine(), params.getCfGoalSetup(),
                 new Color(0.8f, 0.1f, 0.1f), params);
-		fCoordination = BSimChemicalFieldCreate.createChemicalField (params.cfCoordDefine, params.cfCoordSetup, 
+		fCoordination = BSimChemicalFieldCreate.createChemicalField (params.getCfCoordDefine(), params.getCfCoordSetup(), 
                 new Color(0.1f, 0.1f, 0.8f), params);
-		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (params.cfRecruitDefine, params.cfRecruitSetup, 
+		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (params.getCfRecruitDefine(), params.getCfRecruitSetup(), 
                 new Color(0.1f, 0.8f, 0.1f), params);
-		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (params.cfQuorumDefine, params.cfQuorumSetup, 
+		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (params.getCfQuorumDefine(), params.getCfQuorumSetup(), 
                 new Color(0.1f, 0.8f, 0.1f), params);
 		
 		// Create bounding box		
-		boundingBox = new BSimBoundingBox(params.boundingBoxDefine);
+		boundingBox = new BSimBoundingBox(params.getBoundingBoxDefine());
 		
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
