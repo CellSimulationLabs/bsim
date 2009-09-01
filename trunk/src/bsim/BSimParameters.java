@@ -132,32 +132,32 @@ public class BSimParameters {
 		
 		else if(line[0].equals("SCREEN_HEIGHT:")) screenHeight = (int)args[0];
 		else if(line[0].equals("SCREEN_WIDTH:")) screenWidth = (int)args[0];
-		else if(line[0].equals("SCREEN_ZOOM:")) screenZoom = (double)args[0];
+		else if(line[0].equals("SCREEN_ZOOM:")) screenZoom = args[0];
 		else if(line[0].equals("SCREEN_MOVE:")) screenMove = args;
 		
-		else if(line[0].equals("SCREEN_MINIMUM_DISTANCE:")) minimumDistance = (double)args[0];
-		else if(line[0].equals("SCREEN_MAXIMUM_DISTANCE:")) maximumDistance = (double)args[0];
-		else if(line[0].equals("SCREEN_DEFAULT_DISTANCE:")) defaultDistance = (double)args[0];
+		else if(line[0].equals("SCREEN_MINIMUM_DISTANCE:")) minimumDistance = args[0];
+		else if(line[0].equals("SCREEN_MAXIMUM_DISTANCE:")) maximumDistance = args[0];
+		else if(line[0].equals("SCREEN_DEFAULT_DISTANCE:")) defaultDistance = args[0];
 		else if(line[0].equals("SCREEN_FRAME_FOR_SECOND:")) frameForSec = (int)args[0];
 		else if(line[0].equals("SCREEN_FRAME_RECORD_FOR_SECOND:")) frameRecordForSec = (int)args[0];
 		
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BACT:")) wellWidthBactBact = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BACT:")) wellDepthBactBact = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) wellWidthBactBead = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) wellDepthBactBead = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BEAD:")) wellWidthBeadBead = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BEAD:")) wellDepthBeadBead = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BDRY:")) wellWidthBeadBdry = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BDRY:")) wellDepthBeadBdry = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BDRY:")) wellWidthBactBdry = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BDRY:")) wellDepthBactBdry = (double)args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BACT:")) wellWidthBactBact = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BACT:")) wellDepthBactBact = args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) wellWidthBactBead = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) wellDepthBactBead = args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BEAD:")) wellWidthBeadBead = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BEAD:")) wellDepthBeadBead = args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BEAD_BDRY:")) wellWidthBeadBdry = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BEAD_BDRY:")) wellDepthBeadBdry = args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BDRY:")) wellWidthBactBdry = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BDRY:")) wellDepthBactBdry = args[0];
 		
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BDRY:")) wellWidthVesBdry = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BDRY:")) wellDepthVesBdry = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BEAD:")) wellWidthVesBead = (double)args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BEAD:")) wellDepthVesBead = (double)args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BDRY:")) wellWidthVesBdry = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BDRY:")) wellDepthVesBdry = args[0];
+		else if(line[0].equals("PHYSICS_WELL_WIDTH_VES_BEAD:")) wellWidthVesBead = args[0];
+		else if(line[0].equals("PHYSICS_WELL_DEPTH_VES_BEAD:")) wellDepthVesBead = args[0];
 		
-		else if(line[0].equals("PHYSICS_REACT_FORCE:")) reactForce = (double)args[0];				
+		else if(line[0].equals("PHYSICS_REACT_FORCE:")) reactForce = args[0];				
 		
 		else if(line[0].equals("FIELD_GOAL_DEFINE:")) cfGoalDefine = args;
 		else if(line[0].equals("FIELD_GOAL_SETUP:")) cfGoalSetup = args;
