@@ -44,15 +44,15 @@ public class BSimParameters {
 
 	public double   dt               = 0.001; // seconds
 	
-	public Vector bacteriaSingles 	  = new Vector(); 
-	public Vector bacteriaSets 		  = new Vector();
-	public Vector beadSingles 		  = new Vector();
-	public Vector beadSets			  = new Vector(); 	              	               
-	public Vector vaBacteriaTraces 	  = new Vector();
-	public Vector vaAvgBacteriaTraces = new Vector();
-	public Vector vaBeadTraces 		  = new Vector();
-	public Vector vaClocks 			  = new Vector();
-	public Vector vaScales			  = new Vector();
+	public Vector<double[]> bacteriaSingles 	  = new Vector(); 
+	public Vector<double[]> bacteriaSets 		  = new Vector();
+	public Vector<double[]> beadSingles 		  = new Vector();
+	public Vector<double[]> beadSets			  = new Vector(); 	              	               
+	public Vector<double[]> vaBacteriaTraces 	  = new Vector();
+	public Vector<double[]> vaAvgBacteriaTraces   = new Vector();
+	public Vector<double[]> vaBeadTraces 		  = new Vector();
+	public Vector<double[]> vaClocks 			  = new Vector();
+	public Vector<double[]> vaScales			  = new Vector();
 
 	public double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
 	public double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
@@ -241,16 +241,16 @@ public class BSimParameters {
 	public double 	getUpRunLength() {return runLengthUp;}
 	public double 	getDownRunLength() {return runLengthDown;}
 	public double 	getIsoRunLength() {return runLengthIso;}
-	public Vector 	getSingleBacteria() { return bacteriaSingles; }
-	public Vector 	getSingleBead() { return beadSingles; }
-	public Vector 	getBacteriaSet() { return bacteriaSets; }
-	public Vector 	getBeadSet() { return beadSets; }	
+	public Vector<double[]> 	getSingleBacteria() { return bacteriaSingles; }
+	public Vector<double[]> 	getSingleBead() { return beadSingles; }
+	public Vector<double[]> 	getBacteriaSet() { return bacteriaSets; }
+	public Vector<double[]> 	getBeadSet() { return beadSets; }	
 	
-	public Vector   getBacteriaTraces() { return vaBacteriaTraces; }
-	public Vector   getAvgBacteriaTraces() { return vaAvgBacteriaTraces; }
-	public Vector   getBeadTraces() { return vaBeadTraces; }
-	public Vector   getClocks() { return vaClocks; }
-	public Vector	getScales() { return vaScales; }
+	public Vector<double[]>   getBacteriaTraces() { return vaBacteriaTraces; }
+	public Vector<double[]>   getAvgBacteriaTraces() { return vaAvgBacteriaTraces; }
+	public Vector<double[]>   getBeadTraces() { return vaBeadTraces; }
+	public Vector<double[]>   getClocks() { return vaClocks; }
+	public Vector<double[]>	getScales() { return vaScales; }
 	
 	public double	getScreenZoom() {return screenZoom;}
 	
@@ -378,109 +378,4 @@ public class BSimParameters {
 	
 	public void     setBoundingBoxDefine( double[] x) { boundingBoxDefine = x; }
 
-	
-	/**
-	 * Create methods to create the sets of items that are required by the scene.
-	 */
-	
-	public Vector createNewBacteriaVec(BSimScene scene) {
-		int i;
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new single bead for every item in the list
-		for(i=0; i<bacteriaSingles.size(); i++){
-			newVec.add(BSimBacteriaCreate.createBacterium((double[])bacteriaSingles.elementAt(i), scene, this));
-		}
-		
-		// Create a new bead set for every item in the list
-		for(i=0; i<bacteriaSets.size(); i++){
-			newVec.addAll(BSimBacteriaCreate.createBacteriaSet((double[])bacteriaSets.elementAt(i), scene, this));
-		}
-		
-		// Return the new vector
-		return newVec;
-	}
-	
-	public Vector createNewBeadVec() {
-		int i;
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Create a new single bead for every item in the list
-		for(i=0; i<beadSingles.size(); i++){
-			newVec.add(BSimBeadsCreate.createBead((double[])beadSingles.elementAt(i), this));
-		}
-		
-		// Create a new bead set for every item in the list
-		for(i=0; i<beadSets.size(); i++){
-			newVec.addAll(BSimBeadsCreate.createBeadSet((double[])beadSets.elementAt(i), this));
-		}
-		
-		// Return the new vector
-		return newVec;
-	}
-					
-	public Vector createNewVisualAidsVec(BSimScene scene) {
-		int i;
-		
-		// Vector to hold the new objects
-		Vector newVec = new Vector();
-		
-		// Loop through each of the visual aid types, create them and add to the same vector
-		for(i=0; i<vaBacteriaTraces.size(); i++){
-			newVec.add(BSimVisualAidCreate.createBacteriaTrace(scene, (double[])vaBacteriaTraces.elementAt(i)));
-		}
-		for(i=0; i<vaAvgBacteriaTraces.size(); i++){
-			newVec.add(BSimVisualAidCreate.createAvgBacteriaTrace(scene, (double[])vaAvgBacteriaTraces.elementAt(i)));
-		}
-		for(i=0; i<vaBeadTraces.size(); i++){
-			newVec.add(BSimVisualAidCreate.createBeadTrace(scene, (double[])vaBeadTraces.elementAt(i)));
-		}
-		for(i=0; i<vaClocks.size(); i++){
-			newVec.add(BSimVisualAidCreate.createSceneClock(scene));
-		}
-		for(i=0; i<vaScales.size(); i++){
-			newVec.add(BSimVisualAidCreate.createSceneScale(scene, (double[])vaScales.elementAt(i)));
-		}
-		
-		// Return the new vector
-		return newVec;
-	}
-	
-	public BSimChemicalField createNewGoalChemicalField() {
-		
-		// Create the new chemical field
-		return BSimChemicalFieldCreate.createChemicalField (cfGoalDefine, cfGoalSetup,
-		                                               new Color(0.8f, 0.1f, 0.1f), this);
-	}
-	
-	public BSimChemicalField createNewCoordChemicalField() {
-		
-		// Create the new chemical field
-		return BSimChemicalFieldCreate.createChemicalField (cfCoordDefine, cfCoordSetup, 
-		                                               new Color(0.1f, 0.1f, 0.8f), this);
-	}
-	
-	public BSimChemicalField createNewRecruitChemicalField() {
-		
-		// Create the new chemical field
-		return BSimChemicalFieldCreate.createChemicalField (cfRecruitDefine, cfRecruitSetup, 
-		                                               new Color(0.1f, 0.8f, 0.1f), this);
-	}
-	
-	public BSimChemicalField createNewQuorumChemicalField() {
-		
-		// Create the new chemical field
-		return BSimChemicalFieldCreate.createChemicalField (cfQuorumDefine, cfQuorumSetup, 
-		                                               new Color(0.1f, 0.8f, 0.1f), this);
-	}
-	
-	public BSimBoundingBox createNewBoundingBox() {
-		
-		// Create the new bounding box
-		return new BSimBoundingBox(boundingBoxDefine);
-	}
 }

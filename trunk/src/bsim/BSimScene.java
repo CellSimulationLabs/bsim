@@ -32,11 +32,15 @@ import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
 import bsim.app.BSimToolbar;
 import bsim.field.BSimChemicalField;
+import bsim.field.BSimChemicalFieldCreate;
 import bsim.particle.BSimParticle;
+import bsim.particle.bacterium.BSimBacteriaCreate;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.bead.BSimBead;
+import bsim.particle.bead.BSimBeadsCreate;
 import bsim.particle.vesicle.BSimVesicle;
 import bsim.render.BSimProcessingRenderer;
+import bsim.render.visualaid.BSimVisualAidCreate;
 
 
 public class BSimScene extends JPanel implements Runnable, ComponentListener{
@@ -225,23 +229,35 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			app.updateTime(getFormatedTime());
 		}
 		
-		// Create the bacteria and bead sets
-		beads = params.createNewBeadVec();
-		bacteria = params.createNewBacteriaVec(this);
+		// Create the bacteria and bead sets	
+		for(double[] args : params.getSingleBead()){
+			beads.add(BSimBeadsCreate.createBead(args, params));
+		}	
+		for(double[] args : params.getBeadSet()){
+			beads.addAll(BSimBeadsCreate.createBeadSet(args, params));
+		}
+		for(double[] args : params.getSingleBacteria()){
+			bacteria.add(BSimBacteriaCreate.createBacterium(args, this, params));
+		}		
+		for(double[] args : params.getBacteriaSet()){
+			bacteria.addAll(BSimBacteriaCreate.createBacteriaSet(args, this, params));
+		}
+				
+		// Create each of the three chemical fields
+		fGoal = 		BSimChemicalFieldCreate.createChemicalField(params.cfGoalDefine, params.cfGoalSetup,
+                new Color(0.8f, 0.1f, 0.1f), params);
+		fCoordination = BSimChemicalFieldCreate.createChemicalField (params.cfCoordDefine, params.cfCoordSetup, 
+                new Color(0.1f, 0.1f, 0.8f), params);
+		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (params.cfRecruitDefine, params.cfRecruitSetup, 
+                new Color(0.1f, 0.8f, 0.1f), params);
+		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (params.cfQuorumDefine, params.cfQuorumSetup, 
+                new Color(0.1f, 0.8f, 0.1f), params);
+		
+		// Create bounding box		
+		boundingBox = new BSimBoundingBox(params.boundingBoxDefine);
+		
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
-		
-		// Create bounding box
-		boundingBox = params.createNewBoundingBox();
-		
-		// Create any visual aids
-		visualAids = params.createNewVisualAidsVec(this);
-		
-		// Create each of the three chemical fields
-		fGoal = params.createNewGoalChemicalField();
-		fCoordination = params.createNewCoordChemicalField();
-		fRecruitment = params.createNewRecruitChemicalField();
-		fQuorum = params.createNewQuorumChemicalField();
 		
 		// Processing related activity
 		if(guiExists){
