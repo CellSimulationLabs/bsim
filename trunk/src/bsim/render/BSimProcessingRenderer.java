@@ -1,14 +1,23 @@
 /**
- * Processing.java
+ * BSimProcessingRenderer.java
  * 
- * This class uses the Processing library functions to draw the scene.
+ * BSim's standard 3D renderer class.
  * 
- * Authors:	Mattia Fazzini
- * 			Antoni Matyjaszkiewicz
- * Created:	17/8/09
- * Updated:	21/8/09
+ * This class uses Processing's library functions to draw the scene.
+ * Currently the P3D renderer has been implemented in this class. Although it
+ * is not the fastest renderer it is reasonably robust and consistent in its
+ * output. P3D renders in software and therefore should be perfectly suitable 
+ * for rendering on headless nodes or those without graphics cards. It also 
+ * provides a number of output methods (screenshots, movies etc) conveniently
+ * via the Processing libraries.
+ *
+ * Current implementation with processing core v1.0.6
+ * http://www.processing.org
+ * 
+ * 3D camera uses PeasyCam library
+ * http://mrfeinberg.com/peasycam/
+ * 
  */
-
 
 package bsim.render;
 
@@ -19,229 +28,222 @@ import javax.vecmath.Vector3f;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PFont;
-import processing.video.MovieMaker;
-import bsim.BSimBoundingBox;
+import bsim.BSimParameters;
 import bsim.field.BSimChemicalField;
+import bsim.particle.BSimParticle;
 import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bacterium.BSimRepBacterium;
+import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 import bsim.scene.BSimScene;
 
 
-public class BSimProcessingRenderer extends PApplet {
+public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	
-	//Papplet parameters
+	// Simulation core
+	public BSimScene scene = null;
+	
+	// The simulation objects
+	public Vector<BSimBacterium> bacteria = null;
+	public Vector<BSimVesicle> vesicles = null;
+	public Vector<BSimBead> beads = null;
+	
+	// Processing and PApplet
 	public int w;
 	public int h;
-	public int frameForSec;
-	public int frameRecordForSec;
+	public int maximumFPS;
+	PFont myFont;
+
+	// Camera parameters
 	public double minDistance;
 	public double maxDistance;
 	public double defaultDistance;
-	
-	//object to handle the simulation camera
 	public PeasyCam cam = null;
+		
 	
-	//object used to start a video recording
-	public MovieMaker mm = null;	
-	
-	//core of the simulation
-	public BSimScene scene=null;
-	
-	//simulation objects
-	public Vector bacteria=null;
-	public Vector vesicles=null;
-	public BSimBoundingBox boundingBox=null;
-	
-	public BSimChemicalField fGoal = null;
-	public double[][][] theField;
-	// The number of x,y,z boxes used for display
-	public int nBoxX = 20, nBoxY = 20, nBoxZ = 20;
-	public int fieldDimX, fieldDimY, fieldDimZ;
-	public double conc;
-	public double[] boxPos = new double[3];
-	public boolean fieldIsDisplayed = false;
-	
-	PFont myFont;
-
+	/**
+	 * Standard constructor for the renderer
+	 */
 	public BSimProcessingRenderer(BSimScene newScene) {
-		//core of the simulation
-		scene=newScene;
+		// BSimScene used in the core simulation
+		// TODO: check up on references vs instances in java :s
+		scene = newScene;
 			
-		//PApplet parameters
-		w = scene.getParams().getScreenWidth();
-		h = scene.getParams().getScreenHeight();
-		frameForSec = scene.getParams().getFrameForSec();
-		frameRecordForSec = scene.getParams().getFrameRecordForSec();
+		// PApplet parameters
+		w = BSimParameters.screenWidth;
+		h = BSimParameters.screenHeight;
+		maximumFPS = 25;
 		
-		//camera parameters
-		minDistance = scene.getParams().getMinimumDistance();
-		maxDistance =	scene.getParams().getMaximumDistance();
-		defaultDistance = scene.getParams().getDefaultDistance();
+		// Camera specific parameters
+		// TODO: get them from the parameters file?
+		minDistance = 20;
+		maxDistance = 1000;
+		defaultDistance = 200;
+//		minDistance = scene.getParams().getMinimumDistance();
+//		maxDistance =	scene.getParams().getMaximumDistance();
+//		defaultDistance = scene.getParams().getDefaultDistance();
 		
-		//object into the simulation
+		// Get simulation objects from the scene
 		bacteria = scene.getBacteria();
-		vesicles= scene.getVesicles();
-		boundingBox = scene.getBoundingBox();		
-		
-		//Chemical field bits
-		fGoal = scene.getGoalField();
-		fieldIsDisplayed = (boolean)fGoal.getDisplayed();
-		fieldDimX = fGoal.getField().length;
-		fieldDimY = fGoal.getField()[0].length;
-		fieldDimZ = fGoal.getField()[0][0].length;
-		
-		if(fieldDimX<nBoxX){
-			nBoxX = fieldDimX;
-		}
-		if(fieldDimY<nBoxY){
-			nBoxY = fieldDimY;
-		}
-		if(fieldDimZ<nBoxZ){
-			nBoxZ = fieldDimZ;
-		}
-		// This will cause the number of boxes displayed to be exactly equal to those in the chemical
-		// field calculations. WARNING this is VERY slow for a large number of boxes so better to
-		// just keep display box number constant as above.
-		//nBoxX = fGoal.getField().length;
-		//nBoxY = fGoal.getField()[0].length;
-		//nBoxZ = fGoal.getField()[0][0].length;
+		vesicles = scene.getVesicles();
+		beads = scene.getBeads();
 	}
-
-	// Yes, this is the P5 setup()
-	public void setup() {
+	
+	
+	/************************ Processing's initialisation and drawing ************************/
+	/**
+	 * Setup the PApplet; initialise the Processing renderer and its settings
+	 * TODO: 	Passing/selecting colours so that e.g. draw(sensingBacterium) can call 
+	 * 			draw(bacterium) but be a different colour
+	 */
+	public void setup(){
+		// Initialise the Processing renderer:
+		// TODO: 	correct width and height parameters
+		// TODO: 	correlate with window width/height and that blasted resizing bug...!
 		size(w, h, P3D);
-		//frame for sec
-		frameRate(frameForSec);
-		//noStroke() must be here so every object will be draw without stroke
-		noStroke();
-		//Peasy Cam usage
+
+		// Set our target frame rate:
+		frameRate(maximumFPS);
+		
+		// Set up and initialise PeasyCam:
 		cam = new PeasyCam(this, (float) defaultDistance);
 		cam.setMinimumDistance((float) minDistance);
 		cam.setMaximumDistance((float) maxDistance);
-		//simulation time font
+
+		// Speed up sphere rendering somewhat. Processing's default value is 30 (much slower to render).
+		sphereDetail(10);
+		
+		// Other Processing drawing options:
+		noStroke();
+		
+		// Font for drawing overlay text:
 		myFont = createFont("FFScala", 20);
 		textFont(myFont);
+		textMode(SCREEN);
+	}
+	
+	/**
+	 *  Draw all objects in the scene
+	 */
+	public void draw(){
+		// Clean slate, otherwise we end up drawing on top of the previous frame.
+		background(0);
+		
+		// TODO: 	Draw the scene boundaries.
+		//someDrawBoundariesMethod(Boundaries b){}
+		
+		// Don't want 3D lighting to slow down our chemical field rendering...
+		//noLights();
+		
+		// Chemical fields
+		//TODO: 	time to vectorise our chemical fields or something like that
+
+		// Add Processing's 3D lighting.
+		lights();
+		
+		// Bacteria
+		for(BSimBacterium bact : bacteria) {
+			draw(bact);
+		}
+		
+		// Vesicles
+		for(BSimVesicle ves : vesicles) {
+			draw(ves);
+		}
+		
+		// Particles
+		for(BSimBead bead : beads) {
+			draw(bead);
+		}
+			
+		// Text overlays; drawn last so they're on top of everything else.
+		drawTime();
+		drawFPS();
+	}
+	
+	
+	/****************************** BSimParticle Draw Methods ******************************/
+	/**
+	 * Draw a particle
+	 */
+	public void draw(BSimParticle part){
+		fill(255, 255, 255);
+		pushMatrix();
+		translate((float)part.getPosition().x, (float)part.getPosition().y,(float)part.getPosition().z);
+		sphere((float)(part.getRadius()));			
+		popMatrix();
 	}
 
-	public void draw() {
-		lights();
-		background(0);
-				
-					
-			double[] centrePos= boundingBox.getCentrePos();
-			pushMatrix();
-			translate((float)centrePos[0],(float)centrePos[1],(float)centrePos[2]);
-			stroke(255);
-			noFill();
-			box((float)boundingBox.getLength(), (float)boundingBox.getWidth(), (float)boundingBox.getDepth());
-			noStroke();
-			popMatrix();
-		
-		
-		//TODO: should have all 3 (more?) chemical fields and combine for drawing (how slow...)
-		// Draw chemical before drawing bacteria, or they all disappear into the fog!
-		if(fieldIsDisplayed){
-			theField = fGoal.getField();
-			noStroke();
-			
-			for (int i=0; i<nBoxX; i++){
-				for(int j=0; j<nBoxY; j++){
-					for(int k=0; k<nBoxZ;k++){
-						boxPos[0] = (i + 0.5)*boundingBox.getLength()/nBoxX;
-						boxPos[1] = (j + 0.5)*boundingBox.getWidth()/nBoxY;
-						boxPos[2] = (k + 0.5)*boundingBox.getDepth()/nBoxZ;
-						
-						// This seems to work... but only for evenly divisible by nBox.. grrr
-						// TODO: lots of optimisation and fixing
-						conc = 0;
-						for(int bi = floor((float)i*(float)fieldDimX/(float)nBoxX); bi<ceil(((float)i+1.0f)*(float)fieldDimX/(float)nBoxX); bi++){
-							for(int bj = floor((float)j*(float)fieldDimY/(float)nBoxY); bj<ceil(((float)j+1.0f)*(float)fieldDimY/(float)nBoxY); bj++){
-								for(int bk = floor((float)k*(float)fieldDimZ/(float)nBoxZ); bk<ceil(((float)k+1.0f)*(float)fieldDimZ/(float)nBoxZ); bk++){
-									conc += theField[bi][bj][bk];
-								}
-							}
-						}
-						conc = conc/(((float)fieldDimX/(float)nBoxX)*((float)fieldDimY/(float)nBoxY)*((float)fieldDimZ/(float)nBoxZ));
-						
-						// Cheat (this won't look so good if for example a bacteria 
-						// releases a small amount of chemical as it is not an average for the box):
-						// conc = fGoal.getConcentration(boxPos);
-						
-						fill((255*(float)conc), 0, 0,(25*(float)conc));
-						pushMatrix();
-						translate((float)boxPos[0], (float)boxPos[1], (float)boxPos[2]);
-						box((float)boundingBox.getLength()/nBoxX,(float)boundingBox.getWidth()/nBoxY, (float)boundingBox.getDepth()/nBoxZ);
-						popMatrix();
-					}
-				}
-			}
-		}
-	
-		for(int i=0;i<bacteria.size();i++){
-			BSimBacterium bact = (BSimBacterium)bacteria.elementAt(i);
-			//TODO: clean up variables for the rotation part to speed up a bit
-			Vector3f worldY = new Vector3f(0,1,0);
-			Vector3f bacDirVector = new Vector3f(bact.getDirection());
-			Vector3f bacRotVector = new Vector3f();
-			bacRotVector.cross(worldY,bacDirVector);
-			//normalising slows us down... but method breaks without normalising so obviously some vectors have not been normalised by this point
-			bacDirVector.normalize();
-			bacRotVector.normalize();
-			pushMatrix();
-				translate((float)bact.getPosition().x, (float)bact.getPosition().y,(float)bact.getPosition().z);
-				fill(0, 255, 0);		
-				//fix the rotation on the axis
-				//pushMatrix();
-					rotate(worldY.angle(bacDirVector), bacRotVector.x, bacRotVector.y, bacRotVector.z);
-					drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
-				//popMatrix();
-				//Draw the direction
-				//translate(bacDirVector.x, bacDirVector.y,bacDirVector.z);
-				//fill(255,0,0);
-				//sphere(0.25f);
-			popMatrix();
-		}		
-		
-		for(int i=0;i<vesicles.size();i++){
-			BSimVesicle vesicle = (BSimVesicle)vesicles.elementAt(i);
-			pushMatrix();
-			translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
-			fill(255, 131, 223);
-			sphere((float)(vesicle.getRadius()));			
-			popMatrix();
-		}
-		
-		//Draw text last so it is on top
-		//simulation time
-		fill(255, 255, 255);
-		textMode(SCREEN);
-		text(scene.getFormatedTime(), 10, 30);	
-		
-		if(scene.getGuiExists()){
-			if(scene.getStartVideo()){
-				loadPixels();
-				if(mm!=null){
-					mm.addFrame();		
-				}
-				updatePixels();
-			}
-			
-			if(scene.getEndVideo()){
-				if(mm!=null){
-					mm.finish();
-					scene.setEndVideo(false);
-					scene.setWaitingForVideoClosing(false);
-				}
-			}
-		}
+	/**
+	 * Draw a bead
+	 */	
+	public void draw(BSimBead bead){
+		fill(255, 0, 0);
+		pushMatrix();
+		translate((float)bead.getPosition().x, (float)bead.getPosition().y,(float)bead.getPosition().z);
+		sphere((float)(bead.getRadius()));			
+		popMatrix();
 	}
-	
-	//the RodShape is drawn along the y axis
+
+	/**
+	 * Draw a bacterial membrane vesicle
+	 */
+	public void draw(BSimVesicle vesicle){
+		fill(255, 131, 223);
+		pushMatrix();
+		translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
+		sphere((float)(vesicle.getRadius()));			
+		popMatrix();
+	}
+
+
+	/****************************** BSimBacterium Draw Methods *****************************/
+	/**
+	 * Draw a standard BSimBacterium
+	 */
+	public void draw(BSimBacterium bact){
+		fill(0, 255, 0);
+		
+		// Draw the bacterium as a rod shape.
+		Vector3f worldY = new Vector3f(0,1,0);
+		Vector3f bacDirVector = new Vector3f(bact.getDirection());
+		Vector3f bacRotVector = new Vector3f();
+		
+		bacRotVector.cross(worldY,bacDirVector);
+		
+		bacRotVector.normalize();
+			
+		pushMatrix();
+			translate((float)bact.getPosition().x, (float)bact.getPosition().y,(float)bact.getPosition().z);
+			rotate(worldY.angle(bacDirVector), bacRotVector.x, bacRotVector.y, bacRotVector.z);
+			drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
+		popMatrix();
+		
+		// Draw the bacterium as a sphere (faster).
+		//pushMatrix();
+		//translate((float)bact.getPosition().x, (float)bact.getPosition().y,(float)bact.getPosition().z);
+		//sphere((float)bact.getRadius());
+		//popMatrix();
+	}
+		
+	/**
+	 * Draw a repressilator GRN bacterium
+	 */
+	public void draw(BSimRepBacterium bact){
+		// TODO: 	Restore colour changing behaviour without having to write more
+		//			rod transform code in here
+		draw((BSimBacterium)bact);
+	}
+		
+	/**
+	 * Draw a rod shape, aligned with Processing's global y axis.
+	 */
+	// TODO: 	why is there both a radius and diameter? Is diameter actually 'length'?
 	public void drawRodShape(float radius, float diameter, int sides) {
 		  float angle = 0;
 		  float angleIncrement = TWO_PI / sides;
-		  // save a bunch of calculations:
 		  float diameterRatio = -(diameter/2)+radius;
+		  
 		  beginShape(QUAD_STRIP);
 		  for (int i = 0; i < sides + 1; ++i) {
 		    vertex(radius*cos(angle), 0 + diameterRatio, radius*sin(angle));
@@ -250,36 +252,66 @@ public class BSimProcessingRenderer extends PApplet {
 		  }
 		  endShape();
 		  
-		  //bottom cap
+		  //bottom capping sphere
 		  pushMatrix();
 		  translate(0,0 + diameterRatio,0);
 		  sphere(radius);
 		  popMatrix();
 		  
-		  //top cap
+		  //top capping sphere
 		  pushMatrix();
 		  translate(0,0 - diameterRatio,0);
 		  sphere(radius);
 		  popMatrix();
 	}
-		
-	public void createMovie(String videoFileName){		
-		mm = new MovieMaker(this, w, h, videoFileName, frameRecordForSec, MovieMaker.JPEG, MovieMaker.LOSSLESS);
-		scene.setWaitingForVideoOpening(false);
+	
+	
+	/**************************** BSimChemicalField Draw Methods ****************************/
+	/**
+	 * Draw a BSimChemicalField grid in the scene space
+	 */
+	public void draw(BSimChemicalField field){
+		// OK can get rid of this for now. Still on the repository after all...
+		// Draw chemical before drawing bacteria, or they all disappear into the fog!		
 	}
 	
-	public void takeImage(String imageFileName){
-		save(imageFileName);
+	
+	/***************************** Scene Boundary Draw Methods ******************************/
+	/**
+	 * Draw the scene boundary
+	 */
+	// TODO: 	base this on the new boundary implementation when its done:
+	/*
+	 * The old code:
+	 */
+//	double[] centrePos= boundingBox.getCentrePos();
+//	pushMatrix();
+//	translate((float)centrePos[0],(float)centrePos[1],(float)centrePos[2]);
+//	stroke(255);
+//	noFill();
+//	box((float)boundingBox.getLength(), (float)boundingBox.getWidth(), (float)boundingBox.getDepth());
+//	noStroke();
+//	popMatrix();
+	
+	
+	/******************************* GUI Overlay Draw Methods *******************************/
+	/**		These should be drawn last to prevent other stuff being drawn over them			*/
+	/**
+	 * Draw the current Simulation time to screen
+	 */
+	public void drawTime(){
+		fill(255);
+		text(scene.getFormatedTime(), 10, 30);	
 	}
 	
-	public void addMovieFrame(){
-		loadPixels();
-		mm.addFrame();
-		updatePixels();
+	/**
+	 * Draw the estimate frames per second to screen
+	 */
+	public void drawFPS(){
+		fill(255);
+		text(frameRate, 300, 30);
 	}
 	
-	public void closeMovie(){
-		mm.finish();
-		scene.setWaitingForVideoClosing(false);
-	}
 }
+
+
