@@ -13,8 +13,8 @@ import java.io.File;
 import java.util.Vector;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.particle.BSimParticle;
+import bsim.scene.BSimScene;
 
 
 public class BSimBacteriaFileExport extends BSimFileExport {

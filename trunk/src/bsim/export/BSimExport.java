@@ -10,7 +10,7 @@
 package bsim.export;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
+import bsim.scene.BSimScene;
 
 
 public interface BSimExport{

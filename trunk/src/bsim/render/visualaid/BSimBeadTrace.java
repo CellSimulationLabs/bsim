@@ -15,8 +15,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
-import bsim.BSimScene;
 import bsim.particle.bead.BSimBead;
+import bsim.scene.BSimScene;
 
 
 public class BSimBeadTrace implements BSimVisualAid {

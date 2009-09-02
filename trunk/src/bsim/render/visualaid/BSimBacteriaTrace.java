@@ -13,8 +13,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
-import bsim.BSimScene;
 import bsim.particle.bacterium.BSimBacterium;
+import bsim.scene.BSimScene;
 
 
 public class BSimBacteriaTrace implements BSimVisualAid {

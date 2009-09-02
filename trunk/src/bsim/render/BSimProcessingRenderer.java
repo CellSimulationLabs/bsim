@@ -21,10 +21,10 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import processing.video.MovieMaker;
 import bsim.BSimBoundingBox;
-import bsim.BSimScene;
 import bsim.field.BSimChemicalField;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.vesicle.BSimVesicle;
+import bsim.scene.BSimScene;
 
 
 public class BSimProcessingRenderer extends PApplet {

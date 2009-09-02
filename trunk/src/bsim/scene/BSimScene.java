@@ -16,7 +16,7 @@
  * Created: 12/07/2008
  * Updated: 26/08/2009
  */
-package bsim;
+package bsim.scene;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -28,19 +28,17 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
+import bsim.BSimBoundingBox;
+import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
 import bsim.app.BSimToolbar;
 import bsim.field.BSimChemicalField;
-import bsim.field.BSimChemicalFieldCreate;
 import bsim.particle.BSimParticle;
-import bsim.particle.bacterium.BSimBacteriaCreate;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.bead.BSimBead;
-import bsim.particle.bead.BSimBeadsCreate;
 import bsim.particle.vesicle.BSimVesicle;
 import bsim.render.BSimProcessingRenderer;
-import bsim.render.visualaid.BSimVisualAidCreate;
 
 
 public class BSimScene extends JPanel implements Runnable, ComponentListener{

@@ -10,14 +10,10 @@
  */
 package bsim.particle.bacterium;
 
-import java.awt.Graphics;
-
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
-import bsim.particle.BSimParticle;
-import bsim.particle.bead.BSimBead;
+import bsim.scene.BSimScene;
 
 
 public class BSimSensingBacterium extends BSimBacterium {

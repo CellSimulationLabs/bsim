@@ -8,7 +8,6 @@
  */
 package bsim;
 
-import java.awt.Graphics;
 
 
 public class BSimBoundingBox {

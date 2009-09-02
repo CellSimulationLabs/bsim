@@ -10,9 +10,6 @@
 */
 package bsim;
 
-import javax.vecmath.Vector3d;
-
-import bsim.particle.BSimParticle;
 
 
 public class BSimUtils {

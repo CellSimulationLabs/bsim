@@ -13,12 +13,10 @@
  */
 package bsim.particle.bacterium;
 
-import java.awt.Graphics;
-
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
+import bsim.scene.BSimScene;
 
 
 public class BSimRecruitBacterium extends BSimCoordBacterium  {

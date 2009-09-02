@@ -10,13 +10,9 @@
  */
 package bsim.particle.bead;
 
-import java.awt.Graphics;
-
 import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimParticle;
-import bsim.particle.bacterium.BSimBacterium;
-import bsim.particle.vesicle.BSimVesicle;
 
 
 public class BSimBead extends BSimParticle {

@@ -21,7 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
+import bsim.scene.BSimScene;
 
 
 public class BSimToolbar extends JToolBar implements ActionListener{

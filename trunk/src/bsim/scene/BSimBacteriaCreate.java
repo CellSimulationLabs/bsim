@@ -8,16 +8,20 @@
  * Created: 20/07/2008
  * Updated: 07/08/2009
  */
-package bsim.particle.bacterium;
+package bsim.scene;
 
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.particle.BSimParticle;
+import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bacterium.BSimCoordBacterium;
+import bsim.particle.bacterium.BSimRecruitBacterium;
+import bsim.particle.bacterium.BSimRepBacterium;
+import bsim.particle.bacterium.BSimSensingBacterium;
 
 
 public class BSimBacteriaCreate {

@@ -8,13 +8,14 @@
  * Created: 25/07/2008
  * Updated: 07/08/2009
  */
-package bsim.field;
+package bsim.scene;
 
 import java.awt.Color;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
+import bsim.field.BSimChemicalField;
 
 
 public class BSimChemicalFieldCreate {

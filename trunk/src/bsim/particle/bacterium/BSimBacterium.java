@@ -14,7 +14,6 @@
  */
 package bsim.particle.bacterium;
 
-import java.awt.Graphics;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -23,15 +22,13 @@ import java.util.Vector;
 import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
-import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
-import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
+import bsim.scene.BSimScene;
 
 
 public class BSimBacterium extends BSimParticle {

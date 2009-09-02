@@ -15,11 +15,11 @@ import java.util.Calendar;
 import java.util.Vector;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.BSimUtils;
 import bsim.export.BSimBacteriaFileExport;
 import bsim.export.BSimBeadFileExport;
 import bsim.export.BSimExport;
+import bsim.scene.BSimScene;
 
 
 public class BSimBatch{

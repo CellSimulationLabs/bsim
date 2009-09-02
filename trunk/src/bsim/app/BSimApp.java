@@ -23,9 +23,9 @@ import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.export.PngEncoder;
 import bsim.export.QuickTimeOutputStream;
+import bsim.scene.BSimScene;
 
 
 public class BSimApp extends JFrame{

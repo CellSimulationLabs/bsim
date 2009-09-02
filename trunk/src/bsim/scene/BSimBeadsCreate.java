@@ -8,13 +8,14 @@
  * Created: 25/08/2008
  * Updated: 07/08/2009
  */
-package bsim.particle.bead;
+package bsim.scene;
 
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
+import bsim.particle.bead.BSimBead;
 
 
 public class BSimBeadsCreate {

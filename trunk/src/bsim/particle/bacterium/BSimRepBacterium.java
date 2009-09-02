@@ -13,15 +13,13 @@
 
 package bsim.particle.bacterium;
 
-import java.awt.Graphics;
 import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
-import bsim.BSimScene;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
+import bsim.scene.BSimScene;
 
 public class BSimRepBacterium extends BSimBacterium {
 

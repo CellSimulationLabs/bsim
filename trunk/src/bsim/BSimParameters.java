@@ -19,7 +19,7 @@ import java.util.Vector;
 
 public class BSimParameters {	
 	
-	// all hail the timestep
+	// bsim
 	public static double dt = 0.001; // seconds	
 		
 	// bsim.scene
@@ -90,7 +90,7 @@ public class BSimParameters {
 	private void processLine(String[] line, int lineNo) {
 		double[] args = parseLine(line);
 				
-		// dt or not dt? that is the question
+		// bsim
 		if     (line[0].equals("DT:")) dt = args[0];
 		
 		// bsim.scene

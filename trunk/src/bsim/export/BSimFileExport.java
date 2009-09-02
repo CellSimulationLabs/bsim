@@ -17,7 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import bsim.BSimParameters;
-import bsim.BSimScene;
+import bsim.scene.BSimScene;
 
 
 public abstract class BSimFileExport implements BSimExport {
