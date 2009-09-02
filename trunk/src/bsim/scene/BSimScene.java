@@ -27,8 +27,8 @@ import java.awt.event.ComponentListener;
 import java.util.Vector;
 
 import javax.swing.JPanel;
+import javax.vecmath.Vector3d;
 
-import bsim.BSimBoundingBox;
 import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
@@ -79,12 +79,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private Vector<BSimVesicle> vesicles;	
 	private Vector visualAids;
 	
-	private BSimBoundingBox boundingBox;
-	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
-	private BSimChemicalField fRecruitment;
-	private BSimChemicalField fCoordination;
+	private BSimChemicalField fRecruit;
+	private BSimChemicalField fCoord;
 	private BSimChemicalField fQuorum;
 	
 	// Time related variables
@@ -224,33 +222,79 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			app.updateTime(getFormatedTime());
 		}
 		
-		// Create the bacteria and bead sets	
-		for(double[] args : BSimParameters.beadSingles){
-			beads.add(BSimBeadsCreate.createBead(args));
+		// Create the bacteria and beads
+		for(double[] args : BSimParameters.bacteria){			
+			bacteria.add(new BSimBacterium(new Vector3d(args[0], args[1], args[2]), args[3], new Vector3d(args[4], args[5], args[6]), args[7], args[8], BSimBacterium.BAC_STATE_RUNNING, 0, 0, this));
 		}	
-		for(double[] args : BSimParameters.beadSets){
-			beads.addAll(BSimBeadsCreate.createBeadSet(args));
-		}
-		for(double[] args : BSimParameters.bacteriaSingles){
-			bacteria.add(BSimBacteriaCreate.createBacterium(args, this));
-		}		
-		for(double[] args : BSimParameters.bacteriaSets){
-			bacteria.addAll(BSimBacteriaCreate.createBacteriaSet(args, this));
-		}
+		// TODO create other types of bacteria
+		for(double[] args : BSimParameters.beads){
+			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3]));
+		}	
+
+		// Create the fields 
+		// This looks a bit insane but we should clean up the constructor first
+		// Surely the different types of fields should extend an abstract BSimChemicalField!?!!
+		fGoal = new BSimChemicalField(
+				(int)BSimParameters.fGoal[0],
+				(int)BSimParameters.fGoal[1],
+				BSimParameters.fGoal[2],
+				new Vector3d(BSimParameters.fGoal[3], BSimParameters.fGoal[4], BSimParameters.fGoal[5]),
+				BSimParameters.fGoal[6],
+				BSimParameters.fGoal[7],
+				BSimParameters.fGoal[8],
+				(int)BSimParameters.fGoal[9],
+				(int)BSimParameters.fGoal[10],
+				(int)BSimParameters.fGoal[11],
+				BSimParameters.fGoal[12],
+				BSimParameters.fGoal[12],
+				new Color(0.1f, 0.8f, 0.1f)
+              );
+		fCoord = new BSimChemicalField(
+				(int)BSimParameters.fCoord[0],
+				(int)BSimParameters.fCoord[1],
+				BSimParameters.fCoord[2],
+				new Vector3d(BSimParameters.fCoord[3], BSimParameters.fCoord[4], BSimParameters.fCoord[5]),
+				BSimParameters.fCoord[6],
+				BSimParameters.fCoord[7],
+				BSimParameters.fCoord[8],
+				(int)BSimParameters.fCoord[9],
+				(int)BSimParameters.fCoord[10],
+				(int)BSimParameters.fCoord[11],
+				BSimParameters.fCoord[12],
+				BSimParameters.fCoord[12],
+				new Color(0.1f, 0.8f, 0.1f)
+              );
+		fRecruit = new BSimChemicalField(
+				(int)BSimParameters.fRecruit[0],
+				(int)BSimParameters.fRecruit[1],
+				BSimParameters.fRecruit[2],
+				new Vector3d(BSimParameters.fRecruit[3], BSimParameters.fRecruit[4], BSimParameters.fRecruit[5]),
+				BSimParameters.fRecruit[6],
+				BSimParameters.fRecruit[7],
+				BSimParameters.fRecruit[8],
+				(int)BSimParameters.fRecruit[9],
+				(int)BSimParameters.fRecruit[10],
+				(int)BSimParameters.fRecruit[11],
+				BSimParameters.fRecruit[12],
+				BSimParameters.fRecruit[12],
+				new Color(0.1f, 0.8f, 0.1f)
+              );
+		fQuorum = new BSimChemicalField(
+				(int)BSimParameters.fQuorum[0],
+				(int)BSimParameters.fQuorum[1],
+				BSimParameters.fQuorum[2],
+				new Vector3d(BSimParameters.fQuorum[3], BSimParameters.fQuorum[4], BSimParameters.fQuorum[5]),
+				BSimParameters.fQuorum[6],
+				BSimParameters.fQuorum[7],
+				BSimParameters.fQuorum[8],
+				(int)BSimParameters.fQuorum[9],
+				(int)BSimParameters.fQuorum[10],
+				(int)BSimParameters.fQuorum[11],
+				BSimParameters.fQuorum[12],
+				BSimParameters.fQuorum[12],
+				new Color(0.1f, 0.8f, 0.1f)
+              );
 				
-		// Create each of the three chemical fields
-		fGoal = 		BSimChemicalFieldCreate.createChemicalField(BSimParameters.cfGoalDefine, BSimParameters.cfGoalSetup,
-                new Color(0.8f, 0.1f, 0.1f));
-		fCoordination = BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfCoordDefine, BSimParameters.cfCoordSetup, 
-                new Color(0.1f, 0.1f, 0.8f));
-		fRecruitment = 	BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfRecruitDefine, BSimParameters.cfRecruitSetup, 
-                new Color(0.1f, 0.8f, 0.1f));
-		fQuorum = 		BSimChemicalFieldCreate.createChemicalField (BSimParameters.cfQuorumDefine, BSimParameters.cfQuorumSetup, 
-                new Color(0.1f, 0.8f, 0.1f));
-		
-		// Create bounding box		
-		boundingBox = new BSimBoundingBox(BSimParameters.boundingBoxDefine);
-		
 		vesicles = new Vector();
 		reallocateNewForceMat = true;
 		
@@ -388,8 +432,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		
 		// Update the fields
 		fGoal.updateField();
-		fRecruitment.updateField();
-		fCoordination.updateField();
+		fRecruit.updateField();
+		fCoord.updateField();
 		fQuorum.updateField();
 		
 		// Update the visual aids
@@ -597,7 +641,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
-	public BSimBoundingBox getBoundingBox (){ return boundingBox; }
 	public Vector getVisualAids (){ return visualAids; }
 	public boolean getStartVideo (){ return startVideo; }
 	public boolean getEndVideo (){ return endVideo; }
@@ -610,8 +653,8 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public double getDtMilli (){ return dt * 1000; }
 	public int getPlayState () { return playState; }
 	public BSimChemicalField getGoalField (){ return fGoal; }
-	public BSimChemicalField getRecruitmentField (){ return fRecruitment; }
-	public BSimChemicalField getCoordinationField (){ return fCoordination; }
+	public BSimChemicalField getRecruitmentField (){ return fRecruit; }
+	public BSimChemicalField getCoordinationField (){ return fCoord; }
 	public BSimChemicalField getQuorumField() { return fQuorum; }
 	public int getTransX (){ return transX; }
 	public int getTransY (){ return transY; }

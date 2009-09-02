@@ -25,19 +25,16 @@ public class BSimParameters {
 	public static int      screenHeight    		= 700; // pixels	
 		
 	// bsim.scene
-	public static Vector<double[]> bacteriaSingles = new Vector(); 
-	public static Vector<double[]> bacteriaSets = new Vector();
-	public static Vector<double[]> beadSingles = new Vector();
-	public static Vector<double[]> beadSets	= new Vector(); 	  
-	public static double[] cfGoalDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public static double[] cfGoalSetup = {0, 0, 0, 0, 0, 0};
-	public static double[] cfCoordDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public static double[] cfCoordSetup = {0, 0, 0, 0, 0, 0};
-	public static double[] cfRecruitDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public static double[] cfRecruitSetup = {0, 0, 0, 0, 0, 0};
-	public static double[] cfQuorumDefine = {0, 0, 0, 10, 10, 10, 10, 10, 10, 0.001, 1, 1, 0.8};
-	public static double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};	
-	public static double[] boundingBoxDefine = {0, 0, 0, 0, 0, 0};
+	public static Vector<double[]> bacteria = new Vector();	
+	public static Vector<double[]> coordBacteria = new Vector();
+	public static Vector<double[]> recruitBacteria = new Vector();
+	public static Vector<double[]> repBacteria = new Vector();
+	public static Vector<double[]> sensingBacteria = new Vector();
+	public static Vector<double[]> beads = new Vector();
+	public static double[] fGoal;
+	public static double[] fCoord;
+	public static double[] fRecruit;
+	public static double[] fQuorum;	
 	public static double   screenZoom = 1; 
 	public static double[] screenMove = {0.0, 0.0};	
 	public static double bactRadius       = 1.4;	// microns
@@ -87,55 +84,52 @@ public class BSimParameters {
 		double[] args = parseLine(line);
 				
 		// bsim
-		if     (line[0].equals("DT:")) dt = args[0];
+		if     (line[0].equals("dt:")) dt = args[0];
 		
 		// bsim.scene
-		else if(line[0].equals("CREATE_BEAD_SINGLE:")) beadSingles.add(args);
-		else if(line[0].equals("CREATE_BEAD_SET:"))	beadSets.add(args);
-		else if(line[0].equals("CREATE_BACTERIUM_SINGLE:")) bacteriaSingles.add(args);
-		else if(line[0].equals("CREATE_BACTERIA_SET:")) bacteriaSets.add(args);		
-		else if(line[0].equals("FIELD_GOAL_DEFINE:")) cfGoalDefine = args;
-		else if(line[0].equals("FIELD_GOAL_SETUP:")) cfGoalSetup = args;
-		else if(line[0].equals("FIELD_COORD_DEFINE:")) cfCoordDefine = args;
-		else if(line[0].equals("FIELD_COORD_SETUP:")) cfCoordSetup = args;
-		else if(line[0].equals("FIELD_RECRUIT_DEFINE:")) cfRecruitDefine = args;
-		else if(line[0].equals("FIELD_RECRUIT_SETUP:")) cfRecruitSetup = args;
-		else if(line[0].equals("FIELD_QUORUM_DEFINE:")) cfQuorumDefine = args;
-		else if(line[0].equals("FIELD_QUORUM_SETUP:")) cfQuorumSetup = args;		
-		else if(line[0].equals("BOUNDING_BOX_DEFINE:")) boundingBoxDefine = args;			
-		else if(line[0].equals("SCREEN_ZOOM:")) screenZoom = args[0];		
-		else if(line[0].equals("SCREEN_MOVE:")) screenMove = args;
-		else if(line[0].equals("BACTERIA_RADIUS:")) bactRadius = args[0];
-		else if(line[0].equals("BACTERIA_FORCE_UP:")) bactForceUp = args[0];
-		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) bactForceDown = args[0];	
-		else if(line[0].equals("BEAD_RADIUS:")) beadRadius = args[0];
+		else if(line[0].equals("bacterium:")) bacteria.add(args);
+		else if(line[0].equals("coordBacterium:")) coordBacteria.add(args);
+		else if(line[0].equals("recruitBacterium:")) recruitBacteria.add(args);
+		else if(line[0].equals("repBacterium:")) repBacteria.add(args);
+		else if(line[0].equals("sensingBacterium:")) sensingBacteria.add(args);
+		else if(line[0].equals("bead:")) beads.add(args);
+		else if(line[0].equals("fGoal:")) fGoal = args;
+		else if(line[0].equals("fCoord:")) fCoord = args;
+		else if(line[0].equals("fRecruit:")) fRecruit = args;
+		else if(line[0].equals("fQuorum:")) fQuorum = args;				
+		else if(line[0].equals("screenZoom:")) screenZoom = args[0];		
+		else if(line[0].equals("screenMove:")) screenMove = args;
+		else if(line[0].equals("bactRadius:")) bactRadius = args[0];
+		else if(line[0].equals("bactForceUp:")) bactForceUp = args[0];
+		else if(line[0].equals("bactForceDown:")) bactForceDown = args[0];	
+		else if(line[0].equals("beadRadius:")) beadRadius = args[0];
 				
 		// bsim.particle
-		else if(line[0].equals("PHYSICS_REACT_FORCE:")) reactForce = args[0];
-		else if(line[0].equals("VISCOSITY:")) visc = args[0];
-		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) wellWidthBactBead = args[0];
-		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) wellDepthBactBead = args[0];
+		else if(line[0].equals("reactForce:")) reactForce = args[0];
+		else if(line[0].equals("visc:")) visc = args[0];
+		else if(line[0].equals("wellWidthBactBead:")) wellWidthBactBead = args[0];
+		else if(line[0].equals("wellDepthBactBead:")) wellDepthBactBead = args[0];
 		
 		// bsim.particle.bacteria		
-		else if(line[0].equals("UP_RUN_LENGTH:")) runLengthUp = args[0];
-		else if(line[0].equals("DOWN_RUN_LENGTH:")) runLengthDown = args[0];
-		else if(line[0].equals("ISO_RUN_LENGTH:")) runLengthIso = args[0];
+		else if(line[0].equals("runLengthUp:")) runLengthUp = args[0];
+		else if(line[0].equals("runLengthDown:")) runLengthDown = args[0];
+		else if(line[0].equals("runLengthIso:")) runLengthIso = args[0];
 				
 		// bsim.field
-		else if(line[0].equals("NUMBER_OF_THREADS:")) numOfThreads = (int)args[0];		
+		else if(line[0].equals("numOfThreads:")) numOfThreads = (int)args[0];		
 		
 		// bsim.app					
-		else if(line[0].equals("SCREEN_WIDTH:")) screenWidth = (int)args[0];
-		else if(line[0].equals("SCREEN_HEIGHT:")) screenHeight = (int)args[0];
+		else if(line[0].equals("screenWidth:")) screenWidth = (int)args[0];
+		else if(line[0].equals("screenHeight:")) screenHeight = (int)args[0];
 		
 		// bsim.batch		
-		else if(line[0].equals("DATA_FRAMES_SKIP:")) dataFramesSkip = (int)args[0];
-		else if(line[0].equals("VIDEO_FRAMES_SKIP:")) videoFramesSkip = (int)args[0];
-		else if(line[0].equals("SIMULATION_RUNS:")) simRuns = (int)args[0];
-		else if(line[0].equals("SIMULATION_LENGTH:")) simLength = (int)args[0];
-		else if(line[0].equals("RECORD_VIDEO:")) { if((int)args[0] == 1) { recordVideo = true; } else { recordVideo = false; } }
-		else if(line[0].equals("SCREEN_FRAME_RECORD_FOR_SECOND:")) frameRecordForSec = (int)args[0];
-		else if(line[0].equals("EXPORT_DIR:")) exportDir = line[1];
+		else if(line[0].equals("dataFramesSkip:")) dataFramesSkip = (int)args[0];
+		else if(line[0].equals("videoFramesSkip:")) videoFramesSkip = (int)args[0];
+		else if(line[0].equals("simRuns:")) simRuns = (int)args[0];
+		else if(line[0].equals("simLength:")) simLength = (int)args[0];
+		else if(line[0].equals("recordVideo:")) { if((int)args[0] == 1) { recordVideo = true; } else { recordVideo = false; } }
+		else if(line[0].equals("frameRecordForSec:")) frameRecordForSec = (int)args[0];
+		else if(line[0].equals("exportDir:")) exportDir = line[1];
 	
 		else if(line[0].equals("***"))  {} // Do nothing
 		else System.err.println("Line " + lineNo + " not Read in Parameter File");
