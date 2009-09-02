@@ -21,23 +21,6 @@ import bsim.scene.BSimScene;
 
 public class BSimRecruitBacterium extends BSimCoordBacterium  {
 
-	protected boolean foundRecruit = false;
-
-	/**
-	 * General constructor.
-	 */
-	public BSimRecruitBacterium(Vector3d newPosition, double newRadius,
-			Vector3d newDirection,  double newForceMagnitudeDown,
-			double newForceMagnitudeUp,
-			int newState, double newTumbleSpeed, int newRemDt, BSimScene newScene, 
-		    double newSwitchSpeed, double newCoordThreshold) {
-
-		// Call the parent constructor with the basic properties	
-		super(newPosition, newRadius, newDirection, newForceMagnitudeDown,
-		newForceMagnitudeUp, newState,
-		      newTumbleSpeed, newRemDt, newScene, newSwitchSpeed, newCoordThreshold);
-	}
-
 
 	public void action () {
 		
@@ -68,44 +51,8 @@ public class BSimRecruitBacterium extends BSimCoordBacterium  {
 		super.action();
 	}
 
-	
-	/**
-	 * This is an updated version of the BSimBacterium method to only allow for the
-	 * sensed goal concentration to be used if in contact with a bead.
-	 */
-	protected double senseRunContinueProb() {
-		double shortTermMean;
-		double longTermMean;
-		double shortTermCounter = 0.0;
-		double longTermCounter = 0.0;
-		double shortTermMemoryLength = 1.0; // seconds
-		double longTermMemoryLength = 3.0; // seconds
-		double sensitivity = 0.000001;
-		
-		// Perform the normal attraction to the goal chemoattractant
-		for(int i=0; i<concMemory.size();i++) {
-			if(i <= (longTermMemoryLength/BSimParameters.dt)) {
-				longTermCounter = longTermCounter + (Double)concMemory.elementAt(i);
-			} else shortTermCounter = shortTermCounter + (Double)concMemory.elementAt(i);
-		}
-		shortTermMean = shortTermCounter / (1 + (shortTermMemoryLength/BSimParameters.dt));
-		longTermMean = longTermCounter / (longTermMemoryLength/BSimParameters.dt);
-	
-		if(shortTermMean - longTermMean > sensitivity) {
-			foundRecruit = true;
-			runUp = true;
-			return upRunProb;
-		}
-		else if(longTermMean - shortTermMean > sensitivity){
-			foundRecruit = false;
-			runUp = false;
-			return downRunProb;
-		}
-		else {
-			foundRecruit = false;
-			runUp = false;
-			return isoRunProb;
-		}
+	protected double runProb() {
+		//BSimBacterium.runContinueProb();
 	}
 		
 }
