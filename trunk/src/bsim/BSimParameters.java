@@ -18,9 +18,11 @@ import java.util.Vector;
 
 
 public class BSimParameters {	
-	
+
 	// bsim
 	public static double dt = 0.001; // seconds	
+	public static int      screenWidth     	 	= 1025; // pixels
+	public static int      screenHeight    		= 700; // pixels	
 		
 	// bsim.scene
 	public static Vector<double[]> bacteriaSingles = new Vector(); 
@@ -37,7 +39,11 @@ public class BSimParameters {
 	public static double[] cfQuorumSetup = {0, 0, 0, 0, 0, 0};	
 	public static double[] boundingBoxDefine = {0, 0, 0, 0, 0, 0};
 	public static double   screenZoom = 1; 
-	public static double[] screenMove = {0.0, 0.0};
+	public static double[] screenMove = {0.0, 0.0};	
+	public static double bactRadius       = 1.4;	// microns
+	public static double bactForceUp      = 0.4387; // pico newtons
+	public static double bactForceDown    = 0.41; // pico newtons	
+	public static double beadRadius       = 10.0;	// microns
 	
 	// bsim.particle
 	public static double reactForce = 0.0;
@@ -45,24 +51,14 @@ public class BSimParameters {
 	public static double wellWidthBactBead = 0.0;
 	public static double wellDepthBactBead = 0.0;
 	
-	// bsim.particle.bacterium
-	public static double bactRadius       = 1.4;	// microns
-	public static double bactForceUp      = 0.4387; // pico newtons
-	public static double bactForceDown    = 0.41; // pico newtons		
+	// bsim.particle.bacterium	
 	public static double runLengthUp      = 1.07;	// seconds
 	public static double runLengthDown    = 0.8;	// seconds
 	public static double runLengthIso     = 0.86; // seconds
-	
-	// bsim.particle.bead
-	public static double   beadRadius       = 10.0;	// microns
-		
+			
 	// bsim.field
 	public static int      numOfThreads     = 2;	
-	
-	// bsim.app
-	public static int      screenWidth     	 	= 1025; // pixels
-	public static int      screenHeight    		= 700; // pixels	
-	
+		
 	// bsim.batch
 	public static int      dataFramesSkip   = 1;
 	public static int      videoFramesSkip  = 1;
@@ -106,9 +102,13 @@ public class BSimParameters {
 		else if(line[0].equals("FIELD_RECRUIT_SETUP:")) cfRecruitSetup = args;
 		else if(line[0].equals("FIELD_QUORUM_DEFINE:")) cfQuorumDefine = args;
 		else if(line[0].equals("FIELD_QUORUM_SETUP:")) cfQuorumSetup = args;		
-		else if(line[0].equals("BOUNDING_BOX_DEFINE:")) boundingBoxDefine = args;
-		else if(line[0].equals("SCREEN_MOVE:")) screenMove = args;		
-		else if(line[0].equals("SCREEN_ZOOM:")) screenZoom = args[0];
+		else if(line[0].equals("BOUNDING_BOX_DEFINE:")) boundingBoxDefine = args;			
+		else if(line[0].equals("SCREEN_ZOOM:")) screenZoom = args[0];		
+		else if(line[0].equals("SCREEN_MOVE:")) screenMove = args;
+		else if(line[0].equals("BACTERIA_RADIUS:")) bactRadius = args[0];
+		else if(line[0].equals("BACTERIA_FORCE_UP:")) bactForceUp = args[0];
+		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) bactForceDown = args[0];	
+		else if(line[0].equals("BEAD_RADIUS:")) beadRadius = args[0];
 				
 		// bsim.particle
 		else if(line[0].equals("PHYSICS_REACT_FORCE:")) reactForce = args[0];
@@ -116,17 +116,11 @@ public class BSimParameters {
 		else if(line[0].equals("PHYSICS_WELL_WIDTH_BACT_BEAD:")) wellWidthBactBead = args[0];
 		else if(line[0].equals("PHYSICS_WELL_DEPTH_BACT_BEAD:")) wellDepthBactBead = args[0];
 		
-		// bsim.particle.bacteria
-		else if(line[0].equals("BACTERIA_RADIUS:")) bactRadius = args[0];
-		else if(line[0].equals("BACTERIA_FORCE_UP:")) bactForceUp = args[0];
-		else if(line[0].equals("BACTERIA_FORCE_DOWN:")) bactForceDown = args[0];		
+		// bsim.particle.bacteria		
 		else if(line[0].equals("UP_RUN_LENGTH:")) runLengthUp = args[0];
 		else if(line[0].equals("DOWN_RUN_LENGTH:")) runLengthDown = args[0];
 		else if(line[0].equals("ISO_RUN_LENGTH:")) runLengthIso = args[0];
-		
-		// bsim.particle.bead
-		else if(line[0].equals("BEAD_RADIUS:")) beadRadius = args[0];
-		
+				
 		// bsim.field
 		else if(line[0].equals("NUMBER_OF_THREADS:")) numOfThreads = (int)args[0];		
 		
