@@ -15,6 +15,7 @@ package bsim.particle;
 
 import javax.vecmath.Vector3d;
 
+import bsim.BSimParameters;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.bacterium.BSimSensingBacterium;
 import bsim.particle.bead.BSimBead;
@@ -25,12 +26,6 @@ public abstract class BSimParticle {
 	private Vector3d position = new Vector3d(); // microns		
 	private Vector3d force = new Vector3d(); // piconewtons
 	private double radius; // microns	
-	
-	private double visc = 1e-3;
-	private double dt = 0.01;
-	private static double reactForce = 15;
-	private static double wellWidth = 1;
-	private static double wellDepth = 1;
 	
 	public BSimParticle(Vector3d newPosition, double newRadius) {
 		super();	
@@ -43,17 +38,20 @@ public abstract class BSimParticle {
 	*/
 	public static void interaction(BSimBacterium p, BSimBacterium q) {
 		double d = distance(p, q);
-		if(d < 0) reaction(p,q,d*reactForce);		
+		if(d < 0) reaction(p,q,d*BSimParameters.reactForce);		
 	}	
     
 	public static void interaction(BSimBacterium bacterium, BSimBead bead) {
 		
 		double d = distance(bacterium, bead);
-		double magnitude; 		
+		double magnitude;
+		double wellWidth = BSimParameters.wellWidthBactBead;
+		double wellDepth = BSimParameters.wellDepthBactBead;
+		
 		if (d>wellWidth || d == 0) magnitude = 0;
 		else if(d>(wellWidth/2.0)) magnitude = -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
 		else if(d>=0.0) magnitude = -(d*2.0*wellDepth/wellWidth);		
-		else magnitude = d * reactForce;
+		else magnitude = d * BSimParameters.reactForce;
 		
 		if(bacterium instanceof BSimSensingBacterium && magnitude != 0) {
 			((BSimSensingBacterium)bacterium).setBeadContactTimer();
@@ -64,12 +62,12 @@ public abstract class BSimParticle {
 	
 	public static void interaction(BSimBead p, BSimBead q) {
 		double d = distance(p, q);
-		if(d < 0) reaction(p,q,d*reactForce);		
+		if(d < 0) reaction(p,q,d*BSimParameters.reactForce);		
 	}
 	
 	public static void interaction(BSimBead bead, BSimVesicle vesicle) {
 		double d = distance(bead, vesicle);
-		if(d < 0) reaction(bead,vesicle,d*reactForce);		
+		if(d < 0) reaction(bead,vesicle,d*BSimParameters.reactForce);		
 	}
 	
 	/*
@@ -82,7 +80,7 @@ public abstract class BSimParticle {
 	 * Payable in force, yarr
 	 */
 	public void updatePosition() {
-		position.scaleAdd(dt/(6.0*Math.PI*radius*visc), force, position);
+		position.scaleAdd(BSimParameters.dt/(6.0*Math.PI*radius*BSimParameters.visc), force, position);
 		force.set(0,0,0);
 	}
 		
