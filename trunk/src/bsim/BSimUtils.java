@@ -10,28 +10,24 @@
 */
 package bsim;
 
+import java.util.List;
+
 
 
 public class BSimUtils {
 	
-	
-	/**
-	* Calculate the number of timesteps in a given number of seconds.
-	*/
-	public static synchronized int roundToDtSteps(double t, double dt) {
-		double tOverDt = t/dt;
-		int nDt;
-		
-		// Calculate the number of timesteps
-		if(tOverDt%1 >= 0.5) nDt = (int)(Math.ceil(tOverDt));
-		else                 nDt = (int)(Math.floor(tOverDt));
-		
-		// Return the result (we do not allow events to take 0 timesteps)
-		if(nDt==0) return 1;
-		else       return nDt;
+	/**	 
+	 * Returns the mean of a List<Double>
+	 */
+	public static synchronized double mean(List<Double> v) {
+		double c = 0;
+		for(double i : v) {
+			c += i;
+		}
+		return c/v.size();
 	}
 	
-	
+		
 	/**
 	* Returns an exponentially distributed random variable.
 	*/
@@ -94,5 +90,5 @@ public class BSimUtils {
 		}
 		
 		return outStr;
-	}
+	}	
 }
