@@ -17,7 +17,6 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.particle.bacterium.BSimBacterium;
-import bsim.particle.bacterium.BSimSensingBacterium;
 import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 
@@ -52,11 +51,7 @@ public abstract class BSimParticle {
 		else if(d>(wellWidth/2.0)) magnitude = -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
 		else if(d>=0.0) magnitude = -(d*2.0*wellDepth/wellWidth);		
 		else magnitude = d * BSimParameters.reactForce;
-		
-		if(bacterium instanceof BSimSensingBacterium && magnitude != 0) {
-			((BSimSensingBacterium)bacterium).setBeadContactTimer();
-		}
-		
+				
 		reaction(bacterium, bead, magnitude);
 	}		
 	
