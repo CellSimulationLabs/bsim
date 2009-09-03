@@ -59,7 +59,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private int scale = START_SCALE;
 	public static final int VIEW_PAN = 1;
 	public static final int VIEW_ZOOM = 2;
-	private int viewState = VIEW_PAN;
 	
 	private int simWidth = 0;
 	private int simHeight = 0;
@@ -525,14 +524,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				app.updateTime(getFormatedTime());
 			}
 		}
-	}
-
-	
-	/**
-	 * Update the viewState.
-	 */
-	public void setViewState(int newState){
-		viewState = newState;
 	}
 	
 	
