@@ -201,35 +201,36 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		// Create the fields 
 		// This looks a bit insane but we should clean up the constructor first
 		fGoal = new BSimChemicalField(
-				(int)BSimParameters.fGoal[0],
-				(int)BSimParameters.fGoal[1],
-				BSimParameters.fGoal[2],
-				new Vector3d(BSimParameters.fGoal[3], BSimParameters.fGoal[4], BSimParameters.fGoal[5]),
-				BSimParameters.fGoal[6],
-				BSimParameters.fGoal[7],
-				BSimParameters.fGoal[8],
-				(int)BSimParameters.fGoal[9],
-				(int)BSimParameters.fGoal[10],
-				(int)BSimParameters.fGoal[11],
-				BSimParameters.fGoal[12],
-				BSimParameters.fGoal[12],
+				(int)BSimParameters.fGoalFieldType,
+				(int)BSimParameters.fGoalBoundaryType,
+				BSimParameters.fGoalRate,
+				new Vector3d(BSimParameters.fGoalStartPos[0], BSimParameters.fGoalStartPos[1], BSimParameters.fGoalStartPos[2]),
+				BSimParameters.fGoalWidth,
+				BSimParameters.fGoalHeight,
+				BSimParameters.fGoalDepth,
+				(int)BSimParameters.fGoalXBoxes,
+				(int)BSimParameters.fGoalYBoxes,
+				(int)BSimParameters.fGoalZBoxes,
+				BSimParameters.dt,
+				BSimParameters.fGoalThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
-              );
+              );		
+		
 		fQuorum = new BSimChemicalField(
-				(int)BSimParameters.fQuorum[0],
-				(int)BSimParameters.fQuorum[1],
-				BSimParameters.fQuorum[2],
-				new Vector3d(BSimParameters.fQuorum[3], BSimParameters.fQuorum[4], BSimParameters.fQuorum[5]),
-				BSimParameters.fQuorum[6],
-				BSimParameters.fQuorum[7],
-				BSimParameters.fQuorum[8],
-				(int)BSimParameters.fQuorum[9],
-				(int)BSimParameters.fQuorum[10],
-				(int)BSimParameters.fQuorum[11],
-				BSimParameters.fQuorum[12],
-				BSimParameters.fQuorum[12],
+				(int)BSimParameters.fQuorumFieldType,
+				(int)BSimParameters.fQuorumBoundaryType,
+				BSimParameters.fQuorumRate,
+				new Vector3d(BSimParameters.fQuorumStartPos[0], BSimParameters.fQuorumStartPos[1], BSimParameters.fQuorumStartPos[2]),
+				BSimParameters.fQuorumWidth,
+				BSimParameters.fQuorumHeight,
+				BSimParameters.fQuorumDepth,
+				(int)BSimParameters.fQuorumXBoxes,
+				(int)BSimParameters.fQuorumYBoxes,
+				(int)BSimParameters.fQuorumZBoxes,
+				BSimParameters.dt,
+				BSimParameters.fQuorumThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
-              );
+              );	
 				
 		vesicles = new Vector();
 		

@@ -11,13 +11,19 @@
  */
 package bsim;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
 
+import javax.vecmath.Vector3d;
+
+import bsim.field.BSimChemicalField;
+
 
 public class BSimParameters {	
+	// TODO no doubles[] or Vectors, use official Properties class
 
 	// bsim
 	public static double dt = 0.001; // seconds	
@@ -27,8 +33,31 @@ public class BSimParameters {
 	// bsim.scene
 	public static Vector<double[]> bacteria = new Vector();	
 	public static Vector<double[]> beads = new Vector();
-	public static double[] fGoal;
-	public static double[] fQuorum;	
+	
+	public static double fGoalFieldType 	= BSimChemicalField.TYPE_FIXED;
+	public static double fGoalBoundaryType 	= BSimChemicalField.BOUNDARY_LEAK;
+	public static double fGoalRate 			= 0;
+	public static double[] fGoalStartPos 	= {0,0,0};
+	public static double fGoalWidth	 		= 0;
+	public static double fGoalHeight		= 0;
+	public static double fGoalDepth	 		= 0;
+	public static double fGoalXBoxes	 	= 0;
+	public static double fGoalYBoxes	 	= 0;
+	public static double fGoalZBoxes	 	= 0;
+	public static double fGoalThreshold	 		= 0;
+	
+	public static double fQuorumFieldType 		= BSimChemicalField.TYPE_FIXED;
+	public static double fQuorumBoundaryType 	= BSimChemicalField.BOUNDARY_LEAK;
+	public static double fQuorumRate 			= 0;
+	public static double[] fQuorumStartPos 		= {0,0,0};
+	public static double fQuorumWidth	 		= 0;
+	public static double fQuorumHeight			= 0;
+	public static double fQuorumDepth	 		= 0;
+	public static double fQuorumXBoxes	 		= 0;
+	public static double fQuorumYBoxes	 		= 0;
+	public static double fQuorumZBoxes	 		= 0;
+	public static double fQuorumThreshold	 	= 0;
+			
 	public static double   screenZoom = 1; 
 	public static double[] screenMove = {0.0, 0.0};		
 	
@@ -83,8 +112,31 @@ public class BSimParameters {
 		// bsim.scene
 		else if(line[0].equals("bacterium:")) bacteria.add(args);
 		else if(line[0].equals("bead:")) beads.add(args);
-		else if(line[0].equals("fGoal:")) fGoal = args;
-		else if(line[0].equals("fQuorum:")) fQuorum = args;				
+		
+		else if(line[0].equals("fGoalFieldType:")) fGoalFieldType = args[0];
+		else if(line[0].equals("fGoalBoundaryType:")) fGoalBoundaryType = args[0];
+		else if(line[0].equals("fGoalRate:")) fGoalRate = args[0];
+		else if(line[0].equals("fGoalStartPos:")) fGoalStartPos = args;
+		else if(line[0].equals("fGoalWidth:")) fGoalWidth = args[0];
+		else if(line[0].equals("fGoalHeight:")) fGoalHeight = args[0];
+		else if(line[0].equals("fGoalDepth:")) fGoalDepth = args[0];
+		else if(line[0].equals("fGoalXBoxes:")) fGoalXBoxes = args[0];
+		else if(line[0].equals("fGoalYBoxes:")) fGoalYBoxes = args[0];
+		else if(line[0].equals("fGoalZBoxes:")) fGoalZBoxes = args[0];
+		else if(line[0].equals("fGoalThreshold:")) fGoalThreshold = args[0];
+		
+		else if(line[0].equals("fQuorumFieldType:")) fQuorumFieldType = args[0];
+		else if(line[0].equals("fQuorumBoundaryType:")) fQuorumBoundaryType = args[0];
+		else if(line[0].equals("fQuorumRate:")) fQuorumRate = args[0];
+		else if(line[0].equals("fQuorumStartPos:")) fQuorumStartPos = args;
+		else if(line[0].equals("fQuorumWidth:")) fQuorumWidth = args[0];
+		else if(line[0].equals("fQuorumHeight:")) fQuorumHeight = args[0];
+		else if(line[0].equals("fQuorumDepth:")) fQuorumDepth = args[0];
+		else if(line[0].equals("fQuorumXBoxes:")) fQuorumXBoxes = args[0];
+		else if(line[0].equals("fQuorumYBoxes:")) fQuorumYBoxes = args[0];
+		else if(line[0].equals("fQuorumZBoxes:")) fQuorumZBoxes = args[0];
+		else if(line[0].equals("fQuorumThreshold:")) fQuorumThreshold = args[0];
+		
 		else if(line[0].equals("screenZoom:")) screenZoom = args[0];		
 		else if(line[0].equals("screenMove:")) screenMove = args;
 				
