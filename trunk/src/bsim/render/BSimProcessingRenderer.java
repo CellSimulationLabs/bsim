@@ -104,7 +104,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 
 		// Set our target frame rate:
 		frameRate(maximumFPS);
-		
+
 		// Set up and initialise PeasyCam:
 		cam = new PeasyCam(this, (float) defaultDistance);
 		cam.setMinimumDistance((float) minDistance);
@@ -112,10 +112,10 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 
 		// Speed up sphere rendering somewhat. Processing's default value is 30 (much slower to render).
 		sphereDetail(10);
-		
+
 		// Other Processing drawing options:
 		noStroke();
-		
+
 		// Font for drawing overlay text:
 		myFont = createFont("FFScala", 20);
 		textFont(myFont);
@@ -123,42 +123,54 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	}
 	
 	/**
-	 *  Draw all objects in the scene
+	 *  Draw all objects in the scene 
+	 *  By default Processing loops this automatically based on the FPS set above with maximumFPS,
+	 *  however we can control whether looping is on or off with loop() and noLoop() respectively.
 	 */
 	public void draw(){
 		// Clean slate, otherwise we end up drawing on top of the previous frame.
-		background(0);
-		
+		background(255,120,200);
+
 		// TODO: 	Draw the scene boundaries.
 		//someDrawBoundariesMethod(Boundaries b){}
-		
+
 		// Don't want 3D lighting to slow down our chemical field rendering...
 		//noLights();
-		
+
 		// Chemical fields
 		//TODO: 	time to vectorise our chemical fields or something like that
 
 		// Add Processing's 3D lighting.
 		lights();
 		
-		// Bacteria
-		for(BSimBacterium bact : bacteria) {
-			draw(bact);
-		}
+		// bad bad bad, might need to think of a better way of doing this.
+		try{
+			// Bacteria
+			for(BSimBacterium bact : bacteria) {
+				draw(bact);
+			}
+	
+			// Vesicles
+			for(BSimVesicle ves : vesicles) {
+				draw(ves);
+			}
+	
+			// Particles
+			for(BSimBead bead : beads) {
+				draw(bead);
+			}
+		} catch(NullPointerException ignore){}
 		
-		// Vesicles
-		for(BSimVesicle ves : vesicles) {
-			draw(ves);
-		}
-		
-		// Particles
-		for(BSimBead bead : beads) {
-			draw(bead);
-		}
-			
 		// Text overlays; drawn last so they're on top of everything else.
 		drawTime();
 		drawFPS();
+	}
+	
+	/**
+	 * Force a redraw on the scene (Processing will attempt to render a new frame as soon as possible)
+	 */
+	public void redraw(){
+		draw();
 	}
 	
 	
@@ -216,7 +228,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		pushMatrix();
 			translate((float)bact.getPosition().x, (float)bact.getPosition().y,(float)bact.getPosition().z);
 			rotate(worldY.angle(bacDirVector), bacRotVector.x, bacRotVector.y, bacRotVector.z);
-			drawRodShape((float)0.4, (float)(bact.getRadius()*2),90);
+			drawRodShape(0.4f, (float)(bact.getRadius()*2),90);
 		popMatrix();
 		
 		// Draw the bacterium as a sphere (faster).
