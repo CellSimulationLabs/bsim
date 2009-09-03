@@ -34,6 +34,7 @@ public class BSimBacterium extends BSimParticle {
 	
 	protected Vector3d direction;
 	protected Vector<Double> memory; // memory of the concentration of the goal field
+	protected BSimScene scene; // environment that the bacteria is living in
 	
 	// Motion states
 	protected static int RUNNING  = 1;
@@ -56,9 +57,10 @@ public class BSimBacterium extends BSimParticle {
 	/**
 	 * General constructor.
 	 */
-	public BSimBacterium(Vector3d newPosition, double newRadius, Vector3d newDirection) {
+	public BSimBacterium(Vector3d newPosition, double newRadius, Vector3d newDirection, BSimScene newScene) {
 		super(newPosition, newRadius);		
 		direction = newDirection;	
+		scene = newScene;
 		
 		double memorySize = (shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt;
 		memory = new Vector((int)(memorySize));		
@@ -66,8 +68,8 @@ public class BSimBacterium extends BSimParticle {
 	
 	public void action() {			
 		if(motionState == RUNNING) {
-			memory.remove(0);
-			memory.add(BSimScene.getGoalField().getConcentration(this.getPosition()));			
+			memory.remove(0); // forget the oldest concentration
+			memory.add(scene.getGoalField().getConcentration(this.getPosition())); // remember the newest concentration			
 			run();			
 		}
 		else if(motionState == TUMBLING) {
@@ -107,7 +109,7 @@ public class BSimBacterium extends BSimParticle {
 	}	
 	
 	protected void tumble() {		
-		// Obtain a random direction perpendicular to curDirection		
+		// Obtain a random direction perpendicular to current direction		
 		Vector3d randomVector = new Vector3d(Math.random(),Math.random(),Math.random());
 		Vector3d crossVector = new Vector3d();
 		crossVector.cross(direction, randomVector);		
@@ -119,7 +121,7 @@ public class BSimBacterium extends BSimParticle {
 		// Apply the rotation			
 		r.transform(direction);		
 		
-		// Update the remaining tumble steps and tumble angle
+		// Decrement the tumble steps and tumble angle
 		tumbleSteps-= 1;
 		tumbleAngle-= tumbleAngle/tumbleSteps;
 		

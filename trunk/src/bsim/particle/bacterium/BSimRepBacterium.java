@@ -17,6 +17,7 @@ import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
+import bsim.BSimParameters;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 import bsim.scene.BSimScene;
@@ -26,22 +27,11 @@ public class BSimRepBacterium extends BSimBacterium {
 	protected QuorumRepressilator repGRN;
 	protected double[] y, yNew;
 	protected double cellWallDiffusion;
-
-	/*
-	 * Constructor should have a parameter for an ODE? 
-	 * can then be passed from an inheriting class to the solver (here)
-	 */
-	/**
-	 * General constructor.
-	 */
-	public BSimRepBacterium(Vector3d newPosition, double newRadius,
-			Vector3d newDirection, double newForceMagnitudeDown, double newForceMagnitudeUp,
-			int newState, double newTumbleSpeed, int newRemDt, 
-			BSimScene newScene) {
-
-		// Call the parent constructor with the basic properties	
-		super(newPosition, newRadius, newDirection,newForceMagnitudeDown, newForceMagnitudeUp,
-				newState, newTumbleSpeed, newRemDt, newScene);
+	
+	 // Constructor should have a parameter for an ODE? 
+	 // can then be passed from an inheriting class to the solver (here)	 
+	public BSimRepBacterium(Vector3d newPosition, double newRadius, Vector3d newDirection, BSimScene newScene) {
+		super(newPosition, newRadius, newDirection, newScene);
 
 		repGRN = new QuorumRepressilator();
 		repGRN.generateBeta();
@@ -53,11 +43,11 @@ public class BSimRepBacterium extends BSimBacterium {
 
 	public void action() {
 
-		double h = super.scene.getDtSec();
-		int tIndex = super.scene.getTimeStep();
+		double h = BSimParameters.dt;
+		int tIndex = scene.getTimeStep();
 		double tNow = tIndex * h;
 		double externalChem, deltaChem;
-		externalChem = super.scene.getQuorumField().getConcentration(this.getPosition());
+		externalChem = scene.getQuorumField().getConcentration(this.getPosition());
 		// Get the external chem field level for the GRN ode system later on
 		repGRN.setExternalQuorumLevel(externalChem);
 		// Solve the ode system
@@ -68,9 +58,9 @@ public class BSimRepBacterium extends BSimBacterium {
 		deltaChem = externalChem - y[6];
 		//System.out.println(deltaChem);
 		if( deltaChem < 0){
-			super.scene.getQuorumField().addChemical(cellWallDiffusion*(-deltaChem), this.getPosition());
+			scene.getQuorumField().addChemical(cellWallDiffusion*(-deltaChem), this.getPosition());
 		}else if(deltaChem > 0){
-			super.scene.getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
+			scene.getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
 		}
 		
 		super.action();
