@@ -23,8 +23,7 @@ import bsim.field.BSimChemicalField;
 
 
 public class BSimParameters {	
-	// TODO no doubles[] or Vectors, use official Properties class
-
+	
 	// bsim
 	public static double dt = 0.001; // seconds	
 	public static int screenWidth 	= 1025; // pixels
@@ -34,29 +33,35 @@ public class BSimParameters {
 	public static Vector<double[]> bacteria = new Vector();	
 	public static Vector<double[]> beads = new Vector();
 	
-	public static double fGoalFieldType 	= BSimChemicalField.TYPE_FIXED;
-	public static double fGoalBoundaryType 	= BSimChemicalField.BOUNDARY_LEAK;
-	public static double fGoalRate 			= 0;
-	public static double[] fGoalStartPos 	= {0,0,0};
-	public static double fGoalWidth	 		= 0;
-	public static double fGoalHeight		= 0;
-	public static double fGoalDepth	 		= 0;
-	public static double fGoalXBoxes	 	= 0;
-	public static double fGoalYBoxes	 	= 0;
-	public static double fGoalZBoxes	 	= 0;
-	public static double fGoalThreshold	 		= 0;
+	public static double fGoalFieldType 			= BSimChemicalField.TYPE_FIXED;
+	public static double fGoalBoundaryType 			= BSimChemicalField.BOUNDARY_LEAK;
+	public static double fGoalRate 					= 0;
+	public static double[] fGoalStartPos 			= {0,0,0};
+	public static double fGoalWidth	 				= 0;
+	public static double fGoalHeight				= 0;
+	public static double fGoalDepth	 				= 0;
+	public static double fGoalXBoxes	 			= 0;
+	public static double fGoalYBoxes	 			= 0;
+	public static double fGoalZBoxes	 			= 0;
+	public static double fGoalThreshold	 			= 0;
+	public static double fGoalSetAsLinearDir		= 0;
+	public static double fGoalSetAsLinearStartCon	= 0;
+	public static double fGoalSetAsLinearEndCon		= 0;
 	
-	public static double fQuorumFieldType 		= BSimChemicalField.TYPE_FIXED;
-	public static double fQuorumBoundaryType 	= BSimChemicalField.BOUNDARY_LEAK;
-	public static double fQuorumRate 			= 0;
-	public static double[] fQuorumStartPos 		= {0,0,0};
-	public static double fQuorumWidth	 		= 0;
-	public static double fQuorumHeight			= 0;
-	public static double fQuorumDepth	 		= 0;
-	public static double fQuorumXBoxes	 		= 0;
-	public static double fQuorumYBoxes	 		= 0;
-	public static double fQuorumZBoxes	 		= 0;
-	public static double fQuorumThreshold	 	= 0;
+	public static double fQuorumFieldType 			= BSimChemicalField.TYPE_FIXED;
+	public static double fQuorumBoundaryType 		= BSimChemicalField.BOUNDARY_LEAK;
+	public static double fQuorumRate 				= 0;
+	public static double[] fQuorumStartPos 			= {0,0,0};
+	public static double fQuorumWidth	 			= 0;
+	public static double fQuorumHeight				= 0;
+	public static double fQuorumDepth	 			= 0;
+	public static double fQuorumXBoxes	 			= 0;
+	public static double fQuorumYBoxes	 			= 0;
+	public static double fQuorumZBoxes	 			= 0;
+	public static double fQuorumThreshold	 		= 0;
+	public static double fQuorumSetAsLinearDir		= 0;
+	public static double fQuorumSetAsLinearStartCon	= 0;
+	public static double fQuorumSetAsLinearEndCon	= 0;
 			
 	public static double   screenZoom = 1; 
 	public static double[] screenMove = {0.0, 0.0};		
@@ -124,6 +129,9 @@ public class BSimParameters {
 		else if(line[0].equals("fGoalYBoxes:")) fGoalYBoxes = args[0];
 		else if(line[0].equals("fGoalZBoxes:")) fGoalZBoxes = args[0];
 		else if(line[0].equals("fGoalThreshold:")) fGoalThreshold = args[0];
+		else if(line[0].equals("fGoalSetAsLinearDir:")) fGoalSetAsLinearDir = args[0];
+		else if(line[0].equals("fGoalSetAsLinearStartCon:")) fGoalSetAsLinearStartCon = args[0];
+		else if(line[0].equals("fGoalSetAsLinearEndCon:")) fGoalSetAsLinearEndCon = args[0];	
 		
 		else if(line[0].equals("fQuorumFieldType:")) fQuorumFieldType = args[0];
 		else if(line[0].equals("fQuorumBoundaryType:")) fQuorumBoundaryType = args[0];
@@ -136,6 +144,9 @@ public class BSimParameters {
 		else if(line[0].equals("fQuorumYBoxes:")) fQuorumYBoxes = args[0];
 		else if(line[0].equals("fQuorumZBoxes:")) fQuorumZBoxes = args[0];
 		else if(line[0].equals("fQuorumThreshold:")) fQuorumThreshold = args[0];
+		else if(line[0].equals("fQuorumSetAsLinearDir:")) fQuorumSetAsLinearDir = args[0];
+		else if(line[0].equals("fQuorumSetAsLinearStartCon:")) fQuorumSetAsLinearStartCon = args[0];
+		else if(line[0].equals("fQuorumSetAsLinearEndCon:")) fQuorumSetAsLinearEndCon = args[0];		
 		
 		else if(line[0].equals("screenZoom:")) screenZoom = args[0];		
 		else if(line[0].equals("screenMove:")) screenMove = args;

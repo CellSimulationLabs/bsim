@@ -214,7 +214,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				BSimParameters.dt,
 				BSimParameters.fGoalThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
-              );		
+              );	
+        if(BSimParameters.fGoalSetAsLinearDir != 0) {
+        	fGoal.setAsLinear((int)BSimParameters.fGoalSetAsLinearDir, BSimParameters.fGoalSetAsLinearStartCon, BSimParameters.fGoalSetAsLinearEndCon);
+        }
 		
 		fQuorum = new BSimChemicalField(
 				(int)BSimParameters.fQuorumFieldType,
@@ -231,6 +234,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				BSimParameters.fQuorumThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
               );	
+        if(BSimParameters.fQuorumSetAsLinearDir != 0) {
+        	fQuorum.setAsLinear((int)BSimParameters.fQuorumSetAsLinearDir, BSimParameters.fQuorumSetAsLinearStartCon, BSimParameters.fQuorumSetAsLinearEndCon);
+        }
 				
 		vesicles = new Vector();
 		
