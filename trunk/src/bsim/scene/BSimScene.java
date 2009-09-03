@@ -53,16 +53,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private Color bgColour = new Color(0,0,0);
 	
 	// Variables used for zoom and pan controls
-	private int startX = 0;
-	private int startY = 0;
 	private int transX = 0;
 	private int transY = 0;
-	private int transXo = 0;
-	private int transYo = 0;
 	private static int START_SCALE = 1000;
 	private int scale = START_SCALE;
-	private int scaleO = START_SCALE;
-	private int button = 0;
 	public static final int VIEW_PAN = 1;
 	public static final int VIEW_ZOOM = 2;
 	private int viewState = VIEW_PAN;
@@ -77,14 +71,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private Vector<BSimBacterium> bacteria;
 	private Vector<BSimBead> beads;
 	private Vector<BSimVesicle> vesicles;	
-	private Vector visualAids;
 	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
 	private BSimChemicalField fQuorum;
 	
-	// Time related variables
-	private double dt; //= 0.01;
 	// Number of time steps that have occured in current simulation
 	private int timeStep = 0;
 	
@@ -96,29 +87,16 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	// The applications that the simulation is embedded
 	// (required for changes to time to be sent back to the GUI)
 	private BSimApp app = null;
-	
-	// Threshold differences in concentration that result in bacterial response
-	private static double GOAL_THRESHOLD = 0.0001;
-	private static double RECRUIT_THRESHOLD = 0.0001;
-	private static double COORD_THRESHOLD = 0.0001;
-	
+		
 	// Parameters for the scene
 	
-	public boolean guiExists = false;
-	
-	public boolean reallocateNewForceMat = true;
-	
-	public boolean reallocateNewFusionExists = true;
-	
-	public double[][] vesiclesForcesBeads = null;
-	
+	public boolean guiExists = false;	
 	public BSimProcessingRenderer p = null;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;
 	
-	public String imageFileName = null;
-	
+	public String imageFileName = null;	
 	
 	public boolean resizeBug = true;
 	private int bSimWidth = BSimToolbar.BSimToolbarWidth;
@@ -138,8 +116,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		this.addComponentListener(this);
 		
 		guiExists = true;
-		
-		dt = BSimParameters.dt;
 		
 		simWidth = BSimParameters.screenWidth;
 		simHeight = BSimParameters.screenHeight;
@@ -169,8 +145,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	{
 		super();
 		
-		dt = BSimParameters.dt;
-		
 		simWidth = BSimParameters.screenWidth;
 		simHeight = BSimParameters.screenHeight;
 		
@@ -191,10 +165,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	 * Reset the scene creating bactera and beads.
 	 */
 	private void resetScene(int firstTime) {
-		
-		// Update dt
-		dt = BSimParameters.dt;
-		
+				
 		// Update the simulation widths and the window size
 		simWidth = orgSimWidth;
 		simHeight = orgSimHeight;	
@@ -264,7 +235,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
               );
 				
 		vesicles = new Vector();
-		reallocateNewForceMat = true;
 		
 		// Processing related activity
 		if(guiExists){
@@ -351,7 +321,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				}
 				
 				// Wait the for the time-step
-				Thread.sleep((int)(1000*dt));
+				Thread.sleep((int)(1000*BSimParameters.dt));
 				
 				// Update all the elements in the scene
 				runAllUpdates();
@@ -419,7 +389,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		a3 = "";
 		
 		// Calculate the parts of the time
-		int secs = (int)(timeStep * dt);
+		int secs = (int)(timeStep * BSimParameters.dt);
 		int mins = (int)(secs/60);
 		int hrs  = (int)(mins/60);
 		secs = secs - (mins * 60);
@@ -448,9 +418,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			return "Time: 0.00 secs";
 		}
 		
-		timeStr = "" + (dt * timeStep);
+		timeStr = "" + (BSimParameters.dt * timeStep);
 		timeLen = timeStr.length();
-		t = (int)(dt * timeStep);
+		t = (int)(BSimParameters.dt * timeStep);
 		secStr = "" + t;
 		secLen = secStr.length();
 		decLen = timeLen - secLen;
