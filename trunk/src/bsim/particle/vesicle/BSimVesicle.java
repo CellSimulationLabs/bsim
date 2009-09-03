@@ -8,6 +8,10 @@ import bsim.particle.BSimParticle;
 
 public class BSimVesicle extends BSimParticle {
 	
+	public BSimVesicle(double newRadius) {
+		super(newRadius);
+	}
+	
 	public BSimVesicle(Vector3d newPosition, double newRadius) {
 		super(newPosition, newRadius);	
 	}

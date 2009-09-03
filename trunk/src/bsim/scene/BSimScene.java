@@ -194,14 +194,12 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		for(double[] args : BSimParameters.bacteria){			
 			bacteria.add(new BSimBacterium(new Vector3d(args[0], args[1], args[2]), args[3], new Vector3d(args[4], args[5], args[6]), this));
 		}	
-		// TODO create other types of bacteria
 		for(double[] args : BSimParameters.beads){
 			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3]));
 		}	
 
 		// Create the fields 
 		// This looks a bit insane but we should clean up the constructor first
-		// Surely the different types of fields should extend an abstract BSimChemicalField!?!!
 		fGoal = new BSimChemicalField(
 				(int)BSimParameters.fGoal[0],
 				(int)BSimParameters.fGoal[1],
@@ -361,20 +359,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			p.action();
 			p.updatePosition();
 		}
-						
-//		// Perform necessary boundary operations
-//		for (int i = 0; i < wrapBoundaries.size(); i++) {
-//			((BSimWrapPlaneBoundary)wrapBoundaries.elementAt(i)).boundaryCollisions(bacteria, beads);
-//		}
-		
+								
 		// Update the fields
 		fGoal.updateField();
 		fQuorum.updateField();
 		
-		// Update the visual aids
-//		for(int i=0; i<visualAids.size(); i++) {
-//			((BSimVisualAid)visualAids.elementAt(i)).updateState();
-//		}	
 	}
 	
 	

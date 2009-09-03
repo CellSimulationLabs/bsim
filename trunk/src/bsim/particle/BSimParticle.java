@@ -26,12 +26,15 @@ public abstract class BSimParticle {
 	private Vector3d force = new Vector3d(); // piconewtons
 	private double radius; // microns	
 	
-	public BSimParticle(Vector3d newPosition, double newRadius) {
-		super();	
-		position.set(newPosition);		
+	public BSimParticle(double newRadius) {
 		radius = newRadius;
 	}
 	
+	public BSimParticle(Vector3d newPosition, double newRadius) {		
+		position.set(newPosition);		
+		radius = newRadius;
+	}	
+
 	/*
 	* Interactions between particles: reaction forces, fusions, etc 
 	*/
@@ -87,7 +90,7 @@ public abstract class BSimParticle {
 	
 	public static double distance(BSimParticle a, BSimParticle b) {
 		Vector3d d = new Vector3d();
-        d.sub(a.getPosition(), b.getPosition());
+        d.sub(a.position, b.position);
         return d.length();
 	}
 	
@@ -102,7 +105,7 @@ public abstract class BSimParticle {
      */
 	public static void reaction(BSimParticle p, BSimParticle q, double m) {
 		Vector3d f = new Vector3d();
-		f.sub(p.getPosition(), q.getPosition());			
+		f.sub(p.position, q.position);			
 		f.normalize();
 		f.scale(m);
 		p.addForce(f);

@@ -25,7 +25,6 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimUtils;
-import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
 import bsim.scene.BSimScene;
 
@@ -33,7 +32,9 @@ import bsim.scene.BSimScene;
 public class BSimBacterium extends BSimParticle {
 	
 	protected Vector3d direction;
-	protected Vector<Double> memory; // memory of the concentration of the goal field
+	protected Vector<Double> memory; // memory of the concentration of the goal field	
+	protected double replicationRadius;
+	protected double radiusGrowthRate; // microns/sec
 	protected BSimScene scene; // environment that the bacteria is living in
 	
 	// Motion states
@@ -62,6 +63,9 @@ public class BSimBacterium extends BSimParticle {
 		direction = newDirection;	
 		scene = newScene;
 		
+		replicationRadius = 2*newRadius;
+		radiusGrowthRate = 0.1;
+		
 		double memorySize = (shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt;
 		memory = new Vector((int)(memorySize));		
 	}
@@ -75,7 +79,19 @@ public class BSimBacterium extends BSimParticle {
 		else if(motionState == TUMBLING) {
 			tumble();
 		}
+		
+		grow();
+		if(this.getRadius() == replicationRadius) replicate();
 	}
+	
+	protected void grow() {
+		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt);		
+	}
+	
+	protected void replicate() {
+		scene.addBacterium(new BSimBacterium(getPosition(), getRadius()/2, direction, scene));
+		setRadius(getRadius()/2);
+	}	
 
 	protected void run() {				
 		double shortTermMean = BSimUtils.mean(shortTermMemory());
