@@ -195,7 +195,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 			bacteria.add(new BSimBacterium(new Vector3d(args[0], args[1], args[2]), args[3], new Vector3d(args[4], args[5], args[6]), this));
 		}	
 		for(double[] args : BSimParameters.beads){
-			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3]));
+			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3], this));
 		}	
 
 		// Create the fields 

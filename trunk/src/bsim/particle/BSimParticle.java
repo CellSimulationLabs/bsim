@@ -19,20 +19,24 @@ import bsim.BSimParameters;
 import bsim.particle.bacterium.BSimBacterium;
 import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
+import bsim.scene.BSimScene;
 
 public abstract class BSimParticle {		
 
-	private Vector3d position = new Vector3d(); // microns		
-	private Vector3d force = new Vector3d(); // piconewtons
+	private Vector3d position; // microns		
+	private Vector3d force = new Vector3d(); // piconewtons	
 	private double radius; // microns	
+	private BSimScene scene; // the environment that the particle exists in
 	
+	// Used to construct particles that are not taking part in the scene 
 	public BSimParticle(double newRadius) {
 		radius = newRadius;
 	}
 	
-	public BSimParticle(Vector3d newPosition, double newRadius) {		
+	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {		
 		position.set(newPosition);		
 		radius = newRadius;
+		scene = newScene;
 	}	
 
 	/*
@@ -83,10 +87,17 @@ public abstract class BSimParticle {
 	}
 		
 	public Vector3d getPosition() { return position; }	
-	public Vector3d getForce() { return force; }
+	public Vector3d getForce() { return force; }	
 	public double getRadius() { return radius; }
+	public double getSurfaceArea() { return 4*Math.PI*Math.pow(radius,2); }
+	public BSimScene getScene() { return scene; }
 	public void addForce(Vector3d f) { force.add(f); }
 	public void setRadius(double r) { radius = r; }
+	
+	public void escape(BSimParticle p) {
+		position = p.position;
+		scene = p.scene;
+	}
 	
 	public static double distance(BSimParticle a, BSimParticle b) {
 		Vector3d d = new Vector3d();

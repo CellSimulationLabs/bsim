@@ -44,10 +44,10 @@ public class BSimRepBacterium extends BSimBacterium {
 	public void action() {
 
 		double h = BSimParameters.dt;
-		int tIndex = scene.getTimeStep();
+		int tIndex = getScene().getTimeStep();
 		double tNow = tIndex * h;
 		double externalChem, deltaChem;
-		externalChem = scene.getQuorumField().getConcentration(this.getPosition());
+		externalChem = getScene().getQuorumField().getConcentration(this.getPosition());
 		// Get the external chem field level for the GRN ode system later on
 		repGRN.setExternalQuorumLevel(externalChem);
 		// Solve the ode system
@@ -58,9 +58,9 @@ public class BSimRepBacterium extends BSimBacterium {
 		deltaChem = externalChem - y[6];
 		//System.out.println(deltaChem);
 		if( deltaChem < 0){
-			scene.getQuorumField().addChemical(cellWallDiffusion*(-deltaChem), this.getPosition());
+			getScene().getQuorumField().addChemical(cellWallDiffusion*(-deltaChem), this.getPosition());
 		}else if(deltaChem > 0){
-			scene.getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
+			getScene().getQuorumField().removeChemical(cellWallDiffusion*deltaChem, this.getPosition());
 		}
 		
 		super.action();

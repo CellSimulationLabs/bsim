@@ -13,18 +13,13 @@ package bsim.particle.bead;
 import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimParticle;
+import bsim.scene.BSimScene;
 
 
 public class BSimBead extends BSimParticle {
-	
-	
-	/**
-	 * General constructor.
-	 */
-	public BSimBead(Vector3d newPosition, double newRadius) {
-				
-		// Call the parent constructor
-		super(newPosition, newRadius);
+		
+	public BSimBead(Vector3d newPosition, double newRadius, BSimScene newScene) {				
+		super(newPosition, newRadius, newScene);
 	}
 	
 	public void action() {}

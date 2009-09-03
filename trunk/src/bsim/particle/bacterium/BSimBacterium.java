@@ -26,46 +26,59 @@ import javax.vecmath.Vector3d;
 import bsim.BSimParameters;
 import bsim.BSimUtils;
 import bsim.particle.BSimParticle;
+import bsim.particle.vesicle.BSimVesicle;
 import bsim.scene.BSimScene;
 
 
 public class BSimBacterium extends BSimParticle {
 	
-	protected Vector3d direction;
-	protected Vector<Double> memory; // memory of the concentration of the goal field	
-	protected double replicationRadius;
-	protected double radiusGrowthRate; // microns/sec
-	protected BSimScene scene; // environment that the bacteria is living in
-	
 	// Motion states
-	protected static int RUNNING  = 1;
-	protected static int TUMBLING = 2;
-	protected int motionState = RUNNING; // Start off running
+	private static int RUNNING  = 1;
+	private static int TUMBLING = 2;	
+	
+	// Run probabilities
+	private static double runProbUp = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
+	private static double runProbDown = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
+	private static double runProbIso = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+	
+	// Values for gamma tumbling distribution
+	private static double[] gammaVals = readGammaVals();	
+	
+	private Vector3d direction;
+	private int motionState; // RUNNING or TUMBLING
+	
+	private double replicationRadius;
+	private double radiusGrowthRate; // microns/sec
+	
+	private Vector<BSimVesicle> vesicles; // surface vesicles
+	private double pNewVesicleDt; // probability of generating a new surface vesicle over dt
+		
+	private double shortTermMemoryDuration; // seconds
+	private double longTermMemoryDuration; // seconds
+	private double sensitivity; // to differences in long term vs short term mean concentrations
+	private Vector<Double> memory; // memory of the concentration of the goal field
 	
 	// Set at onset of tumbling phase:
-	protected int tumbleSteps; 	// Number of time steps remaining in tumble phase
-	protected double tumbleAngle; // Angle remaining in tumble phase		
-				
-	// Static constants
-	protected static double shortTermMemoryDuration = 1.0; // seconds
-	protected static double longTermMemoryDuration = 3.0; // seconds
-	protected static double sensitivity = 0.000001; // to differences in long term vs short term mean concentrations
-	protected static double runProbUp = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
-	protected static double runProbDown = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
-	protected static double runProbIso = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
-	protected static double[] gammaVals = readGammaVals();	
-
+	private int tumbleSteps; 	// Number of time steps remaining in tumble phase
+	private double tumbleAngle; // Angle remaining in tumble phase		
+					
 	/**
 	 * General constructor.
 	 */
 	public BSimBacterium(Vector3d newPosition, double newRadius, Vector3d newDirection, BSimScene newScene) {
-		super(newPosition, newRadius);		
-		direction = newDirection;	
-		scene = newScene;
+		super(newPosition, newRadius, newScene);		
+		direction = newDirection;			
+		motionState = RUNNING; // Start off running
 		
 		replicationRadius = 2*newRadius;
 		radiusGrowthRate = 0.1;
+				
+		vesicles = new Vector<BSimVesicle>();
+		pNewVesicleDt = 0.0001;
 		
+		shortTermMemoryDuration = 1.0;
+		longTermMemoryDuration = 3.0; 
+		sensitivity = 0.000001;			
 		double memorySize = (shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt;
 		memory = new Vector((int)(memorySize));		
 	}
@@ -73,23 +86,31 @@ public class BSimBacterium extends BSimParticle {
 	public void action() {			
 		if(motionState == RUNNING) {
 			memory.remove(0); // forget the oldest concentration
-			memory.add(scene.getGoalField().getConcentration(this.getPosition())); // remember the newest concentration			
+			memory.add(getScene().getGoalField().getConcentration(this.getPosition())); // remember the newest concentration			
 			run();			
 		}
 		else if(motionState == TUMBLING) {
 			tumble();
 		}
 		
-		grow();
-		if(this.getRadius() == replicationRadius) replicate();
+		if(Math.random() < pNewVesicleDt)
+			vesicles.add(new BSimVesicle(0d));
+		
+		grow();		
 	}
 	
-	protected void grow() {
-		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt);		
+	protected void grow() {		
+		double surfaceAreaConsumedByVesicles = 0;
+		for(BSimVesicle vesicle : vesicles) {
+			surfaceAreaConsumedByVesicles += vesicle.grow(this);			
+		}			
+		
+		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt - surfaceAreaConsumedByVesicles);	
+		if(getRadius() > replicationRadius) replicate();
 	}
 	
 	protected void replicate() {
-		scene.addBacterium(new BSimBacterium(getPosition(), getRadius()/2, direction, scene));
+		getScene().addBacterium(new BSimBacterium(getPosition(), getRadius()/2, direction, getScene()));
 		setRadius(getRadius()/2);
 	}	
 
@@ -155,10 +176,9 @@ public class BSimBacterium extends BSimParticle {
 		}
 	}
 			
-	/**
-	 * Returns the current direction of the bacterium
-	 */
-	public Vector3d getDirection (){ return direction; }
+
+	public Vector3d getDirection (){ return direction; }	
+	public void removeVesicle(BSimVesicle v){ vesicles.remove(v); }
 	
 	/**
 	 * Approximates the new tumble angle based on gamma distributed RV.
