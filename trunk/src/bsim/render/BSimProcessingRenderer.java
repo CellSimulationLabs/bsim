@@ -77,7 +77,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		
 		// Camera specific parameters
 		// TODO: get them from the parameters file?
-		minDistance = 20;
+		minDistance = 10;
 		maxDistance = 1000;
 		defaultDistance = 200;
 		
@@ -120,6 +120,15 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		textFont(myFont);
 		textMode(SCREEN);
 	}
+	
+	
+	/**
+	 * Reset the camera to its original state
+	 */
+	public void resetCamera(){
+		cam.reset();
+	}
+	
 	
 	/**
 	 *  Draw all objects in the scene 

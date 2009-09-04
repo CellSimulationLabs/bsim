@@ -26,7 +26,6 @@ import javax.vecmath.Vector3d;
 import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
-import bsim.app.BSimToolbar;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
 import bsim.particle.bacterium.BSimBacterium;
@@ -75,7 +74,6 @@ public class BSimScene implements Runnable{
 	// Parameters for the scene
 	
 	public boolean guiExists = false;	
-	public BSimProcessingRenderer processingRenderer = null;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;
@@ -83,7 +81,6 @@ public class BSimScene implements Runnable{
 	public String imageFileName = null;	
 	
 	public boolean resizeBug = true;
-	private int bSimWidth = BSimToolbar.BSimToolbarWidth;
 	
 	//BSimBatch parameter for waiting the rigth closing of the file
 	public boolean waitingForVideoClosing = true;
@@ -219,33 +216,8 @@ public class BSimScene implements Runnable{
 		
 		// Reset the renderer with new scene data
 		if(app.getRenderer() != null){
-			app.resetRenderer(firstTime);
+			app.resetDisplay(firstTime);
 		}
-
-		
-		// Processing related activity
-		// TODO: If display window exists
-//		if(guiExists){
-//			if(firstTime == 0){
-//				//displayWindow.remove(processingRenderer);
-//				processingRenderer.destroy();
-//				
-//			}
-//		    processingRenderer = new BSimProcessingRenderer(this);
-//		    // Initialise new animation thread and PApplet
-//		    processingRenderer.init();
-//
-//		}
-//		else{
-//			// Equivalent process for BSimBatch
-//			// This may not be necessary...
-//			if(firstTime == 0){
-//				processingRenderer.destroy();
-//			}
-//			// BSimBatch part
-//			processingRenderer = new BSimProcessingRenderer(this);    
-//		    processingRenderer.init();
-//		}
 
 	}
 	
@@ -291,7 +263,7 @@ public class BSimScene implements Runnable{
 				// Update all the elements in the scene
 				runAllUpdates();
 				
-				// Redraw the backgroundDisplay
+				// Redraw the scene for this frame
 				app.getRenderer().redraw();
 				
 				// Update the time-step

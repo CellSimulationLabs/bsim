@@ -81,24 +81,30 @@ public class BSimApp extends JFrame{
 		processingRenderer = new BSimProcessingRenderer(scene);
 		processingRenderer.init();
 		
-		displayWindow = new BSimDisplayWindow(processingRenderer, this);
+		displayWindow = new BSimDisplayWindow(this);
 	}
+	
 	
 	/**
 	 * Reset the renderer in the display window with new scene data
 	 */
-	//TODO: make this nicer
-	public void resetRenderer(int firstTime){
-//		if(guiWindowExists){
-			if(firstTime == 0){
-				displayWindow.remove(processingRenderer);
-				processingRenderer.destroy();
-			}
-		    processingRenderer = new BSimProcessingRenderer(scene);
-		    // Initialise new animation thread and PApplet
-		    processingRenderer.init();
-		    displayWindow.add(processingRenderer);
+	public void resetDisplay(int firstTime){
+		displayWindow.reset();
+		
+		if(firstTime == 0){
+			// Remove the PApplet from the display window
+			displayWindow.remove(processingRenderer);
+			// Stop the animation thread
+			processingRenderer.destroy();
+		}
+		
+	    processingRenderer = new BSimProcessingRenderer(scene);
+	    
+	    // Initialise new animation thread and add the PApplet to display window
+	    processingRenderer.init();
+	    displayWindow.add(processingRenderer);
 	}
+	
 	
 	/**
 	 * Updates the time of the simulation.
@@ -346,6 +352,4 @@ public class BSimApp extends JFrame{
 	}
 	
 	public BSimProcessingRenderer getRenderer(){ return processingRenderer; }
-	public void setRenderer(BSimProcessingRenderer newRenderer){ processingRenderer = newRenderer; }
-	public BSimDisplayWindow getDisplayWindow(){ return displayWindow; }
 }
