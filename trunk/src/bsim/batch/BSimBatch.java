@@ -16,8 +16,8 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimUtils;
-import bsim.export.BSimBacteriaFileExport;
-import bsim.export.BSimBeadFileExport;
+import bsim.export.BSimParticleFullFileExport;
+import bsim.export.BSimParticleAvgFileExport;
 import bsim.export.BSimExport;
 import bsim.scene.BSimScene;
 
@@ -29,7 +29,7 @@ public class BSimBatch{
 	private BSimScene scene;
 		
 	// Vector of all the export plug-ins that are working in the current scene
-	private Vector exportPlugins;
+	private Vector<BSimExport> exportPlugins;
 	
 	// General proerties that are esier to store locally
 	private int numOfRuns    = 1;
@@ -121,8 +121,9 @@ public class BSimBatch{
 			String filenameMovie = pathToExport + "/" + timestampStr + 
 				"_Video-Export_"  + BSimUtils.padInt4(i+1) + ".mov";
 				
-			exportPlugins.add(new BSimBacteriaFileExport(fileBac, txtFrameSkip));
-			exportPlugins.add(new BSimBeadFileExport(filePart, txtFrameSkip));
+			exportPlugins.add(new BSimParticleAvgFileExport(scene.getBacteria(), fileBac, txtFrameSkip));
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getBeads(), filePart, txtFrameSkip));
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getVesicles(), filePart, txtFrameSkip));
 			
 			// If a simulation has been run reset first
 			if(i != 0){
@@ -137,7 +138,8 @@ public class BSimBatch{
 				if(movieOutput){				
 					//call the method to create the video inside Processing
 					scene.setWaitingForVideoOpening(true);
-					scene.getProcessing().createMovie(filenameMovie);
+					// TODO: Add back in.
+					//scene.getProcessing().createMovie(filenameMovie);
 					while(scene.getWaitingForVideoOpening()){}
 					//frame for sec in the video
 					int frameForSec = BSimParameters.frameRecordForSec;
@@ -153,7 +155,8 @@ public class BSimBatch{
 					
 					if(movieOutput){
 						if(t % frameRate == 0){
-							scene.getProcessing().addMovieFrame();
+							// TODO: Add back in
+							//scene.getProcessing().addMovieFrame();
 						}
 					}
 					
@@ -171,7 +174,8 @@ public class BSimBatch{
 				}
 				
 				if(movieOutput){
-					scene.getProcessing().closeMovie();
+					// TODO: Add back in
+					//scene.getProcessing().closeMovie();
 					while(scene.getWaitingForVideoClosing()){}
 				}
 				
@@ -225,7 +229,8 @@ public class BSimBatch{
 	 * Runs the batch command line application.
 	 */
 	public static void main(String[] args){
-		int numOfRuns = 1;
+		
+		System.out.println("Starting Export...");
 		
 		// Load the file and create the batch object
 		try{
@@ -238,10 +243,10 @@ public class BSimBatch{
 			batch.runBatch();
 		}
 		catch(Exception e){ 
-			System.err.println("Error writing to file (BSimBatch.main)");
+			System.err.println("Error writing to file (bsim.batch.BSimBatch.main)");
 			e.printStackTrace();
 		}
 		
-		System.out.println("Finish");
+		System.out.println("Finished Export.");
 	}
 }

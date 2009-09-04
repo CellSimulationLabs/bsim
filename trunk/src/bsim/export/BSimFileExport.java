@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import bsim.BSimParameters;
 import bsim.scene.BSimScene;
 
 
@@ -63,7 +62,7 @@ public abstract class BSimFileExport implements BSimExport {
 			if(!headerWritten){
 				
 				// Write the header
-				outBufferedWriter.write(getHeaderLine(scene, params));
+				outBufferedWriter.write(getHeaderLine(scene));
 				outBufferedWriter.newLine();
 				
 				// Set the header written flag (we only want a single header)
@@ -71,7 +70,7 @@ public abstract class BSimFileExport implements BSimExport {
 			}
 			
 			// Check to see if the next output line exists and if so write to file
-			nextStr = nextOutputLine(scene, params);
+			nextStr = nextOutputLine(scene);
 			if(nextStr != null){
 				outBufferedWriter.write(nextStr);
 				outBufferedWriter.newLine();
@@ -92,7 +91,7 @@ public abstract class BSimFileExport implements BSimExport {
 		
 		// Finish the export by closing the file and writing the last line
 		try{
-			finalStr = finalOutputLine(scene, params);
+			finalStr = finalOutputLine(scene);
 			if(finalStr != null){
 				outBufferedWriter.write(finalStr);
 			}
