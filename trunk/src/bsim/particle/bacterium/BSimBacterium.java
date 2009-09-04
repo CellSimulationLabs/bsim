@@ -137,11 +137,11 @@ public class BSimBacterium extends BSimParticle {
 	}	
 		
 	protected Vector<Double> longTermMemory() {
-		return (Vector<Double>)memory.subList(0, (int)(longTermMemoryDuration/BSimParameters.dt));
+		return new Vector(memory.subList(0, (int)(longTermMemoryDuration/BSimParameters.dt)));
 	}
 	
 	protected Vector<Double> shortTermMemory() {
-		return (Vector<Double>)memory.subList((int)(longTermMemoryDuration/BSimParameters.dt), memory.size());
+		return new Vector(memory.subList((int)(longTermMemoryDuration/BSimParameters.dt), memory.size()));
 	}	
 	
 	protected void tumble() {		
