@@ -36,10 +36,10 @@ public class BSimBacterium extends BSimParticle {
 	private static int RUNNING  = 1;
 	private static int TUMBLING = 2;	
 	
-	// Run probabilities
-	private static double runProbUp = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
-	private static double runProbDown = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
-	private static double runProbIso = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+	private static double pContinueRunIncreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
+	private static double pContinueRunDecreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
+	private static double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+	private static double pNewVesicleDt = 0.0001;; // probability of generating a new surface vesicle over dt
 	
 	// Values for gamma tumbling distribution
 	private static double[] gammaVals = readGammaVals();	
@@ -50,8 +50,7 @@ public class BSimBacterium extends BSimParticle {
 	private double replicationRadius;
 	private double radiusGrowthRate; // microns/sec
 	
-	private Vector<BSimVesicle> vesicles; // surface vesicles
-	private double pNewVesicleDt; // probability of generating a new surface vesicle over dt
+	private Vector<BSimVesicle> vesicles; // surface vesicles	
 		
 	private double shortTermMemoryDuration; // seconds
 	private double longTermMemoryDuration; // seconds
@@ -74,13 +73,13 @@ public class BSimBacterium extends BSimParticle {
 		radiusGrowthRate = 0.1;
 				
 		vesicles = new Vector<BSimVesicle>();
-		pNewVesicleDt = 0.0001;
 		
 		shortTermMemoryDuration = 1.0;
 		longTermMemoryDuration = 3.0; 
-		sensitivity = 0.000001;			
-		double memorySize = (shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt;
-		memory = new Vector((int)(memorySize));		
+		sensitivity = 0.000001;		
+		memory = new Vector();
+		int memorySize = (int)((shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt);
+		for(int i=0; i<=memorySize; i++) { memory.add(0d);}
 	}
 	
 	public void action() {			
@@ -118,7 +117,7 @@ public class BSimBacterium extends BSimParticle {
 		double shortTermMean = BSimUtils.mean(shortTermMemory());
 		double longTermMean = BSimUtils.mean(longTermMemory());
 		
-		if(Math.random() < runProb(shortTermMean, longTermMean)) {
+		if(Math.random() < continueRunProb(shortTermMean, longTermMean)) {
 			Vector3d f = new Vector3d();
 						
 			if(shortTermMean - longTermMean > sensitivity) f.scale(BSimParameters.bactForceUp, direction);			
@@ -131,10 +130,10 @@ public class BSimBacterium extends BSimParticle {
 		else switchMotionState();
 	}
 	
-	protected double runProb(double shortTermMean, double longTermMean) {				
-		if(shortTermMean - longTermMean > sensitivity) return runProbUp;		
-		else if(longTermMean - shortTermMean > sensitivity) return runProbDown;		
-		else return runProbIso;
+	protected double continueRunProb(double shortTermMean, double longTermMean) {				
+		if(shortTermMean - longTermMean > sensitivity) return pContinueRunIncreasingConc;		
+		else if(longTermMean - shortTermMean > sensitivity) return pContinueRunDecreasingConc;		
+		else return pContinueRunIsotropicConc;
 	}	
 		
 	protected Vector<Double> longTermMemory() {

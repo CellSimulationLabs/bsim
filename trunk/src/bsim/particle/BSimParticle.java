@@ -24,7 +24,7 @@ import bsim.scene.BSimScene;
 public abstract class BSimParticle {		
 
 	private Vector3d position; // microns		
-	private Vector3d force = new Vector3d(); // piconewtons	
+	private Vector3d force; // piconewtons	
 	private double radius; // microns	
 	private BSimScene scene; // the environment that the particle exists in
 	
@@ -33,10 +33,13 @@ public abstract class BSimParticle {
 		radius = newRadius;
 	}
 	
-	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {		
-		position.set(newPosition);		
+	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {	
+		position = new Vector3d();
+		force = new Vector3d();		
 		radius = newRadius;
 		scene = newScene;
+		
+		position.set(newPosition);
 	}	
 
 	/*

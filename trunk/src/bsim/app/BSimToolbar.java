@@ -198,7 +198,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 				btnSaveRecord.setEnabled(false);
 				btnStartRecord.setEnabled(true);
 				btnStartRecord.setIcon(iconStartRecord);
-				scene.getProcessing().createMovie(videoFileName);
+				//scene.getProcessing().createMovie(videoFileName);
 			}
 		}else if (e.getSource() == btnStartRecord) {		
 			btnStartRecord.setEnabled(false);
@@ -230,7 +230,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 				btnSaveScreenshot.setEnabled(false);
 			}
 		}else if(s == btnTakeScreenshot){
-			scene.getProcessing().takeImage(scene.getImageFileName());
+			//scene.getProcessing().takeImage(scene.getImageFileName());
 			btnTakeScreenshot.setEnabled(false);
 			btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
 			btnSaveScreenshot.setEnabled(true);		

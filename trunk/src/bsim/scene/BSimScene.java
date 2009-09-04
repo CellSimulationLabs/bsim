@@ -67,9 +67,9 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private int orgSimHeight = 0;
 	
 	// Vectors holding all bacteria and beads in the simulation
-	private Vector<BSimBacterium> bacteria;
-	private Vector<BSimBead> beads;
-	private Vector<BSimVesicle> vesicles;	
+	private Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
+	private Vector<BSimBead> beads = new Vector<BSimBead>();
+	private Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();	
 	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
@@ -191,8 +191,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		}
 		
 		// Create the bacteria and beads
-		for(double[] args : BSimParameters.bacteria){			
-			bacteria.add(new BSimBacterium(new Vector3d(args[0], args[1], args[2]), args[3], new Vector3d(args[4], args[5], args[6]), this));
+		for(double[] args : BSimParameters.bacteria){
+			Vector3d position = new Vector3d(args[0], args[1], args[2]);
+			Vector3d direction = new Vector3d(args[4], args[5], args[6]);
+			BSimBacterium b = new BSimBacterium(position, args[3], direction, this);
+			bacteria.add(b);
 		}	
 		for(double[] args : BSimParameters.beads){
 			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3], this));
