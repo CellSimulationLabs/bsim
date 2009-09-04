@@ -9,18 +9,9 @@ import bsim.particle.bacterium.BSimBacterium;
 import bsim.scene.BSimScene;
 
 public class BSimVesicle extends BSimParticle {
-	
-	private double budRadius; // microns
-	protected double radiusGrowthRate; // microns/sec
-	
-	public BSimVesicle(double newRadius) {
-		super(newRadius);
-	}
-	
+			
 	public BSimVesicle(Vector3d newPosition, double newRadius, BSimScene newScene) {
 		super(newPosition, newRadius, newScene);	
-		budRadius = 0.1;
-		radiusGrowthRate = 0.001;
 	}
 
 	public void action() {
@@ -34,23 +25,6 @@ public class BSimVesicle extends BSimParticle {
 		
 		Vector3d f = new Vector3d(r.nextGaussian()*amplitude, r.nextGaussian()*amplitude, r.nextGaussian()*amplitude);		
 		this.addForce(f);
-	}
-	
-	public double grow(BSimBacterium bacterium) {		
-		double oldSurfaceArea = getSurfaceArea();
-		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt);
-		double newSurfaceArea = getSurfaceArea();
-				
-		if(getRadius() > budRadius)
-			bud(bacterium);
-		
-		return newSurfaceArea - oldSurfaceArea;
-	}
-	
-	public void bud(BSimBacterium bacterium) {		
-		bacterium.removeVesicle(this);
-		escape(bacterium);		
-		getScene().addVesicle(this);
 	}
 	
 }

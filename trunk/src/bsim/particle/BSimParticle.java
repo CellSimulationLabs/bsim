@@ -27,12 +27,7 @@ public abstract class BSimParticle {
 	private Vector3d force; // piconewtons	
 	private double radius; // microns	
 	private BSimScene scene; // the environment that the particle exists in
-	
-	// Used to construct particles that are not taking part in the scene 
-	public BSimParticle(double newRadius) {
-		radius = newRadius;
-	}
-	
+		
 	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {	
 		position = new Vector3d();
 		force = new Vector3d();		
@@ -96,12 +91,7 @@ public abstract class BSimParticle {
 	public BSimScene getScene() { return scene; }
 	public void addForce(Vector3d f) { force.add(f); }
 	public void setRadius(double r) { radius = r; }
-	
-	public void escape(BSimParticle p) {
-		position = p.position;
-		scene = p.scene;
-	}
-	
+		
 	public static double distance(BSimParticle a, BSimParticle b) {
 		Vector3d d = new Vector3d();
         d.sub(a.position, b.position);

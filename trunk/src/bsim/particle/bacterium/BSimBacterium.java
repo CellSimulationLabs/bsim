@@ -49,8 +49,6 @@ public class BSimBacterium extends BSimParticle {
 	
 	private double replicationRadius;
 	private double radiusGrowthRate; // microns/sec
-	
-	private Vector<BSimVesicle> vesicles; // surface vesicles	
 		
 	private double shortTermMemoryDuration; // seconds
 	private double longTermMemoryDuration; // seconds
@@ -72,8 +70,6 @@ public class BSimBacterium extends BSimParticle {
 		replicationRadius = 2*newRadius;
 		radiusGrowthRate = 0.1;
 				
-		vesicles = new Vector<BSimVesicle>();
-		
 		shortTermMemoryDuration = 1.0;
 		longTermMemoryDuration = 3.0; 
 		sensitivity = 0.000001;		
@@ -93,18 +89,13 @@ public class BSimBacterium extends BSimParticle {
 		}
 		
 		if(Math.random() < pNewVesicleDt)
-			vesicles.add(new BSimVesicle(0d));
+			getScene().addVesicle(new BSimVesicle(getPosition(), 0.01, getScene()));
 		
 		grow();		
 	}
 	
-	protected void grow() {		
-		double surfaceAreaConsumedByVesicles = 0;
-		for(BSimVesicle vesicle : vesicles) {
-			surfaceAreaConsumedByVesicles += vesicle.grow(this);			
-		}			
-		
-		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt - surfaceAreaConsumedByVesicles);	
+	protected void grow() {				
+		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt);	
 		if(getRadius() > replicationRadius) replicate();
 	}
 	
@@ -176,8 +167,7 @@ public class BSimBacterium extends BSimParticle {
 	}
 			
 
-	public Vector3d getDirection (){ return direction; }	
-	public void removeVesicle(BSimVesicle v){ vesicles.remove(v); }
+	public Vector3d getDirection (){ return direction; }		
 	
 	/**
 	 * Approximates the new tumble angle based on gamma distributed RV.
