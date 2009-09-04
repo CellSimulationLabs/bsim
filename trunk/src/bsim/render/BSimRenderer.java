@@ -11,7 +11,7 @@
  * note: 	it might be useful to use an abstract class, as then loops etc can be defined
  * 			in standard draw() as well as useful BSim variables, however this may impose 
  * 			unnecessary constraints and may not be compatible with renderers which must 
- * 			already extend a class
+ * 			already extend a class.
  * 
  */
 
@@ -25,17 +25,11 @@ import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 
 public interface BSimRenderer {
-
-	/*
-	 * Setup the scene drawing class
-	 */
-	//public void setup();
 	
 	/*
 	 *  Draw the scene
 	 */
 	public void draw();
-	//public void redraw();
 	
 	/*
 	 * Draw the boundary
@@ -62,5 +56,5 @@ public interface BSimRenderer {
 	/*
 	 * Draw visual aids
 	 */
-	//public void draw(Some visual Aid);
+	//TODO: public void draw(Some visual Aid);
 }
