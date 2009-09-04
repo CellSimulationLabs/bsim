@@ -181,10 +181,13 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 
 	public void mouseReleased() {
 		// Start to play again if the scene was previously playing
-		noLoop();	
-		if(oldPlayState == BSimScene.PLAYING){
-			scene.getApp().play();
-		}	
+		noLoop();
+		// null check may not be necessary as BSimBatch will not have a window to click on
+		if(scene.getApp() != null){
+			if(oldPlayState == BSimScene.PLAYING){
+				scene.getApp().play();
+			}
+		}
 	}
 	
 	
