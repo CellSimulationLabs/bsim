@@ -50,13 +50,13 @@ public class BSimBacterium extends BSimParticle {
 	private double pContinueRunIncreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
 	private double pContinueRunDecreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
 	private double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+	
+	private double vesicleProductionRate; // vesicles/sec
+	public int fusionCount; // fusion counter
 		
 	// Set at onset of tumbling phase:
 	private int tumbleSteps; 	// Number of time steps remaining in tumble phase
-	private double tumbleAngle; // Angle remaining in tumble phase
-	
-	private double vesicleProductionRate = 1; // vesicles/sec
-	public int fusionCount; // fusion counter
+	private double tumbleAngle; // Angle remaining in tumble phase	
 					
 	/**
 	 * General constructor.
@@ -73,6 +73,9 @@ public class BSimBacterium extends BSimParticle {
 		memory = new Vector();
 		int memorySize = (int)((shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt);
 		for(int i=0; i<=memorySize; i++) { memory.add(0d);}
+		
+		vesicleProductionRate = 1;
+		fusionCount = 0;	
 	}
 	
 	public void action() {			
