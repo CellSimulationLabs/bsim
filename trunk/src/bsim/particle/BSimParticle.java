@@ -80,7 +80,9 @@ public abstract class BSimParticle {
 	 * Payable in force, yarr
 	 */
 	public void updatePosition() {
-		position.scaleAdd(BSimParameters.dt/(6.0*Math.PI*radius*BSimParameters.visc), force, position);
+		Vector3d velocity = new Vector3d();
+		velocity.scale(1/(6.0*Math.PI*radius*BSimParameters.visc), force); // pN/(micrometers*Pa sec) = micrometers/sec 
+		position.scaleAdd(BSimParameters.dt, velocity, position);
 		force.set(0,0,0);
 	}
 		
