@@ -53,7 +53,7 @@ public abstract class BSimFileExport implements BSimExport {
 	/**
 	 * Implements the abstract method for the BSimExport interface.
 	 */
-	public void exportFrame(BSimScene scene, BSimParameters params) {
+	public void exportFrame(BSimScene scene) {
 		String nextStr;
 		
 		// Write the next output to the file if null ignore
@@ -87,7 +87,7 @@ public abstract class BSimFileExport implements BSimExport {
 	/**
 	 * Implements the abstract method for the BSimExport interface.
 	 */
-	public void finishExport(BSimScene scene, BSimParameters params){
+	public void finishExport(BSimScene scene){
 		String finalStr;
 		
 		// Finish the export by closing the file and writing the last line
@@ -111,18 +111,18 @@ public abstract class BSimFileExport implements BSimExport {
 	 * Abstract method to get the header row for the file. Only called once on object
 	 * creation.
 	 */
-	public abstract String getHeaderLine(BSimScene scene, BSimParameters params);
+	public abstract String getHeaderLine(BSimScene scene);
 	
 	
 	/**
 	 * Returns the next output line based on a given scene and parameters.
 	 */
-	public abstract String nextOutputLine(BSimScene scene, BSimParameters params);
+	public abstract String nextOutputLine(BSimScene scene);
 	
 	
 	/**
 	 * Returns the final line (if necessary) in the file. Only use this for calculations
 	 * where you only need a single output for the whole simulation.
 	 */
-	public abstract String finalOutputLine(BSimScene scene, BSimParameters params);
+	public abstract String finalOutputLine(BSimScene scene);
 }

@@ -109,7 +109,7 @@ public class BSimBatch{
 			// Setup the export objects for the current run
 			
 			// Remove any existing export plugins
-			exportPlugins = new Vector(3);
+			exportPlugins = new Vector<BSimExport>(3);
 
 			// Create the files for each of the outputs
 			File fileBac = new File(pathToExport + "/" + timestampStr + 

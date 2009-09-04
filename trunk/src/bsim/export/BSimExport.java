@@ -15,8 +15,8 @@ import bsim.scene.BSimScene;
 
 public interface BSimExport{
 	
-	public abstract void exportFrame(BSimScene scene, BSimParameters params);
+	public abstract void exportFrame(BSimScene scene);
 	
-	public abstract void finishExport(BSimScene scene, BSimParameters params);
+	public abstract void finishExport(BSimScene scene);
 	
 }
