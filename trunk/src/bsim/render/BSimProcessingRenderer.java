@@ -41,47 +41,45 @@ import bsim.scene.BSimScene;
 public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	
 	// Simulation core
-	public BSimScene scene = null;
+	private BSimScene scene = null;
 	
 	// The simulation objects
-	public Vector<BSimBacterium> bacteria = null;
-	public Vector<BSimVesicle> vesicles = null;
-	public Vector<BSimBead> beads = null;
+	private Vector<BSimBacterium> bacteria = null;
+	private Vector<BSimVesicle> vesicles = null;
+	private Vector<BSimBead> beads = null;
 	
 	// Processing and PApplet
-	public int w;
-	public int h;
-	public int maximumFPS;
-	PFont myFont;
+	private int widthInitial;
+	private int heightInitial;
+	private int maximumFPS;
+	private PFont myFont;
 
 	// Camera parameters
-	public double minDistance;
-	public double maxDistance;
-	public double defaultDistance;
-	public PeasyCam cam = null;
+	private double minDistance;
+	private double maxDistance;
+	private double defaultDistance;
+	private PeasyCam cam = null;
 		
+	// Temporary storage for the play state of the scene
+	private int oldPlayState = -1;
 	
 	/**
 	 * Standard constructor for the renderer
 	 */
 	public BSimProcessingRenderer(BSimScene newScene) {
 		// BSimScene used in the core simulation
-		// TODO: check up on references vs instances in java :s
 		scene = newScene;
-			
+		
 		// PApplet parameters
-		w = BSimParameters.screenWidth;
-		h = BSimParameters.screenHeight;
-		maximumFPS = 25;
+		widthInitial = BSimParameters.screenWidth;
+		heightInitial = BSimParameters.screenHeight;
+		maximumFPS = 100;
 		
 		// Camera specific parameters
 		// TODO: get them from the parameters file?
 		minDistance = 20;
 		maxDistance = 1000;
 		defaultDistance = 200;
-//		minDistance = scene.getParams().getMinimumDistance();
-//		maxDistance =	scene.getParams().getMaximumDistance();
-//		defaultDistance = scene.getParams().getDefaultDistance();
 		
 		// Get simulation objects from the scene
 		bacteria = scene.getBacteria();
@@ -98,12 +96,13 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 */
 	public void setup(){
 		// Initialise the Processing renderer:
-		// TODO: 	correct width and height parameters
-		// TODO: 	correlate with window width/height and that blasted resizing bug...!
-		size(w, h, P3D);
+		size(widthInitial, heightInitial, P3D);
 
 		// Set our target frame rate:
 		frameRate(maximumFPS);
+		
+		// Switch off draw() looping, must call redraw() each time we want a new frame drawn.
+		noLoop();
 
 		// Set up and initialise PeasyCam:
 		cam = new PeasyCam(this, (float) defaultDistance);
@@ -168,6 +167,24 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		// Text overlays; drawn last so they're on top of everything else.
 		drawTime();
 		drawFPS();
+	}
+	
+	/**
+	 * Loop the animation if the mouse button is clicked (i.e. on camera movement)
+	 */
+	public void mousePressed() {
+		// Pause the scene calculations while moving the camera
+		oldPlayState = scene.getPlayState();
+		scene.getApp().pause();
+		loop();
+	}
+
+	public void mouseReleased() {
+		// Start to play again if the scene was previously playing
+		noLoop();	
+		if(oldPlayState == BSimScene.PLAYING){
+			scene.getApp().play();
+		}	
 	}
 	
 	

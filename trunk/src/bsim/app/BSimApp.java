@@ -11,7 +11,6 @@
 package bsim.app;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -22,9 +21,9 @@ import java.io.IOException;
 import javax.swing.JFrame;
 import javax.swing.ProgressMonitor;
 
-import bsim.BSimParameters;
 import bsim.export.PngEncoder;
 import bsim.export.QuickTimeOutputStream;
+import bsim.render.BSimProcessingRenderer;
 import bsim.scene.BSimScene;
 
 
@@ -34,8 +33,14 @@ public class BSimApp extends JFrame{
 	// Toolbar that provides acccess to all features of the application
 	private BSimToolbar toolBar;
 	
+	// Default display window
+	private BSimDisplayWindow displayWindow;
+	
 	// Simulation scene will render the animation
 	private BSimScene scene;
+	
+	// Processing renderer
+	protected BSimProcessingRenderer processingRenderer;
 	
 	// Semaphore used for controlling the animation (notifiable object)
 	private BSimSemaphore simSem;
@@ -52,23 +57,31 @@ public class BSimApp extends JFrame{
 		
 		// Semaphore used for animation loop control (notifiable object)
 		simSem = new BSimSemaphore();
-				
+		
 		// Setup the frame and its contents
 		this.setTitle("BSim");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.getContentPane().setLayout(new BorderLayout());
 		
-		// Create the BSim scene and fill centre of frame
+		// Create the BSim scene
 		scene = new BSimScene(simSem, this);
-		scene.setSize(new Dimension(BSimParameters.screenWidth, BSimParameters.screenHeight));
-		this.getContentPane().add(scene, BorderLayout.CENTER);
 		
 		// Create the toolbar and align to bottom of window
 		toolBar = new BSimToolbar(this, scene);
 		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
-		// Set the initial window size and display
-		this.setSize(BSimParameters.screenWidth,BSimParameters.screenHeight);
+		
+		// Squeeze the window nicely to the size of our toolbar
+		pack();
+		
+		// The toolbar is a fixed size
+		//this.setResizable(false);
+		
 		this.setVisible(true);
+		
+		processingRenderer = new BSimProcessingRenderer(scene);
+		processingRenderer.init();
+		
+		displayWindow = new BSimDisplayWindow(processingRenderer, this);
 	}
 	
 	
@@ -118,7 +131,7 @@ public class BSimApp extends JFrame{
 		}
 	}
 	
-	
+	// TODO: get these to record an image from the renderer rather than from BSimScene (graphics)? Or create new methods.
 	public void createImage(String filename) {
 		
 		// Ensure that the filename has the correct extension
@@ -128,12 +141,7 @@ public class BSimApp extends JFrame{
         BufferedImage img = new BufferedImage(scene.getWidth(), 
 			scene.getHeight(), 
 			BufferedImage.TYPE_INT_RGB);
-			
-		Graphics2D g = img.createGraphics();
-    
-		// Draw the frame to the graphics context
-		scene.drawFrame((Graphics)g);
-		
+					
 		byte[] pngbytes;
 		// PngEncoder.ENCODE_ALPHA, PngEncoder.NO_ALPHA
 		PngEncoder png =  new PngEncoder( img,
@@ -321,4 +329,6 @@ public class BSimApp extends JFrame{
 	public static void main(String[] args){
 		BSimApp gui = new BSimApp();
 	}
+	
+	public BSimProcessingRenderer getRenderer(){ return processingRenderer; }
 }

@@ -18,15 +18,9 @@
  */
 package bsim.scene;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.util.Vector;
 
-import javax.swing.JPanel;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
@@ -41,16 +35,13 @@ import bsim.particle.vesicle.BSimVesicle;
 import bsim.render.BSimProcessingRenderer;
 
 
-public class BSimScene extends JPanel implements Runnable, ComponentListener{
+public class BSimScene implements Runnable{
 	
 	
 	// Variables and constants for the animation state
 	public static final int PLAYING = 1;
 	public static final int PAUSED = 2;
 	private int playState = PAUSED;
-	
-	// Background colour of the simulation
-	private Color bgColour = new Color(0,0,0);
 	
 	// Variables used for zoom and pan controls
 	private int transX = 0;
@@ -59,13 +50,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	private int scale = START_SCALE;
 	public static final int VIEW_PAN = 1;
 	public static final int VIEW_ZOOM = 2;
-	
-	private int simWidth = 0;
-	private int simHeight = 0;
-	
-	private int orgSimWidth = 0;
-	private int orgSimHeight = 0;
-	
+		
 	// Vectors holding all bacteria and beads in the simulation
 	private Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
 	private Vector<BSimBead> beads = new Vector<BSimBead>();
@@ -90,7 +75,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	// Parameters for the scene
 	
 	public boolean guiExists = false;	
-	public BSimProcessingRenderer p = null;
+	public BSimProcessingRenderer processingRenderer = null;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;
@@ -112,16 +97,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	{
 		super();
 		
-		this.addComponentListener(this);
+		//this.addComponentListener(this);
 		
 		guiExists = true;
-		
-		simWidth = BSimParameters.screenWidth;
-		simHeight = BSimParameters.screenHeight;
-		
-		orgSimWidth = BSimParameters.screenWidth;
-		orgSimHeight = BSimParameters.screenHeight;
-		
+				
 		// Update the internal variables
 		simSem = newSimSem;
 		app = newApp;
@@ -144,11 +123,11 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	{
 		super();
 		
-		simWidth = BSimParameters.screenWidth;
-		simHeight = BSimParameters.screenHeight;
-		
-		orgSimWidth = BSimParameters.screenWidth;
-		orgSimHeight = BSimParameters.screenHeight;
+//		simWidth = BSimParameters.screenWidth;
+//		simHeight = BSimParameters.screenHeight;
+//		
+//		orgSimWidth = BSimParameters.screenWidth;
+//		orgSimHeight = BSimParameters.screenHeight;
 		
 		// Update the internal variables
 		simSem = null;
@@ -165,15 +144,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	 */
 	private void resetScene(int firstTime) {
 				
-		// Update the simulation widths and the window size
-		simWidth = orgSimWidth;
-		simHeight = orgSimHeight;	
-		
-		if (guiExists){
-			app.setSize(new Dimension(simWidth, simHeight));
-		}	
-		this.setSize(new Dimension(simWidth, simHeight));
-		
 		// Update the translation
 		double[] newTrans = BSimParameters.screenMove;
 		transX = (int)newTrans[0];
@@ -199,7 +169,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		}	
 		for(double[] args : BSimParameters.beads){
 			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3], this));
-		}	
+		}
 
 		// Create the fields 
 		// This looks a bit insane but we should clean up the constructor first
@@ -243,52 +213,31 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				
 		vesicles = new Vector();
 		
-		// Processing related activity
-		if(guiExists){
-			if(firstTime == 0){
-				// Remove the PApplet from the display
-				remove(p);
-				// Kill the (PApplet's) animation thread and free resources
-				p.destroy();
-			}
-		    p = new BSimProcessingRenderer(this);
-		    // Initialise new animation thread and PApplet
-		    p.init();
-		    add(p,BorderLayout.CENTER);
-		    
-			if(resizeBug){
-				if(bSimWidth<BSimToolbar.BSimToolbarWidth){	
-					app.resize(simWidth, simHeight+95);
-				}
-				else{
-					app.resize(simWidth+39, simHeight+95);
-				}
-				resizeBug = false;
-			}
-			else{
-				if(bSimWidth<BSimToolbar.BSimToolbarWidth){	
-					app.resize(simWidth, simHeight+96);
-				}
-				else{
-					app.resize(simWidth+40, simHeight+96);
-				}
-				resizeBug = true;
-			}
-		}
-		else{
-			// Equivalent process for BSimBatch
-			// This may not be necessary...
-			if(firstTime == 0){
-				remove(p);
-				p.destroy();
-			}
-			// BSimBatch part
-			p = new BSimProcessingRenderer(this);    
-		    p.init();
-		}
 
-		// Repaint the graphics display
-		repaint();
+		// Processing related activity
+		// TODO: If display window exists
+//		if(guiExists){
+//			if(firstTime == 0){
+//				//displayWindow.remove(processingRenderer);
+//				processingRenderer.destroy();
+//				
+//			}
+//		    processingRenderer = new BSimProcessingRenderer(this);
+//		    // Initialise new animation thread and PApplet
+//		    processingRenderer.init();
+//
+//		}
+//		else{
+//			// Equivalent process for BSimBatch
+//			// This may not be necessary...
+//			if(firstTime == 0){
+//				processingRenderer.destroy();
+//			}
+//			// BSimBatch part
+//			processingRenderer = new BSimProcessingRenderer(this);    
+//		    processingRenderer.init();
+//		}
+		
 	}
 	
 	
@@ -298,12 +247,12 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public void updateParams () {
 		
 		// Update the parameter object		
-		orgSimWidth = BSimParameters.screenWidth;
-		bSimWidth = orgSimWidth;
-		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
-			orgSimWidth = BSimToolbar.BSimToolbarWidth;
-		}
-		orgSimHeight = BSimParameters.screenHeight;
+//		orgSimWidth = BSimParameters.screenWidth;
+//		bSimWidth = orgSimWidth;
+//		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
+//			orgSimWidth = BSimToolbar.BSimToolbarWidth;
+//		}
+//		orgSimHeight = BSimParameters.screenHeight;
 		
 		// Reset the scene to recreate all objects and ensure local variables are consistent
 		this.reset();
@@ -334,7 +283,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 				runAllUpdates();
 				
 				// Redraw the backgroundDisplay
-				repaint();
+				app.getRenderer().redraw();
 				
 				// Update the time-step
 				timeStep++;
@@ -469,41 +418,6 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 		resetScene(0);
 	}
 	
-	
-	/**
-	 * Redraws the screen (inherited). Called when repaint() is invoked.
-	 */
-	public void paint(Graphics g) {
-		redraw(g);
-	}
-	
-	
-	/**
-	 * Redraws the screen and should remove need for double buffering.
-	*/ 
-	public void update(Graphics g) {
-		redraw(g);
-	}
-	
-	/**
-	 * Redraws the screen.
-	 */
-	public void redraw(Graphics g) {
-		// If flicker returns may need to implement double buffered display
-		// (should not be required though as update method has been implemented)
-		drawFrame(g);
-	}
-	
-	
-	/**
-	 * Draws the current simulation to a given graphics context.
-	 */
-	public void drawFrame(Graphics g) {
-		//Fill the background and clear output
-		g.setColor(bgColour);
-		g.fillRect(0,0,simWidth,simHeight);
-	}
-	
 
 	/**
 	 * Skips the simulation forward a given number of frames. Intermediate frames still
@@ -527,40 +441,10 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	
 	
 	/**
-	 * Check for resize events
-	 */
-	public void componentResized(ComponentEvent e) {
-		
-	    // Check to see if it is the panel and if so update the screen size
-		if(e.getComponent() == this){
-			
-			// Update the parameters
-			BSimParameters.screenWidth = getWidth();
-			BSimParameters.screenHeight = getHeight();
-			
-			// Update the local variables
-			simWidth = getWidth();
-			simHeight = getHeight();
-		}         
-	}
-	
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void componentHidden(ComponentEvent e) {}
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void componentMoved(ComponentEvent e) {}
-	/**
-	 * Not overwritten by this class.
-	 */
-	public void componentShown(ComponentEvent e) {}
-	
-	
-	/**
 	 * Standard get methods for the class.
-	 */
+	 */	
+	public BSimApp getApp() { return app; }
+	
 	public Vector getBacteria (){ return bacteria; }
 	public void addBacterium (BSimBacterium b){ bacteria.add(b); }
 	public Vector getBeads (){ return beads; }
@@ -583,7 +467,7 @@ public class BSimScene extends JPanel implements Runnable, ComponentListener{
 	public int getTransY (){ return transY; }
 	public double getScale () { return (1.0/START_SCALE)*scale; }
 	
-	public BSimProcessingRenderer getProcessing(){return p;}
+	public BSimProcessingRenderer getProcessing(){return app.getRenderer();}
 	public boolean getWaitingForVideoClosing(){return waitingForVideoClosing;}	
 	public boolean getWaitingForVideoOpening(){return waitingForVideoOpening;}
 	public void setWaitingForVideoOpening(boolean b){waitingForVideoOpening=b;}	

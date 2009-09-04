@@ -66,7 +66,9 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		
 		// Create the toolbar and make it floatable
 		setupToolBar();
-		setFloatable(true);		
+		/////////////////////////////************************///////////////////////////
+		// TODO: setOrientation (or whatever) based on a button (flip vertical/horizontal)
+		setFloatable(false);		
 	}
 	
 	
@@ -88,6 +90,9 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnLoadSim.setIcon(iconLoad);
 		btnLoadSim.addActionListener(this);
 		labTime = new JLabel("Time: 00:00:00");
+		// TODO: A button to create a new display window?
+		// TODO: don't really need quite so many different buttons for setting directories etc. i.e. should just be 'take screenshot' for example
+		// Create a folder with the date & time: export_01_09_09_1244\screenshots, .\movies, .\data for example
 		btnSaveScreenshot = new JButton("Screenshot");
 		btnSaveScreenshot.setIcon(iconSaveScreenshot);
 		btnSaveScreenshot.addActionListener(this);
