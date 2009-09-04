@@ -237,13 +237,6 @@ public class BSimChemicalField {
 
 
 	/**
-	 * Draw the field to a given graphics context.
-	 */
-	public void redraw (Graphics g) {
-	}
-
-
-	/**
 	 * Update the field for a single time step.
 	 */
 	public void updateField (){
