@@ -41,35 +41,25 @@ public abstract class BSimParticle {
 	* Interactions between particles: reaction forces, fusions, etc 
 	*/
 	public static void interaction(BSimBacterium p, BSimBacterium q) {
-		double d = distance(p, q);
-		if(d < 0) reaction(p,q,d*BSimParameters.reactForce);		
+		double od = outerDistance(p,q);
+		if(od < 0) reaction(p,q,od*BSimParameters.reactForceGradient);				
 	}	
     
 	public static void interaction(BSimBacterium bacterium, BSimBead bead) {
 		
-		double d = distance(bacterium, bead);
+		double od = outerDistance(bacterium, bead);
 		double magnitude;
 		double wellWidth = BSimParameters.wellWidthBactBead;
 		double wellDepth = BSimParameters.wellDepthBactBead;
 		
-		if (d>wellWidth || d == 0) magnitude = 0;
-		else if(d>(wellWidth/2.0)) magnitude = -wellDepth + (d-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
-		else if(d>=0.0) magnitude = -(d*2.0*wellDepth/wellWidth);		
-		else magnitude = d * BSimParameters.reactForce;
+		if (od>wellWidth || od == 0) magnitude = 0;
+		else if(od>(wellWidth/2.0)) magnitude = -wellDepth + (od-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
+		else if(od>=0.0) magnitude = -(od*2.0*wellDepth/wellWidth);		
+		else magnitude = od * BSimParameters.reactForceGradient;
 				
 		reaction(bacterium, bead, magnitude);
 	}		
-	
-	public static void interaction(BSimBead p, BSimBead q) {
-		double d = distance(p, q);
-		if(d < 0) reaction(p,q,d*BSimParameters.reactForce);		
-	}
-	
-	public static void interaction(BSimBead bead, BSimVesicle vesicle) {
-		double d = distance(bead, vesicle);
-		if(d < 0) reaction(bead,vesicle,d*BSimParameters.reactForce);		
-	}
-	
+		
 	/*
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
 	 */		
@@ -104,10 +94,9 @@ public abstract class BSimParticle {
         return d.length();
 	}
 	
-    public static boolean particlesIntersecting(BSimParticle a, BSimParticle b) {
-        if(distance(a,b) < (a.radius + b.radius)) return true;
-        else return false;
-}
+	public static double outerDistance(BSimParticle a, BSimParticle b) {
+		return distance(a,b) - (a.radius + b.radius);
+	}	
         	
     /*
      * Applies a force on p of magnitude m towards p,

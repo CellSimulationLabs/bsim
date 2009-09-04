@@ -105,7 +105,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		noLoop();
 
 		// Set up and initialise PeasyCam:
-		cam = new PeasyCam(this, (float) defaultDistance);
+		cam = new PeasyCam(this, 50, 50, 50, (float) defaultDistance);
 		cam.setMinimumDistance((float) minDistance);
 		cam.setMaximumDistance((float) maxDistance);
 

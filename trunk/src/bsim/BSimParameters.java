@@ -67,7 +67,7 @@ public class BSimParameters {
 	public static double[] screenMove = {0.0, 0.0};		
 	
 	// bsim.particle
-	public static double reactForce = 0.0;
+	public static double reactForceGradient = 0.5; // pN/micrometer
 	public static double visc = Math.pow(10.0,-3.0); // Pascal seconds
 	public static double wellWidthBactBead = 0.0;
 	public static double wellDepthBactBead = 0.0;
@@ -155,7 +155,7 @@ public class BSimParameters {
 		else if(line[0].equals("screenMove:")) screenMove = args;
 				
 		// bsim.particle
-		else if(line[0].equals("reactForce:")) reactForce = args[0];
+		else if(line[0].equals("reactForce:")) reactForceGradient = args[0];
 		else if(line[0].equals("visc:")) visc = args[0];
 		else if(line[0].equals("wellWidthBactBead:")) wellWidthBactBead = args[0];
 		else if(line[0].equals("wellDepthBactBead:")) wellDepthBactBead = args[0];

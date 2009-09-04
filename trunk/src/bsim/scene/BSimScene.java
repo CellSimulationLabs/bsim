@@ -281,9 +281,9 @@ public class BSimScene implements Runnable{
 	
 	private void runAllUpdates(){
 						
-		for(BSimBacterium bacterium : bacteria) {
-			for(BSimBead bead : beads) {
-					BSimParticle.interaction(bacterium, bead);
+		for(int i = 0; i < bacteria.size(); i++) {
+			for(int j = i+1; j < bacteria.size(); j++) {
+					BSimParticle.interaction(bacteria.get(i), bacteria.get(j));
 			}		
 		}
 		
