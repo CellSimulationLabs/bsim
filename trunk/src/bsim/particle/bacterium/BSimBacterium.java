@@ -61,7 +61,8 @@ public class BSimBacterium extends BSimParticle {
 	 */
 	public BSimBacterium(Vector3d newPosition, double newRadius, Vector3d newDirection, BSimScene newScene) {
 		super(newPosition, newRadius, newScene);		
-		direction = newDirection;			
+		direction = newDirection;
+		direction.normalize();
 		motionState = RUNNING; // Start off running
 						
 		shortTermMemoryDuration = 1.0;
@@ -132,8 +133,8 @@ public class BSimBacterium extends BSimParticle {
 		r.transform(direction);		
 		
 		// Decrement the tumble steps and tumble angle
-		tumbleSteps-= 1;
 		tumbleAngle-= tumbleAngle/tumbleSteps;
+		tumbleSteps-= 1;		
 		
 		if (tumbleSteps == 0) switchMotionState();		
 	}
