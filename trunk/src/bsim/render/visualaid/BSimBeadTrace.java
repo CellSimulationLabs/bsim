@@ -76,8 +76,9 @@ public class BSimBeadTrace implements BSimVisualAid {
 				trace = (Vector)traces.elementAt(j);
 				
 				double[] point = new double[2];
-				point[0] = ((BSimBead)beads.elementAt(j)).getPosition()[0];
-				point[1] = ((BSimBead)beads.elementAt(j)).getPosition()[1];
+				// TODO: Broken to compile on Mac
+				//point[0] = ((BSimBead)beads.elementAt(j)).getPosition()[0];
+				//point[1] = ((BSimBead)beads.elementAt(j)).getPosition()[1];
 				trace.add(0,(double[])point);
 			}
 		}

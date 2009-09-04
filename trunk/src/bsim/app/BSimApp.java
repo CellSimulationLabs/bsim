@@ -159,8 +159,12 @@ public class BSimApp extends JFrame{
 		filename = filename + ".png";
 		
 		// Create the image required to hold the output
-        BufferedImage img = new BufferedImage(scene.getWidth(), 
-			scene.getHeight(), 
+        // TODO: Broke this to get compiling on Mac
+		//BufferedImage img = new BufferedImage(scene.getWidth(), 
+		//	scene.getHeight(), 
+		//	BufferedImage.TYPE_INT_RGB);
+		BufferedImage img = new BufferedImage(100, 
+			100, 
 			BufferedImage.TYPE_INT_RGB);
 					
 		byte[] pngbytes;
@@ -302,10 +306,14 @@ public class BSimApp extends JFrame{
 					out.setTimeScale(30); // 30 fps
 					
 					// Create the image required to hold the output
-		            BufferedImage img = new BufferedImage(scene.getWidth(), 
-						scene.getHeight(), 
+		            //BufferedImage img = new BufferedImage(scene.getWidth(), 
+					//	scene.getHeight(), 
+					//	BufferedImage.TYPE_INT_RGB);
+		            // TODO: Broke this to compile on Mac
+					BufferedImage img = new BufferedImage(100, 
+						100, 
 						BufferedImage.TYPE_INT_RGB);
-		            
+					
 					// Loop through each frame in animation and draw scene
 					for(int a = 0; a<numOfFrames; a++) {
 						// Update progress
@@ -313,7 +321,9 @@ public class BSimApp extends JFrame{
 						g = img.createGraphics();
 		            
 						// Draw the frame to the graphics context
-						scene.drawFrame((Graphics)g);
+						// TODO: Broken to compile on Mac
+						//scene.drawFrame((Graphics)g);
+						
 						// Skip the required number of frames
 						// (This will still calculate all intermediate timesteps)
 						scene.skipFrames(skipFrames);
@@ -337,7 +347,8 @@ public class BSimApp extends JFrame{
 			// Update final progress to ensure progress monitor exits
 			pCur = pMax;
 			// Update the display with current frame
-			scene.repaint();
+			// TODO: Broken to compile on Mac
+			//scene.repaint();
 			// Enable user input again
 			toolBar.setEnabled(true);
 		}

@@ -15,7 +15,7 @@ cp -R ./bsim/resource ../build/bsim/resource
 
 # Generate the jar file
 cd ../build
-jar cmf ../scripts/mainClass.txt BSim.jar bsim/
+jar cfm BSim.jar ../scripts/mainClass.txt bsim/
 
 # Return to calling directory
 cd ../scripts

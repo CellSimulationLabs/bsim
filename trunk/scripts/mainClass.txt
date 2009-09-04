@@ -1,1 +1,2 @@
-Main-Class: bsim.BSimApp
+Class-Path: core.jar PeasyCam.jar vecmath.jar video.jar
+Main-Class: bsim.app.BSimApp
