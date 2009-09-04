@@ -52,9 +52,9 @@ public class BSimScene implements Runnable{
 	public static final int VIEW_ZOOM = 2;
 		
 	// Vectors holding all bacteria and beads in the simulation
-	private Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
-	private Vector<BSimBead> beads = new Vector<BSimBead>();
-	private Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();	
+	private Vector<BSimBacterium> bacteria;
+	private Vector<BSimBead> beads;
+	private Vector<BSimVesicle> vesicles;	
 	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
@@ -159,6 +159,10 @@ public class BSimScene implements Runnable{
 		if (firstTime == 0 && guiExists){
 			app.updateTime(getFormatedTime());
 		}
+		
+		bacteria = new Vector<BSimBacterium>();
+		beads = new Vector<BSimBead>();
+		vesicles = new Vector<BSimVesicle>();
 		
 		// Create the bacteria and beads
 		for(double[] args : BSimParameters.bacteria){
