@@ -25,13 +25,18 @@ import bsim.field.BSimChemicalField;
 public class BSimParameters {	
 	
 	// bsim
-	public static double dt = 0.001; // seconds	
+	public static double dt = 0.01; // seconds	
 	public static int screenWidth 	= 1025; // pixels
 	public static int screenHeight 	= 700; // pixels	
 		
 	// bsim.scene
 	public static Vector<double[]> bacteria = new Vector();	
 	public static Vector<double[]> beads = new Vector();
+	
+	public static double[] boundingBoxStartPos 	= {0,0,0};
+	public static double boundingBoxWidth 		= 100;
+	public static double boundingBoxHeight 		= 100;
+	public static double boundingBoxDepth 		= 100;
 	
 	public static double fGoalFieldType 			= BSimChemicalField.TYPE_FIXED;
 	public static double fGoalBoundaryType 			= BSimChemicalField.BOUNDARY_LEAK;
