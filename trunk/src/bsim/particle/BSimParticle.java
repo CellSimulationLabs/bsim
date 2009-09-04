@@ -26,7 +26,7 @@ public abstract class BSimParticle {
 	private Vector3d position; // microns		
 	private Vector3d force; // piconewtons	
 	private double radius; // microns	
-	private BSimScene scene; // the environment that the particle exists in
+	private static BSimScene scene; // the environment that the particle exists in
 		
 	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {	
 		position = new Vector3d();
@@ -43,6 +43,15 @@ public abstract class BSimParticle {
 	public static void interaction(BSimBacterium p, BSimBacterium q) {
 		double od = outerDistance(p,q);
 		if(od < 0) reaction(p,q,od*BSimParameters.reactForceGradient);				
+	}	
+	
+	public static void interaction(BSimBacterium bacterium, BSimVesicle vesicle) {
+		double od = outerDistance(bacterium, vesicle);
+		if(od < 0) {
+			bacterium.fusionCount++;
+			// TODO horrid
+			scene.removeVesicle(vesicle);
+		}		
 	}	
     
 	public static void interaction(BSimBacterium bacterium, BSimBead bead) {

@@ -36,11 +36,6 @@ public class BSimBacterium extends BSimParticle {
 	private static int RUNNING  = 1;
 	private static int TUMBLING = 2;	
 	
-	private static double pContinueRunIncreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
-	private static double pContinueRunDecreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
-	private static double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
-	private static double pNewVesicleDt = 0.0001;; // probability of generating a new surface vesicle over dt
-	
 	// Values for gamma tumbling distribution
 	private static double[] gammaVals = readGammaVals();	
 	
@@ -52,9 +47,16 @@ public class BSimBacterium extends BSimParticle {
 	private double sensitivity; // to differences in long term vs short term mean concentrations
 	private Vector<Double> memory; // memory of the concentration of the goal field
 	
+	private double pContinueRunIncreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
+	private double pContinueRunDecreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
+	private double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+		
 	// Set at onset of tumbling phase:
 	private int tumbleSteps; 	// Number of time steps remaining in tumble phase
-	private double tumbleAngle; // Angle remaining in tumble phase		
+	private double tumbleAngle; // Angle remaining in tumble phase
+	
+	private double vesicleProductionRate = 1; // vesicles/sec
+	public int fusionCount; // fusion counter
 					
 	/**
 	 * General constructor.
@@ -83,8 +85,8 @@ public class BSimBacterium extends BSimParticle {
 			tumble();
 		}
 		
-		if(Math.random() < pNewVesicleDt)
-			getScene().addVesicle(new BSimVesicle(getPosition(), 0.01, getScene()));
+		if(Math.random() < vesicleProductionRate*BSimParameters.dt)
+			getScene().addVesicle(new BSimVesicle(getPosition(), 1, getScene()));
 			
 	}
 	

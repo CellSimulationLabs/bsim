@@ -432,6 +432,7 @@ public class BSimScene implements Runnable{
 	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
+	public void removeVesicle(BSimVesicle b){ vesicles.remove(b); }
 		
 	public int getTimeStep (){ return timeStep; }
 	public BSimChemicalField getGoalField (){ return fGoal; }
