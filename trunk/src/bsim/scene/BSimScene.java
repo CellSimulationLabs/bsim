@@ -287,6 +287,13 @@ public class BSimScene implements Runnable{
 			}		
 		}
 		
+		for(BSimBacterium bacterium : bacteria) {
+			for(BSimVesicle vesicle : vesicles) {
+				BSimParticle.interaction(bacterium, vesicle);
+			}
+		}	
+		
+		
 		for(BSimBacterium p : bacteria) {
 			p.action();
 			p.updatePosition();

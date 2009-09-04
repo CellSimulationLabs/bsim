@@ -49,7 +49,7 @@ public abstract class BSimParticle {
 		double od = outerDistance(bacterium, vesicle);
 		if(od < 0) {
 			bacterium.fusionCount++;
-			// TODO horrid
+			// TODO horrid static scene
 			scene.removeVesicle(vesicle);
 		}		
 	}	
