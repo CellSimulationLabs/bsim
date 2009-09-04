@@ -25,7 +25,7 @@ import bsim.field.BSimChemicalField;
 public class BSimParameters {	
 	
 	// bsim
-	public static double dt = 0.001; // seconds	
+	public static double dt = 0.01; // seconds	
 	public static int screenWidth 	= 1025; // pixels
 	public static int screenHeight 	= 700; // pixels	
 		
