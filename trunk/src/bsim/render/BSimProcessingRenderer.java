@@ -129,7 +129,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 */
 	public void draw(){
 		// Clean slate, otherwise we end up drawing on top of the previous frame.
-		background(255,120,200);
+		background(0);
 
 		// TODO: 	Draw the scene boundaries.
 		//someDrawBoundariesMethod(Boundaries b){}
@@ -211,7 +211,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 * Draw a standard BSimBacterium
 	 */
 	public void draw(BSimBacterium bact){
-		fill(0);
+		fill(0, 255, 0);
 		
 		// Draw the bacterium as a rod shape.
 		Vector3f worldY = new Vector3f(0,1,0);
