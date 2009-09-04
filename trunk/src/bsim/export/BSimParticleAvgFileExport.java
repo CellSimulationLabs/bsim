@@ -72,7 +72,7 @@ public class BSimParticleAvgFileExport extends BSimFileExport {
 		finalAvg = new double[3];
 		
 		// Check to see if the frame needs to be output
-		if(scene.getTimeStep() % frameSkip == 0){
+		if(scene.getTimeStep() % frameSkip == 0 && particles.size() > 0){
 
 			// Add the timestep
 			actTime = scene.getTimeStep() * BSimParameters.dt;

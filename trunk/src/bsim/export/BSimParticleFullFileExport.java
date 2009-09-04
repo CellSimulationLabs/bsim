@@ -52,13 +52,15 @@ public class BSimParticleFullFileExport extends BSimFileExport {
 		
 		outStr = "Timestep";
 		
-		for(int i=0; i<scene.getBeads().size(); i++){
-			outStr += ", " + i + "_x";
-			outStr += ", " + i + "_y";
+		for(int i=0; i<particles.size(); i++){
+			outStr += ", " + (i+1) + "_x";
+			outStr += ", " + (i+1) + "_y";
+			outStr += ", " + (i+1) + "_z";
 		}
 		
 		outStr += ", Average_x";
 		outStr += ", Average_y";
+		outStr += ", Average_z";
 		
 		return outStr;
 	}
@@ -77,7 +79,7 @@ public class BSimParticleFullFileExport extends BSimFileExport {
 		vecOutput = new double[3];
 		
 		// Check to see if the frame needs to be output
-		if(scene.getTimeStep() % frameSkip == 0){
+		if(scene.getTimeStep() % frameSkip == 0 && particles.size() > 0){
 
 			// Add the timestep
 			actTime = scene.getTimeStep() * BSimParameters.dt;

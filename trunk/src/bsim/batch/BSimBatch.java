@@ -121,7 +121,7 @@ public class BSimBatch{
 			String filenameMovie = pathToExport + "/" + timestampStr + 
 				"_Video-Export_"  + BSimUtils.padInt4(i+1) + ".mov";
 				
-			exportPlugins.add(new BSimParticleAvgFileExport(scene.getBacteria(), fileBac, txtFrameSkip));
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getBacteria(), fileBac, txtFrameSkip));
 			exportPlugins.add(new BSimParticleFullFileExport(scene.getBeads(), filePart, txtFrameSkip));
 			exportPlugins.add(new BSimParticleFullFileExport(scene.getVesicles(), filePart, txtFrameSkip));
 			
@@ -179,9 +179,12 @@ public class BSimBatch{
 					while(scene.getWaitingForVideoClosing()){}
 				}
 				
-			} catch (Exception ex) { ex.printStackTrace();}			
+			} catch (Exception ex) { ex.printStackTrace();}		
+			
 			// Finalise the current run (close open files, etc)
 			finaliseCurrent();
+			
+			scene.reset();
 		}
 	}
 	
@@ -192,9 +195,9 @@ public class BSimBatch{
 	private void finaliseCurrent(){
 		
 		// Cycle through each of the export plugins
-		for(int i=0; i<exportPlugins.size(); i++){
+		for(BSimExport i : exportPlugins){
 			// Finish the export
-			((BSimExport)exportPlugins.elementAt(i)).finishExport(scene);
+			i.finishExport(scene);
 		}
 	}
 		
@@ -218,9 +221,9 @@ public class BSimBatch{
 		scene.skipFrames(1);
 		
 		// Export the next frames data
-		for(int i=0; i<exportPlugins.size(); i++){
+		for(BSimExport i : exportPlugins){
 			// Export the current frame
-			((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene);
+			i.exportFrame(scene);
 		}	
 	}
 	
@@ -235,6 +238,7 @@ public class BSimBatch{
 		// Load the file and create the batch object
 		try{
 			// The parameter file for the simulation
+			System.out.println(" " + args[0]);
 			File fParams = new File(args[0]);
 			
 			// Create the batch object
