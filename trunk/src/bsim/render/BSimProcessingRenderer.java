@@ -143,19 +143,23 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		// Add Processing's 3D lighting.
 		lights();
 		
-		// bad bad bad, might need to think of a better way of doing this.
+		// Doesn't draw an object if it doesn't exist...
+		// might need to think of a better way of doing this (or go back to old style loops).
+		// Bacteria
 		try{
-			// Bacteria
 			for(BSimBacterium bact : bacteria) {
 				draw(bact);
 			}
-	
-			// Vesicles
+		} catch(NullPointerException ignore){}
+		// Vesicles
+		try{
 			for(BSimVesicle ves : vesicles) {
 				draw(ves);
 			}
-	
-			// Particles
+		} catch(NullPointerException ignore){}
+		// Particles
+		try{
+
 			for(BSimBead bead : beads) {
 				draw(bead);
 			}
@@ -164,13 +168,6 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		// Text overlays; drawn last so they're on top of everything else.
 		drawTime();
 		drawFPS();
-	}
-	
-	/**
-	 * Force a redraw on the scene (Processing will attempt to render a new frame as soon as possible)
-	 */
-	public void redraw(){
-		draw();
 	}
 	
 	
@@ -214,7 +211,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 * Draw a standard BSimBacterium
 	 */
 	public void draw(BSimBacterium bact){
-		fill(0, 255, 0);
+		fill(0);
 		
 		// Draw the bacterium as a rod shape.
 		Vector3f worldY = new Vector3f(0,1,0);
