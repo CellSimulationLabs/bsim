@@ -84,6 +84,10 @@ public abstract class BSimParticle {
 		velocity.scale(1/(6.0*Math.PI*radius*BSimParameters.visc), force); // pN/(micrometers*Pa sec) = micrometers/sec 
 		position.scaleAdd(BSimParameters.dt, velocity, position);
 		force.set(0,0,0);
+		
+		if(position.x > BSimParameters.xBound) position.x -= BSimParameters.xBound;
+		if(position.y > BSimParameters.yBound) position.y -= BSimParameters.yBound;
+		if(position.z > BSimParameters.zBound) position.z -= BSimParameters.zBound;				
 	}
 		
 	public Vector3d getPosition() { return position; }	

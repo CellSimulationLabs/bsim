@@ -23,7 +23,6 @@ import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimBoundingBox;
 import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
@@ -59,9 +58,6 @@ public class BSimScene implements Runnable{
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
 	private BSimChemicalField fQuorum;
-	
-	// Bounding box
-	private BSimBoundingBox boundingBox;
 	
 	// Number of time steps that have occured in current simulation
 	private int timeStep = 0;
@@ -192,7 +188,7 @@ public class BSimScene implements Runnable{
 				BSimParameters.dt,
 				BSimParameters.fGoalThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
-			);	
+              );	
         if(BSimParameters.fGoalSetAsLinearDir != 0) {
         	fGoal.setAsLinear((int)BSimParameters.fGoalSetAsLinearDir, BSimParameters.fGoalSetAsLinearStartCon, BSimParameters.fGoalSetAsLinearEndCon);
         }
@@ -211,17 +207,12 @@ public class BSimScene implements Runnable{
 				BSimParameters.dt,
 				BSimParameters.fQuorumThreshold,
 				new Color(0.1f, 0.8f, 0.1f)
-  			);	
+              );	
         if(BSimParameters.fQuorumSetAsLinearDir != 0) {
         	fQuorum.setAsLinear((int)BSimParameters.fQuorumSetAsLinearDir, BSimParameters.fQuorumSetAsLinearStartCon, BSimParameters.fQuorumSetAsLinearEndCon);
         }
 				
-		boundingBox = new BSimBoundingBox(
-				new Vector3d(BSimParameters.boundingBoxStartPos[0], BSimParameters.boundingBoxStartPos[1], BSimParameters.boundingBoxStartPos[2]),
-				BSimParameters.boundingBoxWidth,
-				BSimParameters.boundingBoxHeight,
-				BSimParameters.boundingBoxDepth
-			);
+		vesicles = new Vector();
 		
 		// Reset the renderer with new scene data
 		if(app.getRenderer() != null){
@@ -444,8 +435,7 @@ public class BSimScene implements Runnable{
 		
 	public int getTimeStep (){ return timeStep; }
 	public BSimChemicalField getGoalField (){ return fGoal; }
-	public BSimChemicalField getQuorumField() { return fQuorum; }
-	public BSimBoundingBox getBoundingBox(){ return boundingBox; }
+	public BSimChemicalField getQuorumField() { return fQuorum; }	
 	
 	public boolean getStartVideo (){ return startVideo; }
 	public boolean getEndVideo (){ return endVideo; }
