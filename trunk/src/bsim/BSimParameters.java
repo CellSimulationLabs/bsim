@@ -155,7 +155,7 @@ public class BSimParameters {
 		else if(line[0].equals("screenMove:")) screenMove = args;
 				
 		// bsim.particle
-		else if(line[0].equals("reactForce:")) reactForceGradient = args[0];
+		else if(line[0].equals("reactForceGradient:")) reactForceGradient = args[0];
 		else if(line[0].equals("visc:")) visc = args[0];
 		else if(line[0].equals("wellWidthBactBead:")) wellWidthBactBead = args[0];
 		else if(line[0].equals("wellDepthBactBead:")) wellDepthBactBead = args[0];
