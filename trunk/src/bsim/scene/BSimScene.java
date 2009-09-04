@@ -217,7 +217,12 @@ public class BSimScene implements Runnable{
 				
 		vesicles = new Vector();
 		
+		// Reset the renderer with new scene data
+		if(app.getRenderer() != null){
+			app.resetRenderer(firstTime);
+		}
 
+		
 		// Processing related activity
 		// TODO: If display window exists
 //		if(guiExists){
@@ -241,7 +246,7 @@ public class BSimScene implements Runnable{
 //			processingRenderer = new BSimProcessingRenderer(this);    
 //		    processingRenderer.init();
 //		}
-		
+
 	}
 	
 	
