@@ -46,10 +46,7 @@ public class BSimBacterium extends BSimParticle {
 	
 	private Vector3d direction;
 	private int motionState; // RUNNING or TUMBLING
-	
-	private double replicationRadius;
-	private double radiusGrowthRate; // microns/sec
-		
+			
 	private double shortTermMemoryDuration; // seconds
 	private double longTermMemoryDuration; // seconds
 	private double sensitivity; // to differences in long term vs short term mean concentrations
@@ -66,10 +63,7 @@ public class BSimBacterium extends BSimParticle {
 		super(newPosition, newRadius, newScene);		
 		direction = newDirection;			
 		motionState = RUNNING; // Start off running
-		
-		replicationRadius = 2*newRadius;
-		radiusGrowthRate = 0.1;
-				
+						
 		shortTermMemoryDuration = 1.0;
 		longTermMemoryDuration = 3.0; 
 		sensitivity = 0.000001;		
@@ -90,20 +84,9 @@ public class BSimBacterium extends BSimParticle {
 		
 		if(Math.random() < pNewVesicleDt)
 			getScene().addVesicle(new BSimVesicle(getPosition(), 0.01, getScene()));
-		
-		grow();		
+			
 	}
 	
-	protected void grow() {				
-		setRadius(getRadius() + radiusGrowthRate*BSimParameters.dt);	
-		if(getRadius() > replicationRadius) replicate();
-	}
-	
-	protected void replicate() {
-		getScene().addBacterium(new BSimBacterium(getPosition(), getRadius()/2, direction, getScene()));
-		setRadius(getRadius()/2);
-	}	
-
 	protected void run() {				
 		double shortTermMean = BSimUtils.mean(shortTermMemory());
 		double longTermMean = BSimUtils.mean(longTermMemory());
