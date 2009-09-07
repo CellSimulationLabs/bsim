@@ -9,21 +9,20 @@ import bsim.particle.bacterium.BSimBacterium;
 import bsim.scene.BSimScene;
 
 public class BSimVesicle extends BSimParticle {
-			
+		
+	static double boltzmann = 1.38 * Math.pow(10,-23);
+	static double temperature = 300;
+	
 	public BSimVesicle(Vector3d newPosition, double newRadius, BSimScene newScene) {
 		super(newPosition, newRadius, newScene);	
 	}
 
-	public void action() {
-		
+	public void action() {						
+		double brownianAmplitude = Math.sqrt(2*stokesCoefficient()*boltzmann*temperature/BSimParameters.dt)*Math.pow(10,9);
+
 		Random r = new Random();
-		
-		double resistance = 6.0*Math.PI*(this.getRadius()*Math.pow(10, -6))*BSimParameters.visc;
-		double boltzmann = 1.38 * Math.pow(10,-23);
-		double temperature = 300;
-		double amplitude = Math.sqrt(2*resistance*boltzmann*temperature/BSimParameters.dt)*Math.pow(10,12);
-		
-		Vector3d f = new Vector3d(r.nextGaussian()*amplitude, r.nextGaussian()*amplitude, r.nextGaussian()*amplitude);		
+		Vector3d f = new Vector3d(r.nextGaussian(), r.nextGaussian(), r.nextGaussian());
+		f.scale(brownianAmplitude);
 		this.addForce(f);
 	}
 	
