@@ -48,7 +48,7 @@ public abstract class BSimParticle {
 	 */
 	public void updatePosition() {
 		Vector3d velocity = new Vector3d();
-		velocity.scale(1/(6.0*Math.PI*radius*BSimParameters.visc), force); // pN/(micrometers*Pa sec) = micrometers/sec 
+		velocity.scale(1/stokesCoefficient(), force); // pN/(micrometers*Pa sec) = micrometers/sec 
 		position.scaleAdd(BSimParameters.dt, velocity, position);
 		force.set(0,0,0);
 		
@@ -64,6 +64,7 @@ public abstract class BSimParticle {
 	public BSimScene getScene() { return scene; }
 	public void addForce(Vector3d f) { force.add(f); }
 	public void setRadius(double r) { radius = r; }
+	public double stokesCoefficient() { return 6.0*Math.PI*radius*BSimParameters.visc; } // micrometers*Pa sec
 		
 	public double distance(BSimParticle p) {
 		Vector3d d = new Vector3d();
