@@ -26,7 +26,7 @@ public abstract class BSimParticle {
 	private Vector3d position; // microns		
 	private Vector3d force; // piconewtons	
 	private double radius; // microns	
-	private static BSimScene scene; // the environment that the particle exists in
+	private BSimScene scene; // the environment that the particle exists in
 		
 	public BSimParticle(Vector3d newPosition, double newRadius, BSimScene newScene) {	
 		position = new Vector3d();
@@ -36,39 +36,7 @@ public abstract class BSimParticle {
 		
 		position.set(newPosition);
 	}	
-
-	/*
-	* Interactions between particles: reaction forces, fusions, etc 
-	*/
-	public static void interaction(BSimBacterium p, BSimBacterium q) {
-		double od = outerDistance(p,q);
-		if(od < 0) reaction(p,q,od*BSimParameters.reactForceGradient);				
-	}	
 	
-	public static void interaction(BSimBacterium bacterium, BSimVesicle vesicle) {
-		double od = outerDistance(bacterium, vesicle);
-		if(od < 0) {
-			bacterium.fusionCount++;
-			// TODO horrid static scene
-			scene.removeVesicle(vesicle);
-		}		
-	}	
-    
-	public static void interaction(BSimBacterium bacterium, BSimBead bead) {
-		
-		double od = outerDistance(bacterium, bead);
-		double magnitude;
-		double wellWidth = BSimParameters.wellWidthBactBead;
-		double wellDepth = BSimParameters.wellDepthBactBead;
-		
-		if (od>wellWidth || od == 0) magnitude = 0;
-		else if(od>(wellWidth/2.0)) magnitude = -wellDepth + (od-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
-		else if(od>=0.0) magnitude = -(od*2.0*wellDepth/wellWidth);		
-		else magnitude = od * BSimParameters.reactForceGradient;
-				
-		reaction(bacterium, bead, magnitude);
-	}		
-		
 	/*
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
 	 */		
@@ -97,28 +65,28 @@ public abstract class BSimParticle {
 	public void addForce(Vector3d f) { force.add(f); }
 	public void setRadius(double r) { radius = r; }
 		
-	public static double distance(BSimParticle a, BSimParticle b) {
+	public double distance(BSimParticle p) {
 		Vector3d d = new Vector3d();
-        d.sub(a.position, b.position);
+        d.sub(this.position, p.position);
         return d.length();
 	}
 	
-	public static double outerDistance(BSimParticle a, BSimParticle b) {
-		return distance(a,b) - (a.radius + b.radius);
+	public double outerDistance(BSimParticle p) {
+		return this.distance(p) - (this.radius + p.radius);
 	}	
         	
     /*
-     * Applies a force on p of magnitude m towards p,
-     * and a force on q of magnitude m towards q.
+     * Applies a force on this of magnitude m towards this,
+     * and a force on p of magnitude m towards p.
      */
-	public static void reaction(BSimParticle p, BSimParticle q, double m) {
+	public void reaction(BSimParticle p, double m) {
 		Vector3d f = new Vector3d();
-		f.sub(p.position, q.position);			
+		f.sub(this.position, p.position);			
 		f.normalize();
 		f.scale(m);
-		p.addForce(f);
+		this.addForce(f);
 		f.negate();
-		q.addForce(f);
+		p.addForce(f);
 	}
 		
 }

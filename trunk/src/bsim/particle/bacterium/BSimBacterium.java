@@ -26,6 +26,7 @@ import javax.vecmath.Vector3d;
 import bsim.BSimParameters;
 import bsim.BSimUtils;
 import bsim.particle.BSimParticle;
+import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 import bsim.scene.BSimScene;
 
@@ -89,6 +90,35 @@ public class BSimBacterium extends BSimParticle {
 			getScene().addVesicle(new BSimVesicle(getPosition(), 1, getScene()));
 			
 	}
+	
+	public void interaction(BSimBacterium b) {
+		double od = outerDistance(b);
+		if(od < 0) this.reaction(b,od*BSimParameters.reactForceGradient);				
+	}	
+	
+	public void interaction(BSimVesicle vesicle) {
+		double od = outerDistance(vesicle);
+		if(od < 0) {
+			this.fusionCount++;
+			getScene().removeVesicle(vesicle);
+		}		
+	}	
+    
+	public void interaction(BSimBead bead) {
+		
+		double od = outerDistance(bead);
+		double magnitude;
+		double wellWidth = BSimParameters.wellWidthBactBead;
+		double wellDepth = BSimParameters.wellDepthBactBead;
+		
+		if (od>wellWidth || od == 0) magnitude = 0;
+		else if(od>(wellWidth/2.0)) magnitude = -wellDepth + (od-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
+		else if(od>=0.0) magnitude = -(od*2.0*wellDepth/wellWidth);		
+		else magnitude = od * BSimParameters.reactForceGradient;
+				
+		this.reaction(bead, magnitude);
+	}
+	
 	
 	protected void run() {				
 		double shortTermMean = BSimUtils.mean(shortTermMemory());
