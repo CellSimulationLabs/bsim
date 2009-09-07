@@ -53,8 +53,11 @@ public abstract class BSimParticle {
 		force.set(0,0,0);
 		
 		if(position.x > BSimParameters.xBound) position.x -= BSimParameters.xBound;
+		if(position.x < 0) position.x += BSimParameters.xBound;
 		if(position.y > BSimParameters.yBound) position.y -= BSimParameters.yBound;
-		if(position.z > BSimParameters.zBound) position.z -= BSimParameters.zBound;				
+		if(position.y < 0) position.y += BSimParameters.yBound;
+		if(position.z > BSimParameters.zBound) position.z -= BSimParameters.zBound;
+		if(position.z < 0) position.z += BSimParameters.zBound;
 	}
 		
 	public Vector3d getPosition() { return position; }	
