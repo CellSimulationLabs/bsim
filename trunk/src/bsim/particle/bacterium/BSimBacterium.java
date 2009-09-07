@@ -35,10 +35,7 @@ public class BSimBacterium extends BSimParticle {
 	// Motion states
 	private static int RUNNING  = 1;
 	private static int TUMBLING = 2;	
-	
-	// Values for gamma tumbling distribution
-	private static double[] gammaVals = readGammaVals();	
-	
+		
 	private Vector3d direction;
 	private int motionState; // RUNNING or TUMBLING
 			
@@ -178,8 +175,7 @@ public class BSimBacterium extends BSimParticle {
 	/**
      * Read in file containing gamma distributed values to precision 0.001
      */
-    public static double[] readGammaVals() {
-    	double[] g = { -4.003954
+	private static double[] gammaVals = {-4.003954
 		, 3.251049, 4.903565, 6.047345, 6.952474, 7.714995, 8.38089
 		, 8.976646, 9.518559, 10.01769, 10.481896, 10.916998, 11.327071
 		, 11.715898, 12.086245, 12.440002, 12.779352, 13.105461, 13.419928
@@ -348,7 +344,4 @@ public class BSimBacterium extends BSimParticle {
 		, 182.053342, 184.976531, 188.273413, 192.058075, 196.507469, 201.913796
 		, 208.826538, 218.465727, 234.694022
 		};
-		
-    	return g;
-    }	
 }
