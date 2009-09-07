@@ -66,6 +66,7 @@ public class BSimScene implements Runnable{
 	private Thread simThread;
 	// Semaphore to control the play/pause commands
 	private BSimSemaphore simSem;
+	public BSimSemaphore renderSem;
 	
 	// The applications that the simulation is embedded
 	// (required for changes to time to be sent back to the GUI)
@@ -100,6 +101,7 @@ public class BSimScene implements Runnable{
 				
 		// Update the internal variables
 		simSem = newSimSem;
+		renderSem = new BSimSemaphore();
 		app = newApp;
 				
 	    
@@ -265,6 +267,7 @@ public class BSimScene implements Runnable{
 				
 				// Redraw the scene for this frame
 				app.getRenderer().redraw();
+				renderSem.waitOn();
 				
 				// Update the time-step
 				timeStep++;
@@ -281,18 +284,17 @@ public class BSimScene implements Runnable{
 	
 	private void runAllUpdates(){
 						
-		for(int i = 0; i < bacteria.size(); i++) {
-			for(int j = i+1; j < bacteria.size(); j++) {
-					BSimParticle.interaction(bacteria.get(i), bacteria.get(j));
-			}		
-		}
-		
-		for(BSimBacterium bacterium : bacteria) {
-			for(BSimVesicle vesicle : vesicles) {
-				BSimParticle.interaction(bacterium, vesicle);
-			}
-		}	
-		
+//		for(int i = 0; i < bacteria.size(); i++) {
+//			for(int j = i+1; j < bacteria.size(); j++) {
+//				bacteria.get(i).interaction( bacteria.get(j));
+//			}		
+//		}
+//		
+//		for(BSimBacterium bacterium : bacteria) {
+//			for(BSimVesicle vesicle : vesicles) {
+//				BSimParticle.interaction(bacterium, vesicle);
+//			}
+//		}	
 		
 		for(BSimBacterium p : bacteria) {
 			p.action();

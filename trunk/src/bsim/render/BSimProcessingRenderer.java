@@ -47,6 +47,8 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	private Vector<BSimBacterium> bacteria = null;
 	private Vector<BSimVesicle> vesicles = null;
 	private Vector<BSimBead> beads = null;
+	// Centre position of the scene boundary
+	private double[] boundCentre = new double[3];
 	
 	// Processing and PApplet
 	private int widthInitial;
@@ -85,6 +87,12 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		bacteria = scene.getBacteria();
 		vesicles = scene.getVesicles();
 		beads = scene.getBeads();
+		
+		// Set scene bounds
+		boundCentre[0] = BSimParameters.xBound/2;
+		boundCentre[1] = BSimParameters.yBound/2;
+		boundCentre[2] = BSimParameters.zBound/2;
+
 	}
 	
 	
@@ -105,7 +113,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		noLoop();
 
 		// Set up and initialise PeasyCam:
-		cam = new PeasyCam(this, 50, 50, 50, (float) defaultDistance);
+		cam = new PeasyCam(this, boundCentre[0], boundCentre[1], boundCentre[2], (float) defaultDistance);
 		cam.setMinimumDistance((float) minDistance);
 		cam.setMaximumDistance((float) maxDistance);
 
@@ -139,9 +147,6 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		// Clean slate, otherwise we end up drawing on top of the previous frame.
 		background(0);
 
-		// TODO: 	Draw the scene boundaries.
-		//someDrawBoundariesMethod(Boundaries b){}
-
 		// Don't want 3D lighting to slow down our chemical field rendering...
 		//noLights();
 
@@ -153,7 +158,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		
 		// Doesn't draw an object if it doesn't exist...
 		// might need to think of a better way of doing this (or go back to old style loops).
-		// Bacteria
+		// Bacteria. if(BSimScene or bact etc != null) then{.....
 		try{
 			for(BSimBacterium bact : bacteria) {
 				draw(bact);
@@ -173,14 +178,24 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 			}
 		} catch(NullPointerException ignore){}
 		
+		noLights();
+		// Draw the scene boundaries.
+		drawBoundary();
+		
 		// Text overlays; drawn last so they're on top of everything else.
 		drawTime();
 		drawFPS();
+		
+		if(scene != null){
+			scene.renderSem.signal();
+		}
 	}
 	
 	/**
 	 * Loop the animation if the mouse button is clicked (i.e. on camera movement)
 	 */
+	// Need to tolerate multiple mouse buttons.
+	// flag the current playstate/renderstate and if() these mouse pressed functions
 	public void mousePressed() {
 		// Pause the scene calculations while moving the camera
 		oldPlayState = scene.getPlayState();
@@ -227,10 +242,13 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 * Draw a bacterial membrane vesicle
 	 */
 	public void draw(BSimVesicle vesicle){
-		fill(255, 131, 223);
+		fill(255, 131, 223, 50);
+		
 		pushMatrix();
 		translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
-		sphere((float)(vesicle.getRadius()));			
+		sphere((float)(10*vesicle.getRadius()));
+		fill(255,0,0);
+		sphere((float)(vesicle.getRadius()));
 		popMatrix();
 	}
 
@@ -318,18 +336,15 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	/**
 	 * Draw the scene boundary
 	 */
-	// TODO: 	base this on the new boundary implementation when its done:
-	/*
-	 * The old code:
-	 */
-//	double[] centrePos= boundingBox.getCentrePos();
-//	pushMatrix();
-//	translate((float)centrePos[0],(float)centrePos[1],(float)centrePos[2]);
-//	stroke(255);
-//	noFill();
-//	box((float)boundingBox.getLength(), (float)boundingBox.getWidth(), (float)boundingBox.getDepth());
-//	noStroke();
-//	popMatrix();
+	public void drawBoundary(){
+		fill(128, 128, 255, 25);
+		stroke(255);
+		pushMatrix();
+		translate((float)boundCentre[0],(float)boundCentre[1],(float)boundCentre[2]);
+		box((float)BSimParameters.xBound, (float)BSimParameters.yBound, (float)BSimParameters.zBound);
+		popMatrix();
+		noStroke();
+	}
 	
 	
 	/******************************* GUI Overlay Draw Methods *******************************/
