@@ -19,7 +19,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JToolBar;
 
-import bsim.BSimParameters;
 import bsim.scene.BSimScene;
 
 
@@ -35,7 +34,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private int playState = 0;
 	
 	// GUI objects
-	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot, btnLoadSim;	
+	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot;	
 	private JFileChooser fc;
 	
 	// Images used on the buttons
@@ -83,10 +82,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnPlayPause.addActionListener(this);
 		btnReset = new JButton("Reset");
 		btnReset.setIcon(iconReset);
-		btnReset.addActionListener(this);
-		btnLoadSim = new JButton("Load Simulation");
-		btnLoadSim.setIcon(iconLoad);
-		btnLoadSim.addActionListener(this);		
+		btnReset.addActionListener(this);	
 		// TODO: A button to create a new display window?
 		// TODO: don't really need quite so many different buttons for setting directories etc. i.e. should just be 'take screenshot' for example
 		// Create a folder with the date & time: export_01_09_09_1244\screenshots, .\movies, .\data for example
@@ -112,7 +108,6 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		this.add(btnPlayPause);
 		this.add(btnReset);
 		// Parameters
-		this.add(btnLoadSim);
 		this.addSeparator();
 		// Screenshot controls
 		this.add(btnSaveScreenshot);
@@ -136,8 +131,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		// Update the enabled property for all items on the toolbar
 		super.setEnabled(enabled);
 		btnPlayPause.setEnabled(enabled);
-		btnReset.setEnabled(enabled);
-		btnLoadSim.setEnabled(enabled);
+		btnReset.setEnabled(enabled);		
 		btnSaveScreenshot.setEnabled(enabled);
 		btnSaveRecord.setEnabled(enabled);
 	}
@@ -225,30 +219,6 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
 			btnSaveScreenshot.setEnabled(true);		
 		//Load simulation
-		}else if(s == btnLoadSim) {
-			// Pause the current simulation first
-			playState = 0;
-			btnPlayPause.setIcon(iconPlay);
-			btnPlayPause.setText("Play");
-			app.pause();
-			
-			// Variable to check if cancel is pressed (also displays the file dialog)
-			int returnVal = fc.showOpenDialog(this);
-			
-			// If OK is pressed
-			if (returnVal == JFileChooser.APPROVE_OPTION) {
-				// Get the file that has been entered
-				File file = fc.getSelectedFile();
-										
-				try{
-					// Pass the filename to the BSimApp to write movie to file
-					new BSimParameters(file);
-					scene.updateParams();					
-				} catch (Exception ex) { 
-					System.err.println("Error Loading Simulation (See stack trace)");
-					ex.printStackTrace();
-				}
-			}
 		}
 	}
 }

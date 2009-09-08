@@ -18,23 +18,25 @@
  */
 package bsim.scene;
 
-import java.awt.Color;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimBead;
-import bsim.particle.BSimMagnetotacticBacterium;
+import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
 
 
 public class BSimScene implements Runnable{
 	
+	public static double dt = 0.01; // seconds	
+	public static double xBound 	= 100;
+	public static double yBound 	= 100;
+	public static double zBound		= 100;
 	
 	// Variables and constants for the animation state
 	public static final int PLAYING = 1;
@@ -125,78 +127,44 @@ public class BSimScene implements Runnable{
 	private void resetScene(int firstTime) {
 					
 		// Move back to first time-step 
-		timeStep = 0;
-				
+		timeStep = 0;				
 		bacteria = new Vector<BSimBacterium>();
 		beads = new Vector<BSimBead>();
-		vesicles = new Vector<BSimVesicle>();
+		vesicles = new Vector<BSimVesicle>();		
 		
 		// Create the bacteria and beads
-		for(double[] args : BSimParameters.bacteria){
-			Vector3d position = new Vector3d(args[0], args[1], args[2]);
-			Vector3d direction = new Vector3d(args[4], args[5], args[6]);
-			BSimBacterium b = new BSimBacterium(position, args[3], direction, this);
-			bacteria.add(b);
+		Vector3d startPos = new Vector3d();
+		double width = BSimScene.xBound;
+		double height = BSimScene.yBound;
+		double depth = BSimScene.zBound;
+		while(bacteria.size() < 100) {
+			Vector3d position = new Vector3d();
+			Vector3d offset = new Vector3d(Math.random()*width, Math.random()*height, Math.random()*depth);			
+			position.add(startPos, offset);
+			BSimBacterium b = new BSimBacterium(position, 1, new Vector3d(Math.random(),Math.random(),Math.random()), this);
+			if(!intersection(b)) bacteria.add(b);			
 		}
-		for(double[] args : BSimParameters.magnetotacticBacteria){
-			Vector3d position = new Vector3d(args[0], args[1], args[2]);
-			Vector3d direction = new Vector3d(BSimParameters.magneticFieldDirection[0],BSimParameters.magneticFieldDirection[1],BSimParameters.magneticFieldDirection[2]);
-			direction.normalize();
-			BSimMagnetotacticBacterium b = new BSimMagnetotacticBacterium(position, args[3], direction, this);
-			bacteria.add(b);
-		}				
-		for(double[] args : BSimParameters.beads){
-			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3], this));
-		}
-
-		// Create the fields 
-		// This looks a bit insane but we should clean up the constructor first
-		fGoal = new BSimChemicalField(
-				(int)BSimParameters.fGoalFieldType,
-				(int)BSimParameters.fGoalBoundaryType,
-				BSimParameters.fGoalRate,
-				new Vector3d(BSimParameters.fGoalStartPos[0], BSimParameters.fGoalStartPos[1], BSimParameters.fGoalStartPos[2]),
-				BSimParameters.fGoalWidth,
-				BSimParameters.fGoalHeight,
-				BSimParameters.fGoalDepth,
-				(int)BSimParameters.fGoalXBoxes,
-				(int)BSimParameters.fGoalYBoxes,
-				(int)BSimParameters.fGoalZBoxes,
-				BSimParameters.dt,
-				BSimParameters.fGoalThreshold,
-				new Color(0.1f, 0.8f, 0.1f)
-              );	
-        if(BSimParameters.fGoalSetAsLinearDir != 0) {
-        	fGoal.setAsLinear((int)BSimParameters.fGoalSetAsLinearDir, BSimParameters.fGoalSetAsLinearStartCon, BSimParameters.fGoalSetAsLinearEndCon);
-        }
-		
-		fQuorum = new BSimChemicalField(
-				(int)BSimParameters.fQuorumFieldType,
-				(int)BSimParameters.fQuorumBoundaryType,
-				BSimParameters.fQuorumRate,
-				new Vector3d(BSimParameters.fQuorumStartPos[0], BSimParameters.fQuorumStartPos[1], BSimParameters.fQuorumStartPos[2]),
-				BSimParameters.fQuorumWidth,
-				BSimParameters.fQuorumHeight,
-				BSimParameters.fQuorumDepth,
-				(int)BSimParameters.fQuorumXBoxes,
-				(int)BSimParameters.fQuorumYBoxes,
-				(int)BSimParameters.fQuorumZBoxes,
-				BSimParameters.dt,
-				BSimParameters.fQuorumThreshold,
-				new Color(0.1f, 0.8f, 0.1f)
-              );	
-        if(BSimParameters.fQuorumSetAsLinearDir != 0) {
-        	fQuorum.setAsLinear((int)BSimParameters.fQuorumSetAsLinearDir, BSimParameters.fQuorumSetAsLinearStartCon, BSimParameters.fQuorumSetAsLinearEndCon);
-        }
-				
-		vesicles = new Vector();
+	
 		
 		// Reset the renderer with new scene data
-		if(app.getRenderer() != null){
+		if(app != null && app.getRenderer() != null){
 			app.resetDisplay(firstTime);
 		}
 
 	}
+	
+	
+	
+	private boolean intersection(BSimParticle p) {
+		for(BSimBacterium b : bacteria)
+			if (p.outerDistance(b) < 0) return true;
+		for(BSimBead b : beads)
+			if (p.outerDistance(b) < 0) return true;	
+		return false;
+	}	
+
+	
+	
 	
 	
 	/**
@@ -227,7 +195,7 @@ public class BSimScene implements Runnable{
 				}
 				
 				// Wait the for the time-step
-				Thread.sleep((int)(1000*BSimParameters.dt));
+				Thread.sleep((int)(1000*BSimScene.dt));
 				
 				// Update all the elements in the scene
 				runAllUpdates();
@@ -277,8 +245,8 @@ public class BSimScene implements Runnable{
 		}
 								
 		// Update the fields
-		fGoal.updateField();
-		fQuorum.updateField();
+		if(fGoal != null) fGoal.updateField();
+		if(fQuorum != null) fQuorum.updateField();
 		
 	}
 	

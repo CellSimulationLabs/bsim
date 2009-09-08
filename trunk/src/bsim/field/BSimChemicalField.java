@@ -19,11 +19,11 @@ import java.awt.Color;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
-
 
 public class BSimChemicalField {
 
+	public static int numOfThreads = 2;
+	
 	// The type of field
 	// TYPE_FIXED  = fixed field (no diffusion)
 	// TYPE_DIFUSE = diffuses
@@ -89,7 +89,7 @@ public class BSimChemicalField {
 			int newYBoxes, int newZBoxes, double newDt, double newThreshold, Color newColour){
 
 
-		MAX_WORKER_THREADS = BSimParameters.numOfThreads;
+		MAX_WORKER_THREADS = BSimChemicalField.numOfThreads;
 
 		fieldType = newFieldType;
 		boundaryType = newBoundaryType;

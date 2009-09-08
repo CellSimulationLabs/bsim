@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.particle.BSimParticle;
 import bsim.scene.BSimScene;
 
@@ -75,7 +74,7 @@ public class BSimParticleAvgFileExport extends BSimFileExport {
 		if(scene.getTimeStep() % frameSkip == 0 && particles.size() > 0){
 
 			// Add the timestep
-			actTime = scene.getTimeStep() * BSimParameters.dt;
+			actTime = scene.getTimeStep() * BSimScene.dt;
 			outStr = "";
 			outStr += "" + actTime;
 

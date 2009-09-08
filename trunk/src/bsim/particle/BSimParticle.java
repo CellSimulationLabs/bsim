@@ -15,10 +15,11 @@ package bsim.particle;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.scene.BSimScene;
 
-public abstract class BSimParticle {		
+public abstract class BSimParticle {	
+	
+	public static double visc = Math.pow(10.0,-3.0); // Pascal seconds
 
 	private Vector3d position; // microns		
 	private Vector3d force; // piconewtons	
@@ -46,15 +47,15 @@ public abstract class BSimParticle {
 	public void updatePosition() {
 		Vector3d velocity = new Vector3d();
 		velocity.scale(1/stokesCoefficient(), force); // pN/(micrometers*Pa sec) = micrometers/sec 
-		position.scaleAdd(BSimParameters.dt, velocity, position);
+		position.scaleAdd(BSimScene.dt, velocity, position);
 		force.set(0,0,0);
 		
-		if(position.x > BSimParameters.xBound) position.x -= BSimParameters.xBound;
-		if(position.x < 0) position.x += BSimParameters.xBound;
-		if(position.y > BSimParameters.yBound) position.y -= BSimParameters.yBound;
-		if(position.y < 0) position.y += BSimParameters.yBound;
-		if(position.z > BSimParameters.zBound) position.z -= BSimParameters.zBound;
-		if(position.z < 0) position.z += BSimParameters.zBound;
+		if(position.x > BSimScene.xBound) position.x -= BSimScene.xBound;
+		if(position.x < 0) position.x += BSimScene.xBound;
+		if(position.y > BSimScene.yBound) position.y -= BSimScene.yBound;
+		if(position.y < 0) position.y += BSimScene.yBound;
+		if(position.z > BSimScene.zBound) position.z -= BSimScene.zBound;
+		if(position.z < 0) position.z += BSimScene.zBound;
 	}
 		
 	public Vector3d getPosition() { return position; }	
@@ -64,7 +65,7 @@ public abstract class BSimParticle {
 	public BSimScene getScene() { return scene; }
 	public void addForce(Vector3d f) { force.add(f); }
 	public void setRadius(double r) { radius = r; }
-	public double stokesCoefficient() { return 6.0*Math.PI*radius*BSimParameters.visc; } // micrometers*Pa sec
+	public double stokesCoefficient() { return 6.0*Math.PI*radius*BSimParticle.visc; } // micrometers*Pa sec
 		
 	public double distance(BSimParticle p) {
 		Vector3d d = new Vector3d();

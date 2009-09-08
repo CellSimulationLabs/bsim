@@ -20,7 +20,6 @@ import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.BSimUtils;
 import bsim.scene.BSimScene;
 
@@ -39,9 +38,16 @@ public class BSimBacterium extends BSimParticle {
 	private double sensitivity; // to differences in long term vs short term mean concentrations
 	private Vector<Double> memory; // memory of the concentration of the goal field
 	
-	private double pContinueRunIncreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthUp;
-	private double pContinueRunDecreasingConc = 1 - BSimParameters.dt/BSimParameters.runLengthDown;
-	private double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
+	public static double bactForceUp      = 0.4387; // pico newtons
+	public static double bactForceDown    = 0.41; // pico newtons
+	
+	public static double runLengthUp      = 1.07;	// seconds
+	public static double runLengthDown    = 0.8;	// seconds
+	public static double runLengthIso     = 0.86; // seconds
+	
+	private double pContinueRunIncreasingConc = 1 - BSimScene.dt/BSimBacterium.runLengthUp;
+	private double pContinueRunDecreasingConc = 1 - BSimScene.dt/BSimBacterium.runLengthDown;
+	private double pContinueRunIsotropicConc = 1 - BSimScene.dt/BSimBacterium.runLengthIso;
 	
 	private double vesicleProductionRate; // vesicles/sec
 	private double vesicleFusionProbability;
@@ -50,6 +56,10 @@ public class BSimBacterium extends BSimParticle {
 	// Set at onset of tumbling phase:
 	private int tumbleSteps; 	// Number of time steps remaining in tumble phase
 	private double tumbleAngle; // Angle remaining in tumble phase	
+	
+	public static double reactForceGradient = 0.5; // pN/micrometer	
+	public static double wellWidthBactBead = 0.0;
+	public static double wellDepthBactBead = 0.0;
 					
 	/**
 	 * General constructor.
@@ -64,8 +74,8 @@ public class BSimBacterium extends BSimParticle {
 		longTermMemoryDuration = 3.0; 
 		sensitivity = 0.000001;		
 		memory = new Vector();
-		int memorySize = (int)((shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt);
-		for(int i=0; i<=memorySize; i++) { memory.add(0d);}
+		int memorySize = (int)((shortTermMemoryDuration + longTermMemoryDuration) / BSimScene.dt) - 1;
+		for(int i=0; i<=memorySize; i++) { memory.add(0d);}	
 		
 		vesicleProductionRate = 0.1;
 		vesicleFusionProbability = 0.1;
@@ -73,9 +83,11 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	public void action() {			
-		if(motionState == RUNNING) {
-			memory.remove(0); // forget the oldest concentration
-			memory.add(getScene().getGoalField().getConcentration(this.getPosition())); // remember the newest concentration			
+		if(motionState == RUNNING) {			
+			if (getScene().getGoalField() != null) {
+				memory.remove(0); // forget the oldest concentration
+				memory.add(getScene().getGoalField().getConcentration(this.getPosition())); // remember the newest concentration
+			}
 			run();			
 		}
 		else if(motionState == TUMBLING) {
@@ -86,7 +98,7 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	public void vesiculate() {
-		if(Math.random() < vesicleProductionRate*BSimParameters.dt) {
+		if(Math.random() < vesicleProductionRate*BSimScene.dt) {
 			Vector3d position = new Vector3d();			
 			Vector3d offset = new Vector3d();
 			Vector3d r = new Vector3d(Math.random(),Math.random(),Math.random());
@@ -99,7 +111,7 @@ public class BSimBacterium extends BSimParticle {
 	
 	public void interaction(BSimBacterium b) {
 		double od = outerDistance(b);
-		if(od < 0) this.reaction(b,od*BSimParameters.reactForceGradient);				
+		if(od < 0) this.reaction(b,od*BSimBacterium.reactForceGradient);				
 	}	
 	
 	public void interaction(BSimVesicle vesicle) {
@@ -114,13 +126,13 @@ public class BSimBacterium extends BSimParticle {
 		
 		double od = outerDistance(bead);
 		double magnitude;
-		double wellWidth = BSimParameters.wellWidthBactBead;
-		double wellDepth = BSimParameters.wellDepthBactBead;
+		double wellWidth = BSimBacterium.wellWidthBactBead;
+		double wellDepth = BSimBacterium.wellDepthBactBead;
 		
 		if (od>wellWidth || od == 0) magnitude = 0;
 		else if(od>(wellWidth/2.0)) magnitude = -wellDepth + (od-(wellWidth/2.0))*wellDepth/(wellWidth/2.0);
 		else if(od>=0.0) magnitude = -(od*2.0*wellDepth/wellWidth);		
-		else magnitude = od * BSimParameters.reactForceGradient;
+		else magnitude = od * BSimBacterium.reactForceGradient;
 				
 		this.reaction(bead, magnitude);
 	}
@@ -133,8 +145,8 @@ public class BSimBacterium extends BSimParticle {
 		if(Math.random() < continueRunProb(shortTermMean, longTermMean)) {
 			Vector3d f = new Vector3d();
 						
-			if(shortTermMean - longTermMean > sensitivity) f.scale(BSimParameters.bactForceUp, direction);			
-			else f.scale(BSimParameters.bactForceDown, direction);
+			if(shortTermMean - longTermMean > sensitivity) f.scale(BSimBacterium.bactForceUp, direction);			
+			else f.scale(BSimBacterium.bactForceDown, direction);
 			
 			this.addForce(f);
 			direction.set(getForce());
@@ -150,11 +162,11 @@ public class BSimBacterium extends BSimParticle {
 	}	
 		
 	protected Vector<Double> longTermMemory() {
-		return new Vector(memory.subList(0, (int)(longTermMemoryDuration/BSimParameters.dt)));
+		return new Vector(memory.subList(0, (int)(longTermMemoryDuration/BSimScene.dt)));
 	}
 	
 	protected Vector<Double> shortTermMemory() {
-		return new Vector(memory.subList((int)(longTermMemoryDuration/BSimParameters.dt), memory.size()));
+		return new Vector(memory.subList((int)(longTermMemoryDuration/BSimScene.dt), memory.size()));
 	}	
 	
 	protected void tumble() {		
@@ -180,7 +192,7 @@ public class BSimBacterium extends BSimParticle {
 		
 	protected void switchMotionState() {			
 		if (motionState == RUNNING) {					
-			tumbleSteps = (int)Math.ceil(BSimUtils.expRandVar(0.14)/BSimParameters.dt);			
+			tumbleSteps = (int)Math.ceil(BSimUtils.expRandVar(0.14)/BSimScene.dt);			
 			tumbleAngle = approxTumbleAngle();
 			motionState = TUMBLING;
 		} else if (motionState == TUMBLING) {

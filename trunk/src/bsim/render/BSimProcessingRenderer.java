@@ -28,8 +28,8 @@ import javax.vecmath.Vector3f;
 import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PFont;
-import bsim.BSimParameters;
 import bsim.BSimUtils;
+import bsim.app.BSimApp;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimBead;
@@ -74,8 +74,8 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		scene = newScene;
 		
 		// PApplet parameters
-		widthInitial = BSimParameters.screenWidth;
-		heightInitial = BSimParameters.screenHeight;
+		widthInitial = BSimApp.screenWidth;
+		heightInitial = BSimApp.screenHeight;
 		maximumFPS = 100;
 		
 		// Camera specific parameters
@@ -90,9 +90,9 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		beads = scene.getBeads();
 		
 		// Set scene bounds
-		boundCentre[0] = BSimParameters.xBound/2;
-		boundCentre[1] = BSimParameters.yBound/2;
-		boundCentre[2] = BSimParameters.zBound/2;
+		boundCentre[0] = BSimScene.xBound/2;
+		boundCentre[1] = BSimScene.yBound/2;
+		boundCentre[2] = BSimScene.zBound/2;
 
 	}
 	
@@ -345,7 +345,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		stroke(255);
 		pushMatrix();
 		translate((float)boundCentre[0],(float)boundCentre[1],(float)boundCentre[2]);
-		box((float)BSimParameters.xBound, (float)BSimParameters.yBound, (float)BSimParameters.zBound);
+		box((float)BSimScene.xBound, (float)BSimScene.yBound, (float)BSimScene.zBound);
 		popMatrix();
 		noStroke();
 	}
@@ -358,7 +358,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 */
 	public void drawTime(){
 		fill(255);
-		text(BSimUtils.formatTime(scene.getTimeStep() * BSimParameters.dt), 10, 30);	
+		text(BSimUtils.formatTime(scene.getTimeStep() * BSimScene.dt), 10, 30);	
 	}
 	
 	/**

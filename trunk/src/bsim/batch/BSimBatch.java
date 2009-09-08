@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.Calendar;
 import java.util.Vector;
 
-import bsim.BSimParameters;
 import bsim.BSimUtils;
 import bsim.export.BSimExport;
 import bsim.export.BSimParticleFullFileExport;
@@ -32,29 +31,19 @@ public class BSimBatch{
 	
 	// General proerties that are esier to store locally
 	private int numOfRuns    = 1;
-	private int lenOfSim     = 1;
+	private int lenOfSim     = 100;
 	private int movFrameSkip = 1;
 	private int txtFrameSkip = 1;
-	private String pathToExport;
-	private boolean movieOutput = true;
+	private String pathToExport = "./results";
+	private boolean movieOutput = false;
+	private int frameRecordForSec = 1;
 	
 	
 	/**
 	 * General constructor.
 	 */
-	public BSimBatch(File f){
-		
-		// Create a parameter file loader and read into our local variable		
-		new BSimParameters(f);
-		
-		// Update the batch variables
-		numOfRuns = BSimParameters.simRuns;
-		lenOfSim = BSimParameters.simLength;
-		movFrameSkip = BSimParameters.videoFramesSkip;
-		txtFrameSkip = BSimParameters.dataFramesSkip;
-		movieOutput = BSimParameters.recordVideo;
-		pathToExport = BSimParameters.exportDir;
-		
+	public BSimBatch(){
+				
 		// Check that path is valid and that it exists, if not create
 		File testPath = new File(pathToExport);
 		if(!testPath.exists()){
@@ -141,9 +130,9 @@ public class BSimBatch{
 					//scene.getProcessing().createMovie(filenameMovie);
 					while(scene.getWaitingForVideoOpening()){}
 					//frame for sec in the video
-					int frameForSec = BSimParameters.frameRecordForSec;
+					int frameForSec = frameRecordForSec;
 					//time step in un sec
-					int timeStepSec=(int) (1/BSimParameters.dt); 
+					int timeStepSec=(int) (1/BSimScene.dt); 
 					//one frame Rate in confront of timeStep
 					frameRate  = timeStepSec/frameForSec;
 					
@@ -237,11 +226,11 @@ public class BSimBatch{
 		// Load the file and create the batch object
 		try{
 			// The parameter file for the simulation
-			System.out.println(" " + args[0]);
-			File fParams = new File(args[0]);
+			//System.out.println(" " + args[0]);
+			//File fParams = new File(args[0]);
 			
 			// Create the batch object
-			BSimBatch batch = new BSimBatch(fParams);
+			BSimBatch batch = new BSimBatch();
 			
 			batch.runBatch();
 		}

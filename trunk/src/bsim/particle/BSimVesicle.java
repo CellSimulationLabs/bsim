@@ -3,7 +3,6 @@ import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.scene.BSimScene;
 
 public class BSimVesicle extends BSimParticle {
@@ -16,7 +15,7 @@ public class BSimVesicle extends BSimParticle {
 	}
 
 	public void action() {						
-		double brownianAmplitude = Math.sqrt(2*stokesCoefficient()*boltzmann*temperature/BSimParameters.dt)*Math.pow(10,9);
+		double brownianAmplitude = Math.sqrt(2*stokesCoefficient()*boltzmann*temperature/BSimScene.dt)*Math.pow(10,9);
 
 		Random r = new Random();
 		Vector3d f = new Vector3d(r.nextGaussian(), r.nextGaussian(), r.nextGaussian());

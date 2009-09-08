@@ -17,7 +17,6 @@ import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
-import bsim.BSimParameters;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 import bsim.scene.BSimScene;
@@ -43,7 +42,7 @@ public class BSimRepBacterium extends BSimBacterium {
 
 	public void action() {
 
-		double h = BSimParameters.dt;
+		double h = BSimScene.dt;
 		int tIndex = getScene().getTimeStep();
 		double tNow = tIndex * h;
 		double externalChem, deltaChem;

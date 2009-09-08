@@ -9,8 +9,6 @@ package bsim.app;
 
 import javax.swing.JFrame;
 
-import bsim.BSimParameters;
-
 public class BSimDisplayWindow extends JFrame{
 	BSimApp app;
 	
@@ -23,7 +21,7 @@ public class BSimDisplayWindow extends JFrame{
 		app = newApp;
 		
 		this.setTitle("BSim Display");
-		this.setSize(BSimParameters.screenWidth, BSimParameters.screenHeight);
+		this.setSize(BSimApp.screenWidth, BSimApp.screenHeight);
 		this.add(app.getRenderer());
 		
 		// Place the display window below the toolbar (BSimApp). Probably best as the toolbar
@@ -36,7 +34,7 @@ public class BSimDisplayWindow extends JFrame{
 	 * Resets the display window
 	 */
 	void reset(){
-		this.setSize(BSimParameters.screenWidth, BSimParameters.screenHeight);
+		this.setSize(BSimApp.screenWidth, BSimApp.screenHeight);
 	}
 	
 	

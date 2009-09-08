@@ -29,6 +29,9 @@ import bsim.scene.BSimScene;
 public class BSimApp extends JFrame{
 	
 	
+	public static int screenWidth 	= 1025; // pixels
+	public static int screenHeight 	= 700; // pixels
+	
 	// Toolbar that provides acccess to all features of the application
 	private BSimToolbar toolBar;
 	
