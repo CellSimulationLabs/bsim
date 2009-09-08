@@ -58,7 +58,7 @@ public class BSimScene implements Runnable{
 	private Thread simThread;
 	// Semaphore to control the play/pause commands
 	private BSimSemaphore simSem;
-	public BSimSemaphore renderSem;
+	private BSimSemaphore renderSem;
 	
 	// The applications that the simulation is embedded
 	// (required for changes to time to be sent back to the GUI)
@@ -234,6 +234,7 @@ public class BSimScene implements Runnable{
 				
 				// Redraw the scene for this frame
 				app.getRenderer().redraw();
+				// All threads wait for the redraw (or we may get concurrent modification)
 				renderSem.waitOn();
 				
 				// Update the time-step
@@ -281,7 +282,15 @@ public class BSimScene implements Runnable{
 		
 	}
 	
+	
+	/**
+	 * Signal renderer semaphore (e.g. that redraw has completed)
+	 */
+	public void signalRenderSem() {
+		renderSem.signal();
+	}
 		
+	
 	/**
 	 * Plays the current simulation.
 	 */

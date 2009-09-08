@@ -187,8 +187,9 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		drawTime();
 		drawFPS();
 		
+		// Signal the scene that redraw has been completed
 		if(scene != null){
-			scene.renderSem.signal();
+			scene.signalRenderSem();
 		}
 	}
 	
@@ -248,9 +249,11 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		pushMatrix();
 		translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
 		sphere((float)(100*vesicle.getRadius()));
-		fill(255,0,0);
-		sphere((float)(vesicle.getRadius()));
 		popMatrix();
+		// As vesicles are so small compared to everything else we can just draw them as a point
+		stroke(255,0,0);
+		point((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
+		noStroke();
 	}
 
 
