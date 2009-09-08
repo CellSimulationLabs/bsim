@@ -23,6 +23,7 @@ import bsim.particle.BSimBead;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimRepBacterium;
 import bsim.particle.BSimVesicle;
+import bsim.particle.BSimVesicleAcceptor;
 
 public interface BSimRenderer {
 	
@@ -47,6 +48,8 @@ public interface BSimRenderer {
 	public void draw(BSimBead g);
 	// Vesicles
 	public void draw(BSimVesicle g);
+	// Vesicle acceptor
+	public void draw(BSimVesicleAcceptor g);
 	
 	/*
 	 * Draw chemical field

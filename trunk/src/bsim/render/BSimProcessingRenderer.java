@@ -36,6 +36,7 @@ import bsim.particle.BSimBead;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimRepBacterium;
 import bsim.particle.BSimVesicle;
+import bsim.particle.BSimVesicleAcceptor;
 import bsim.scene.BSimScene;
 
 
@@ -254,6 +255,17 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		stroke(255,0,0);
 		point((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
 		noStroke();
+	}
+	
+	/**
+	 * Draw a vesicle acceptor
+	 */
+	public void draw(BSimVesicleAcceptor acceptor){
+		fill(255, 0, 0);
+		pushMatrix();
+		translate((float)acceptor.getPosition().x, (float)acceptor.getPosition().y,(float)acceptor.getPosition().z);
+		sphere((float)(acceptor.getRadius()));			
+		popMatrix();
 	}
 
 
