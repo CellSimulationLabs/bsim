@@ -150,35 +150,34 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		background(0);
 
 		// Don't want 3D lighting to slow down our chemical field rendering...
-		//noLights();
+		noLights();
 
 		// Chemical fields
-		//TODO: 	time to vectorise our chemical fields or something like that
-
+		//	TODO: 	time to vectorise our chemical fields or something like that
+		//	TODO:	better way of looping through, to allow multiple coloured fields
+		if(scene.getGoalField() != null && scene.getGoalField().getFieldType() != BSimChemicalField.TYPE_UNDEFINED){
+			draw(scene.getGoalField());
+		}
+//		if(scene.getQuorumField() != null && scene.getQuorumField().getFieldType() != BSimChemicalField.TYPE_UNDEFINED){
+//			draw(scene.getQuorumField());
+//		}
+		
 		// Add Processing's 3D lighting.
 		lights();
 		
 		// Doesn't draw an object if it doesn't exist...
-		// might need to think of a better way of doing this (or go back to old style loops).
-		// Bacteria. if(BSimScene or bact etc != null) then{.....
-		try{
-			for(BSimBacterium bact : bacteria) {
-				draw(bact);
-			}
-		} catch(NullPointerException ignore){}
+		// Bacteria
+		for(int i = 0, n = bacteria.size(); i < n; i++) {
+			draw(bacteria.elementAt(i));
+		}
 		// Vesicles
-		try{
-			for(BSimVesicle ves : vesicles) {
-				draw(ves);
-			}
-		} catch(NullPointerException ignore){}
+		for(int i = 0, n = vesicles.size(); i < n; i++) {
+			draw(vesicles.elementAt(i));
+		}
 		// Particles
-		try{
-
-			for(BSimBead bead : beads) {
-				draw(bead);
-			}
-		} catch(NullPointerException ignore){}
+		for(int i = 0, n = beads.size(); i < n; i++) {
+			draw(beads.elementAt(i));
+		}
 		
 		noLights();
 		// Draw the scene boundaries.
@@ -343,8 +342,65 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 * Draw a BSimChemicalField grid in the scene space
 	 */
 	public void draw(BSimChemicalField field){
-		// OK can get rid of this for now. Still on the repository after all...
-		// Draw chemical before drawing bacteria, or they all disappear into the fog!		
+		if(field.getDisplayed()){
+			// Initialise variables
+			double[][][] theField = field.getField();
+	        int nBoxX = 100, nBoxY = 100, nBoxZ = 100;
+	        int fieldDimX, fieldDimY, fieldDimZ;
+	        double conc;
+	        double[] boxPos = new double[3];
+	        
+	        fieldDimX = theField.length;
+	        fieldDimY = theField[0].length;
+	        fieldDimZ = theField[0][0].length;
+	        
+	        if(fieldDimX<nBoxX){
+	                nBoxX = fieldDimX;
+	        }
+	        if(fieldDimY<nBoxY){
+	                nBoxY = fieldDimY;
+	        }
+	        if(fieldDimZ<nBoxZ){
+	                nBoxZ = fieldDimZ;
+	        }
+			
+	        // Draw the field
+			noStroke();
+			for (int i=0; i<nBoxX; i++){
+				for(int j=0; j<nBoxY; j++){
+					for(int k=0; k<nBoxZ;k++){
+						boxPos[0] = (i + 0.5)*BSimScene.xBound/nBoxX;
+						boxPos[1] = (j + 0.5)*BSimScene.yBound/nBoxY;
+						boxPos[2] = (k + 0.5)*BSimScene.zBound/nBoxZ;
+
+						conc = 0;
+						// If the (drawn) boxes are not equivalent to those of the actual field then take local averages
+						if(nBoxX != fieldDimX || nBoxY != fieldDimY || nBoxZ != fieldDimZ){
+							for(int bi = floor((float)i*(float)fieldDimX/(float)nBoxX); bi<ceil(((float)i+1.0f)*(float)fieldDimX/(float)nBoxX); bi++){
+								for(int bj = floor((float)j*(float)fieldDimY/(float)nBoxY); bj<ceil(((float)j+1.0f)*(float)fieldDimY/(float)nBoxY); bj++){
+									for(int bk = floor((float)k*(float)fieldDimZ/(float)nBoxZ); bk<ceil(((float)k+1.0f)*(float)fieldDimZ/(float)nBoxZ); bk++){
+										conc += theField[bi][bj][bk];
+									}
+								}
+							}
+							conc = conc/(((float)fieldDimX/(float)nBoxX)*((float)fieldDimY/(float)nBoxY)*((float)fieldDimZ/(float)nBoxZ));
+						// Otherwise the drawn box concentration simply corresponds to the actual field
+						}else{
+							conc = theField[i][j][k];
+						}
+						// Cheat (this won't look so good if for example a bacteria releases a small amount 
+						// of chemical as it is not an average for the box):
+						// conc = fGoal.getConcentration(boxPos);
+
+						fill((255*(float)conc), 0, 0,(25*(float)conc));
+						pushMatrix();
+						translate((float)boxPos[0], (float)boxPos[1], (float)boxPos[2]);
+						box((float)BSimScene.xBound/nBoxX,(float)BSimScene.yBound/nBoxY, (float)BSimScene.zBound/nBoxZ);
+						popMatrix();
+					}
+				}
+			}
+		}	
 	}
 	
 	

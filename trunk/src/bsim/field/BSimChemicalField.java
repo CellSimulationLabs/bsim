@@ -27,9 +27,10 @@ public class BSimChemicalField {
 	// The type of field
 	// TYPE_FIXED  = fixed field (no diffusion)
 	// TYPE_DIFUSE = diffuses
+	public static int TYPE_UNDEFINED = -1;
 	public static int TYPE_FIXED   = 1;
 	public static int TYPE_DIFFUSE = 2;
-	protected int fieldType        = TYPE_FIXED;
+	protected int fieldType        = TYPE_UNDEFINED;
 
 	// The boundary type
 	public static int BOUNDARY_LEAK     = 1;
