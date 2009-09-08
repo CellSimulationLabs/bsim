@@ -30,11 +30,11 @@ import processing.core.PApplet;
 import processing.core.PFont;
 import bsim.BSimParameters;
 import bsim.field.BSimChemicalField;
+import bsim.particle.BSimBacterium;
+import bsim.particle.BSimBead;
 import bsim.particle.BSimParticle;
-import bsim.particle.bacterium.BSimBacterium;
-import bsim.particle.bacterium.BSimRepBacterium;
-import bsim.particle.bead.BSimBead;
-import bsim.particle.vesicle.BSimVesicle;
+import bsim.particle.BSimRepBacterium;
+import bsim.particle.BSimVesicle;
 import bsim.scene.BSimScene;
 
 

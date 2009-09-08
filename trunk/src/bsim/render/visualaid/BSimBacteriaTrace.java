@@ -13,7 +13,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Vector;
 
-import bsim.particle.bacterium.BSimBacterium;
 import bsim.scene.BSimScene;
 
 

@@ -16,9 +16,8 @@ import java.util.Vector;
 
 import bsim.BSimParameters;
 import bsim.BSimUtils;
-import bsim.export.BSimParticleFullFileExport;
-import bsim.export.BSimParticleAvgFileExport;
 import bsim.export.BSimExport;
+import bsim.export.BSimParticleFullFileExport;
 import bsim.scene.BSimScene;
 
 

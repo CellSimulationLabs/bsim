@@ -7,12 +7,11 @@
  *  
  * Created: 07/09/2009
  */
-package bsim.particle.bacterium;
+package bsim.particle;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.BSimUtils;
 import bsim.scene.BSimScene;
 
 

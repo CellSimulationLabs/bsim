@@ -16,7 +16,6 @@
 package bsim.field;
 
 import java.awt.Color;
-import java.awt.Graphics;
 
 import javax.vecmath.Vector3d;
 

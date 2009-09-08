@@ -27,11 +27,10 @@ import bsim.BSimParameters;
 import bsim.app.BSimApp;
 import bsim.app.BSimSemaphore;
 import bsim.field.BSimChemicalField;
-import bsim.particle.BSimParticle;
-import bsim.particle.bacterium.BSimBacterium;
-import bsim.particle.bacterium.BSimMagnetotacticBacterium;
-import bsim.particle.bead.BSimBead;
-import bsim.particle.vesicle.BSimVesicle;
+import bsim.particle.BSimBacterium;
+import bsim.particle.BSimBead;
+import bsim.particle.BSimMagnetotacticBacterium;
+import bsim.particle.BSimVesicle;
 import bsim.render.BSimProcessingRenderer;
 
 

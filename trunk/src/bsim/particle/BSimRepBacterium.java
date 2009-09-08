@@ -11,7 +11,7 @@
  * Created: 13/08/2009
  */
 
-package bsim.particle.bacterium;
+package bsim.particle;
 
 import java.util.Random;
 

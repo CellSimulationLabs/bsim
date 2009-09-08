@@ -12,11 +12,8 @@
  * Created: 12/07/2008
  * Updated: 07/08/2009
  */
-package bsim.particle.bacterium;
+package bsim.particle;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Scanner;
 import java.util.Vector;
 
 import javax.vecmath.AxisAngle4d;
@@ -25,9 +22,6 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
 import bsim.BSimUtils;
-import bsim.particle.BSimParticle;
-import bsim.particle.bead.BSimBead;
-import bsim.particle.vesicle.BSimVesicle;
 import bsim.scene.BSimScene;
 
 

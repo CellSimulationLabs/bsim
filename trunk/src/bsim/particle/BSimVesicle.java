@@ -1,11 +1,9 @@
-package bsim.particle.vesicle;
+package bsim.particle;
 import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.particle.BSimParticle;
-import bsim.particle.bacterium.BSimBacterium;
 import bsim.scene.BSimScene;
 
 public class BSimVesicle extends BSimParticle {

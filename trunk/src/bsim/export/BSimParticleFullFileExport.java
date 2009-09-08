@@ -6,8 +6,8 @@ import java.util.Vector;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.scene.BSimScene;
 import bsim.particle.BSimParticle;
+import bsim.scene.BSimScene;
 
 
 public class BSimParticleFullFileExport extends BSimFileExport {

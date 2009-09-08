@@ -11,13 +11,10 @@
  */
 package bsim;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Vector;
-
-import javax.vecmath.Vector3d;
 
 import bsim.field.BSimChemicalField;
 

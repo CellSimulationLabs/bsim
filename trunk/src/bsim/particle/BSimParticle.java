@@ -16,9 +16,6 @@ package bsim.particle;
 import javax.vecmath.Vector3d;
 
 import bsim.BSimParameters;
-import bsim.particle.bacterium.BSimBacterium;
-import bsim.particle.bead.BSimBead;
-import bsim.particle.vesicle.BSimVesicle;
 import bsim.scene.BSimScene;
 
 public abstract class BSimParticle {		
