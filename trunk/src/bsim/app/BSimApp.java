@@ -103,17 +103,7 @@ public class BSimApp extends JFrame{
 	    processingRenderer.init();
 	    displayWindow.add(processingRenderer);
 	}
-	
-	
-	/**
-	 * Updates the time of the simulation.
-	 */
-	public void updateTime(String newTime){
-		// Pass on the update to the toolbar
-		toolBar.updateTime(newTime);
-	}
-	
-	
+		
 	/**
 	 * Starts to play the simulation.
 	 */

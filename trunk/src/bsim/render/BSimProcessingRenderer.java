@@ -29,6 +29,7 @@ import peasy.PeasyCam;
 import processing.core.PApplet;
 import processing.core.PFont;
 import bsim.BSimParameters;
+import bsim.BSimUtils;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimBead;
@@ -354,7 +355,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	 */
 	public void drawTime(){
 		fill(255);
-		text(scene.getFormatedTime(), 10, 30);	
+		text(BSimUtils.formatTime(scene.getTimeStep() * BSimParameters.dt), 10, 30);	
 	}
 	
 	/**

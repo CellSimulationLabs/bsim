@@ -10,6 +10,7 @@
 */
 package bsim;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 
@@ -49,6 +50,30 @@ public class BSimUtils {
 			return -(221.64*Math.pow(-x,4.0)) - (109.34*Math.pow(-x,3.0)) - 
 			(137.84*Math.pow(-x,2.0) + (177.58*-x) + 12.736);
 		}
+	}
+		
+	/**
+	 * Formats a time in seconds to a string (HH:MM:SS)
+	 */	
+	public static synchronized String formatTime(double secs){
+		String a1, a2, a3;
+		a1 = "";
+		a2 = "";
+		
+		// Calculate the parts of the time		
+		int mins = (int)(secs/60);
+		int hrs  = (int)(mins/60);
+		secs = secs - (mins * 60);
+		mins = mins - (hrs * 60);
+		
+		// Check if zero padding required 
+		// (could use format string but quicker to do manually)
+		if(mins < 10){ a2 = "0"; }
+		if(hrs  < 10){ a1 = "0"; }
+		        
+        DecimalFormat df = new DecimalFormat("00.00");		
+		// Return the formatted time
+		return "Time: " + a1 + hrs + ":" + a2 + mins + ":" + df.format(secs);
 	}
 			
 	/**

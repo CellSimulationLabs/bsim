@@ -17,7 +17,6 @@ import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 import javax.swing.JToolBar;
 
 import bsim.BSimParameters;
@@ -36,8 +35,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private int playState = 0;
 	
 	// GUI objects
-	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot, btnLoadSim;
-	private JLabel labTime;
+	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot, btnLoadSim;	
 	private JFileChooser fc;
 	
 	// Images used on the buttons
@@ -88,8 +86,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnReset.addActionListener(this);
 		btnLoadSim = new JButton("Load Simulation");
 		btnLoadSim.setIcon(iconLoad);
-		btnLoadSim.addActionListener(this);
-		labTime = new JLabel("Time: 00:00:00");
+		btnLoadSim.addActionListener(this);		
 		// TODO: A button to create a new display window?
 		// TODO: don't really need quite so many different buttons for setting directories etc. i.e. should just be 'take screenshot' for example
 		// Create a folder with the date & time: export_01_09_09_1244\screenshots, .\movies, .\data for example
@@ -116,8 +113,6 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		this.add(btnReset);
 		// Parameters
 		this.add(btnLoadSim);
-		this.addSeparator();
-		this.add(labTime);
 		this.addSeparator();
 		// Screenshot controls
 		this.add(btnSaveScreenshot);
@@ -146,17 +141,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnSaveScreenshot.setEnabled(enabled);
 		btnSaveRecord.setEnabled(enabled);
 	}
-	
-	
-	/**
-	 * Update the simluation time label.
-	 */
-	public void updateTime(String newTime){
-		// Update the simulation time with the new value
-		labTime.setText(newTime);
-	}
-	
-	
+		
 	/**
 	 * Handle events for the toolbar.
 	 */

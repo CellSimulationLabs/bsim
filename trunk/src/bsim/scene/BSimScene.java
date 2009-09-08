@@ -31,7 +31,6 @@ import bsim.particle.BSimBacterium;
 import bsim.particle.BSimBead;
 import bsim.particle.BSimMagnetotacticBacterium;
 import bsim.particle.BSimVesicle;
-import bsim.render.BSimProcessingRenderer;
 
 
 public class BSimScene implements Runnable{
@@ -41,15 +40,7 @@ public class BSimScene implements Runnable{
 	public static final int PLAYING = 1;
 	public static final int PAUSED = 2;
 	private int playState = PAUSED;
-	
-	// Variables used for zoom and pan controls
-	private int transX = 0;
-	private int transY = 0;
-	private static int START_SCALE = 1000;
-	private int scale = START_SCALE;
-	public static final int VIEW_PAN = 1;
-	public static final int VIEW_ZOOM = 2;
-		
+			
 	// Vectors holding all bacteria and beads in the simulation
 	private Vector<BSimBacterium> bacteria;
 	private Vector<BSimBead> beads;
@@ -73,17 +64,13 @@ public class BSimScene implements Runnable{
 	// (required for changes to time to be sent back to the GUI)
 	private BSimApp app = null;
 		
-	// Parameters for the scene
-	
+	// Parameters for the scene	
 	public boolean guiExists = false;	
 	
 	public boolean startVideo = false;
-	public boolean endVideo = false;
-	
-	public String imageFileName = null;	
-	
-	public boolean resizeBug = true;
-	
+	public boolean endVideo = false;	
+	public String imageFileName = null;		
+
 	//BSimBatch parameter for waiting the rigth closing of the file
 	public boolean waitingForVideoClosing = true;
 	public boolean waitingForVideoOpening = true;
@@ -122,18 +109,11 @@ public class BSimScene implements Runnable{
 	public BSimScene()
 	{
 		super();
-		
-//		simWidth = BSimParameters.screenWidth;
-//		simHeight = BSimParameters.screenHeight;
-//		
-//		orgSimWidth = BSimParameters.screenWidth;
-//		orgSimHeight = BSimParameters.screenHeight;
-		
+				
 		// Update the internal variables
 		simSem = null;
 		app = null;
-		
-		
+				
 		// Create initial bacteria and beads
 		resetScene(1);
 	}
@@ -143,23 +123,10 @@ public class BSimScene implements Runnable{
 	 * Reset the scene creating bactera and beads.
 	 */
 	private void resetScene(int firstTime) {
-				
-		// Update the translation
-		double[] newTrans = BSimParameters.screenMove;
-		transX = (int)newTrans[0];
-		transY = (int)newTrans[1];
-		
-		// Update the scale
-		scale = (int)(START_SCALE * BSimParameters.screenZoom);
-	
+					
 		// Move back to first time-step 
 		timeStep = 0;
-		
-		// Update GUI time if already created
-		if (firstTime == 0 && guiExists){
-			app.updateTime(getFormatedTime());
-		}
-		
+				
 		bacteria = new Vector<BSimBacterium>();
 		beads = new Vector<BSimBead>();
 		vesicles = new Vector<BSimVesicle>();
@@ -236,15 +203,7 @@ public class BSimScene implements Runnable{
 	 * Update the parameters that are used
 	 */
 	public void updateParams () {
-		
-		// Update the parameter object		
-//		orgSimWidth = BSimParameters.screenWidth;
-//		bSimWidth = orgSimWidth;
-//		if(orgSimWidth<BSimToolbar.BSimToolbarWidth){
-//			orgSimWidth = BSimToolbar.BSimToolbarWidth;
-//		}
-//		orgSimHeight = BSimParameters.screenHeight;
-		
+				
 		// Reset the scene to recreate all objects and ensure local variables are consistent
 		this.reset();
 	}
@@ -280,10 +239,6 @@ public class BSimScene implements Runnable{
 				// Update the time-step
 				timeStep++;
 				
-				if(guiExists){
-					// Update the time in the GUI
-					app.updateTime(getFormatedTime());
-				}
 			}
 			catch(InterruptedException error){};
 		}while(true);
@@ -326,63 +281,7 @@ public class BSimScene implements Runnable{
 		
 	}
 	
-	
-	/**
-	 * Calculates a formated version of the current simulation time (HH:MM:SS).
-	 */
-	public String getFormatedTime(){
-		String a1, a2, a3;
-		a1 = "";
-		a2 = "";
-		a3 = "";
 		
-		// Calculate the parts of the time
-		int secs = (int)(timeStep * BSimParameters.dt);
-		int mins = (int)(secs/60);
-		int hrs  = (int)(mins/60);
-		secs = secs - (mins * 60);
-		mins = mins - (hrs * 60);
-		
-		// Check if zero padding required 
-		// (could use format string but quicker to do manually)
-		if(secs < 10){ a3 = "0"; }
-		if(mins < 10){ a2 = "0"; }
-		if(hrs  < 10){ a1 = "0"; }
-		
-		// Return the formatted time
-		return "Time: " + a1 + hrs + ":" + a2 + mins + ":" + a3 + secs;
-	}
-	
-	
-	/**
-	 * Calculates a formated version of the current simulation time (HH:MM:SS).
-	 */
-	public String getFormatedTimeSecs(){
-		String timeStr, secStr;
-		int secLen = 0, decLen = 0, timeLen = 0, t;
-		
-		// Check to see at the first time step (no need to carry out calculation)
-		if(timeStep == 0){
-			return "Time: 0.00 secs";
-		}
-		
-		timeStr = "" + (BSimParameters.dt * timeStep);
-		timeLen = timeStr.length();
-		t = (int)(BSimParameters.dt * timeStep);
-		secStr = "" + t;
-		secLen = secStr.length();
-		decLen = timeLen - secLen;
-		
-		// Alter the time so that it is in the format SS.MM
-		if(timeLen == 1){ timeStr = timeStr + ".00"; }
-		else if(decLen == 2){ timeStr = timeStr + "1"; }
-		else if(decLen  > 3){ timeStr = timeStr.substring(0, secLen+3); }
-		
-		// Return the formatted time
-		return "Time: " + timeStr + " secs";
-	}
-	
-	
 	/**
 	 * Plays the current simulation.
 	 */
@@ -411,9 +310,6 @@ public class BSimScene implements Runnable{
 	public void reset() {
 		// Update state variables
 		playState = PAUSED;
-		scale = START_SCALE;
-		transX = 0;
-		transY = 0;
 		
 		// Recreate all simulation objects
 		resetScene(0);
@@ -433,10 +329,6 @@ public class BSimScene implements Runnable{
 			// Update the time-step
 			timeStep++;
 			
-			if(guiExists){
-				// Update the time in the GUI
-				app.updateTime(getFormatedTime());
-			}
 		}
 	}
 	
@@ -446,10 +338,8 @@ public class BSimScene implements Runnable{
 	 */	
 	public BSimApp getApp() { return app; }
 	
-	public Vector getBacteria (){ return bacteria; }
-	public void addBacterium (BSimBacterium b){ bacteria.add(b); }
-	public Vector getBeads (){ return beads; }
-	public void addBead(BSimBead b){ beads.add(b); }
+	public Vector getBacteria (){ return bacteria; }	
+	public Vector getBeads (){ return beads; }	
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
 	public void removeVesicle(BSimVesicle b){ vesiclesToRemove.add(b); }
@@ -457,19 +347,13 @@ public class BSimScene implements Runnable{
 	public int getTimeStep (){ return timeStep; }
 	public BSimChemicalField getGoalField (){ return fGoal; }
 	public BSimChemicalField getQuorumField() { return fQuorum; }	
-	
-	public boolean getStartVideo (){ return startVideo; }
-	public boolean getEndVideo (){ return endVideo; }
+		
 	public void setStartVideo (boolean b){ startVideo=b; }
 	public void setEndVideo (boolean b){ endVideo=b; }
-	public String getImageFileName (){ return imageFileName; }
 	public void setImageFileName (String s){ imageFileName=s; }
-	public int getPlayState () { return playState; }
-	public int getTransX (){ return transX; }
-	public int getTransY (){ return transY; }
-	public double getScale () { return (1.0/START_SCALE)*scale; }
 	
-	public BSimProcessingRenderer getProcessing(){return app.getRenderer();}
+	public int getPlayState () { return playState; }
+	
 	public boolean getWaitingForVideoClosing(){return waitingForVideoClosing;}	
 	public boolean getWaitingForVideoOpening(){return waitingForVideoOpening;}
 	public void setWaitingForVideoOpening(boolean b){waitingForVideoOpening=b;}	
