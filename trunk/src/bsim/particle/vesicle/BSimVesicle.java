@@ -10,8 +10,8 @@ import bsim.scene.BSimScene;
 
 public class BSimVesicle extends BSimParticle {
 		
-	static double boltzmann = 1.38 * Math.pow(10,-23);
-	static double temperature = 300;
+	private static double boltzmann = 1.38 * Math.pow(10,-23);
+	private static double temperature = 300;	
 	
 	public BSimVesicle(Vector3d newPosition, double newRadius, BSimScene newScene) {
 		super(newPosition, newRadius, newScene);	

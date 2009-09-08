@@ -54,7 +54,8 @@ public class BSimScene implements Runnable{
 	// Vectors holding all bacteria and beads in the simulation
 	private Vector<BSimBacterium> bacteria;
 	private Vector<BSimBead> beads;
-	private Vector<BSimVesicle> vesicles;	
+	private Vector<BSimVesicle> vesicles;
+	private Vector<BSimVesicle> vesiclesToRemove;
 	
 	// Chemical fields required for the simulation
 	private BSimChemicalField fGoal;
@@ -298,11 +299,14 @@ public class BSimScene implements Runnable{
 //			}		
 //		}
 //		
-//		for(BSimBacterium bacterium : bacteria) {
-//			for(BSimVesicle vesicle : vesicles) {
-//				BSimParticle.interaction(bacterium, vesicle);
-//			}
-//		}	
+		
+		for(BSimBacterium bacterium : bacteria) {
+			vesiclesToRemove = new Vector<BSimVesicle>();
+			for(BSimVesicle vesicle : vesicles) {
+				bacterium.interaction(vesicle);				
+			}
+			vesicles.removeAll(vesiclesToRemove);
+		}	
 		
 		for(BSimBacterium p : bacteria) {
 			p.action();
@@ -449,7 +453,7 @@ public class BSimScene implements Runnable{
 	public void addBead(BSimBead b){ beads.add(b); }
 	public Vector getVesicles (){ return vesicles; }
 	public void addVesicle(BSimVesicle b){ vesicles.add(b); }
-	public void removeVesicle(BSimVesicle b){ vesicles.remove(b); }
+	public void removeVesicle(BSimVesicle b){ vesiclesToRemove.add(b); }
 		
 	public int getTimeStep (){ return timeStep; }
 	public BSimChemicalField getGoalField (){ return fGoal; }

@@ -246,7 +246,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		
 		pushMatrix();
 		translate((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
-		sphere((float)(10*vesicle.getRadius()));
+		sphere((float)(100*vesicle.getRadius()));
 		fill(255,0,0);
 		sphere((float)(vesicle.getRadius()));
 		popMatrix();

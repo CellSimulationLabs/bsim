@@ -50,7 +50,8 @@ public class BSimBacterium extends BSimParticle {
 	private double pContinueRunIsotropicConc = 1 - BSimParameters.dt/BSimParameters.runLengthIso;
 	
 	private double vesicleProductionRate; // vesicles/sec
-	public int fusionCount; // fusion counter
+	private double vesicleFusionProbability;
+	private int fusionCount; // fusion counter
 		
 	// Set at onset of tumbling phase:
 	private int tumbleSteps; 	// Number of time steps remaining in tumble phase
@@ -73,6 +74,7 @@ public class BSimBacterium extends BSimParticle {
 		for(int i=0; i<=memorySize; i++) { memory.add(0d);}
 		
 		vesicleProductionRate = 0.1;
+		vesicleFusionProbability = 0.1;
 		fusionCount = 0;	
 	}
 	
@@ -90,8 +92,15 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	public void vesiculate() {
-		if(Math.random() < vesicleProductionRate*BSimParameters.dt)
-			getScene().addVesicle(new BSimVesicle(getPosition(), 1, getScene()));		
+		if(Math.random() < vesicleProductionRate*BSimParameters.dt) {
+			Vector3d position = new Vector3d();			
+			Vector3d offset = new Vector3d();
+			Vector3d r = new Vector3d(Math.random(),Math.random(),Math.random());
+			r.normalize();
+			offset.scale(getRadius() + 0.02, r);
+			position.add(getPosition(), offset);			
+			getScene().addVesicle(new BSimVesicle(position, 0.02, getScene()));
+		}
 	}
 	
 	public void interaction(BSimBacterium b) {
@@ -100,9 +109,9 @@ public class BSimBacterium extends BSimParticle {
 	}	
 	
 	public void interaction(BSimVesicle vesicle) {
-		double od = outerDistance(vesicle);
-		if(od < 0) {
-			this.fusionCount++;
+		double od = outerDistance(vesicle);		
+		if(od < 0 && Math.random() < vesicleFusionProbability) {
+			this.fusionCount++;			
 			getScene().removeVesicle(vesicle);
 		}		
 	}	
