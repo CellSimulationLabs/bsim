@@ -31,6 +31,7 @@ public class BSimParameters {
 		
 	// bsim.scene
 	public static Vector<double[]> bacteria = new Vector();	
+	public static Vector<double[]> magnetotacticBacteria = new Vector();
 	public static Vector<double[]> beads = new Vector();
 	
 	public static double fGoalFieldType 			= BSimChemicalField.TYPE_FIXED;
@@ -78,9 +79,11 @@ public class BSimParameters {
 	// bsim.particle.bacterium
 	public static double bactForceUp      = 0.4387; // pico newtons
 	public static double bactForceDown    = 0.41; // pico newtons
+	public static double bactForceMagnetic    = 0.42; // pico newtons
 	public static double runLengthUp      = 1.07;	// seconds
 	public static double runLengthDown    = 0.8;	// seconds
 	public static double runLengthIso     = 0.86; // seconds
+	public static double[] magneticFieldDirection     = {1,1,1};
 			
 	// bsim.field
 	public static int      numOfThreads     = 2;	
@@ -119,6 +122,7 @@ public class BSimParameters {
 		
 		// bsim.scene
 		else if(line[0].equals("bacterium:")) bacteria.add(args);
+		else if(line[0].equals("magnetotacticBacterium:")) magnetotacticBacteria.add(args);
 		else if(line[0].equals("bead:")) beads.add(args);
 		
 		else if(line[0].equals("fGoalFieldType:")) fGoalFieldType = args[0];
@@ -163,6 +167,7 @@ public class BSimParameters {
 		// bsim.particle.bacteria		
 		else if(line[0].equals("bactForceUp:")) bactForceUp = args[0];
 		else if(line[0].equals("bactForceDown:")) bactForceDown = args[0];	
+		else if(line[0].equals("bactForceMagnetic:")) bactForceMagnetic = args[0];	
 		else if(line[0].equals("runLengthUp:")) runLengthUp = args[0];
 		else if(line[0].equals("runLengthDown:")) runLengthDown = args[0];
 		else if(line[0].equals("runLengthIso:")) runLengthIso = args[0];

@@ -29,6 +29,7 @@ import bsim.app.BSimSemaphore;
 import bsim.field.BSimChemicalField;
 import bsim.particle.BSimParticle;
 import bsim.particle.bacterium.BSimBacterium;
+import bsim.particle.bacterium.BSimMagnetotacticBacterium;
 import bsim.particle.bead.BSimBead;
 import bsim.particle.vesicle.BSimVesicle;
 import bsim.render.BSimProcessingRenderer;
@@ -169,7 +170,14 @@ public class BSimScene implements Runnable{
 			Vector3d direction = new Vector3d(args[4], args[5], args[6]);
 			BSimBacterium b = new BSimBacterium(position, args[3], direction, this);
 			bacteria.add(b);
-		}	
+		}
+		for(double[] args : BSimParameters.magnetotacticBacteria){
+			Vector3d position = new Vector3d(args[0], args[1], args[2]);
+			Vector3d direction = new Vector3d(BSimParameters.magneticFieldDirection[0],BSimParameters.magneticFieldDirection[1],BSimParameters.magneticFieldDirection[2]);
+			direction.normalize();
+			BSimMagnetotacticBacterium b = new BSimMagnetotacticBacterium(position, args[3], direction, this);
+			bacteria.add(b);
+		}				
 		for(double[] args : BSimParameters.beads){
 			beads.add(new BSimBead(new Vector3d(args[0], args[1], args[2]), args[3], this));
 		}

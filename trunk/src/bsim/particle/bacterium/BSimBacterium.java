@@ -72,7 +72,7 @@ public class BSimBacterium extends BSimParticle {
 		int memorySize = (int)((shortTermMemoryDuration + longTermMemoryDuration) / BSimParameters.dt);
 		for(int i=0; i<=memorySize; i++) { memory.add(0d);}
 		
-		vesicleProductionRate = 1;
+		vesicleProductionRate = 0.1;
 		fusionCount = 0;	
 	}
 	
@@ -86,9 +86,12 @@ public class BSimBacterium extends BSimParticle {
 			tumble();
 		}
 		
+		vesiculate();
+	}
+	
+	public void vesiculate() {
 		if(Math.random() < vesicleProductionRate*BSimParameters.dt)
-			getScene().addVesicle(new BSimVesicle(getPosition(), 1, getScene()));
-			
+			getScene().addVesicle(new BSimVesicle(getPosition(), 1, getScene()));		
 	}
 	
 	public void interaction(BSimBacterium b) {
