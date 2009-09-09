@@ -103,15 +103,18 @@ public class BSimBatch{
 			File fileBac = new File(pathToExport + "/" + timestampStr + 
 				"_Bacteria-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
 			
-			File filePart = new File(pathToExport + "/" + timestampStr + 
+			File fileBead = new File(pathToExport + "/" + timestampStr + 
 				"_Bead-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
 			
+//			File fileVesicle = new File(pathToExport + "/" + timestampStr + 
+//					"_Vesicle-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
+//			
 			String filenameMovie = pathToExport + "/" + timestampStr + 
 				"_Video-Export_"  + BSimUtils.padInt4(i+1) + ".mov";
 				
 			exportPlugins.add(new BSimParticleFullFileExport(scene.getBacteria(), fileBac, txtFrameSkip));
-			exportPlugins.add(new BSimParticleFullFileExport(scene.getBeads(), filePart, txtFrameSkip));
-			exportPlugins.add(new BSimParticleFullFileExport(scene.getVesicles(), filePart, txtFrameSkip));
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getBeads(), fileBead, txtFrameSkip));
+//			exportPlugins.add(new BSimParticleFullFileExport(scene.getVesicles(), fileVesicle, txtFrameSkip));
 			
 			// If a simulation has been run reset first
 			if(i != 0){

@@ -5,7 +5,9 @@ import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
+import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
+import bsim.particle.BSimVesicleAcceptor;
 import bsim.scene.BSimScene;
 
 
@@ -55,6 +57,9 @@ public class BSimParticleFullFileExport extends BSimFileExport {
 			outStr += ", " + (i+1) + "_x";
 			outStr += ", " + (i+1) + "_y";
 			outStr += ", " + (i+1) + "_z";
+			if(particles.get(i) instanceof BSimVesicleAcceptor) {
+				outStr += ", " + (i+1) + "_fusionCount";
+			}
 		}
 		
 		outStr += ", Average_x";
@@ -92,6 +97,9 @@ public class BSimParticleFullFileExport extends BSimFileExport {
 				outStr += ", " + vecOutput[0];
 				outStr += ", " + vecOutput[1];
 				outStr += ", " + vecOutput[2];
+				if(p instanceof BSimVesicleAcceptor) {
+					outStr += ", " + ((BSimVesicleAcceptor)p).fusionCount;
+				}
 				
 				// Calculate the sum of all bacteria positions
 				particleAvg.add(p.getPosition());
