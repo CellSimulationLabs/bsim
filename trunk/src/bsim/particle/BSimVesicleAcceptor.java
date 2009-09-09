@@ -17,7 +17,7 @@ import bsim.scene.BSimScene;
 
 public class BSimVesicleAcceptor extends BSimParticle {
 		
-	private int fusionCount;
+	public int fusionCount;
 
 	public BSimVesicleAcceptor(Vector3d newPosition, double newRadius, BSimScene newScene) {				
 		super(newPosition, newRadius, newScene);
