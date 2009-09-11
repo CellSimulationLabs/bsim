@@ -1,112 +1,284 @@
-/**
- * BSimApp.java
- *
- * Class to generate the main application frame and GUI components. It also contains 
- * methods to handle user input and generate animation files.
- *
- * Authors: Thomas Gorochowski
- * Created: 12/07/2008
- * Updated: 24/08/2008
- */
 package bsim.app;
 
-import java.awt.BorderLayout;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.Calendar;
+import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.ProgressMonitor;
-
-import bsim.export.PngEncoder;
-import bsim.export.QuickTimeOutputStream;
+import bsim.BSimUtils;
+import bsim.app.gui.BSimGUI;
+import bsim.batch.BSimBatch;
+import bsim.export.BSimExport;
+import bsim.export.BSimParticleFullFileExport;
 import bsim.render.BSimProcessingRenderer;
 import bsim.scene.BSimScene;
 
-
-public class BSimApp extends JFrame{
+public class BSimApp {
 	
+	// TODO: something better with these (i.e. record/render/display etc etc)
+	// Display dimensions in pixels
+	public static int screenWidth 	= 1025;
+	public static int screenHeight 	= 700;
 	
-	public static int screenWidth 	= 1025; // pixels
-	public static int screenHeight 	= 700; // pixels
-	
-	// Toolbar that provides acccess to all features of the application
-	private BSimToolbar toolBar;
-	
-	// Default display window
-	private BSimDisplayWindow displayWindow;
-	
-	// Simulation scene will render the animation
+	// The simulation scene
 	private BSimScene scene;
+	// scene instance for our initial parameters. 
+	// (not a good idea for thousands of bacteria really, might have to rethink this one eventually)
+	private BSimScene defaultScene;
+	private BSimGUI gui;
+	// Vector of all the export plug-ins that are working in the current scene
+	private Vector<BSimExport> exportPlugins;
 	
-	// Processing renderer
-	protected BSimProcessingRenderer processingRenderer;
+	// General properties that are easier to store locally
+	private int numOfRuns    = 2;
+	private int lenOfSim     = 500;
+	private int movFrameSkip = 1;
+	private int txtFrameSkip = 1;
+	private String pathToExport = "./results";
+	private boolean movieOutput = false;
+	private int frameRecordForSec = 1;
 	
-	// Semaphore used for controlling the animation (notifiable object)
-	private BSimSemaphore simSem;
+	private BSimSemaphore simSem = null;
+	// call this drawSem or something better
+	private BSimSemaphore renderSem = null;
 	
-	// Variables required for the progress bar when saving a movie
-	private int pMin, pMax, pCur;
-	private ProgressMonitor pBar; 	
+	// Simulation thread
+	private Thread simThread;
+	
+	private int playState = BSimScene.PAUSED;
+	
+	private BSimProcessingRenderer renderer;
+	
 	
 	/**
 	 * General constructor.
 	 */
-	public BSimApp (){
-		super();
+	public BSimApp(BSimScene newScene){
+				
+		// Check that path is valid and that it exists, if not create
+		File testPath = new File(pathToExport);
+		if(!testPath.exists()){
+			// Create directories as required
+			testPath.mkdirs();
+		}
 		
-		// Semaphore used for animation loop control (notifiable object)
+		// Create the simulation scene
 		simSem = new BSimSemaphore();
+		renderSem = new BSimSemaphore();
+
+		defaultScene = newScene;
+		scene = defaultScene;
 		
-		// Setup the frame and its contents
-		this.setTitle("BSim");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.getContentPane().setLayout(new BorderLayout());
+		renderer = new BSimProcessingRenderer(this);
 		
-		// Create the BSim scene
-		scene = new BSimScene(simSem, this);
+		if(BSimGUI.guiState()){
+			// if GUI enabled then create a GUI
+			gui = new BSimGUI(this);
+		}
+	}
+
+
+	/**
+	 * Scene reset
+	 */
+	private void resetScene(int firstTime) {
+		// If we make scene.update() threaded we will need a method to stop all threads
+		// and thus make sure the garbage collector gets rid of our old scene before we create a new one
+		// Similar to the renderer? (animation thread)
+		//scene.destroy();
 		
-		// Create the toolbar and align to bottom of window
-		toolBar = new BSimToolbar(this, scene);
-		this.getContentPane().add(toolBar, BorderLayout.SOUTH);
-		
-		// Squeeze the window nicely to the size of our toolbar
-		pack();
-		
-		// The toolbar is a fixed size
-		//this.setResizable(false);
-		
-		this.setVisible(true);
-		
-		processingRenderer = new BSimProcessingRenderer(scene);
-		processingRenderer.init();
-		
-		displayWindow = new BSimDisplayWindow(this);
+		// Reset the current scene to the default that was originally specified
+		// Should reset the time etc.
+		// note - Can't use this for batches as starting conditions, positions etc are not randomised
+		// outside of the initialisation process in the specification file
+		scene = defaultScene;
+
 	}
 	
 	
 	/**
-	 * Reset the renderer in the display window with new scene data
+	 * Run the batch of simulations.
 	 */
-	public void resetDisplay(int firstTime){
-		displayWindow.reset();
+	public void runBatch(){	
 		
-		if(firstTime == 0){
-			// Remove the PApplet from the display window
-			displayWindow.remove(processingRenderer);
-			// Stop the animation thread
-			processingRenderer.destroy();
+		// Create the quicktime output stream and the image to hold each frame
+		//QuickTimeOutputStream movOut = null;
+		
+		// Build the time stamp of the whole batch (this helps to keep batches together)
+		Calendar calNow = Calendar.getInstance();
+		String yyyyStr, mmStr, ddStr, hhStr, miStr, ssStr, timestampStr;
+		String curhhStr, curmiStr, curssStr, curtimestampStr;
+		
+		
+		yyyyStr = "" + calNow.get(Calendar.YEAR);
+		mmStr = BSimUtils.padInt2(calNow.get(Calendar.MONTH));
+		ddStr = BSimUtils.padInt2(calNow.get(Calendar.DAY_OF_MONTH));
+		hhStr = BSimUtils.padInt2(calNow.get(Calendar.HOUR_OF_DAY));
+		miStr = BSimUtils.padInt2(calNow.get(Calendar.MINUTE));
+		ssStr = BSimUtils.padInt2(calNow.get(Calendar.SECOND));
+		
+		timestampStr = yyyyStr + "-" + mmStr + "-" + ddStr + "_" +
+			hhStr + "-" + miStr + "-" + ssStr;
+		
+		// Cycle through the number of batch runs required
+		for(int i=0; i<numOfRuns; i++){
+			
+			int iN = i+1;
+			calNow = Calendar.getInstance();
+			curhhStr = BSimUtils.padInt2(calNow.get(Calendar.HOUR_OF_DAY));
+			curmiStr = BSimUtils.padInt2(calNow.get(Calendar.MINUTE));
+			curssStr = BSimUtils.padInt2(calNow.get(Calendar.SECOND));
+			curtimestampStr = hhStr + ":" + miStr + ":" + ssStr;
+			
+			System.out.println("[" + curtimestampStr + "] BSimBatch: Starting run " + iN + " of " + numOfRuns 
+			   + " (" + timestampStr + ")");
+			
+			// Setup the export objects for the current run
+			
+			// Remove any existing export plugins
+			exportPlugins = new Vector<BSimExport>(3);
+
+			// Create the files for each of the outputs
+			File fileBac = new File(pathToExport + "/" + timestampStr + 
+				"_Bacteria-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
+			
+			File filePart = new File(pathToExport + "/" + timestampStr + 
+				"_Bead-Export_"  + BSimUtils.padInt4(i+1) + ".csv");
+			
+			String filenameMovie = pathToExport + "/" + timestampStr + 
+				"_Video-Export_"  + BSimUtils.padInt4(i+1) + ".mov";
+				
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getBacteria(), fileBac, txtFrameSkip));
+			//exportPlugins.add(new BSimParticleFullFileExport(scene.getBeads(), filePart, txtFrameSkip));
+			exportPlugins.add(new BSimParticleFullFileExport(scene.getVesicles(), filePart, txtFrameSkip));
+			
+			// If a simulation has been run reset first
+			if(i != 0){
+				// Reset the scene
+				scene.reset();
+			}
+			
+			try {
+		        
+				int frameRate = 0;
+				
+				if(movieOutput){				
+					//call the method to create the video inside Processing
+					//scene.setWaitingForVideoOpening(true);
+					// TODO: Add back in.
+					//scene.getProcessing().createMovie(filenameMovie);
+					//while(scene.getWaitingForVideoOpening()){}
+					//frame for sec in the video
+					int frameForSec = frameRecordForSec;
+					//time step in un sec
+					int timeStepSec=(int) (1/BSimScene.dt); 
+					//one frame Rate in confront of timeStep
+					frameRate  = timeStepSec/frameForSec;
+					
+				}
+
+				// Run the scene for the length specified
+				for(int t=0; t<lenOfSim; t++){
+					
+					if(movieOutput){
+						if(t % frameRate == 0){
+							// TODO: Add back in
+							//scene.getProcessing().addMovieFrame();
+						}
+					}
+					
+					// Move to the next frame
+					if(t == 0){
+						// First frame in the output
+						nextFrame(true);
+					}
+					else{
+						// Not the first frame in the output
+						nextFrame(false);
+					}
+				}
+				
+				if(movieOutput){
+					// TODO: Add back in
+					//scene.getProcessing().closeMovie();
+					//while(scene.getWaitingForVideoClosing()){}
+				}
+				
+			} catch (Exception ex) { ex.printStackTrace();}		
+			
+			// Finalise the current run (close open files, etc)
+			finaliseCurrent();
+			
+			scene.reset();
 		}
+	}
+	
+	
+	/** 
+	 * Finalise the current run to allow for any files to be closed safely.
+	 */
+	private void finaliseCurrent(){
 		
-	    processingRenderer = new BSimProcessingRenderer(scene);
-	    
-	    // Initialise new animation thread and add the PApplet to display window
-	    processingRenderer.init();
-	    displayWindow.add(processingRenderer);
+		// Cycle through each of the export plugins
+		for(BSimExport i : exportPlugins){
+			// Finish the export
+			i.finishExport(scene);
+		}
 	}
 		
+	
+	/**
+	 * Move to the next frame in the simulation.
+	 */
+	private void nextFrame(boolean firstFrame){
+		
+		// Check if first frame and if so export current simulation before moving to next frame
+		if(firstFrame){
+			// Using this updated simulation cycle through all export plugins and 
+			// export the latest frames data.
+			for(int i=0; i<exportPlugins.size(); i++){
+				// Export the current frame
+				((BSimExport)exportPlugins.elementAt(i)).exportFrame(scene);
+			}
+		}
+		
+		// Move the simulation to the next frame
+		scene.advance(1);
+		
+		// Export the next frames data
+		for(BSimExport i : exportPlugins){
+			// Export the current frame
+			i.exportFrame(scene);
+		}	
+	}
+	
+	
+	/**
+	 * Runs the batch process
+	 * TODO: change to run, and implement Runnable?
+	 */
+	public void runApp(){
+		
+		System.out.println("Starting Export...");
+		
+		// Load the file and create the batch object
+		try{
+			// The parameter file for the simulation
+			//System.out.println(" " + args[0]);
+			//File fParams = new File(args[0]);
+			
+			// Create the batch object
+
+			runBatch();
+		}
+		catch(Exception e){ 
+			System.err.println("Error writing to file (bsim.batch.BSimBatch.main)");
+			e.printStackTrace();
+		}
+		
+		System.out.println("Finished Export.");
+	}
+	
+	
 	/**
 	 * Starts to play the simulation.
 	 */
@@ -130,13 +302,18 @@ public class BSimApp extends JFrame{
 	/**
 	 * Resets the simulation.
 	 */
-	public void reset() {
+	public void reset(int firstTime) {
 		
 		// Get the current play state
 		int playState = scene.getPlayState();
 		
 		// Pass on the reset signal to the scene
-		scene.reset();
+		//scene.reset();
+		resetScene(firstTime);
+		// Reset the renderer with new scene data
+		if(BSimGUI.guiState() && renderer != null){
+			gui.resetDisplay(firstTime);
+		}
 		
 		if(playState != scene.PAUSED){
 			// Notify the animation of the update
@@ -144,215 +321,14 @@ public class BSimApp extends JFrame{
 		}
 	}
 	
-	// TODO: get these to record an image from the renderer rather than from BSimScene (graphics)? Or create new methods.
-	public void createImage(String filename) {
-		
-		// Ensure that the filename has the correct extension
-		filename = filename + ".png";
-		
-		// Create the image required to hold the output
-        // TODO: Broke this to get compiling on Mac
-		//BufferedImage img = new BufferedImage(scene.getWidth(), 
-		//	scene.getHeight(), 
-		//	BufferedImage.TYPE_INT_RGB);
-		BufferedImage img = new BufferedImage(100, 
-			100, 
-			BufferedImage.TYPE_INT_RGB);
-					
-		byte[] pngbytes;
-		// PngEncoder.ENCODE_ALPHA, PngEncoder.NO_ALPHA
-		PngEncoder png =  new PngEncoder( img,
-			PngEncoder.NO_ALPHA, 0, 1);
+	
+	/*
+	 * Get and set methods
+	 */
+	public BSimSemaphore getRenderSem() { return renderSem; }
 
-        try
-        {
-            FileOutputStream outfile = new FileOutputStream( filename );
-            pngbytes = png.pngEncode();
-            if (pngbytes == null)
-            {
-                System.out.println("Null image");
-            }
-            else
-            {
-                outfile.write( pngbytes );
-            }
-            outfile.flush();
-            outfile.close();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-	}
+	public BSimScene getScene(){ return scene;}
+	public BSimGUI getGUI(){ return gui; }
+	public BSimProcessingRenderer getRenderer(){ return renderer; }
 	
-	
-	/**
-	 * Creates a movie of the simultion from the current time for a given
-	 * length (in frames) with a skip rate (in frames) and filename.
-	 */
-	public void createMovie(String filename, int numOfFrames, int skipFrames) {
-		
-		// Ensure that the filename has the correct extension
-		filename = filename + ".mov";
-		
-		// Update the initial values for the progress monitor
-		pCur = 0;
-		pMin = 0;
-		pMax = numOfFrames-1;
-		
-		// Disble the toolbar to stop interaction during the recording
-		toolBar.setEnabled(false);
-		
-		// Thread to display and update the progress bar
-		Thread recProgress = new BSimRecordProgress();
-		recProgress.start();
-		
-		// Thread to record the movie
-		// This ensures the main thread can redraw the screen as required
-		Thread recThread = new BSimRecordThread (filename, numOfFrames, skipFrames);
-		recThread.start();
-	}
-	
-	
-	/**
-	 * Internal class to handle the progress monitor for movies.
-	 */
-	class BSimRecordProgress extends Thread {
-		
-		/**
-		 * General constructor.
-		 */
-		public BSimRecordProgress(){
-			// Create the progress monitor object with initial conditions
-			pBar = new ProgressMonitor(null, "Recording Movie", "Writing Movie...", pMin, pMax);
-			// Update the initial progress
-			pBar.setProgress(pCur);
-		}
-
-		
-		/**
-		 * Function run when thread starts. Updates the progress monitor window.
-		 */
-		public void run(){
-			// Variables to hold user friendly status
-			int i, j;
-			
-			// Because sleep function is called must handle exceptions
-			try {
-				// Delay to redraw the progress monitor
-				Thread.sleep(10);
-				
-				// Loop while frames are being processed
-				while(pCur < pMax){
-					// Delay the update (ensures no continually cycling)
-					Thread.sleep(100);
-					// Update the progress
-					pBar.setProgress(pCur);
-					// Update the user friendly progress values
-					i = pCur + 1;
-					j = pMax + 1;
-					// Update status note to display current frame
-					pBar.setNote("Frame " + i + " of " + j);
-				}
-			} catch (InterruptedException ignore) {}
-		}
-	}
-	
-	
-	/**
-	 * Internal class to record a movie of the simulation.
-	 */
-	class BSimRecordThread extends Thread {
-		
-		
-		// Variables to hold movie properties
-		String filename;
-		int numOfFrames, skipFrames;
-		
-		
-		/**
-		 * General constructor.
-		 */
-		public BSimRecordThread (String newFilename, int newNumOfFrames, int newSkipFrames){
-			// Update movie parameters
-			filename = newFilename;
-			numOfFrames = newNumOfFrames;
-			skipFrames = newSkipFrames;
-		}
-		
-		
-		/**
-		 * Main thread method. Creaes a movie output using the given parameters.
-		 */
-			public void run() {
-				// Create the quicktime output stream and the image to hold each frame
-				QuickTimeOutputStream out = null;
-		        Graphics2D g = null;
-		        try {
-		            // The quicktime output (format is JPG by default, PNG also supported)
-					out = new QuickTimeOutputStream(new File(filename), 
-						QuickTimeOutputStream.VideoFormat.JPG);
-		            // Set the video quality
-					out.setVideoCompressionQuality(1f);
-		            // Set the number of frames per second
-					out.setTimeScale(30); // 30 fps
-					
-					// Create the image required to hold the output
-		            //BufferedImage img = new BufferedImage(scene.getWidth(), 
-					//	scene.getHeight(), 
-					//	BufferedImage.TYPE_INT_RGB);
-		            // TODO: Broke this to compile on Mac
-					BufferedImage img = new BufferedImage(100, 
-						100, 
-						BufferedImage.TYPE_INT_RGB);
-					
-					// Loop through each frame in animation and draw scene
-					for(int a = 0; a<numOfFrames; a++) {
-						// Update progress
-						pCur = a;
-						g = img.createGraphics();
-		            
-						// Draw the frame to the graphics context
-						// TODO: Broken to compile on Mac
-						//scene.drawFrame((Graphics)g);
-						
-						// Skip the required number of frames
-						// (This will still calculate all intermediate timesteps)
-						scene.skipFrames(skipFrames);
-						
-						// Write the frame to the file
-			            out.writeFrame(img, 1);
-					}
-				} catch (IOException ex) { ex.printStackTrace();  
-		        // Handle any existing problems that arise
-				} finally {
-		            if (g != null) {
-		                g.dispose();
-		            }
-		            if (out != null) {
-						try{
-							out.close();
-						} catch (IOException ex) { ex.printStackTrace(); }
-		            }
-		        }
-			
-			// Update final progress to ensure progress monitor exits
-			pCur = pMax;
-			// Update the display with current frame
-			// TODO: Broken to compile on Mac
-			//scene.repaint();
-			// Enable user input again
-			toolBar.setEnabled(true);
-		}
-	}
-		
-	
-	/**
-	 * Runs the GUI application.
-	 */
-	public static void main(String[] args){
-		BSimApp gui = new BSimApp();
-	}
-	
-	public BSimProcessingRenderer getRenderer(){ return processingRenderer; }
 }

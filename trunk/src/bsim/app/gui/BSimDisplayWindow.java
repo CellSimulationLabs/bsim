@@ -5,38 +5,38 @@
  * 
  */
 
-package bsim.app;
+package bsim.app.gui;
 
 import javax.swing.JFrame;
 
+
 public class BSimDisplayWindow extends JFrame{
-	BSimApp app;
 	
 	/**
 	 * Default constructor for a display window.
 	 * Creates a display window with an embedded Processing P3D renderer.
 	 */
-	BSimDisplayWindow(BSimApp newApp){
+	BSimDisplayWindow(BSimGUI gui){
 		super();
-		app = newApp;
 		
 		this.setTitle("BSim Display");
-		this.setSize(BSimApp.screenWidth, BSimApp.screenHeight);
-		this.add(app.getRenderer());
+		this.setSize(BSimGUI.screenWidth, BSimGUI.screenHeight);
+		this.add(gui.getRenderer());
 		
 		// Place the display window below the toolbar (BSimApp). Probably best as the toolbar
 		// is guaranteed to start in the top left, therefore both windows should be visible when the app starts.
-		this.setLocation(0, app.getHeight());
+		this.setLocation(0, gui.getHeight());
 		this.setVisible(true);		
 	}
+	
+	//TODO: processWindowEvent method for window closing, remove and destroy the renderer. (only important for multiple display windows/ dodgy reset)
 	
 	/**
 	 * Resets the display window
 	 */
 	void reset(){
-		this.setSize(BSimApp.screenWidth, BSimApp.screenHeight);
+		this.setSize(BSimGUI.screenWidth, BSimGUI.screenHeight);
 	}
-	
 	
 	/**
 	 * Check for resize events: 
@@ -65,5 +65,6 @@ public class BSimDisplayWindow extends JFrame{
 //	 * Not overwritten by this class.
 //	 */
 //	public void componentShown(ComponentEvent e) {}
+	
 	
 }

@@ -26,6 +26,27 @@ import bsim.particle.BSimVesicle;
 import bsim.particle.BSimVesicleAcceptor;
 
 public interface BSimRenderer {
+	// A note. This interface is a bit of a mess in terms of extensibility
+	// (i.e. renderers have to be specifically defined as a processing renderer
+	// at the moment for us to be able to pass them to classes/methods)
+	// Therefore this should also specify some form of GUI 'embedability' e.g. an applet or graphics object.
+	// Thus we would be able to specify BSimRenderer objects throughout and only actually define the
+	// specific renderer type in the setup of the scene.
+	
+	/**
+	 * These bad boys may be useful for recording movies, screenshots etc.
+	 * Remember that BitSet could be used, possibly, for settings? Or just our own bitwise flags.
+	 */
+//	public static final int RENDERING_DISABLED = 1;
+//	public static final int RENDERING_ENABLED = 2;
+//	
+//	public static final int RENDERING_LOOP_OFF = 1;
+//	public static final int RENDERING_LOOP_ON = 2;
+//	
+//	public void renderingStateSet(int newState);
+//	public int renderingStateGet();
+//	public void loopStateSet(int newState);
+//	public int loopStateGet();
 	
 	/*
 	 *  Draw the scene
@@ -50,6 +71,9 @@ public interface BSimRenderer {
 	public void draw(BSimVesicle g);
 	// Vesicle acceptor
 	public void draw(BSimVesicleAcceptor g);
+	
+	// Boundaries (for now)
+	public void drawBoundary();
 	
 	/*
 	 * Draw chemical field

@@ -44,6 +44,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	
 	// Simulation core
 	private BSimScene scene = null;
+	private BSimApp app = null;
 	
 	// The simulation objects
 	private Vector<BSimBacterium> bacteria = null;
@@ -70,9 +71,10 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	/**
 	 * Standard constructor for the renderer
 	 */
-	public BSimProcessingRenderer(BSimScene newScene) {
+	public BSimProcessingRenderer(BSimApp newApp) {
 		// BSimScene used in the core simulation
-		scene = newScene;
+		app = newApp;
+		scene = app.getScene();
 		
 		// PApplet parameters
 		widthInitial = BSimApp.screenWidth;
@@ -189,7 +191,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		
 		// Signal the scene that redraw has been completed
 		if(scene != null){
-			scene.signalRenderSem();
+			app.getRenderSem().signal();
 		}
 	}
 	
@@ -201,7 +203,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 	public void mousePressed() {
 		// Pause the scene calculations while moving the camera
 		oldPlayState = scene.getPlayState();
-		scene.getApp().pause();
+		app.pause();
 		loop();
 	}
 
@@ -209,9 +211,9 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		// Start to play again if the scene was previously playing
 		noLoop();
 		// null check may not be necessary as BSimBatch will not have a window to click on
-		if(scene.getApp() != null){
+		if(BSimScene.getApp() != null){
 			if(oldPlayState == BSimScene.PLAYING){
-				scene.getApp().play();
+				app.play();
 			}
 		}
 	}
@@ -255,7 +257,7 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		point((float)vesicle.getPosition().x, (float)vesicle.getPosition().y,(float)vesicle.getPosition().z);
 		noStroke();
 	}
-	
+	// TODO: pulsating vesicle acceptor when a vesicle combines.
 	/**
 	 * Draw a vesicle acceptor
 	 */

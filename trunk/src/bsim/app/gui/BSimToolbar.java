@@ -8,7 +8,7 @@
  * Created: 14/07/2008
  * Updated: 24/07/2008
  */
-package bsim.app;
+package bsim.app.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,12 +19,13 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JToolBar;
 
+import bsim.app.BSimApp;
 import bsim.scene.BSimScene;
 
 
 public class BSimToolbar extends JToolBar implements ActionListener{
 
-	public final static int BSimToolbarWidth = 1025;
+	//public final static int BSimToolbarWidth = 1025;
 	
 	// Other BSim references
 	private BSimApp app;
@@ -34,37 +35,37 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 	private int playState = 0;
 	
 	// GUI objects
-	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot;	
+	private JButton btnPlayPause, btnReset, btnSaveRecord, btnStartRecord, btnEndRecord, btnSaveScreenshot, btnTakeScreenshot;
 	private JFileChooser fc;
 	
 	// Images used on the buttons
-	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/play.png"));
-	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/pause.png"));
-	private static final ImageIcon iconReset = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/reset.png"));
-	private static final ImageIcon iconLoad = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/load.png"));
-	private static final ImageIcon iconSaveRecord = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/saveRecord.png"));
-	private static final ImageIcon iconStartRecord = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/startRecord.png"));
-	private static final ImageIcon iconEndRecord = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/endRecord.png"));
-	private static final ImageIcon iconStartRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/startRecordDisabled.png"));
-	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/endRecordDisabled.png"));
-	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/saveScreenshot.png"));
-	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/takeScreenshot.png"));
-	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("/bsim/resource/icons/takeScreenshotDisabled.png"));	
+	private static final ImageIcon iconPlay = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/play.png"));
+	private static final ImageIcon iconPause = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/pause.png"));
+	private static final ImageIcon iconReset = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/reset.png"));
+	
+	private static final ImageIcon iconSaveRecord = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/saveRecord.png"));
+	private static final ImageIcon iconStartRecord = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/startRecord.png"));
+	private static final ImageIcon iconEndRecord = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/endRecord.png"));
+	private static final ImageIcon iconStartRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/startRecordDisabled.png"));
+	private static final ImageIcon iconEndRecordDisabled = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/endRecordDisabled.png"));
+	
+	private static final ImageIcon iconSaveScreenshot = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/saveScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshot = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/takeScreenshot.png"));
+	private static final ImageIcon iconTakeScreenshotDisabled = new ImageIcon(BSimToolbar.class.getResource("../../resource/icons/takeScreenshotDisabled.png"));	
+	
 	
 	/**
 	 * Creates a new toolbar for a given BSimApp and BSimScene.
 	 */
-	public BSimToolbar(BSimApp newApp, BSimScene newScene){
+	public BSimToolbar(BSimApp newApp){
 		super();
-		
 		// Update internal variables
 		app = newApp;
-		scene = newScene;
+		scene = app.getScene();
 		
-		// Create the toolbar and make it floatable
+		// Create the toolbar
 		setupToolBar();
-		/////////////////////////////************************///////////////////////////
-		// TODO: setOrientation (or whatever) based on a button (flip vertical/horizontal)
+		setOrientation(HORIZONTAL);
 		setFloatable(false);		
 	}
 	
@@ -80,9 +81,11 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnPlayPause = new JButton("Play");
 		btnPlayPause.setIcon(iconPlay);
 		btnPlayPause.addActionListener(this);
+		
 		btnReset = new JButton("Reset");
 		btnReset.setIcon(iconReset);
-		btnReset.addActionListener(this);	
+		btnReset.addActionListener(this);
+
 		// TODO: A button to create a new display window?
 		// TODO: don't really need quite so many different buttons for setting directories etc. i.e. should just be 'take screenshot' for example
 		// Create a folder with the date & time: export_01_09_09_1244\screenshots, .\movies, .\data for example
@@ -92,6 +95,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnTakeScreenshot = new JButton("Save Screenshot");
 		btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
 		btnTakeScreenshot.addActionListener(this);
+		
 		btnSaveRecord = new JButton("Record");
 		btnSaveRecord.setIcon(iconSaveRecord);
 		btnSaveRecord.addActionListener(this);
@@ -101,14 +105,13 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnEndRecord = new JButton("End Record");
 		btnEndRecord.setIcon(iconEndRecordDisabled);
 		btnEndRecord.addActionListener(this);
-		
-		
+				
 		// Add objects to the toolbar
 		// Playback controls
 		this.add(btnPlayPause);
 		this.add(btnReset);
-		// Parameters
 		this.addSeparator();
+		
 		// Screenshot controls
 		this.add(btnSaveScreenshot);
 		this.add(btnTakeScreenshot);
@@ -117,10 +120,10 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		// Movie record controls
 		this.add(btnSaveRecord);
 		this.add(btnStartRecord);
-		this.add(btnEndRecord);		
+		this.add(btnEndRecord);	
+				
 		btnStartRecord.setEnabled(false);
 		btnEndRecord.setEnabled(false);
-		
 	}
 	
 	
@@ -135,7 +138,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnSaveScreenshot.setEnabled(enabled);
 		btnSaveRecord.setEnabled(enabled);
 	}
-		
+
 	/**
 	 * Handle events for the toolbar.
 	 */
@@ -164,7 +167,7 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			playState = 0;
 			btnPlayPause.setIcon(iconPlay);
 			btnPlayPause.setText("Play");
-			app.reset();
+			app.reset(0);
 			
 		//Record button
 		}else if (e.getSource() == btnSaveRecord) {		
@@ -196,8 +199,9 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			scene.setStartVideo(false);
 			scene.setEndVideo(true);
 			btnSaveRecord.setEnabled(true);
+			
+		//Screenshot button
 		}else if(s == btnSaveScreenshot){
-			//Screenshot
 			int returnVal = fc.showSaveDialog(this);
 				
 			// If OK is pressed
@@ -217,8 +221,9 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 			//scene.getProcessing().takeImage(scene.getImageFileName());
 			btnTakeScreenshot.setEnabled(false);
 			btnTakeScreenshot.setIcon(iconTakeScreenshotDisabled);
-			btnSaveScreenshot.setEnabled(true);		
+			btnSaveScreenshot.setEnabled(true);	
+			
 		//Load simulation
 		}
-	}
+	}	
 }
