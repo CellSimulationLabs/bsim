@@ -63,14 +63,16 @@ public class BSimSceneExample extends BSimScene{
 			if(!scene.intersection(b)) scene.getBacteria().add(b);			
 		}
 	
+		// Batch Parameters (if GUI disabled)
+		numberOfBatchRuns(2);
+		simLength(100);
+		
 		// New instance of a BSimApp that will manage the simulation
 		app.setScene(scene);
 		scene.setApp(app);
-		
-		//app.setRuns(number of runs) etc etc
-		
+				
 		// Change this to what we decide
-		runApp();
+		runSimulation();
 	}
 	
 	

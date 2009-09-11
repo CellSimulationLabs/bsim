@@ -24,8 +24,12 @@ public abstract class BSimScene implements Runnable{
 	
 	// TODO: something better with these (i.e. record/render/display etc etc)
 	// Display dimensions in pixels
-	public static int screenWidth 	= 1025;
-	public static int screenHeight 	= 700;
+	public static int screenWidth 	= 800;
+	public static int screenHeight 	= 600;
+	
+	// Batch simulation parameters
+	private static int numberOfRuns    = 1;
+	private static int simLength     = 100;
 	
 	// Simulation boundary dimensions
 	public static double xBound 	= 100;
@@ -60,7 +64,6 @@ public abstract class BSimScene implements Runnable{
 	// The BSimApp that runs the simulation
 	// (required for changes to time to be sent back to the GUI)
 	private static BSimApp app;
-	//private static BSimScene scene;
 	
 	public boolean startVideo = false;
 	public boolean endVideo = false;	
@@ -267,11 +270,17 @@ public abstract class BSimScene implements Runnable{
 		}while(true);
 	}
 	
+	public static void simLength(int length){ simLength = length;}
+	public static int simLength(){ return  simLength;}
+	public static void numberOfBatchRuns(int num){ numberOfRuns = num;}
+	public static int numberOfBatchRuns(){ return numberOfRuns;}
+
+	
 	/**
 	 * Standard get methods for the class.
 	 */	
 	public static BSimApp getApp() { return app; }
-	public static void runApp() { app.runApp(); }
+	public static void runSimulation() { app.runApp(); }
 	
 	public Vector getBacteria (){ return bacteria; }	
 	public Vector getBeads (){ return beads; }	

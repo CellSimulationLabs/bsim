@@ -24,8 +24,6 @@ public class BSimApp {
 	private Vector<BSimExport> exportPlugins;
 	
 	// General properties that are easier to store locally
-	private int numOfRuns    = 2;
-	private int lenOfSim     = 100;
 	private int movFrameSkip = 1;
 	private int txtFrameSkip = 1;
 	private String pathToExport = "./results";
@@ -118,7 +116,7 @@ public class BSimApp {
 			hhStr + "-" + miStr + "-" + ssStr;
 		
 		// Cycle through the number of batch runs required
-		for(int i=0; i<numOfRuns; i++){
+		for(int i=0, nBatch = BSimScene.numberOfBatchRuns(); i<nBatch; i++){
 			
 			int iN = i+1;
 			calNow = Calendar.getInstance();
@@ -127,7 +125,7 @@ public class BSimApp {
 			curssStr = BSimUtils.padInt2(calNow.get(Calendar.SECOND));
 			curtimestampStr = hhStr + ":" + miStr + ":" + ssStr;
 			
-			System.out.println("[" + curtimestampStr + "] BSimBatch: Starting run " + iN + " of " + numOfRuns 
+			System.out.println("[" + curtimestampStr + "] BSimBatch: Starting run " + iN + " of " + nBatch 
 			   + " (" + timestampStr + ")");
 			
 			// Setup the export objects for the current run
@@ -178,7 +176,7 @@ public class BSimApp {
 				play();
 				
 				// Run the scene for the length specified
-				for(int t=0; t<lenOfSim; t++){
+				for(int t = 0, lSim = BSimScene.simLength(); t<lSim; t++){
 					
 					if(movieOutput){
 						if(t % frameRate == 0){
