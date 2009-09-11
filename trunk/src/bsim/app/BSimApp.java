@@ -14,11 +14,6 @@ import bsim.scene.BSimScene;
 
 public class BSimApp {
 	
-	// TODO: something better with these (i.e. record/render/display etc etc)
-	// Display dimensions in pixels
-	public static int screenWidth 	= 1025;
-	public static int screenHeight 	= 700;
-	
 	// The simulation scene
 	private BSimScene scene;
 	// scene instance for our initial parameters. 
@@ -30,7 +25,7 @@ public class BSimApp {
 	
 	// General properties that are easier to store locally
 	private int numOfRuns    = 2;
-	private int lenOfSim     = 500;
+	private int lenOfSim     = 100;
 	private int movFrameSkip = 1;
 	private int txtFrameSkip = 1;
 	private String pathToExport = "./results";
@@ -52,7 +47,7 @@ public class BSimApp {
 	/**
 	 * General constructor.
 	 */
-	public BSimApp(BSimScene newScene){
+	public BSimApp(){
 				
 		// Check that path is valid and that it exists, if not create
 		File testPath = new File(pathToExport);
@@ -64,7 +59,11 @@ public class BSimApp {
 		// Create the simulation scene
 		simSem = new BSimSemaphore();
 		renderSem = new BSimSemaphore();
-
+		
+	}
+	
+	
+	public void setScene(BSimScene newScene){
 		defaultScene = newScene;
 		scene = defaultScene;
 		
@@ -99,7 +98,6 @@ public class BSimApp {
 	 * Run the batch of simulations.
 	 */
 	public void runBatch(){	
-		
 		// Create the quicktime output stream and the image to hold each frame
 		//QuickTimeOutputStream movOut = null;
 		
@@ -175,7 +173,10 @@ public class BSimApp {
 					frameRate  = timeStepSec/frameForSec;
 					
 				}
-
+				
+				// Set the playState to playing
+				play();
+				
 				// Run the scene for the length specified
 				for(int t=0; t<lenOfSim; t++){
 					
@@ -210,6 +211,7 @@ public class BSimApp {
 			
 			scene.reset();
 		}
+
 	}
 	
 	
@@ -257,25 +259,28 @@ public class BSimApp {
 	 * TODO: change to run, and implement Runnable?
 	 */
 	public void runApp(){
-		
-		System.out.println("Starting Export...");
-		
-		// Load the file and create the batch object
-		try{
-			// The parameter file for the simulation
-			//System.out.println(" " + args[0]);
-			//File fParams = new File(args[0]);
+		if(!BSimGUI.guiState()){
+			System.out.println("Starting Export...");
 			
-			// Create the batch object
-
-			runBatch();
+			// Load the file and create the batch object
+			try{
+				// The parameter file for the simulation
+				//System.out.println(" " + args[0]);
+				//File fParams = new File(args[0]);
+				
+				// Create the batch object
+	
+				runBatch();
+			}
+			catch(Exception e){ 
+				System.err.println("Error writing to file (bsim.batch.BSimBatch.main)");
+				e.printStackTrace();
+			}
+			
+			System.out.println("Finished Export.");
+		} else{
+			scene.initialiseThread();
 		}
-		catch(Exception e){ 
-			System.err.println("Error writing to file (bsim.batch.BSimBatch.main)");
-			e.printStackTrace();
-		}
-		
-		System.out.println("Finished Export.");
 	}
 	
 	
@@ -326,6 +331,7 @@ public class BSimApp {
 	 * Get and set methods
 	 */
 	public BSimSemaphore getRenderSem() { return renderSem; }
+	public BSimSemaphore getSimSem()	{ return simSem; }
 
 	public BSimScene getScene(){ return scene;}
 	public BSimGUI getGUI(){ return gui; }

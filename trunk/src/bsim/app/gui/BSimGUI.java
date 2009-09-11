@@ -12,8 +12,6 @@ import bsim.render.BSimRenderer;
 
 public class BSimGUI extends JFrame{
 	
-	public static int screenWidth = 800;
-	public static int screenHeight = 600;
 	public static int toolbarHeight = 32;
 	private static boolean guiEnabled = false;
 	
@@ -34,7 +32,6 @@ public class BSimGUI extends JFrame{
 		this.getContentPane().setLayout(new BorderLayout());
 		
 		// Create the toolbar and align to bottom of window
-		System.out.println(BSimToolbar.class.getResource("../../resource/icons/play.png"));
 		toolbar = new BSimToolbar(app);
 		this.getContentPane().add(toolbar, BorderLayout.SOUTH);
 		

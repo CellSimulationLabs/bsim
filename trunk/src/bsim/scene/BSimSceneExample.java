@@ -18,8 +18,6 @@
  */
 package bsim.scene;
 
-import java.util.Vector;
-
 import javax.vecmath.Vector3d;
 
 import bsim.app.BSimApp;
@@ -41,12 +39,13 @@ public class BSimSceneExample extends BSimScene{
 		BSimScene.dt = 0.01;
 		
 		// Set display parameters?
-		BSimGUI.guiDisable();
-		BSimGUI.screenWidth = 800;
-		BSimGUI.screenHeight = 600;
+		BSimGUI.guiEnable();
+		screenWidth = 800;
+		screenHeight = 600;
 		
 		// Create a new scene to simulate
 		BSimSceneExample scene = new BSimSceneExample();
+		BSimApp app = new BSimApp();
 		//BSimScene scene = new BSimScene();
 				
 		/*
@@ -65,7 +64,9 @@ public class BSimSceneExample extends BSimScene{
 		}
 	
 		// New instance of a BSimApp that will manage the simulation
-		setApp(new BSimApp(scene));
+		app.setScene(scene);
+		scene.setApp(app);
+		
 		//app.setRuns(number of runs) etc etc
 		
 		// Change this to what we decide
@@ -84,7 +85,7 @@ public class BSimSceneExample extends BSimScene{
 	 */
 	public BSimSceneExample()
 	{
-		super(getApp());
+		super();
 	}
 
 }

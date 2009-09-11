@@ -14,13 +14,18 @@ import bsim.particle.BSimBead;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
 
-public abstract class BSimScene {
+public abstract class BSimScene implements Runnable{
 	
 	// If these are going to be changed in the setup, might have to eventually do something clever
 	// to make them more private as they are static so changing them by accident will make a huge mess
 	
 	// Global simulation time step (seconds)
 	public static double dt = 0.01;
+	
+	// TODO: something better with these (i.e. record/render/display etc etc)
+	// Display dimensions in pixels
+	public static int screenWidth 	= 1025;
+	public static int screenHeight 	= 700;
 	
 	// Simulation boundary dimensions
 	public static double xBound 	= 100;
@@ -60,37 +65,45 @@ public abstract class BSimScene {
 	public boolean startVideo = false;
 	public boolean endVideo = false;	
 	public String imageFileName = null;		
-
-	//BSimBatch parameter for waiting the rigth closing of the file
-	public boolean waitingForVideoClosing = true;
-	public boolean waitingForVideoOpening = true;
 	
 	
 	/**
 	 * General constructor
 	 */
-	public BSimScene(BSimApp newApp)
+	public BSimScene()
 	{
 		super();
-		app = newApp;				
-		// Update the internal variables
-		simSem = new BSimSemaphore();;
-		renderSem = new BSimSemaphore();
 	    
 		// Create initial bacteria and beads
-		//resetScene(1);
-		//******************************************************** Threads ********************************************************
+		//resetScene(1);		
+	}
+	
+	
+	/**
+	 * Start the simulation thread
+	 */
+	public void initialiseThread(){
 		// Create new thread to run the simulation in an associate with this object
-		//simThread = new Thread(this);
+		simThread = new Thread(this);
 		// Start the simulation thread
-		//simThread.start();
-		
+		simThread.start();	
+	}
+	
+	
+	/**
+	 * Set the BSimApp running this scene
+	 */
+	public void setApp(BSimApp newApp) { app = newApp;				
+		// Update the internal variables
+		simSem = app.getSimSem();
+		renderSem = app.getRenderSem(); 
 	}
 	
 	
 	/**
 	 * Reset the scene 
 	 */
+	// TODO: fix
 	private void resetScene(int firstTime) {
 		
 		// Move back to first time-step 
@@ -123,6 +136,7 @@ public abstract class BSimScene {
 		this.reset();
 	}
 	
+	
 	/**
 	 * Update all of the scene elements for one time step
 	 * TODO: multithreading?
@@ -152,8 +166,7 @@ public abstract class BSimScene {
 								
 		// Update the fields
 		if(fGoal != null) fGoal.updateField();
-		if(fQuorum != null) fQuorum.updateField();
-		
+		if(fQuorum != null) fQuorum.updateField();	
 	}
 	
 	
@@ -195,55 +208,69 @@ public abstract class BSimScene {
 	 * Skips the simulation forward a given number of frames. Intermediate frames still
 	 * have to be computed.
 	 */
-	public void advance(int frameSkip) {
-		
-		// Need to catch exceptions because sleep method is called
-		for(int i=0; i<frameSkip; i++){
-			//try{
-				// Check to see if playback state has changed
-//				if(playState == BSimScene.PAUSED) {
-//					// If paused wait on notifiable object (semaphore)
-//					simSem.waitOn();
-//				}
-				
-				// Wait the for the time-step
-				//Thread.sleep((int)(1000*dt));
-				
-				// Update all the elements in the scene for one time step
-				update();
-				
-				// Redraw the scene for this frame
-				if(BSimGUI.guiState()){
-					app.getGUI().getRenderer().redraw();
-					// All threads wait for the redraw (or we may get concurrent modification)
-					app.getRenderSem().waitOn();
-				}
-				
-				// Update the time-step
-				timeStep++;
+	public void advance(int numOfFrames) {
+		// Loop through the necessary frames and update positions of objects
+		for(int i=0; i<numOfFrames; i++){
+			// Update all the elements in the scene
 			
-			//} catch(InterruptedException error){};
-		}		
+			// pause the simulation update if state is paused.
+			// TODO: better to use semaphore to pause threads as this method is still using cpu
+			if(playState == BSimScene.PAUSED){
+				while(playState == BSimScene.PAUSED);
+			}
+			
+			update();
+			
+			if(BSimGUI.guiState()){
+				app.getGUI().getRenderer().redraw();
+				// All threads wait for the redraw (or we may get concurrent modification)
+				renderSem.waitOn();
+			}
+			
+			// Update the time-step
+			timeStep++;		
+		}
 	}
-	
 	
 	/**
 	 * The main thread loop. This handles the animation of the simulation using 
 	 * notifiable objects to ensure that when paused no additional processing
 	 * resources are used.
 	 */
-	//public void run(){
+	public void run(){
 		// Loop forever (until application closes)
-		//do{
-			
-		//}while(true);
-	//}
+		do{
+			// Need to catch exceptions because sleep method is called
+			try{	
+				// Check to see if playback state has changed
+				if(playState == BSimScene.PAUSED) {
+					// If paused wait on notifiable object (semaphore)
+					simSem.waitOn();
+				}
+				
+				// Wait the for the time-step
+				Thread.sleep((int)(1000*dt));
+				
+				// Update all the elements in the scene for one time step
+				update();
+				
+				// Redraw the scene for this frame
+				app.getGUI().getRenderer().redraw();
+				// All threads wait for the redraw (or we may get concurrent modification)
+				app.getRenderSem().waitOn();
+				
+				// Update the time-step
+				timeStep++;
+				
+			}
+			catch(InterruptedException error){};
+		}while(true);
+	}
 	
 	/**
 	 * Standard get methods for the class.
 	 */	
 	public static BSimApp getApp() { return app; }
-	public static void setApp(BSimApp newApp) { app = newApp; }
 	public static void runApp() { app.runApp(); }
 	
 	public Vector getBacteria (){ return bacteria; }	

@@ -77,8 +77,8 @@ public class BSimProcessingRenderer extends PApplet implements BSimRenderer {
 		scene = app.getScene();
 		
 		// PApplet parameters
-		widthInitial = BSimApp.screenWidth;
-		heightInitial = BSimApp.screenHeight;
+		widthInitial = BSimScene.screenWidth;
+		heightInitial = BSimScene.screenHeight;
 		maximumFPS = 100;
 		
 		// Camera specific parameters

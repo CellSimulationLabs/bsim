@@ -25,8 +25,6 @@ import bsim.scene.BSimScene;
 
 public class BSimToolbar extends JToolBar implements ActionListener{
 
-	//public final static int BSimToolbarWidth = 1025;
-	
 	// Other BSim references
 	private BSimApp app;
 	private BSimScene scene;
@@ -86,8 +84,6 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 		btnReset.setIcon(iconReset);
 		btnReset.addActionListener(this);
 
-		// TODO: A button to create a new display window?
-		// TODO: don't really need quite so many different buttons for setting directories etc. i.e. should just be 'take screenshot' for example
 		// Create a folder with the date & time: export_01_09_09_1244\screenshots, .\movies, .\data for example
 		btnSaveScreenshot = new JButton("Screenshot");
 		btnSaveScreenshot.setIcon(iconSaveScreenshot);
@@ -124,21 +120,13 @@ public class BSimToolbar extends JToolBar implements ActionListener{
 				
 		btnStartRecord.setEnabled(false);
 		btnEndRecord.setEnabled(false);
-	}
-	
-	
-	/**
-	 * Update the enabled property for GUI objects
-	 */
-	public void setEnabled(boolean enabled){
-		// Update the enabled property for all items on the toolbar
-		super.setEnabled(enabled);
-		btnPlayPause.setEnabled(enabled);
-		btnReset.setEnabled(enabled);		
-		btnSaveScreenshot.setEnabled(enabled);
-		btnSaveRecord.setEnabled(enabled);
+		btnPlayPause.setEnabled(true);
+		btnReset.setEnabled(false);		
+		btnSaveScreenshot.setEnabled(false);
+		btnSaveRecord.setEnabled(false);
 	}
 
+	
 	/**
 	 * Handle events for the toolbar.
 	 */
