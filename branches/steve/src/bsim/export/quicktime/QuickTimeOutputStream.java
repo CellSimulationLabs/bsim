@@ -1,3 +1,4 @@
+package bsim.export.quicktime;
 /**
  * @(#)QuickTimeOutputStream.java  1.0.1  2008-06-18
  *
@@ -11,9 +12,6 @@
  * Werner Randelshofer. For details see accompanying license terms. 
  */
 
-
-// Define the location of the class in the bsim package
-package bsim.export;
 
 import java.awt.image.BufferedImage;
 import java.io.*;

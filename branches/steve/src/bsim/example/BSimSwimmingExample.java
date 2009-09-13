@@ -1,15 +1,13 @@
 package bsim.example;
 
-import java.awt.Graphics;
+import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
-import processing.core.PGraphics;
 import processing.core.PGraphics3D;
 import bsim.BSim;
-import bsim.BSimDrawer;
 import bsim.BSimTicker;
-import bsim.export.BSimExporter;
+import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovieExporter;
@@ -22,16 +20,18 @@ public class BSimSwimmingExample {
 		/* Declare final to allow references from anonymous inner classes */  
 		final BSim sim = new BSim();		
 		sim.setDt(0.1);
-		sim.setSimulationTime(5);
+		sim.setSimulationTime(6);
+		sim.setTimeFormat("0.00");
 		
-		/* Add BSimParticles to the simulation */
-		BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50), 1, new Vector3d(1,1,1));
-		sim.addBacterium(bacterium);	
+		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
+		bacteria.add(new BSimBacterium(sim, new Vector3d(50,50,50), 1, new Vector3d(1,1,1)));
+		bacteria.add(new BSimBacterium(sim, new Vector3d(55,55,55), 1, new Vector3d(1,1,1)));
+		bacteria.add(new BSimBacterium(sim, new Vector3d(60,60,60), 1, new Vector3d(1,1,1)));
 				
 		/* Add a ticker that implements tick(), run each timestep to update particle properties */
 		sim.setTicker(new BSimTicker() {
 			public void tick() {
-				for(BSimBacterium b : sim.getBacteria()) {
+				for(BSimBacterium b : bacteria) {
 					b.action();		
 					b.updatePosition();
 				}
@@ -39,46 +39,43 @@ public class BSimSwimmingExample {
 		});
 		
 		/* Add a drawer that implements the draw(Graphics) method for drawing the scene to a graphics object */
-		sim.setDrawer(new BSimDrawer(200,200) {
-			public void draw(Graphics g) {
-				PGraphics p3d = new PGraphics3D();
-				p3d.setPrimary(true); 
-				p3d.setSize(width, height);
-				p3d.beginDraw();
-
-				p3d.sphereDetail(10);
-				p3d.noStroke();		
-				p3d.background(0, 0, 0);
-					
-				for(BSimBacterium b : sim.getBacteria()) {
+		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
+			public void particles(PGraphics3D p3d) {	
+				for(BSimBacterium b : bacteria) {
 					p3d.translate((float)b.getPosition().x, (float)b.getPosition().y, (float)b.getPosition().z);
 					p3d.fill(255, 0, 0);		
 					p3d.sphere((float)b.getRadius());
 				}
-
-				p3d.endDraw();		
-				g.drawImage(p3d.image, 0,0, null);
 			}
 		});
 											
-		/* Add some concrete predefined exporters */ 		 
-		sim.addExporter(new BSimMovieExporter(sim, "results/BSim.mov"));		
-		sim.addExporter(new BSimImageExporter(sim, "results"));			
-		/* BSimLogger is an abstract BSimExporter requires the implementation of before() and during() 
+		/* Add some exporters */
+		BSimMovieExporter movieExporter = new BSimMovieExporter(sim, "results/BSim.mov");
+		movieExporter.setSpeed(2);
+		sim.addExporter(movieExporter);			
+		
+		BSimImageExporter imageExporter = new BSimImageExporter(sim, "results");
+		imageExporter.setDt(0.5);
+		sim.addExporter(imageExporter);			
+		
+		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */
-		sim.addExporter(new BSimLogger(sim, "results/BSim.log") {
+		BSimLogger logger = new BSimLogger(sim, "results/BSim.log") {
 			public void before() {
+				super.before();
 				write("Let's go!"); 
 			}
 			public void during() {
 				String o = "";
-				for (BSimBacterium b : sim.getBacteria())
+				for (BSimBacterium b : bacteria)
 					o += sim.getTime() + " " + b.getPosition() + " " + b.getMotionState();
 				write(o);
 			}
-		});			
-		/* Add your own exporters like sim.addExporter(new BSimExporter(sim) {}); */
+		};
+//		sim.addExporter(logger);
 		
+		/* Add your own exporters by extending BSimExporter like
+		 * BSimExporter e = new BSimExporter(){}; */		
 				
 		/* sim.preview() to preview the scene, sim.export() to set exporters working */
 		sim.preview();	

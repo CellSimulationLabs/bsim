@@ -1,35 +1,35 @@
 package bsim;
 
-import java.awt.Frame;
 import java.awt.Graphics;
+import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 
-import bsim.export.BSimExporter;
 import bsim.particle.BSimBacterium;
 
 public class BSim {
 
-	private double t;
+	private int ticks;
 	private double dt;
 	private double simulationTime;	
+	private String timeFormat;
 	private BSimTicker ticker;
 	private BSimDrawer drawer;
 	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();
-	private Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();	
 
-	public double getTime() { return t; }
-	public double getDt() { return dt; }
-	public Vector<BSimBacterium> getBacteria() { return bacteria; }
-
-	public void setDt(double d) { dt = d; }
+	public void setDt(double d) { dt = d; }	
 	public void setSimulationTime(double d) { simulationTime = d; }
+	public void setTimeFormat(String s) { timeFormat = s; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
 	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}	
 	public void addExporter(BSimExporter e) { exporters.add(e); }
-	public void addBacterium(BSimBacterium b) { bacteria.add(b); }
+	
+	public double getDt() { return dt; }
 
+	/**
+	 * Runs the simulation in a frame until the frame is closed. Ignores exporters. 
+	 */
 	public void preview() {
 		JFrame frame = new JFrame() {
 			public void paint(Graphics g) {
@@ -48,17 +48,26 @@ public class BSim {
 		}
 	}
 	
+	/**
+	 * Runs and exports the simulation
+	 */
 	public void export() {						
 		for(BSimExporter exporter : exporters) exporter.before();		
 
-		for(t = 0; t <= simulationTime; t = t + dt) {
+		// Use integer ticks than double time to avoid rouding issues
+		for(ticks = 0; ticks <= ticksIn(simulationTime); ticks++) {			
 			ticker.tick();	
-			for(BSimExporter exporter : exporters) exporter.during();
+			System.out.println(getTime());
+			for(BSimExporter exporter : exporters)
+				if(ticks % ticksIn(exporter.getDt()) == 0) exporter.during();
 		}		
 
 		for(BSimExporter exporter : exporters) exporter.after();			
 	}	
 
+	/**
+	 * Uses the drawer to draw to the graphics object g
+	 */
 	public void draw(Graphics g) {
 		drawer.draw(g);
 	}
@@ -69,6 +78,21 @@ public class BSim {
 	
 	public int getHeight() {
 		return drawer.getHeight();	
+	}
+	
+	/**
+	 * Returns the number of ticks in the duration d
+	 */
+	private int ticksIn(double d) {
+		return (int)(d/dt);
+	}	
+	
+	/**
+	 * Returns the simulation time formatted according to timeFormat
+	 */
+	public String getTime() {
+	    DecimalFormat df = new DecimalFormat(timeFormat);
+	    return df.format(ticks*dt);
 	}
 
 }

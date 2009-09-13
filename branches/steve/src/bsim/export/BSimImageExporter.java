@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import bsim.BSim;
+import bsim.BSimExporter;
 
 public class BSimImageExporter extends BSimExporter {
 

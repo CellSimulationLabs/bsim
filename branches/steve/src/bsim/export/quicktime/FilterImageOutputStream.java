@@ -1,3 +1,4 @@
+package bsim.export.quicktime;
 /**
  * @(#)FilterImageOutputStream.java  1.0  15.06.2008
  *
@@ -11,9 +12,6 @@
  * Werner Randelshofer. For details see accompanying license terms. 
  */
 
-
-// Define the location of the class in the bsim package
-package bsim.export;
 
 import java.io.*;
 import javax.imageio.stream.ImageOutputStream;

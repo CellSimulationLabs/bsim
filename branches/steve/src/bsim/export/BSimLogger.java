@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import bsim.BSim;
+import bsim.BSimExporter;
 
 public abstract class BSimLogger extends BSimExporter {
 	
@@ -17,17 +18,16 @@ public abstract class BSimLogger extends BSimExporter {
 		this.filename = filename;
 	}
 	
-	public void write(String text) {
-		
-		if(bufferedWriter == null) {
-			try{
-				bufferedWriter = new BufferedWriter(new FileWriter(new File(filename)));
-			}
-			catch(IOException e){ 
-				e.printStackTrace();
-			} 
+	public void before() {
+		try {
+			bufferedWriter = new BufferedWriter(new FileWriter(new File(filename)));
 		}
-		
+		catch(IOException e){ 
+			e.printStackTrace();
+		} 
+	}
+	
+	public void write(String text) {		
 		try {			
 			bufferedWriter.write(text);
 			bufferedWriter.newLine();

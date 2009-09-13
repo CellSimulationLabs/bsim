@@ -6,22 +6,33 @@ import java.io.File;
 import java.io.IOException;
 
 import bsim.BSim;
+import bsim.BSimExporter;
+import bsim.export.quicktime.QuickTimeOutputStream;
 
 public class BSimMovieExporter extends BSimExporter {
 
 	private QuickTimeOutputStream outputStream;
 	private String filename;
+	private int speed = 1;
 
 	public BSimMovieExporter(BSim sim, String filename) {
 		super(sim);
 		this.filename = filename;		
 	}
 	
+	/**
+	 * Speeds up the movie relative to simulation time by a factor f, that is,
+	 * 1 second in the simulation will last 1/f seconds in the movie
+	 */
+	public void setSpeed(int f) {
+		speed = f;		
+	}
+	
 	public void before() {		
 		try {
 			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);
 			outputStream.setVideoCompressionQuality(1f);
-			outputStream.setTimeScale(30);
+			outputStream.setTimeScale(speed*(int)(1/sim.getDt()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			

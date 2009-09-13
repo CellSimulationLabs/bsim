@@ -4,10 +4,12 @@ import java.awt.Graphics;
 
 public abstract class BSimDrawer {
 	
+	protected BSim sim;
 	protected int width;
-	protected int height;
+	protected int height;	
 	
-	public BSimDrawer(int width, int height) {
+	public BSimDrawer(BSim sim, int width, int height) {
+		this.sim = sim;
 		this.width = width;
 		this.height = height;
 	}
