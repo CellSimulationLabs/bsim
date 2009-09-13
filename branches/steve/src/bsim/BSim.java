@@ -25,8 +25,8 @@ public class BSim {
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTimeFormat(String s) { timeFormat = s; }
 	public void setBound(Vector3d b) { bound = b;	}
-	public void setVisc(final double v) { visc = v; }
-	public void setTemperature(final double t) { temperature = t; }
+	public void setVisc(double v) { visc = v; }
+	public void setTemperature(double t) { temperature = t; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
 	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
 	public void addExporter(BSimExporter e) { exporters.add(e); }
