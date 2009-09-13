@@ -24,7 +24,7 @@ public class BSimSwimmingExample {
 		 * 	BSim#setSimulatonTime()
 		 * 	BSim#setTimeFormat()
 		 * 	BSim#setBound()
-		 * 	BSim#setVisc() defaults to 1e-3
+		 * 	BSim#setVisc() defaults to 1e-3 Pa s
 		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
@@ -34,12 +34,14 @@ public class BSimSwimmingExample {
 		
 		/*
 		 * Step 2: Create BSimParticles marked final
-		 */
+		 */		
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
-		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
-		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
-		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
-				
+		
+		while(bacteria.size() < 100) {		
+			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z), new Vector3d(Math.random(),Math.random(),Math.random()));
+			if(!b.intersection(bacteria)) bacteria.add(b);		
+		}
+						
 		/* 
 		 * Step 3: Implement tick() on a BSimTicker and add the ticker to the simulation	  
 		 */
@@ -56,10 +58,10 @@ public class BSimSwimmingExample {
 		 * Step 4: Implement draw(Graphics) on a BSimDrawer and add the drawer to the simulation 
 		 * 
 		 * Here we use the BSimP3DDrawer which has already implemented draw(Graphics) to draw boundaries
-		 * and a clock but still requires the implementation of particles(PGraphics3D) to draw particles 
+		 * and a clock but still requires the implementation of draw(PGraphics3D) to draw particles 
 		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
-			public void particles(PGraphics3D p3d) {				
+			public void draw(PGraphics3D p3d) {				
 				for(BSimBacterium b : bacteria) {
 					p3d.pushMatrix();					
 					Vector3d position = b.getPosition();
@@ -81,7 +83,6 @@ public class BSimSwimmingExample {
 		 * 	BSimMovieExporter#setSpeed()
 		 */			
 		BSimMovieExporter movieExporter = new BSimMovieExporter(sim, "results/BSim.mov");
-		movieExporter.setDt(0.1);
 		movieExporter.setSpeed(5);
 		sim.addExporter(movieExporter);			
 		

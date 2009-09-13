@@ -4,7 +4,11 @@ import java.util.Random;
 
 public class BSimUtils {
 
-
+	public static void main(String[] args) {
+		for(int i = 0; i < 1000; i ++)
+			System.out.println(sampleGamma(4,18));
+	}
+	
 	/*
 	 * http://vyshemirsky.blogspot.com/2007/11/sample-from-gamma-distribution-in-java.html
 	 */

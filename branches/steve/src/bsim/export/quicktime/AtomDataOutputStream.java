@@ -13,7 +13,10 @@ package bsim.export.quicktime;
  */
 
 
-import java.io.*;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 

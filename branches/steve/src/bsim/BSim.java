@@ -7,12 +7,9 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.vecmath.Vector3d;
 
-import bsim.particle.BSimBacterium;
-import bsim.particle.BSimParticle;
-
 public class BSim {
 
-	private int ticks;
+	private int timestep;
 	private double dt;
 	private double simulationTime;
 	private String timeFormat;
@@ -37,7 +34,7 @@ public class BSim {
 	public double getVisc() { return visc; }
 
 	/**
-	 * Runs the simulation in a frame until the frame is closed. Ignores exporters. 
+	 * Runs the simulation in a frame until the frame is closed, ignoring exporters. 
 	 */
 	public void preview() {
 		JFrame frame = new JFrame() {
@@ -49,10 +46,10 @@ public class BSim {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		ticks = 0;
+		timestep = 0;
 		while(true) {
 			ticker.tick();	
-			ticks++;
+			timestep++;
 			frame.repaint();
 			// http://www.ryerson.ca/~dgrimsha/courses/cps840/repaint.html
 			try { Thread.sleep((long) (1000*dt)); } catch (InterruptedException e) {}
@@ -65,12 +62,12 @@ public class BSim {
 	public void export() {						
 		for(BSimExporter exporter : exporters) exporter.before();		
 
-		// Use integer ticks than double time to avoid rouding issues
-		for(ticks = 0; ticks <= ticksIn(simulationTime); ticks++) {			
+		// Increment integer timesteps than adding to double time to avoid rouding issues
+		for(timestep = 0; timestep <= timesteps(simulationTime); timestep++) {			
 			ticker.tick();	
 			System.out.println(getTime());
 			for(BSimExporter exporter : exporters)
-				if(ticks % ticksIn(exporter.getDt()) == 0) exporter.during();
+				if(timestep % timesteps(exporter.getDt()) == 0) exporter.during();
 		}		
 
 		for(BSimExporter exporter : exporters) exporter.after();			
@@ -86,15 +83,15 @@ public class BSim {
 	public int getWidth() {
 		return drawer.getWidth();
 	}
-	
+
 	public int getHeight() {
 		return drawer.getHeight();	
 	}
 		
 	/**
-	 * Returns the number of ticks in the duration d
+	 * Returns the number of timesteps in the duration d
 	 */
-	private int ticksIn(double d) {
+	private int timesteps(double d) {
 		return (int)(d/dt);
 	}	
 	
@@ -103,7 +100,7 @@ public class BSim {
 	 */
 	public String getTime() {
 	    DecimalFormat df = new DecimalFormat(timeFormat);
-	    return df.format(ticks*dt);
+	    return df.format(timestep*dt);
 	}
 
 }

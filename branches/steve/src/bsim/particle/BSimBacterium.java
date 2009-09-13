@@ -14,7 +14,7 @@ public class BSimBacterium extends BSimParticle {
 	private static int TUMBLING = 2;	
 	private int motionState = RUNNING; // RUNNING or TUMBLING
 	private Vector3d direction;
-	
+			
 	// Probability of switching state in t -> t+dt = lambda(state)*dt
 	private double lambdaRun = 1/0.86; // 1/s
 	private double lambdaTumble = 1/0.14; // 1/s
@@ -24,8 +24,8 @@ public class BSimBacterium extends BSimParticle {
 	private double tumbleScale = 18.32;
 	private double tumbleLocation = -4.60;
 	
-	public BSimBacterium(BSim sim, Vector3d position, double radius, Vector3d direction) {
-		super(sim, position, radius);	
+	public BSimBacterium(BSim sim, Vector3d position, Vector3d direction) {
+		super(sim, position, 0.7);	// default radius 0.7 microns
 		setDirection(direction);
 	}
 	
@@ -33,7 +33,7 @@ public class BSimBacterium extends BSimParticle {
 		d.normalize();
 		direction = d;
 	}
-	
+		
 	public String getMotionState() {
 		if (motionState == RUNNING) return "RUNNING";
 		else return "TUMBLING"; //(motionState == TUMBLING)
@@ -57,8 +57,8 @@ public class BSimBacterium extends BSimParticle {
 	protected void run() {				
 		Vector3d f = new Vector3d();		
 		f.scale(motorForce, direction);
-		addForce(f);
-		direction.set(getForce());
+		force.add(f);
+		direction.set(force);
 		direction.normalize();	
 	}
 
@@ -81,8 +81,6 @@ public class BSimBacterium extends BSimParticle {
 		// Apply the rotation			
 		r.transform(direction);			
 	}
-
-	public Vector3d getDirection() { return direction; }
-
+	
 
 }

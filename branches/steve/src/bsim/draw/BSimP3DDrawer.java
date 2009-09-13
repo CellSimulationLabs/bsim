@@ -42,7 +42,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.camera((float)bound.x, (float)bound.y, (float)bound.z*2, (float)boundCentre.x, (float)boundCentre.y, (float)boundCentre.z, 0, 1, 0);
 		p3d.endCamera();
 			
-		particles(p3d);
+		draw(p3d);
 		
 		p3d.fill(128, 128, 255, 25);
 		p3d.stroke(255);
@@ -60,8 +60,8 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 	
 	/**
-	 * Draws particles to a PGraphics3D object
+	 * Draws remaining scene objects to the PGraphics3D object
 	 */
-	public abstract void particles(PGraphics3D p3d);
+	public abstract void draw(PGraphics3D p3d);
 
 }

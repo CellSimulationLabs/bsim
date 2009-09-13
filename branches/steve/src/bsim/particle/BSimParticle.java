@@ -1,14 +1,16 @@
 package bsim.particle;
 
+import java.util.Vector;
+
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
 
 public abstract class BSimParticle {	
 		
-	private Vector3d position ; // microns		
-	private Vector3d force = new Vector3d(); // piconewtons	
-	private double radius; // microns	
+	protected Vector3d position ; // microns		
+	protected Vector3d force = new Vector3d(); // piconewtons	
+	protected double radius; // microns	
 	protected BSim sim; // the environment that the particle exists in	
 		
 	public BSimParticle(BSim sim, Vector3d position, double radius) {	
@@ -39,24 +41,34 @@ public abstract class BSimParticle {
 		if(position.z < 0) zBelow();
 	}
 		
-	public void setPosition(Vector3d p) { position = p; }
-	
 	public Vector3d getPosition() { return position; }	
-	public Vector3d getForce() { return force; }	
 	public double getRadius() { return radius; }	
 	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
-			
+
+	/**
+	 * Distance between particle centres (always positive)
+	 */
 	public double distance(BSimParticle p) {
 		Vector3d d = new Vector3d();
         d.sub(this.position, p.position);
         return d.length();
 	}
 	
+	/**
+	 * Distance between particle edges (can be negative)
+	 */
 	public double outerDistance(BSimParticle p) {
 		return this.distance(p) - (this.radius + p.radius);
+	}		
+	
+	/**
+	 * Tests if this particle is intersecting with any in the vector
+	 */
+	public boolean intersection(Vector particles) {
+		for(BSimParticle p : (Vector<BSimParticle>)particles)
+			if (outerDistance(p) < 0) return true;	
+		return false;
 	}	
-		
-	public void addForce(Vector3d f) { force.add(f); }
         	
     /**
      * Applies a force on this of magnitude m towards this,
@@ -67,28 +79,37 @@ public abstract class BSimParticle {
 		f.sub(this.position, p.position);			
 		f.normalize();
 		f.scale(m);
-		this.addForce(f);
+		this.force.add(f);
 		f.negate();
-		p.addForce(f);
+		p.force.add(f);
 	}
 	
-	public void xAbove() { position.x = bounceAbove(position.x,sim.getBound().x); }
-	public void xBelow() { position.x = bounceBelow(position.x,sim.getBound().x); }
-	public void yAbove() { position.y = bounceAbove(position.y,sim.getBound().y); }
-	public void yBelow() { position.y = bounceBelow(position.y,sim.getBound().y); }
-	public void zAbove() { position.z = bounceAbove(position.z,sim.getBound().z); }
-	public void zBelow() { position.z = bounceBelow(position.z,sim.getBound().z); }	
+	/*
+	 * Called when the particle goes above or below the bounds of the simulation.
+	 * Overwrite these methods if you want different behaviour; you can use the 
+	 * bounce...() methods below for solid boundaries
+	 */	
+	public void xAbove() { position.x = wrapAbove(position.x,sim.getBound().x); }
+	public void xBelow() { position.x = wrapBelow(position.x,sim.getBound().x); }
+	public void yAbove() { position.y = wrapAbove(position.y,sim.getBound().y); }
+	public void yBelow() { position.y = wrapBelow(position.y,sim.getBound().y); }
+	public void zAbove() { position.z = wrapAbove(position.z,sim.getBound().z); }
+	public void zBelow() { position.z = wrapBelow(position.z,sim.getBound().z); }	
 	
-	private double wrapAbove(double coord, double edge) {
+	/*
+	 * Methods returning the appropriate coordinate for wrapping/bouncing a particle 
+	 * that has gone above/below a bound 
+	 */
+	protected double wrapAbove(double coord, double edge) {
 		return coord - edge;		
 	}
-	private double wrapBelow(double coord, double edge) {
+	protected double wrapBelow(double coord, double edge) {
 		return coord + edge;		
 	}
-	private double bounceAbove(double coord, double edge) {
+	protected double bounceAbove(double coord, double edge) {
 		return coord - 2*(coord - edge);	
 	}
-	private double bounceBelow(double coord, double edge) {
+	protected double bounceBelow(double coord, double edge) {
 		return coord + 2*-coord;		
 	}
 	

@@ -13,7 +13,9 @@ package bsim.export.quicktime;
  */
 
 
-import java.io.*;
+import java.io.FilterOutputStream;
+import java.io.IOException;
+
 import javax.imageio.stream.ImageOutputStream;
 
 /**
