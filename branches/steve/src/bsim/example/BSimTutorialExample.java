@@ -13,7 +13,7 @@ import bsim.export.BSimLogger;
 import bsim.export.BSimMovieExporter;
 import bsim.particle.BSimBacterium;
 
-public class BSimSwimmingExample {
+public class BSimTutorialExample {
 
 	public static void main(String[] args) {
 
@@ -98,7 +98,7 @@ public class BSimSwimmingExample {
 		});				
 
 		/* 
-		 * Step 6: Implement before(), during() and after() on BSimExporters and add them to the simulation
+		 * Step 5: Implement before(), during() and after() on BSimExporters and add them to the simulation
 		 * Available setters:
 		 * 	BSimExporter#setDt(Double)
 		 * 
@@ -139,7 +139,7 @@ public class BSimSwimmingExample {
 		/* Add your own exporters by extending BSimExporter like
 		 * BSimExporter e = new BSimExporter(){}; */		
 
-		/* Step 7: Call sim.preview() to preview the scene or sim.export() to set exporters working */
+		/* Step 6: Call sim.preview() to preview the scene or sim.export() to set exporters working */
 		sim.preview();
 
 	}
