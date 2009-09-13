@@ -14,9 +14,9 @@ import bsim.export.BSimMovieExporter;
 import bsim.particle.BSimBacterium;
 
 public class BSimSwimmingExample {
-	
+
 	public static void main(String[] args) {
-		
+
 		/*
 		 * Step 1: Create a new simulation object
 		 * Available setters:
@@ -28,31 +28,50 @@ public class BSimSwimmingExample {
 		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
-		sim.setSimulationTime(0.5);
+		sim.setSimulationTime(100);
 		sim.setTimeFormat("0.00");
 		sim.setBound(new Vector3d(100,100,100));
-		
+
 		/*
-		 * Step 2: Create BSimParticles marked final
-		 */		
-		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
-		while(bacteria.size() < 100) {		
-			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z), new Vector3d(Math.random(),Math.random(),Math.random()));
+		 * Step 2: Create BSimParticles, marked final
+		 * Let's extend a BSimBacterium to add a simple interaction
+		 */				
+		class BSimCollidingBacterium extends BSimBacterium {
+			boolean collision = false;	
+
+			public BSimCollidingBacterium(BSim sim, Vector3d position, Vector3d direction) {
+				super(sim, position, direction);
+			}
+
+			public void interaction(BSimCollidingBacterium b) {
+				if(outerDistance(b) < 0) {
+					collision = true;
+					b.collision = true;
+				}
+			}	
+		}		
+		final Vector<BSimCollidingBacterium> bacteria = new Vector<BSimCollidingBacterium>();		
+		while(bacteria.size() < 20) {		
+			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z), new Vector3d(Math.random(),Math.random(),Math.random()));
 			if(!b.intersection(bacteria)) bacteria.add(b);		
 		}
-						
+
 		/* 
 		 * Step 3: Implement tick() on a BSimTicker and add the ticker to the simulation	  
 		 */
 		sim.setTicker(new BSimTicker() {
 			public void tick() {
-				for(BSimBacterium b : bacteria) {
+				for(int i = 1; i < bacteria.size(); i++)
+					for(int j = i+1; j < bacteria.size(); j++)
+						bacteria.get(i).interaction(bacteria.get(j));
+
+				for(BSimCollidingBacterium b : bacteria) {
 					b.action();		
 					b.updatePosition();
 				}
 			}		
 		});
-		
+
 		/* 
 		 * Step 4: Implement draw(Graphics) on a BSimDrawer and add the drawer to the simulation 
 		 * 
@@ -61,17 +80,20 @@ public class BSimSwimmingExample {
 		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			public void draw(PGraphics3D p3d) {							
-				for(BSimBacterium b : bacteria) {
+				for(BSimCollidingBacterium b : bacteria) {
 					p3d.pushMatrix();					
 					Vector3d position = b.getPosition();
 					p3d.translate((float)position.x, (float)position.y, (float)position.z);
-					p3d.fill(0,255,0);		
+					if(b.collision)
+						p3d.fill(255,0,0);
+					else
+						p3d.fill(0,255,0);
 					p3d.sphere((float)b.getRadius());
 					p3d.popMatrix();
 				}			
 			}
 		});				
-											
+
 		/* 
 		 * Step 6: Implement before(), during() and after() on BSimExporters and add them to the simulation
 		 * Available setters:
@@ -83,36 +105,41 @@ public class BSimSwimmingExample {
 		 * 	BSimMovieExporter#setSpeed()
 		 */			
 		BSimMovieExporter movieExporter = new BSimMovieExporter(sim, "results/BSim.mov");
-		movieExporter.setSpeed(5);
-//		sim.addExporter(movieExporter);			
-		
+		movieExporter.setSpeed(2);
+		sim.addExporter(movieExporter);			
+
 		/* BSimImageExporter is another concrete BSimExporter for creating images 
 		 * Uses the drawer defined above */
 		BSimImageExporter imageExporter = new BSimImageExporter(sim, "results");
 		imageExporter.setDt(0.5);
-//		sim.addExporter(imageExporter);			
-		
+		sim.addExporter(imageExporter);			
+
 		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */
 		BSimLogger logger = new BSimLogger(sim, "results/BSim.log") {
 			public void before() {
 				super.before();
-				write("Let's go!"); 
+				write("time,collisions"); 
 			}
 			public void during() {
-				String o = "";
-				for (BSimBacterium b : bacteria)
-					o += sim.getTime() + " " + b.getPosition() + " " + b.getMotionState();
-				write(o);
+				String o = sim.getTime();
+				int collisions = 0;
+				for (BSimCollidingBacterium b : bacteria)
+					if(b.collision) collisions++;
+				write(o+","+collisions);
 			}
 		};
-//		sim.addExporter(logger);
-		
+		sim.addExporter(logger);
+
 		/* Add your own exporters by extending BSimExporter like
 		 * BSimExporter e = new BSimExporter(){}; */		
-				
+
 		/* Step 7: Call sim.preview() to preview the scene or sim.export() to set exporters working */
 		sim.preview();
-		
+
 	}
+
+
+
+
 }
