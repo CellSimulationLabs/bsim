@@ -31,6 +31,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		font = new PFont(PFont.findFont("Trebuchet MS").deriveFont((float)20), true, PFont.DEFAULT_CHARSET);
 	}
 
+	@Override
 	public void draw(Graphics g) {			
 		p3d.beginDraw();
 		

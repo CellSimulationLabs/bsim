@@ -28,6 +28,7 @@ public class BSimMovieExporter extends BSimExporter {
 		speed = f;		
 	}
 	
+	@Override
 	public void before() {		
 		try {
 			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);
@@ -38,6 +39,7 @@ public class BSimMovieExporter extends BSimExporter {
 		}			
 	}
 	
+	@Override
 	public void during() {			
 		BufferedImage img = new BufferedImage(sim.getWidth(), sim.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics g = img.createGraphics();
@@ -50,6 +52,7 @@ public class BSimMovieExporter extends BSimExporter {
 		}
 	}
 	
+	@Override
 	public void after() {
 		try {
 			outputStream.close();

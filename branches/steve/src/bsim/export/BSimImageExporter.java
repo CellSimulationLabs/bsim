@@ -19,8 +19,10 @@ public class BSimImageExporter extends BSimExporter {
 		this.directory = directory;
 	}
 	
+	@Override
 	public void before() {}
 	
+	@Override
 	public void during() {				
 		BufferedImage img = new BufferedImage(sim.getWidth(), sim.getHeight(), BufferedImage.TYPE_INT_RGB);
 		Graphics g = img.createGraphics();				
@@ -35,6 +37,7 @@ public class BSimImageExporter extends BSimExporter {
 
 	}
 	
+	@Override
 	public void after() {}
 
 }

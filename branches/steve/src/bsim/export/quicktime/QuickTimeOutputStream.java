@@ -207,7 +207,8 @@ public class QuickTimeOutputStream {
          * and disposes of all resources held by the atom.
          * @throws java.io.IOException
          */
-        public void finish() throws IOException {
+        @Override
+		public void finish() throws IOException {
             if (!finished) {
                 if (size() > 0xffffffffL) {
                     throw new IOException("CompositeAtom \"" + type + "\" is too large: " + size());
@@ -227,7 +228,8 @@ public class QuickTimeOutputStream {
             }
         }
 
-        public long size() {
+        @Override
+		public long size() {
             long length = 8;
             for (Atom child : children) {
                 length += child.size();

@@ -18,6 +18,7 @@ public abstract class BSimLogger extends BSimExporter {
 		this.filename = filename;
 	}
 	
+	@Override
 	public void before() {
 		try {
 			bufferedWriter = new BufferedWriter(new FileWriter(new File(filename)));
@@ -36,6 +37,7 @@ public abstract class BSimLogger extends BSimExporter {
 		}		
 	}	
 	
+	@Override
 	public void after(){
 		try {
 			bufferedWriter.close();

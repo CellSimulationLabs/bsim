@@ -4,12 +4,13 @@ import java.util.Random;
 
 public class BSimUtils {
 	
+	private static Random rng = new Random();
+	
 	/*
+	 * Sample from a gamma distribution
 	 * http://vyshemirsky.blogspot.com/2007/11/sample-from-gamma-distribution-in-java.html
 	 */
 	public static double sampleGamma(double k, double theta) {
-		Random rng = new Random();
-
 		boolean accept = false;
 		if (k < 1) {
 			// Weibull algorithm

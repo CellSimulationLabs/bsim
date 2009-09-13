@@ -19,6 +19,12 @@ public abstract class BSimParticle {
 		this.radius = radius;
 	}	
 	
+	public void setRadius(double r) { radius = r; } 
+	
+	public Vector3d getPosition() { return position; }	
+	public double getRadius() { return radius; }	
+	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
+	
 	/**
 	 * Actions independent of other obstacles: flagellar forces, adding chemicals, etc
 	 */		
@@ -40,10 +46,6 @@ public abstract class BSimParticle {
 		if(position.z > sim.getBound().z) zAbove();
 		if(position.z < 0) zBelow();
 	}
-		
-	public Vector3d getPosition() { return position; }	
-	public double getRadius() { return radius; }	
-	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
 
 	/**
 	 * Distance between particle centres (always positive)

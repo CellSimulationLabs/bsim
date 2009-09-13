@@ -40,6 +40,7 @@ public class BSimBacterium extends BSimParticle {
 	}		
 	
 		
+	@Override
 	public void action() {			
 		if(motionState == RUNNING) {
 			if(Math.random() < lambdaRun*sim.getDt())

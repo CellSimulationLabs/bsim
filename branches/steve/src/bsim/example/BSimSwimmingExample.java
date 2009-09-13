@@ -33,8 +33,8 @@ public class BSimSwimmingExample {
 		sim.setBound(new Vector3d(100,100,100));
 
 		/*
-		 * Step 2: Create BSimParticles, marked final
-		 * Let's extend a BSimBacterium to add a simple interaction
+		 * Step 2: Extend BSimParticle as required and create vectors marked final
+		 * As an example let's make bacteria that turn red upon colliding
 		 */				
 		class BSimCollidingBacterium extends BSimBacterium {
 			boolean collision = false;	
@@ -60,6 +60,7 @@ public class BSimSwimmingExample {
 		 * Step 3: Implement tick() on a BSimTicker and add the ticker to the simulation	  
 		 */
 		sim.setTicker(new BSimTicker() {
+			@Override
 			public void tick() {
 				for(int i = 1; i < bacteria.size(); i++)
 					for(int j = i+1; j < bacteria.size(); j++)
@@ -79,15 +80,16 @@ public class BSimSwimmingExample {
 		 * and a clock but still requires the implementation of draw(PGraphics3D) to draw particles 
 		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
+			@Override
 			public void draw(PGraphics3D p3d) {							
 				for(BSimCollidingBacterium b : bacteria) {
 					p3d.pushMatrix();					
 					Vector3d position = b.getPosition();
 					p3d.translate((float)position.x, (float)position.y, (float)position.z);
-					if(b.collision)
-						p3d.fill(255,0,0);
+					if(!b.collision)
+						p3d.fill(0,255,0); // green
 					else
-						p3d.fill(0,255,0);
+						p3d.fill(255,0,0); // red!
 					p3d.sphere((float)b.getRadius());
 					p3d.popMatrix();
 				}			
@@ -117,10 +119,12 @@ public class BSimSwimmingExample {
 		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */
 		BSimLogger logger = new BSimLogger(sim, "results/BSim.log") {
+			@Override
 			public void before() {
 				super.before();
 				write("time,collisions"); 
 			}
+			@Override
 			public void during() {
 				String o = sim.getTime();
 				int collisions = 0;

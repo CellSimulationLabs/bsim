@@ -8,23 +8,25 @@ import javax.swing.JFrame;
 import javax.vecmath.Vector3d;
 
 public class BSim {
+	
+	public static double BOLTZMANN = 1.38 * Math.pow(10,-23);
 
-	private int timestep;
 	private double dt;
 	private double simulationTime;
 	private String timeFormat;
 	private Vector3d bound;
 	private double visc = 1e-3; // Pa s
+	private double temperature = 300; // K
 	private BSimTicker ticker;
 	private BSimDrawer drawer;
 	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();
-
 
 	public void setDt(double d) { dt = d; }	
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTimeFormat(String s) { timeFormat = s; }
 	public void setBound(Vector3d b) { bound = b;	}
 	public void setVisc(double v) { visc = v; }
+	public void setTemperature(double t) { temperature = t; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
 	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
 	public void addExporter(BSimExporter e) { exporters.add(e); }
@@ -32,18 +34,23 @@ public class BSim {
 	public double getDt() { return dt; }
 	public Vector3d getBound() { return bound; }
 	public double getVisc() { return visc; }
+	public double getTemperature() { return temperature; }
+	
+	private int timestep;
 
 	/**
 	 * Runs the simulation in a frame until the frame is closed, ignoring exporters. 
 	 */
 	public void preview() {
 		JFrame frame = new JFrame("BSim Preview") {
+			@Override
 			public void paint(Graphics g) {
 				draw(g);
 			}
 		};
 		frame.setSize(getWidth(), getHeight());
 		frame.setResizable(false);
+		/* TODO frame.addMouseListener(drawer) */
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
