@@ -25,6 +25,7 @@ public class BSimSwimmingExample {
 		 * 	BSim#setTimeFormat()
 		 * 	BSim#setBound()
 		 * 	BSim#setVisc() defaults to 1e-3 Pa s
+		 * 	BSim#setTemperature() defaults to 300 K
 		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
