@@ -82,5 +82,7 @@ public class BSimBacterium extends BSimParticle {
 		r.transform(direction);			
 	}
 
+	public Vector3d getDirection() { return direction; }
+
 
 }

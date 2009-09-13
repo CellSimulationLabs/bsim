@@ -5,12 +5,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import bsim.BSim;
+
 public abstract class BSimLogger extends BSimExporter {
 	
 	private BufferedWriter bufferedWriter;
 	private String filename;
 	
-	public BSimLogger(String filename) {				
+	public BSimLogger(BSim sim, String filename) {
+		super(sim);
 		this.filename = filename;
 	}
 	
@@ -33,7 +36,7 @@ public abstract class BSimLogger extends BSimExporter {
 		}		
 	}	
 	
-	public void finishExport(){
+	public void after(){
 		try {
 			bufferedWriter.close();
 		} catch (IOException e) {

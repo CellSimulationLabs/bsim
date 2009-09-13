@@ -36,7 +36,7 @@ public class BSim {
 				draw(g);
 			}
 		};
-		frame.setSize(drawer.getWidth(), drawer.getHeight());
+		frame.setSize(getWidth(), getHeight());
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -49,18 +49,26 @@ public class BSim {
 	}
 	
 	public void export() {						
-		for(BSimExporter exporter : exporters) exporter.beginExport();		
+		for(BSimExporter exporter : exporters) exporter.before();		
 
 		for(t = 0; t <= simulationTime; t = t + dt) {
 			ticker.tick();	
-			for(BSimExporter exporter : exporters) exporter.exportFrame();
+			for(BSimExporter exporter : exporters) exporter.during();
 		}		
 
-		for(BSimExporter exporter : exporters) exporter.finishExport();			
+		for(BSimExporter exporter : exporters) exporter.after();			
 	}	
 
 	public void draw(Graphics g) {
 		drawer.draw(g);
+	}
+	
+	public int getWidth() {
+		return drawer.getWidth();
+	}
+	
+	public int getHeight() {
+		return drawer.getHeight();	
 	}
 
 }
