@@ -22,13 +22,16 @@ public class BSimSwimmingExample {
 	
 	public static void main(String[] args) {
 		
+		/* Declare final to allow references from anonymous inner classes */  
 		final BSim sim = new BSim();		
 		sim.setDt(0.1);
-		sim.setSimulationTime(50);
+		sim.setSimulationTime(10);
 		
+		/* Add BSimParticles to the simulation */
 		BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50), 1, new Vector3d(1,1,1));
 		sim.addBacterium(bacterium);	
 				
+		/* Add a ticker that implements tick(), run each timestep to update particle properties */
 		sim.setTicker(new BSimTicker() {
 			public void tick() {
 				for(BSimBacterium b : sim.getBacteria()) {
@@ -38,6 +41,7 @@ public class BSimSwimmingExample {
 			}		
 		});
 		
+		/* Add a drawer that implements the draw(Graphics) method for drawing the scene to a graphics object */
 		sim.setDrawer(new BSimDrawer(400,500) {
 			public void draw(Graphics g) {
 				PGraphics g3 = new PGraphics3D();
@@ -59,19 +63,8 @@ public class BSimSwimmingExample {
 				g.drawImage(g3.image, 0,0, null);
 			}
 		});
-				
-		sim.addExporter(new BSimLogger("BSim.log") {
-			public void beginExport() {
-				write("Let's go!"); 
-			}
-			public void exportFrame() {
-				String o = "";
-				for (BSimBacterium b : sim.getBacteria())
-					o += sim.getTime() + " " + b.getPosition() + " " + b.getMotionState();
-				write(o);
-			}
-		});
-				
+							
+		/* Add an exporter that creates png images by calling sim.draw(Graphics) (which in turn calls drawer.draw(Graphics)) */
 		sim.addExporter(new BSimExporter() {			
 			public void exportFrame() {
 				
@@ -86,15 +79,23 @@ public class BSimSwimmingExample {
 				} catch (IOException e) {}
 
 			}	
-		});		
+		});	
 		
-		sim.setFrame(new JFrame() {
-			public void paint(Graphics g) {
-				sim.draw(g);
+		/* Add another BSimExporter, this time the extension BSimLogger which comes with the convinience method write() */
+		sim.addExporter(new BSimLogger("BSim.log") {
+			public void beginExport() {
+				write("Let's go!"); 
+			}
+			public void exportFrame() {
+				String o = "";
+				for (BSimBacterium b : sim.getBacteria())
+					o += sim.getTime() + " " + b.getPosition() + " " + b.getMotionState();
+				write(o);
 			}
 		});
-		
-		sim.run();	
+				
+		/* sim.preview() to preview the scene, sim.export() to set exporters working */
+		sim.preview();	
 		
 	}
 }

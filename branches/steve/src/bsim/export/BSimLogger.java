@@ -7,24 +7,25 @@ import java.io.IOException;
 
 public abstract class BSimLogger extends BSimExporter {
 	
-	public void finishExport() {
-		close();
-	}
-	
 	private BufferedWriter bufferedWriter;
+	private String filename;
 	
 	public BSimLogger(String filename) {				
-		try{
-			bufferedWriter = new BufferedWriter(new FileWriter(new File(filename)));
-		}
-		catch(IOException e){ 
-			e.printStackTrace();
-		} 
+		this.filename = filename;
 	}
 	
-	public void write(String text) {	
-		try {
-			System.out.println(text);
+	public void write(String text) {
+		
+		if(bufferedWriter == null) {
+			try{
+				bufferedWriter = new BufferedWriter(new FileWriter(new File(filename)));
+			}
+			catch(IOException e){ 
+				e.printStackTrace();
+			} 
+		}
+		
+		try {			
 			bufferedWriter.write(text);
 			bufferedWriter.newLine();
 		} catch (IOException e) {
@@ -32,7 +33,7 @@ public abstract class BSimLogger extends BSimExporter {
 		}		
 	}	
 	
-	public void close(){
+	public void finishExport(){
 		try {
 			bufferedWriter.close();
 		} catch (IOException e) {

@@ -16,7 +16,6 @@ public class BSim {
 	private double simulationTime;	
 	private BSimTicker ticker;
 	private BSimDrawer drawer;
-	private JFrame frame;
 	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();
 	private Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();	
 
@@ -27,36 +26,37 @@ public class BSim {
 	public void setDt(double d) { dt = d; }
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
-	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
-	public void setFrame(JFrame f) { frame = f;	}
-	public void addBacterium(BSimBacterium b) { bacteria.add(b); }
+	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}	
 	public void addExporter(BSimExporter e) { exporters.add(e); }
+	public void addBacterium(BSimBacterium b) { bacteria.add(b); }
 
-	public void run() {						
+	public void preview() {
+		JFrame frame = new JFrame() {
+			public void paint(Graphics g) {
+				draw(g);
+			}
+		};
 		frame.setSize(drawer.getWidth(), drawer.getHeight());
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		if(frame == null) {
-			for(BSimExporter exporter : exporters)
-				exporter.beginExport();
-		} 
+		while(true) {
+			ticker.tick();	
+			frame.repaint();
+			// http://www.ryerson.ca/~dgrimsha/courses/cps840/repaint.html
+			try { Thread.sleep(100); } catch (InterruptedException e) {}
+		}
+	}
+	
+	public void export() {						
+		for(BSimExporter exporter : exporters) exporter.beginExport();		
 
 		for(t = 0; t <= simulationTime; t = t + dt) {
 			ticker.tick();	
-			if(frame == null) {
-				for(BSimExporter exporter : exporters)
-					exporter.exportFrame();
-			} else {
-				frame.repaint();
-				try { Thread.sleep(100); } catch (InterruptedException e) {}
-			}
+			for(BSimExporter exporter : exporters) exporter.exportFrame();
 		}		
-		
-		if(frame == null) {
-			for(BSimExporter exporter : exporters)
-				exporter.finishExport();	
-		}
+
+		for(BSimExporter exporter : exporters) exporter.finishExport();			
 	}	
 
 	public void draw(Graphics g) {
