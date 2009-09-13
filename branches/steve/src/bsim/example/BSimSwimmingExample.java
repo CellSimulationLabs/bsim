@@ -17,18 +17,32 @@ public class BSimSwimmingExample {
 	
 	public static void main(String[] args) {
 		
-		/* Declare final to allow references from anonymous inner classes */  
-		final BSim sim = new BSim();		
-		sim.setDt(0.1);
-		sim.setSimulationTime(6);
+		/*
+		 * Step 1: Create a new simulation object
+		 * Available setters:
+		 * 	BSim#setDt()
+		 * 	BSim#setSimulatonTime()
+		 * 	BSim#setTimeFormat()
+		 * 	BSim#setBound()
+		 * 	BSim#setVisc() defaults to 1e-3
+		 */
+		BSim sim = new BSim();		
+		sim.setDt(0.01);
+		sim.setSimulationTime(4);
 		sim.setTimeFormat("0.00");
+		sim.setBound(new Vector3d(100,100,100));
 		
+		/*
+		 * Step 2: Create BSimParticles marked final
+		 */
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
-		bacteria.add(new BSimBacterium(sim, new Vector3d(50,50,50), 1, new Vector3d(1,1,1)));
-		bacteria.add(new BSimBacterium(sim, new Vector3d(55,55,55), 1, new Vector3d(1,1,1)));
-		bacteria.add(new BSimBacterium(sim, new Vector3d(60,60,60), 1, new Vector3d(1,1,1)));
+		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
+		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
+		bacteria.add(new BSimBacterium(sim, new Vector3d(0,0,0), 1, new Vector3d(1,1,1)));
 				
-		/* Add a ticker that implements tick(), run each timestep to update particle properties */
+		/* 
+		 * Step 3: Implement tick() on a BSimTicker and add the ticker to the simulation	  
+		 */
 		sim.setTicker(new BSimTicker() {
 			public void tick() {
 				for(BSimBacterium b : bacteria) {
@@ -38,22 +52,40 @@ public class BSimSwimmingExample {
 			}		
 		});
 		
-		/* Add a drawer that implements the draw(Graphics) method for drawing the scene to a graphics object */
+		/* 
+		 * Step 4: Implement draw(Graphics) on a BSimDrawer and add the drawer to the simulation 
+		 * 
+		 * Here we use the BSimP3DDrawer which has already implemented draw(Graphics) to draw boundaries
+		 * and a clock but still requires the implementation of particles(PGraphics3D) to draw particles 
+		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
-			public void particles(PGraphics3D p3d) {	
+			public void particles(PGraphics3D p3d) {				
 				for(BSimBacterium b : bacteria) {
-					p3d.translate((float)b.getPosition().x, (float)b.getPosition().y, (float)b.getPosition().z);
+					p3d.pushMatrix();					
+					Vector3d position = b.getPosition();
+					p3d.translate((float)position.x, (float)position.y, (float)position.z);
 					p3d.fill(255, 0, 0);		
 					p3d.sphere((float)b.getRadius());
-				}
+					p3d.popMatrix();
+				}			
 			}
-		});
+		});				
 											
-		/* Add some exporters */
+		/* 
+		 * Step 6: Implement before(), during() and after() on BSimExporters and add them to the simulation
+		 * Available setters:
+		 * 	BSimExporter#setDt(Double)
+		 * 
+		 * BSimMovieExporter is a concrete BSimExporter for creating Quicktime movies
+		 * Available setters:
+		 * 	BSimMovieExporter#setSpeed()
+		 */			
 		BSimMovieExporter movieExporter = new BSimMovieExporter(sim, "results/BSim.mov");
-		movieExporter.setSpeed(2);
+		movieExporter.setDt(0.1);
+		movieExporter.setSpeed(5);
 		sim.addExporter(movieExporter);			
 		
+		/* BSimImageExporter is another concrete BSimExporter for creating images */
 		BSimImageExporter imageExporter = new BSimImageExporter(sim, "results");
 		imageExporter.setDt(0.5);
 		sim.addExporter(imageExporter);			
@@ -72,13 +104,13 @@ public class BSimSwimmingExample {
 				write(o);
 			}
 		};
-//		sim.addExporter(logger);
+		sim.addExporter(logger);
 		
 		/* Add your own exporters by extending BSimExporter like
 		 * BSimExporter e = new BSimExporter(){}; */		
 				
-		/* sim.preview() to preview the scene, sim.export() to set exporters working */
-		sim.preview();	
+		/* Step 7: Call sim.preview() to preview the scene or sim.export() to set exporters working */
+		sim.preview();
 		
 	}
 }

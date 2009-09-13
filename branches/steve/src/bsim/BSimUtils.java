@@ -1,6 +1,5 @@
 package bsim;
 
-import java.util.Calendar;
 import java.util.Random;
 
 public class BSimUtils {
@@ -10,9 +9,7 @@ public class BSimUtils {
 	 * http://vyshemirsky.blogspot.com/2007/11/sample-from-gamma-distribution-in-java.html
 	 */
 	public static double sampleGamma(double k, double theta) {
-		Random rng = new Random(
-				Calendar.getInstance().getTimeInMillis() +
-				Thread.currentThread().getId());
+		Random rng = new Random();
 
 		boolean accept = false;
 		if (k < 1) {

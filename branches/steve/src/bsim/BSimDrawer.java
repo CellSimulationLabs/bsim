@@ -14,6 +14,9 @@ public abstract class BSimDrawer {
 		this.height = height;
 	}
 	
+	/**
+	 * Draws the scene to a graphics object
+	 */
 	public abstract void draw(Graphics g);
 	
 	public int getWidth() { return width; }

@@ -11,15 +11,15 @@ public abstract class BSimExporter {
 		this.dt = sim.getDt();
 	}
 	
+	public abstract void before();
+	public abstract void during();
+	public abstract void after();
+	
 	/**
-	 * The exporter is called every dt seconds, defaults to sim.getDt()  
+	 * The exporter is called every d seconds. Defaults to sim.getDt()  
 	 */
 	public void setDt(double d) { dt = d;  }
 	
 	public double getDt() { return dt; }
-	
-	public abstract void before();
-	public abstract void during();
-	public abstract void after();
 	
 }

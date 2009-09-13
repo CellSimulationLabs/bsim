@@ -32,7 +32,7 @@ public class BSimMovieExporter extends BSimExporter {
 		try {
 			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);
 			outputStream.setVideoCompressionQuality(1f);
-			outputStream.setTimeScale(speed*(int)(1/sim.getDt()));
+			outputStream.setTimeScale(speed*(int)(1/this.getDt()));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			

@@ -5,27 +5,36 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.JFrame;
+import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimBacterium;
+import bsim.particle.BSimParticle;
 
 public class BSim {
 
 	private int ticks;
 	private double dt;
-	private double simulationTime;	
+	private double simulationTime;
 	private String timeFormat;
+	private Vector3d bound;
+	private double visc = 1e-3; // Pa s
 	private BSimTicker ticker;
 	private BSimDrawer drawer;
 	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();
 
+
 	public void setDt(double d) { dt = d; }	
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTimeFormat(String s) { timeFormat = s; }
+	public void setBound(Vector3d b) { bound = b;	}
+	public void setVisc(double v) { visc = v; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
-	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}	
+	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
 	public void addExporter(BSimExporter e) { exporters.add(e); }
 	
 	public double getDt() { return dt; }
+	public Vector3d getBound() { return bound; }
+	public double getVisc() { return visc; }
 
 	/**
 	 * Runs the simulation in a frame until the frame is closed. Ignores exporters. 
@@ -40,11 +49,13 @@ public class BSim {
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		ticks = 0;
 		while(true) {
 			ticker.tick();	
+			ticks++;
 			frame.repaint();
 			// http://www.ryerson.ca/~dgrimsha/courses/cps840/repaint.html
-			try { Thread.sleep(100); } catch (InterruptedException e) {}
+			try { Thread.sleep((long) (1000*dt)); } catch (InterruptedException e) {}
 		}
 	}
 	
@@ -79,7 +90,7 @@ public class BSim {
 	public int getHeight() {
 		return drawer.getHeight();	
 	}
-	
+		
 	/**
 	 * Returns the number of ticks in the duration d
 	 */
