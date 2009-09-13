@@ -37,12 +37,13 @@ public class BSim {
 	 * Runs the simulation in a frame until the frame is closed, ignoring exporters. 
 	 */
 	public void preview() {
-		JFrame frame = new JFrame() {
+		JFrame frame = new JFrame("BSim Preview") {
 			public void paint(Graphics g) {
 				draw(g);
 			}
 		};
 		frame.setSize(getWidth(), getHeight());
+		frame.setResizable(false);
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
