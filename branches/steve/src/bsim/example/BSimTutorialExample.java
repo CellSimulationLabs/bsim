@@ -12,7 +12,7 @@ import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovieExporter;
-import bsim.mixin.BSimBrownianMixin;
+import bsim.mixin.BSimBrownianForceMixin;
 import bsim.mixin.BSimRunTumbleMixin;
 
 public class BSimTutorialExample {
@@ -43,7 +43,7 @@ public class BSimTutorialExample {
 		class BSimTutorialParticle extends BSimParticle {
 			private boolean collision = false;			
 			private BSimRunTumbleMixin runTumbleMixin = new BSimRunTumbleMixin(sim, this);
-			private BSimBrownianMixin brownianMixin = new BSimBrownianMixin(sim, this);
+			private BSimBrownianForceMixin brownianForceMixin = new BSimBrownianForceMixin(sim, this);
 
 			public BSimTutorialParticle(BSim sim, Vector3d position) {
 				super(sim, position, 1); // radius 1 micron				
@@ -58,8 +58,8 @@ public class BSimTutorialExample {
 
 			@Override
 			public void action() {
-				brownianMixin.brownianForce();
-				runTumbleMixin.runOrTumble();				
+				//brownianForceMixin.brownianForce();
+				runTumbleMixin.runTumble();				
 			}	
 		}		
 		final Vector<BSimTutorialParticle> tutorialParticles = new Vector<BSimTutorialParticle>();		
