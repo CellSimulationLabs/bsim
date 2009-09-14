@@ -6,12 +6,14 @@ import javax.vecmath.Vector3d;
 
 import processing.core.PGraphics3D;
 import bsim.BSim;
+import bsim.BSimParticle;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovieExporter;
-import bsim.particle.BSimBacterium;
+import bsim.mixin.BSimBrownianMixin;
+import bsim.mixin.BSimRunTumbleMixin;
 
 public class BSimTutorialExample {
 
@@ -35,26 +37,35 @@ public class BSimTutorialExample {
 
 		/*
 		 * Step 2: Extend BSimParticle as required and create vectors marked final
-		 * As an example let's make bacteria that turn red upon colliding
+		 * As an example let's make a particle that runs and tumbles like a bacterium,
+		 * experiences a Brownian force and turns red upon colliding
 		 */				
-		class BSimCollidingBacterium extends BSimBacterium {
-			boolean collision = false;	
+		class BSimTutorialParticle extends BSimParticle {
+			private boolean collision = false;			
+			private BSimRunTumbleMixin runTumbleMixin = new BSimRunTumbleMixin(sim, this);
+			private BSimBrownianMixin brownianMixin = new BSimBrownianMixin(sim, this);
 
-			public BSimCollidingBacterium(BSim sim, Vector3d position, Vector3d direction) {
-				super(sim, position, direction);
+			public BSimTutorialParticle(BSim sim, Vector3d position) {
+				super(sim, position, 1); // radius 1 micron				
 			}
 
-			public void interaction(BSimCollidingBacterium b) {
-				if(outerDistance(b) < 0) {
+			public void interaction(BSimTutorialParticle p) {
+				if(outerDistance(p) < 0) {
 					collision = true;
-					b.collision = true;
+					p.collision = true;
 				}
+			}
+
+			@Override
+			public void action() {
+				brownianMixin.brownianForce();
+				runTumbleMixin.runOrTumble();				
 			}	
 		}		
-		final Vector<BSimCollidingBacterium> bacteria = new Vector<BSimCollidingBacterium>();		
-		while(bacteria.size() < 20) {		
-			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z), new Vector3d(Math.random(),Math.random(),Math.random()));
-			if(!b.intersection(bacteria)) bacteria.add(b);		
+		final Vector<BSimTutorialParticle> tutorialParticles = new Vector<BSimTutorialParticle>();		
+		while(tutorialParticles.size() < 200) {		
+			BSimTutorialParticle p = new BSimTutorialParticle(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+			if(!p.intersection(tutorialParticles)) tutorialParticles.add(p);		
 		}
 
 		/* 
@@ -63,13 +74,13 @@ public class BSimTutorialExample {
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				for(int i = 1; i < bacteria.size(); i++)
-					for(int j = i+1; j < bacteria.size(); j++)
-						bacteria.get(i).interaction(bacteria.get(j));
+				for(int i = 1; i < tutorialParticles.size(); i++)
+					for(int j = i+1; j < tutorialParticles.size(); j++)
+						tutorialParticles.get(i).interaction(tutorialParticles.get(j));
 
-				for(BSimCollidingBacterium b : bacteria) {
-					b.action();		
-					b.updatePosition();
+				for(BSimTutorialParticle p : tutorialParticles) {
+					p.action();		
+					p.updatePosition();
 				}
 			}		
 		});
@@ -83,15 +94,15 @@ public class BSimTutorialExample {
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void draw(PGraphics3D p3d) {							
-				for(BSimCollidingBacterium b : bacteria) {
+				for(BSimTutorialParticle p : tutorialParticles) {
 					p3d.pushMatrix();					
-					Vector3d position = b.getPosition();
+					Vector3d position = p.getPosition();
 					p3d.translate((float)position.x, (float)position.y, (float)position.z);
-					if(!b.collision)
+					if(!p.collision)
 						p3d.fill(0,255,0); // green
 					else
 						p3d.fill(255,0,0); // red!
-					p3d.sphere((float)b.getRadius());
+					p3d.sphere((float)p.getRadius());
 					p3d.popMatrix();
 				}			
 			}
@@ -129,8 +140,8 @@ public class BSimTutorialExample {
 			public void during() {
 				String o = sim.getTime();
 				int collisions = 0;
-				for (BSimCollidingBacterium b : bacteria)
-					if(b.collision) collisions++;
+				for (BSimTutorialParticle p : tutorialParticles)
+					if(p.collision) collisions++;
 				write(o+","+collisions);
 			}
 		};

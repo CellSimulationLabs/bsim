@@ -16,7 +16,7 @@ public abstract class BSimExporter {
 	public abstract void after();
 	
 	/**
-	 * The exporter is called every d seconds. Defaults to sim.getDt()  
+	 * The exporter is called every d seconds in simulation time. Defaults to sim.getDt()  
 	 */
 	public void setDt(double d) { dt = d;  }
 	
