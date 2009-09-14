@@ -13,7 +13,7 @@ public class BSim {
 
 	private double dt;
 	private double simulationTime;
-	private String timeFormat;
+	private DecimalFormat timeFormat;
 	private Vector3d bound;
 	private double visc = 1e-3; // Pa s
 	private double temperature = 300; // K
@@ -23,8 +23,8 @@ public class BSim {
 
 	public void setDt(double d) { dt = d; }	
 	public void setSimulationTime(double d) { simulationTime = d; }
-	public void setTimeFormat(String s) { timeFormat = s; }
-	public void setBound(Vector3d b) { bound = b;	}
+	public void setTimeFormat(String s) { timeFormat = new DecimalFormat(s); }
+	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z);	}
 	public void setVisc(double v) { visc = v; }
 	public void setTemperature(double t) { temperature = t; }
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
@@ -107,8 +107,7 @@ public class BSim {
 	 * Returns the simulation time formatted according to timeFormat
 	 */
 	public String getTime() {
-	    DecimalFormat df = new DecimalFormat(timeFormat);
-	    return df.format(timestep*dt);
+	    return timeFormat.format(timestep*dt);
 	}
 
 }

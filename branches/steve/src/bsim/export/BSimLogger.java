@@ -10,8 +10,8 @@ import bsim.BSimExporter;
 
 public abstract class BSimLogger extends BSimExporter {
 	
-	private BufferedWriter bufferedWriter;
-	private String filename;
+	protected BufferedWriter bufferedWriter;
+	protected String filename;
 	
 	public BSimLogger(BSim sim, String filename) {
 		super(sim);

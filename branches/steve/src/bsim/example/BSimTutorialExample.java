@@ -31,9 +31,9 @@ public class BSimTutorialExample {
 		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
-		sim.setSimulationTime(100);
+		sim.setSimulationTime(10);
 		sim.setTimeFormat("0.00");
-		sim.setBound(new Vector3d(100,100,100));
+		sim.setBound(100,100,100);
 
 		/*
 		 * Step 2: Extend BSimParticle as required and create vectors marked final
@@ -130,7 +130,7 @@ public class BSimTutorialExample {
 
 		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */
-		BSimLogger logger = new BSimLogger(sim, "results/BSim.log") {
+		BSimLogger logger = new BSimLogger(sim, "results/tutorialExample.csv") {
 			@Override
 			public void before() {
 				super.before();

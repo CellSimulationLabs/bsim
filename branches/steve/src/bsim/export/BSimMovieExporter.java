@@ -11,9 +11,9 @@ import bsim.export.quicktime.QuickTimeOutputStream;
 
 public class BSimMovieExporter extends BSimExporter {
 
-	private QuickTimeOutputStream outputStream;
-	private String filename;
-	private int speed = 1;
+	protected QuickTimeOutputStream outputStream;
+	protected String filename;
+	protected int speed = 1;
 
 	public BSimMovieExporter(BSim sim, String filename) {
 		super(sim);

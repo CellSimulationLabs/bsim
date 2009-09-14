@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
-
 public abstract class BSimParticle {	
 		
 	protected Vector3d position ; // microns		
@@ -27,7 +26,7 @@ public abstract class BSimParticle {
 	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
 	
 	/**
-	 * Call in tick()
+	 * @see BSimTicker#tick() 
 	 */		
 	public abstract void action();
 	

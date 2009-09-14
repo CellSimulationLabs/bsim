@@ -11,10 +11,10 @@ import bsim.BSimDrawer;
 
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
-	private PGraphics3D p3d;
-	private PFont font;
-	private Vector3d bound;
-	private Vector3d boundCentre;
+	protected PGraphics3D p3d;
+	protected PFont font;
+	protected Vector3d bound;
+	protected Vector3d boundCentre;
 	
 	public BSimP3DDrawer(BSim sim, int width, int height) {
 		super(sim, width, height);		

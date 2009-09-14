@@ -5,37 +5,34 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
+import bsim.BSimMixin;
 import bsim.BSimParticle;
 import bsim.BSimUtils;
 
 
-public class BSimRunTumbleMixin {
+public class BSimRunTumbleMixin extends BSimMixin {
 	
-	private BSim sim;
-	private BSimParticle particle;
-
-	private enum MotionState { RUNNING, TUMBLING }	
-	private MotionState motionState = MotionState.RUNNING;
-	private Vector3d direction;
+	protected enum MotionState { RUNNING, TUMBLING }	
+	protected MotionState motionState = MotionState.RUNNING;
+	protected Vector3d direction;
 			
-	private double motorForce = 0.41; // pN
+	protected double motorForce = 0.41; // pN
 	
 	// Probability of switching state in t -> t+dt = lambda(state)*dt
-	private double lambdaRun = 1/0.86; // 1/s
-	private double lambdaTumble = 1/0.14; // 1/s	
+	protected double lambdaRun = 1/0.86; // 1/s
+	protected double lambdaTumble = 1/0.14; // 1/s	
 		
 	// Parameters for the tumbling distribution
-	private double tumbleShape = 4;
-	private double tumbleScale = 18.32;
-	private double tumbleLocation = -4.60;	
+	protected double tumbleShape = 4;
+	protected double tumbleScale = 18.32;
+	protected double tumbleLocation = -4.60;	
 	
 	public BSimRunTumbleMixin(BSim sim, BSimParticle particle) {
-		this.sim = sim;
-		this.particle = particle;
+		super(sim, particle);
 		setDirection(new Vector3d(Math.random(),Math.random(),Math.random()));
 	}
 	
-	private void setDirection(Vector3d d) {
+	protected void setDirection(Vector3d d) {
 		d.normalize();
 		direction = d;
 	}
@@ -66,7 +63,7 @@ public class BSimRunTumbleMixin {
 		if(motionState == MotionState.RUNNING) run();
 	}
 
-	private void run() {				
+	protected void run() {				
 		Vector3d f = new Vector3d();		
 		f.scale(motorForce, direction);
 		particle.addForce(f);
@@ -74,7 +71,7 @@ public class BSimRunTumbleMixin {
 		direction.normalize();	
 	}
 
-	private void tumble() {		
+	protected void tumble() {		
 		// Obtain a random direction perpendicular to current direction		
 		Vector3d randomVector = new Vector3d(Math.random(),Math.random(),Math.random());
 		Vector3d crossVector = new Vector3d();

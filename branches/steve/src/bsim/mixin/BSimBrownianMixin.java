@@ -4,18 +4,16 @@ import java.util.Random;
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
+import bsim.BSimMixin;
 import bsim.BSimParticle;
 
-public class BSimBrownianMixin {
+public class BSimBrownianMixin extends BSimMixin {
 	
-	private BSim sim;
-	private BSimParticle particle;
-	private double brownianAmplitude;
-	private static Random rng = new Random();
+	protected double brownianAmplitude;
+	protected static Random rng = new Random();
 	
 	public BSimBrownianMixin(BSim sim, BSimParticle particle) {
-		this.sim = sim;
-		this.particle = particle; 		
+		super(sim, particle); 		
 		setBrownianAmplitude();
 	}
 	

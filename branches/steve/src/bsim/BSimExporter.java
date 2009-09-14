@@ -1,6 +1,8 @@
 package bsim;
 
-
+/**
+ * @see BSim#export()
+ */
 public abstract class BSimExporter {
 	
 	protected BSim sim;

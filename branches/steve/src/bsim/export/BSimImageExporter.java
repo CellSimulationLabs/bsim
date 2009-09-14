@@ -12,7 +12,7 @@ import bsim.BSimExporter;
 
 public class BSimImageExporter extends BSimExporter {
 
-	private String directory;
+	protected String directory;
 	
 	public BSimImageExporter(BSim sim, String directory) {
 		super(sim);
