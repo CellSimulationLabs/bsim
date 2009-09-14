@@ -111,7 +111,7 @@ public class BSimTutorialExample {
 		/* 
 		 * Step 5: Implement before(), during() and after() on BSimExporters and add them to the simulation
 		 * Available setters:
-		 * 	BSimExporter#setDt(Double)
+		 * 	BSimExporter#setDt()
 		 * 
 		 * BSimMovieExporter is a concrete BSimExporter for creating Quicktime movies
 		 * Uses the drawer defined above
@@ -138,11 +138,10 @@ public class BSimTutorialExample {
 			}
 			@Override
 			public void during() {
-				String o = sim.getTime();
 				int collisions = 0;
 				for (BSimTutorialParticle p : tutorialParticles)
 					if(p.collision) collisions++;
-				write(o+","+collisions);
+				write(sim.getTime()+","+collisions);
 			}
 		};
 		sim.addExporter(logger);
