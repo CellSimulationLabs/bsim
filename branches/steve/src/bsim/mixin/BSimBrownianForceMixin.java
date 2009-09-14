@@ -9,31 +9,31 @@ import bsim.BSimParticle;
 
 /**
  * Public methods:
- *	BSimBrownianForceMixin#setBrownianForceMagnitude()
+ *	BSimBrownianForceMixin#setForceMagnitude()
  * 	BSimBrownianForceMixin#brownianForce() 
  */
 public class BSimBrownianForceMixin extends BSimMixin {
 	
-	protected double brownianForceMagnitude;
+	protected double forceMagnitude;
 	protected static Random rng = new Random();
 	
 	public BSimBrownianForceMixin(BSim sim, BSimParticle particle) {
 		super(sim, particle); 		
-		setBrownianForceMagnitude();
+		setForceMagnitude();
 	}
 	
-	public void setBrownianForceMagnitude() {
-		brownianForceMagnitude = Math.sqrt(2*particle.stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
+	public void setForceMagnitude() {
+		forceMagnitude = Math.sqrt(2*particle.stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
 	}
 	
 	/**
 	 * Applies a Brownian force to the particle. The applied force is a function of 
 	 * radius, viscosity and temperature; if any of these are changed externally, you should call
-	 * setBrownianForceMagnitude() again
+	 * setForceMagnitude() again
 	 */
 	public void brownianForce() {						
 		Vector3d f = new Vector3d(rng.nextGaussian(), rng.nextGaussian(), rng.nextGaussian());
-		f.scale(brownianForceMagnitude); 
+		f.scale(forceMagnitude); 
 		particle.addForce(f);
 	}
 	
