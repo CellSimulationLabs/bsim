@@ -29,7 +29,7 @@ public class BSimImageExporter extends BSimExporter {
 		sim.draw(g);
 		
 		try {
-			File file = new File(directory + "/" + sim.getTime() + ".png");
+			File file = new File(directory + "/" + sim.getFormattedTime() + ".png");
 			ImageIO.write(img, "png", file);
 		} catch (IOException e) {
 			e.printStackTrace();

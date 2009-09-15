@@ -15,26 +15,29 @@ public class BSim {
 	private double simulationTime;
 	private DecimalFormat timeFormat;
 	private Vector3d bound;
-	private double visc = 1e-3; // Pa s
-	private double temperature = 300; // K
+	/* Conditions of 'Chemotaxis in Escherichia Coli', Berg at al. */
+	private double visc = 2.7e-3; // Pa s
+	private double temperature = 305; // K	
 	private BSimTicker ticker;
 	private BSimDrawer drawer;
-	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();
+	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();	
 
 	public void setDt(double d) { dt = d; }	
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTimeFormat(String s) { timeFormat = new DecimalFormat(s); }
 	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z);	}
 	public void setVisc(double v) { visc = v; }
-	public void setTemperature(double t) { temperature = t; }
+	public void setTemperature(double t) { temperature = t; }	
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
 	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
-	public void addExporter(BSimExporter e) { exporters.add(e); }
+	public void addExporter(BSimExporter e) { exporters.add(e); }	
 	
 	public double getDt() { return dt; }
 	public Vector3d getBound() { return bound; }
 	public double getVisc() { return visc; }
 	public double getTemperature() { return temperature; }
+	public double getTime() { return timestep*dt; }
+	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
 	
 	private int timestep;
 
@@ -73,7 +76,7 @@ public class BSim {
 		// Increment integer timesteps than adding to double time to avoid rouding issues
 		for(timestep = 0; timestep <= timesteps(simulationTime); timestep++) {			
 			ticker.tick();	
-			System.out.println(getTime());
+			System.out.println(getFormattedTime());
 			for(BSimExporter exporter : exporters)
 				if(timestep % timesteps(exporter.getDt()) == 0) exporter.during();
 		}		
@@ -103,11 +106,5 @@ public class BSim {
 		return (int)(d/dt);
 	}	
 	
-	/**
-	 * Returns the simulation time formatted according to timeFormat
-	 */
-	public String getTime() {
-	    return timeFormat.format(timestep*dt);
-	}
 
 }

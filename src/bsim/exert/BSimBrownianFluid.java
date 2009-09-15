@@ -1,23 +1,18 @@
-package bsim.mixin;
+package bsim.exert;
 import java.util.Random;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
-import bsim.BSimMixin;
+import bsim.BSimExerter;
 import bsim.BSimParticle;
 
-/**
- * Public methods:
- *	BSimBrownianForceMixin#setForceMagnitude()
- * 	BSimBrownianForceMixin#brownianForce() 
- */
-public class BSimBrownianForceMixin extends BSimMixin {
+public class BSimBrownianFluid extends BSimExerter {
 	
 	protected double forceMagnitude;
 	protected static Random rng = new Random();
 	
-	public BSimBrownianForceMixin(BSim sim, BSimParticle particle) {
+	public BSimBrownianFluid(BSim sim, BSimParticle particle) {
 		super(sim, particle); 		
 		setForceMagnitude();
 	}
@@ -27,11 +22,11 @@ public class BSimBrownianForceMixin extends BSimMixin {
 	}
 	
 	/**
-	 * Applies a Brownian force to the particle. The applied force is a function of 
+	 * Exerts a Brownian force to the particle. The applied force is a function of 
 	 * radius, viscosity and temperature; if any of these are changed externally, you should call
 	 * setForceMagnitude() again
 	 */
-	public void brownianForce() {						
+	public void exert() {						
 		Vector3d f = new Vector3d(rng.nextGaussian(), rng.nextGaussian(), rng.nextGaussian());
 		f.scale(forceMagnitude); 
 		particle.addForce(f);
