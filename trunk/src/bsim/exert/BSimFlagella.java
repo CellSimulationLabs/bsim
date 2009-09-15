@@ -38,7 +38,7 @@ public class BSimFlagella extends BSimExerter {
 	 * lambdaXY is the probability per unit time of switching state X to state Y
 	 */
 	protected double lambdaBundledApart = 1/1; // 1/seconds
-	protected double lambdaApartBundled = 1/0.1; // 1/seconds	
+	protected double lambdaApartBundled = 1/0.1; // 1/seconds
 
 	/**
 	 * Magnitude of the force exerted by the flagella in the BUNDLED state. 
@@ -56,28 +56,34 @@ public class BSimFlagella extends BSimExerter {
 		setState(State.BUNDLED);
 		setBundleDirection(new Vector3d(Math.random(),Math.random(),Math.random()));
 	}	
-			
+				
 	public void setState(State s) { state = s; }
+	public void setLambdaBundledApart(double d) { lambdaBundledApart = d; }
+	public void setLambdaApartBundled(double d) { lambdaApartBundled = d; }
 	public void setBundleForceMagnitude(double d) { bundleForceMagnitude = d; }
 	public void setBundleDirection(Vector3d v) {
 		Vector3d x = new Vector3d(v); 
 		x.normalize();
 		this.bundleDirection = x;
-	}	
+	}		
 	
+	public double getLambdaBundledApart() { return lambdaBundledApart; }
+	public double getLambdaApartBundled() { return lambdaApartBundled; }
 	public Vector3d getBundleDirection() { return bundleDirection; }
 	public State getState() { return state; }					
 	
-	/** Exerts the flagella force, causing the particle to run and tumble like a bacterium */
+	/** 
+	 * Exerts the flagella force, causing the particle to run and tumble like a bacterium
+	 */
 	public void exert() {
 		switch(state) {
 		case BUNDLED:
-			if(Math.random() < lambdaBundledApart*sim.getDt())
+			if(Math.random() < getLambdaBundledApart()*sim.getDt())
 				state = State.APART;
 			break;
 		case APART:
-			if(Math.random() < lambdaApartBundled*sim.getDt()) {
-				BSimUtils.rotate(bundleDirection, tumbleAngle());
+			if(Math.random() < getLambdaApartBundled()*sim.getDt()) {
+				BSimUtils.rotate(getBundleDirection(), tumbleAngle());
 				state = State.BUNDLED;
 			}
 			break;
@@ -105,9 +111,9 @@ public class BSimFlagella extends BSimExerter {
 	}	
 	
 	/**
-	 * Return a tumble angle distributed according to Fig. 3, 'Chemotaxis in Escherichia Coli', 
-	 * Berg et al. (claim from 'AgentCell: a digital single-cell assay for bacterial 
-	 * chemotaxis', Emonet et al.) 
+	 * Return a tumble angle in radians distributed according to Fig. 3, 'Chemotaxis 
+	 * in Escherichia Coli', Berg et al. (claim from 'AgentCell: a digital single-cell 
+	 * assay for bacterial chemotaxis', Emonet et al.) 
 	 */
 	public double tumbleAngle() {	
 		double tumbleShape = 4;
