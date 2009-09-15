@@ -53,7 +53,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.noStroke();
 		
 		p3d.fill(255);
-		p3d.text(sim.getTime(), 50, 50);
+		p3d.text(sim.getFormattedTime(), 50, 50);
 		
 		p3d.endDraw();		
 		g.drawImage(p3d.image, 0,0, null);

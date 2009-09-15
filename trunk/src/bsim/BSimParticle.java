@@ -9,7 +9,8 @@ public abstract class BSimParticle {
 	protected Vector3d position ; // microns		
 	protected Vector3d force = new Vector3d(); // piconewtons	
 	protected double radius; // microns	
-	protected BSim sim; // the environment that the particle exists in	
+	protected BSim sim; // the environment that the particle exists in
+	protected Vector<BSimExerter> exerters = new Vector<BSimExerter>(); // objects that exert de novo forces on the particle
 		
 	public BSimParticle(BSim sim, Vector3d position, double radius) {	
 		this.sim = sim;
@@ -26,9 +27,12 @@ public abstract class BSimParticle {
 	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
 	
 	/**
-	 * @see BSimTicker#tick() 
+	 * Call in BSimTicker#tick() 
 	 */		
-	public abstract void action();
+	public void action() { 
+		for(BSimExerter exerter : exerters)
+			exerter.exert();
+	}
 	
 	/**
 	 * Update the position of the particle according to Stokes' law

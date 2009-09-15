@@ -26,10 +26,10 @@ import bsim.BSim;
 import bsim.BSimParticle;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
+import bsim.exert.BSimBrownianFluid;
+import bsim.exert.BSimFlagella;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
-import bsim.mixin.BSimBrownianForceMixin;
-import bsim.mixin.BSimRunTumbleMixin;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 
@@ -51,10 +51,7 @@ public class BSimRepressilatorExample {
 		 * Extend BSimParticle to a Brownian motion/run-tumble bacterium with
 		 * a repressilator GRN inside it.
 		 */				
-		class BSimRepressilatorParticle extends BSimParticle {
-			private BSimRunTumbleMixin runTumbleMixin = new BSimRunTumbleMixin(sim, this);
-			private BSimBrownianForceMixin brownianMixin = new BSimBrownianForceMixin(sim, this);
-			
+		class BSimRepressilatorParticle extends BSimParticle {			
 			protected QuorumRepressilator repGRN;
 			protected double[] y, yNew;
 			protected double cellWallDiffusion;			
@@ -64,7 +61,8 @@ public class BSimRepressilatorExample {
 			 */
 			public BSimRepressilatorParticle(BSim sim, Vector3d position){
 				super(sim, position, 1);
-				
+				exerters.add(new BSimFlagella(sim, this));
+				exerters.add(new BSimBrownianFluid(sim, this));				
 				//Create the parameters and initial conditions for the ODE system
 				repGRN = new QuorumRepressilator();
 				repGRN.generateBeta();
@@ -77,8 +75,7 @@ public class BSimRepressilatorExample {
 			 */
 			@Override
 			public void action() {
-				brownianMixin.brownianForce();
-				runTumbleMixin.runTumble();
+				super.action();
 				yNew = BSimOdeSolver.rungeKutta45(repGRN, 1, y, sim.getDt());
 				y = yNew;
 			}
@@ -243,7 +240,7 @@ public class BSimRepressilatorExample {
 			 */
 			@Override
 			public void during() {
-				String o = sim.getTime();
+				String o = sim.getFormattedTime();
 				// All bacteria
 				String lacI = "";
 				for(BSimRepressilatorParticle p: GRNParticles){

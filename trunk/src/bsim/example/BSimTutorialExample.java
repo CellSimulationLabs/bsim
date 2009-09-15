@@ -9,16 +9,16 @@ import bsim.BSim;
 import bsim.BSimParticle;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
+import bsim.exert.BSimBrownianFluid;
+import bsim.exert.BSimFlagella;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovieExporter;
-import bsim.mixin.BSimBrownianForceMixin;
-import bsim.mixin.BSimRunTumbleMixin;
 
 public class BSimTutorialExample {
 
 	public static void main(String[] args) {
-
+System.out.println(2.7e-3);
 		/*
 		 * Step 1: Create a new simulation object
 		 * Available setters:
@@ -26,8 +26,8 @@ public class BSimTutorialExample {
 		 * 	BSim#setSimulatonTime()
 		 * 	BSim#setTimeFormat()
 		 * 	BSim#setBound()
-		 * 	BSim#setVisc() defaults to 1e-3 Pa s
-		 * 	BSim#setTemperature() defaults to 300 K
+		 * 	BSim#setVisc() defaults to 2.7e-3 Pa s
+		 * 	BSim#setTemperature() defaults to 305 K
 		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
@@ -42,11 +42,11 @@ public class BSimTutorialExample {
 		 */				
 		class BSimTutorialParticle extends BSimParticle {
 			private boolean collision = false;			
-			private BSimRunTumbleMixin runTumbleMixin = new BSimRunTumbleMixin(sim, this);
-			private BSimBrownianForceMixin brownianForceMixin = new BSimBrownianForceMixin(sim, this);
 
 			public BSimTutorialParticle(BSim sim, Vector3d position) {
 				super(sim, position, 1); // radius 1 micron				
+				exerters.add(new BSimFlagella(sim, this));
+				exerters.add(new BSimBrownianFluid(sim, this));
 			}
 
 			public void interaction(BSimTutorialParticle p) {
@@ -55,12 +55,6 @@ public class BSimTutorialExample {
 					p.collision = true;
 				}
 			}
-
-			@Override
-			public void action() {
-				//brownianForceMixin.brownianForce();
-				runTumbleMixin.runTumble();				
-			}	
 		}		
 		final Vector<BSimTutorialParticle> tutorialParticles = new Vector<BSimTutorialParticle>();		
 		while(tutorialParticles.size() < 200) {		
@@ -141,7 +135,7 @@ public class BSimTutorialExample {
 				int collisions = 0;
 				for (BSimTutorialParticle p : tutorialParticles)
 					if(p.collision) collisions++;
-				write(sim.getTime()+","+collisions);
+				write(sim.getFormattedTime()+","+collisions);
 			}
 		};
 		sim.addExporter(logger);
