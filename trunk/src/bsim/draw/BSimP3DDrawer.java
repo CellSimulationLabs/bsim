@@ -1,5 +1,6 @@
 package bsim.draw;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.vecmath.Vector3d;
@@ -7,7 +8,9 @@ import javax.vecmath.Vector3d;
 import processing.core.PFont;
 import processing.core.PGraphics3D;
 import bsim.BSim;
+import bsim.BSimChemicalField;
 import bsim.BSimDrawer;
+import bsim.BSimParticle;
 
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
@@ -15,7 +18,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	protected PFont font;
 	protected Vector3d bound;
 	protected Vector3d boundCentre;
-	
+
 	public BSimP3DDrawer(BSim sim, int width, int height) {
 		super(sim, width, height);		
 		bound = sim.getBound();
@@ -27,23 +30,64 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.setPrimary(true); 
 		p3d.setSize(width, height);				
 		p3d.camera(-(float)bound.x*0.7f, -(float)bound.y*0.3f, -(float)bound.z*0.5f, (float)bound.x, (float)bound.y, (float)bound.z, 0, 1, 0);
-		
+
 		font = new PFont(PFont.findFont("Trebuchet MS").deriveFont((float)20), true, PFont.DEFAULT_CHARSET);
 	}
 
 	@Override
 	public void draw(Graphics g) {			
 		p3d.beginDraw();
-		
+
 		p3d.textFont(font);
 		p3d.textMode(p3d.SCREEN);
-		
+
 		p3d.sphereDetail(10);
 		p3d.noStroke();		
 		p3d.background(0, 0, 0);	
-			
+
 		draw(p3d);
-		
+		drawBoundaries();
+		drawTime();
+
+		p3d.endDraw();		
+		g.drawImage(p3d.image, 0,0, null);
+	}
+
+	/**
+	 * Draws remaining scene objects to the PGraphics3D object
+	 */
+	public abstract void draw(PGraphics3D p3d);
+
+	/**
+	 * Draws a particle p as a sphere of color c 
+	 */
+	public void draw(BSimParticle p, Color c) {
+		p3d.pushMatrix();					
+		Vector3d position = p.getPosition();
+		p3d.translate((float)position.x, (float)position.y, (float)position.z);
+		p3d.fill(c.getRed(),c.getGreen(),c.getBlue());
+		p3d.sphere((float)p.getRadius());
+		p3d.popMatrix();
+	}	
+
+	/**
+	 * Draws a chemical field with alpha per unit concentration alphaGrad
+	 */
+	public void draw(BSimChemicalField field, Color c, int alphaGrad) {
+		int[] partition = field.getPartition();
+		double[] boxSize = field.getBox();				
+		for(int i=0; i < partition[0]; i++)
+			for(int j=0; j < partition[1]; j++)
+				for(int k=0; k < partition[2]; k++) {							
+					p3d.pushMatrix();					
+					p3d.translate((float)(boxSize[0]*i+boxSize[0]/2), (float)(boxSize[1]*j+boxSize[1]/2), (float)(boxSize[2]*k+boxSize[2]/2));
+					p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)field.getConc(i,j,k));
+					p3d.box((float)boxSize[0],(float)boxSize[1],(float)boxSize[2]);
+					p3d.popMatrix();
+				}
+	}
+	
+	public void drawBoundaries() {
 		p3d.fill(128, 128, 255, 50);
 		p3d.stroke(128, 128, 255);
 		p3d.pushMatrix();
@@ -51,16 +95,11 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.box((float)bound.x, (float)bound.y, (float)bound.z);
 		p3d.popMatrix();
 		p3d.noStroke();
-		
-		p3d.fill(255);
-		p3d.text(sim.getFormattedTime(), 50, 50);
-		
-		p3d.endDraw();		
-		g.drawImage(p3d.image, 0,0, null);
 	}
 	
-	/**
-	 * Draws remaining scene objects to the PGraphics3D object
-	 */
-	public abstract void draw(PGraphics3D p3d);
+	public void drawTime() {
+		p3d.fill(255);
+		p3d.text(sim.getFormattedTime(), 50, 50);
+	}
+
 }

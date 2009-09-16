@@ -1,20 +1,18 @@
 package bsim.example;
 
+import java.awt.Color;
+
 import javax.vecmath.Vector3d;
 
 import processing.core.PGraphics3D;
 import bsim.BSim;
-import bsim.BSimExerter;
-import bsim.BSimParticle;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.exert.BSimFlagella;
-import bsim.exert.BSimFlagella.State;
 import bsim.export.BSimLogger;
+import bsim.particle.BSimBacterium;
 
 /**
- * Tests BSimRunTumbleMixin to see whether the distributions of the run durations
- * and tumble angle are correct
+ * Tests whether the distributions of the run durations and tumble angle are correct.
  */
 public class BSimRunTumbleExample {
 
@@ -26,47 +24,24 @@ public class BSimRunTumbleExample {
 		sim.setTimeFormat("0.00");
 		sim.setBound(100,100,100);
 				
-		class BSimRunningTumblingBacterium extends BSimParticle  {			
-			BSimFlagella flagella = new BSimFlagella(sim, this);
-											
-			public BSimRunningTumblingBacterium(BSim sim, Vector3d position) {
-				super(sim, position, 1);
-			}
-
-			public void action() {
-				flagella.exert();				
-			}
-			
-			public void setLambdaBundledApart(double d) { flagella.setLambdaBundledApart(d); }
-			public void setState(BSimFlagella.State s) { flagella.setState(s); }
-			public BSimFlagella.State getState() { return flagella.getState(); }			
-			public Vector3d getBundleDirection() { return flagella.getBundleDirection(); }			
-			public double tumbleAngle() { return flagella.tumbleAngle(); }
-		}
-		final BSimRunningTumblingBacterium runningTumblingBacterium = new BSimRunningTumblingBacterium(sim, new Vector3d(50,50,50));
-
+		final BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50));
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				runningTumblingBacterium.action();		
-				runningTumblingBacterium.updatePosition();
+				bacterium.action();		
+				bacterium.updatePosition();
 			}
 		});
 		
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void draw(PGraphics3D p3d) {							
-					p3d.pushMatrix();					
-					Vector3d position = runningTumblingBacterium.getPosition();
-					p3d.translate((float)position.x, (float)position.y, (float)position.z);		
-					p3d.fill(0,255,0);
-					p3d.sphere((float)runningTumblingBacterium.getRadius());
-					p3d.popMatrix();						
+				draw(bacterium,Color.GREEN);
 			}
 		});	
 		
 		class BSimRunTumbleLogger extends BSimLogger {
-			protected BSimFlagella.State lastState;
+			protected BSimBacterium.MotionState lastState;
 			
 			public BSimRunTumbleLogger(BSim sim, String filename) {
 				super(sim, filename);
@@ -75,32 +50,31 @@ public class BSimRunTumbleExample {
 			@Override
 			public void before() {
 				super.before();
-				runningTumblingBacterium.setState(BSimFlagella.State.BUNDLED);				
-				lastState = BSimFlagella.State.BUNDLED; 
+				assert(bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING);
+				lastState = BSimBacterium.MotionState.RUNNING; 
 			}
 			@Override
 			public void during() {								
-				lastState = runningTumblingBacterium.getState();					
+				lastState = bacterium.getMotionState();					
 			}
 		};
 		
 		
 		
 		sim.addExporter(new BSimRunTumbleLogger(sim, "results/tumbleAngle.csv") {
-			private Vector3d bundleDirectionAtStartOfLastRun;
+			private Vector3d directionAtStartOfLastRun;
 			
 			@Override
 			public void before() {
 				super.before();
-				bundleDirectionAtStartOfLastRun = new Vector3d(runningTumblingBacterium.getBundleDirection());
-				/* Distributions should be the same */
-				write("tumbleAngle,sampledTumbleAngle");
+				directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());				
+				write("tumbleAngle,sampledTumbleAngle"); // Distributions should be the same
 			}
 			@Override
 			public void during() {								
-				if (lastState == BSimFlagella.State.APART && runningTumblingBacterium.getState() == BSimFlagella.State.BUNDLED) {
-					write(Math.toDegrees(runningTumblingBacterium.getBundleDirection().angle(bundleDirectionAtStartOfLastRun))+","+Math.toDegrees(runningTumblingBacterium.tumbleAngle()));
-					bundleDirectionAtStartOfLastRun = new Vector3d(runningTumblingBacterium.getBundleDirection());
+				if (lastState == BSimBacterium.MotionState.TUMBLING && bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING) {
+					write(Math.toDegrees(bacterium.getDirection().angle(directionAtStartOfLastRun))+","+Math.toDegrees(bacterium.tumbleAngle()));
+					directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());
 				}	
 				super.during();					
 			}
@@ -113,16 +87,15 @@ public class BSimRunTumbleExample {
 			public void before() {
 				super.before();
 				startTimeOfLastRun = 0;
-				runningTumblingBacterium.setLambdaBundledApart(1);
-				/* Should be exponentially distributed with mean 1 */
-				write("runDuration");
+				assert (bacterium.pEndRun() == 1);
+				write("runDuration"); // Should be exponentially distributed with mean 1
 			}
 			@Override
 			public void during() {								
-				if (lastState == BSimFlagella.State.BUNDLED && runningTumblingBacterium.getState() == BSimFlagella.State.APART) {
+				if (lastState == BSimBacterium.MotionState.RUNNING && bacterium.getMotionState() == BSimBacterium.MotionState.TUMBLING) {
 					// end of run
 					write(sim.getTime()-startTimeOfLastRun+"");
-				} else if (lastState == BSimFlagella.State.APART && runningTumblingBacterium.getState() == BSimFlagella.State.BUNDLED) {
+				} else if (lastState == BSimBacterium.MotionState.TUMBLING && bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING) {
 					// start of run
 					startTimeOfLastRun = sim.getTime();
 				}				

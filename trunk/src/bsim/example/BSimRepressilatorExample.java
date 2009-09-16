@@ -16,6 +16,7 @@
 
 package bsim.example;
 
+import java.awt.Color;
 import java.util.Random;
 import java.util.Vector;
 
@@ -23,15 +24,13 @@ import javax.vecmath.Vector3d;
 
 import processing.core.PGraphics3D;
 import bsim.BSim;
-import bsim.BSimParticle;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.exert.BSimBrownianFluid;
-import bsim.exert.BSimFlagella;
 import bsim.export.BSimImageExporter;
 import bsim.export.BSimLogger;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
+import bsim.particle.BSimBacterium;
 
 public class BSimRepressilatorExample {
 
@@ -51,7 +50,7 @@ public class BSimRepressilatorExample {
 		 * Extend BSimParticle to a Brownian motion/run-tumble bacterium with
 		 * a repressilator GRN inside it.
 		 */				
-		class BSimRepressilatorParticle extends BSimParticle {			
+		class BSimRepressilatorBacterium extends BSimBacterium {			
 			protected QuorumRepressilator repGRN;
 			protected double[] y, yNew;
 			protected double cellWallDiffusion;			
@@ -59,10 +58,8 @@ public class BSimRepressilatorExample {
 			/*
 			 * Constructor for a repressilator GRN bacterium.
 			 */
-			public BSimRepressilatorParticle(BSim sim, Vector3d position){
-				super(sim, position, 1);
-				exerters.add(new BSimFlagella(sim, this));
-				exerters.add(new BSimBrownianFluid(sim, this));				
+			public BSimRepressilatorBacterium(BSim sim, Vector3d position){
+				super(sim, position);			
 				//Create the parameters and initial conditions for the ODE system
 				repGRN = new QuorumRepressilator();
 				repGRN.generateBeta();
@@ -155,15 +152,15 @@ public class BSimRepressilatorExample {
 		/**
 		 * Create the vector of all bacteria used in the simulation 
 		 */
-		final Vector<BSimRepressilatorParticle> GRNParticles = new Vector<BSimRepressilatorParticle>();
+		final Vector<BSimRepressilatorBacterium> bacteria = new Vector<BSimRepressilatorBacterium>();
 		
 		// Add bacteria to the vector
-		while(GRNParticles.size() < 200) {		
-			BSimRepressilatorParticle p = new BSimRepressilatorParticle(sim, 
+		while(bacteria.size() < 200) {		
+			BSimRepressilatorBacterium p = new BSimRepressilatorBacterium(sim, 
 										  new Vector3d(Math.random()*sim.getBound().x,
 													   Math.random()*sim.getBound().y,
 													   Math.random()*sim.getBound().z));
-			if(!p.intersection(GRNParticles)) GRNParticles.add(p);
+			if(!p.intersection(bacteria)) bacteria.add(p);
 		}
 
 		
@@ -174,7 +171,7 @@ public class BSimRepressilatorExample {
 			@Override
 			public void tick() {
 				
-				for(BSimRepressilatorParticle p : GRNParticles) {
+				for(BSimRepressilatorBacterium p : bacteria) {
 					p.action();		
 					p.updatePosition();
 				}
@@ -191,16 +188,8 @@ public class BSimRepressilatorExample {
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void draw(PGraphics3D p3d) {	
-				for(BSimRepressilatorParticle p : GRNParticles) {
-					p3d.pushMatrix();					
-					Vector3d position = p.getPosition();
-					p3d.translate((float)position.x, (float)position.y, (float)position.z);
-					
-					// Colour the particle by internal level of lacI mRNA (y[2])
-					p3d.fill(4*(int)p.y[2],255 - 4*(int)p.y[2],0);
-					
-					p3d.sphere((float)p.getRadius());
-					p3d.popMatrix();
+				for(BSimRepressilatorBacterium p : bacteria) {
+					draw(p,new Color(4*(int)p.y[2],255 - 4*(int)p.y[2],0));					
 				}			
 			}
 		});				
@@ -243,7 +232,7 @@ public class BSimRepressilatorExample {
 				String o = sim.getFormattedTime();
 				// All bacteria
 				String lacI = "";
-				for(BSimRepressilatorParticle p: GRNParticles){
+				for(BSimRepressilatorBacterium p: bacteria){
 					lacI = lacI + ","+p.y[2];
 				}
 				write(o+lacI);
