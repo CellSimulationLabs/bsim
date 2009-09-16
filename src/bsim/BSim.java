@@ -11,10 +11,11 @@ public class BSim {
 	
 	public static double BOLTZMANN = 1.38 * Math.pow(10,-23);
 
-	private double dt;
+	private double dt = 0.01;
 	private double simulationTime;
-	private DecimalFormat timeFormat;
-	private Vector3d bound;
+	private DecimalFormat timeFormat = new DecimalFormat("0.00");	
+	private Vector3d bound = new Vector3d(100,100,100);
+	private boolean[] solid = {false, false, false};
 	/* Conditions of 'Chemotaxis in Escherichia Coli', Berg at al. */
 	private double visc = 2.7e-3; // Pa s
 	private double temperature = 305; // K	
@@ -26,6 +27,7 @@ public class BSim {
 	public void setSimulationTime(double d) { simulationTime = d; }
 	public void setTimeFormat(String s) { timeFormat = new DecimalFormat(s); }
 	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z);	}
+	public void setSolid(boolean x, boolean y, boolean z) { solid = new boolean[]{x,y,z}; }
 	public void setVisc(double v) { visc = v; }
 	public void setTemperature(double t) { temperature = t; }	
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
@@ -34,6 +36,7 @@ public class BSim {
 	
 	public double getDt() { return dt; }
 	public Vector3d getBound() { return bound; }
+	public boolean[] getSolid() { return solid; }
 	public double getVisc() { return visc; }
 	public double getTemperature() { return temperature; }
 	public double getTime() { return timestep*dt; }
@@ -102,7 +105,7 @@ public class BSim {
 	/**
 	 * Returns the number of timesteps in the duration d
 	 */
-	private int timesteps(double d) {
+	public int timesteps(double d) {
 		return (int)(d/dt);
 	}	
 	

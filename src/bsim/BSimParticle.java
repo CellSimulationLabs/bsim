@@ -1,23 +1,30 @@
 package bsim;
 
+import java.util.Random;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
 public abstract class BSimParticle {	
 		
+	protected static Random rng = new Random();
+	
 	protected Vector3d position ; // microns		
 	protected Vector3d force = new Vector3d(); // piconewtons	
 	protected double radius; // microns	
-	protected BSim sim; // the environment that the particle exists in
-	protected Vector<BSimExerter> exerters = new Vector<BSimExerter>(); // objects that exert de novo forces on the particle
+	protected double brownianForceMagnitude;
+	protected BSim sim; // the environment that the particle exists in	
 		
 	public BSimParticle(BSim sim, Vector3d position, double radius) {	
 		this.sim = sim;
 		this.position = position;
 		this.radius = radius;
+		setBrownianForceMagnitude();
 	}	
 	
+	public void setBrownianForceMagnitude() {
+		brownianForceMagnitude = Math.sqrt(2*stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
+	}
 	public void setRadius(double r) { radius = r; }
 	public void addForce(Vector3d f) { force.add(f); }
 	
@@ -29,15 +36,12 @@ public abstract class BSimParticle {
 	/**
 	 * Call in BSimTicker#tick() 
 	 */		
-	public void action() { 
-		for(BSimExerter exerter : exerters)
-			exerter.exert();
-	}
+	public abstract void action();
 	
 	/**
 	 * Update the position of the particle according to Stokes' law
 	 */
-	public void updatePosition() {
+	public void updatePosition() {			
 		Vector3d velocity = new Vector3d();
 		velocity.scale(1/stokesCoefficient(), force); // pN/(micrometers*Pa sec) = micrometers/sec 
 		position.scaleAdd(sim.getDt(), velocity, position);
@@ -49,6 +53,17 @@ public abstract class BSimParticle {
 		if(position.y < 0) yBelow();
 		if(position.z > sim.getBound().z) zAbove();
 		if(position.z < 0) zBelow();
+	}
+	
+	/**
+	 * Applies a Brownian force to the particle. The applied force is a function of 
+	 * radius, viscosity and temperature; if any of these are changed externally, you should call
+	 * setBrownianForceMagnitude() again
+	 */
+	public void brownianForce() {						
+		Vector3d f = new Vector3d(rng.nextGaussian(), rng.nextGaussian(), rng.nextGaussian());
+		f.scale(brownianForceMagnitude); 
+		addForce(f);
 	}
 
 	/**
@@ -85,22 +100,39 @@ public abstract class BSimParticle {
 		f.sub(this.position, p.position);			
 		f.normalize();
 		f.scale(m);
-		this.force.add(f);
+		addForce(f);
 		f.negate();
-		p.force.add(f);
+		p.addForce(f);
 	}
 	
 	/*
 	 * Called when the particle goes above or below the bounds of the simulation.
-	 * Overwrite these methods if you want different behaviour; you can use the 
-	 * bounce...() methods below for solid boundaries
+	 * Overwrite these methods if you want different behaviour
 	 */	
-	protected void xAbove() { position.x = wrapAbove(position.x,sim.getBound().x); }
-	protected void xBelow() { position.x = wrapBelow(position.x,sim.getBound().x); }
-	protected void yAbove() { position.y = wrapAbove(position.y,sim.getBound().y); }
-	protected void yBelow() { position.y = wrapBelow(position.y,sim.getBound().y); }
-	protected void zAbove() { position.z = wrapAbove(position.z,sim.getBound().z); }
-	protected void zBelow() { position.z = wrapBelow(position.z,sim.getBound().z); }	
+	protected void xAbove() { 
+		if(sim.getSolid()[0]) position.x = bounceAbove(position.x,sim.getBound().x);
+		else position.x = wrapAbove(position.x,sim.getBound().x); 		
+	}
+	protected void xBelow() { 
+		if(sim.getSolid()[0]) position.x = bounceBelow(position.x,sim.getBound().x);
+		else position.x = wrapBelow(position.x,sim.getBound().x); 		
+	}
+	protected void yAbove() { 
+		if(sim.getSolid()[1]) position.y = bounceAbove(position.y,sim.getBound().y);
+		else position.y = wrapAbove(position.y,sim.getBound().y); 		
+	}
+	protected void yBelow() { 
+		if(sim.getSolid()[1]) position.y = bounceBelow(position.y,sim.getBound().y);
+		else position.y = wrapBelow(position.y,sim.getBound().y); 		
+	}
+	protected void zAbove() { 
+		if(sim.getSolid()[2]) position.z = bounceAbove(position.z,sim.getBound().z);
+		else position.z = wrapAbove(position.z,sim.getBound().z); 		
+	}
+	protected void zBelow() { 
+		if(sim.getSolid()[2]) position.z = bounceBelow(position.z,sim.getBound().z);
+		else position.z = wrapBelow(position.z,sim.getBound().z); 		
+	}
 	
 	/*
 	 * Methods returning the appropriate coordinate for wrapping/bouncing a particle 
