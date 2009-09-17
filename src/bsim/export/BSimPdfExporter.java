@@ -11,7 +11,7 @@ import bsim.BSim;
 import bsim.draw.BSimDrawer;
 
 /**
- * Exports graphics to a PDF, make sure the drawer draws the raw shape information (not the image)
+ * Exports graphics to a PDF, best if the drawer draws the raw shape information (not an image)
  */
 public class BSimPdfExporter extends BSimDrawingExporter {
 
