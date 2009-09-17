@@ -9,9 +9,10 @@ import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimImageExporter;
+import bsim.export.BSimPngExporter;
 import bsim.export.BSimLogger;
-import bsim.export.BSimMovieExporter;
+import bsim.export.BSimMovExporter;
+import bsim.export.BSimPdfExporter;
 import bsim.particle.BSimBacterium;
 
 public class BSimTutorialExample {
@@ -19,7 +20,7 @@ public class BSimTutorialExample {
 	public static void main(String[] args) {
 
 		/*
-		 * Step 1: Create a new simulation object
+		 * Step 1: Create a new simulation object and set environmental properties
 		 * Available setters:
 		 * 	BSim#setDt() defaults to 0.01
 		 * 	BSim#setSimulatonTime() 
@@ -80,37 +81,36 @@ public class BSimTutorialExample {
 		 * Step 4: Implement draw(Graphics) on a BSimDrawer and add the drawer to the simulation 
 		 * 
 		 * Here we use the BSimP3DDrawer which has already implemented draw(Graphics) to draw boundaries
-		 * and a clock but still requires the implementation of draw(PGraphics3D) to draw particles
+		 * and a clock but still requires the implementation of scene(PGraphics3D) to draw particles
 		 * You can use the draw(BSimParticle, Color) method to draw particles 
 		 */
-		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
+		BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
-			public void draw(PGraphics3D p3d) {						
+			public void scene(PGraphics3D p3d) {						
 				for(BSimTutorialBacterium p : tutorialParticles) {
 					draw(p, p.collision ? Color.RED : Color.GREEN);
 				}			
 			}
-		});				
+		};
+		sim.setDrawer(drawer);				
 
 		/* 
 		 * Step 5: Implement before(), during() and after() on BSimExporters and add them to the simulation
 		 * Available setters:
 		 * 	BSimExporter#setDt()
 		 * 
-		 * BSimMovieExporter is a concrete BSimExporter for creating Quicktime movies
-		 * Uses the drawer defined above
+		 * BSimMovExporter is a concrete BSimExporter for creating Quicktime movies
 		 * Available setters:
-		 * 	BSimMovieExporter#setSpeed()
+		 * 	BSimMovExporter#setSpeed()
 		 */			
-		BSimMovieExporter movieExporter = new BSimMovieExporter(sim, "results/BSim.mov");
-		movieExporter.setSpeed(2);
-		sim.addExporter(movieExporter);			
+		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/BSim.mov");
+		movExporter.setSpeed(2);
+		sim.addExporter(movExporter);			
 
-		/* BSimImageExporter is another concrete BSimExporter for creating images 
-		 * Uses the drawer defined above */
-		BSimImageExporter imageExporter = new BSimImageExporter(sim, "results");
-		imageExporter.setDt(0.5);
-		sim.addExporter(imageExporter);			
+		/* BSimPngExporter is another concrete BSimExporter for creating png images */
+		BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+		pngExporter.setDt(0.5);
+		sim.addExporter(pngExporter);			
 
 		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */

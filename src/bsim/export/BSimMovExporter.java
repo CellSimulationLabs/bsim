@@ -1,22 +1,22 @@
 package bsim.export;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import bsim.BSim;
-import bsim.BSimExporter;
+import bsim.draw.BSimDrawer;
 import bsim.export.quicktime.QuickTimeOutputStream;
 
-public class BSimMovieExporter extends BSimExporter {
+public class BSimMovExporter extends BSimDrawingExporter {
 
 	protected QuickTimeOutputStream outputStream;
 	protected String filename;
 	protected int speed = 1;
 
-	public BSimMovieExporter(BSim sim, String filename) {
-		super(sim);
+	public BSimMovExporter(BSim sim, BSimDrawer drawer, String filename) {
+		super(sim, drawer);
 		this.filename = filename;		
 	}
 	
@@ -41,10 +41,10 @@ public class BSimMovieExporter extends BSimExporter {
 	
 	@Override
 	public void during() {			
-		BufferedImage img = new BufferedImage(sim.getWidth(), sim.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics g = img.createGraphics();
-		sim.draw(g);
-        
+		BufferedImage img = new BufferedImage(drawer.getWidth(), drawer.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();
+		drawer.draw(g);
+		g.dispose();
 		try {
 			outputStream.writeFrame(img, 1);
 		} catch (IOException e) {

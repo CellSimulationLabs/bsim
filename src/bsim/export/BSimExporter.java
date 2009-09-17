@@ -1,4 +1,6 @@
-package bsim;
+package bsim.export;
+
+import bsim.BSim;
 
 /**
  * @see BSim#export()

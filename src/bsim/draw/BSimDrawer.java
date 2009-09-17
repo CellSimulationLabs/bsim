@@ -1,6 +1,8 @@
-package bsim;
+package bsim.draw;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
+
+import bsim.BSim;
 
 public abstract class BSimDrawer {
 	
@@ -14,10 +16,7 @@ public abstract class BSimDrawer {
 		this.height = height;
 	}
 	
-	/**
-	 * Draws the scene to a graphics object
-	 */
-	public abstract void draw(Graphics g);
+	public abstract void draw(Graphics2D g);
 	
 	public int getWidth() { return width; }
 	public int getHeight() { return height; }

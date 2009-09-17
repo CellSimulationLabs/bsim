@@ -4,9 +4,12 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSim;
 import bsim.BSimChemicalField;
-import bsim.BSimParticle;
 import bsim.BSimUtils;
 
+/**
+ * Class representing a bacterium whose run-tumble motion is affected in a simple way by
+ * a single goal chemical 
+ */
 public class BSimBacterium extends BSimParticle {
 	
 	/* MOVEMENT */
@@ -35,9 +38,9 @@ public class BSimBacterium extends BSimParticle {
 	protected Vector3d direction;
 	
 	/* CHEMOTAXIS */
-	/** The chemical field that the bacterium responds to */
-	protected BSimChemicalField field;
-	/** Memory of previous concentrations of the chemical field */ 
+	/** Bacteria tend to swim towards higher concentrations of this chemical field */
+	protected BSimChemicalField goal;
+	/** Memory of previous concentrations of the goal field */ 
 	protected double[] memory; // molecules/(micron)^3
 	/*
 	 * 'Temporal comparisons in bacterial chemotaxis', Segall, Berg et al.:
@@ -82,7 +85,7 @@ public class BSimBacterium extends BSimParticle {
 	protected double pEndTumble = 1/0.14; // 1/seconds
 	/** Probability per per unit time of ending a run */
 	public double pEndRun() {
-		if(field != null && movingUpGradient()) return pEndRunUp;
+		if(goal != null && movingUpGradient()) return pEndRunUp;
 		else return pEndRunElse;
 	}
 	/** Probability per per unit time of ending a tumble */
@@ -110,13 +113,13 @@ public class BSimBacterium extends BSimParticle {
 		this.direction = x;
 	}		
 	/**
-	 * Respond to this chemical field
+	 * Set this chemical field as the goal field
 	 */
-	public void setField(BSimChemicalField field) { 
-		this.field = field; 	
+	public void setGoal(BSimChemicalField goal) { 
+		this.goal = goal; 	
 		setMemoryDuration(shortTermMemoryDuration, longTermMemoryDuration);
 		memory = new double[sim.timesteps(getMemoryDuration())];
-		for(int i=0;i<memory.length;i++) memory[i] = field.getConc(position);
+		for(int i=0;i<memory.length;i++) memory[i] = goal.getConc(position);
 	} 
 	public void setMemoryDuration(double shortTermMemoryDuration, double longTermMemoryDuration) {
 		this.shortTermMemoryDuration = shortTermMemoryDuration;
@@ -150,15 +153,7 @@ public class BSimBacterium extends BSimParticle {
 			assert false : motionState;
 		}
 		
-		if(motionState == MotionState.RUNNING) flagellarForce();
-		
-		brownianForce();
-		/**
-		 * Sets the cell direction from the total force on the cell at this point, which may
-		 * include external contributions in addition to the flagellar force (if it doesn't, 
-		 * the new direction is the same as the old) 
-		 */
-		setDirection(force);
+		if(motionState == MotionState.RUNNING) flagellarForce();			
 	}
 	
 	/**
@@ -197,7 +192,7 @@ public class BSimBacterium extends BSimParticle {
 		double longTermCounter = 0, longTermMean = 0;
 		
 		System.arraycopy(memory, 0, memory, 1, memory.length - 1);
-		memory[0] = field.getConc(position);
+		memory[0] = goal.getConc(position);
 		
 		for(int i=0; i<memory.length; i++) {
 			if(i < shortTermMemoryLength) {
