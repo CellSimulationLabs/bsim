@@ -16,21 +16,17 @@ import bsim.export.BSimMovExporter;
 import bsim.export.BSimPdfExporter;
 import bsim.particle.BSimBacterium;
 
-public class BSimQuorumExample {
+public class BSimQuorumOscillatorExample {
 
 	public static void main(String[] args) {
 
 		BSim sim = new BSim();		
-		sim.setDt(0.01);
-		sim.setSimulationTime(10);
-		sim.setTimeFormat("0.00");
-		sim.setBound(100,100,100);
 		
-		final double diffusivity = 1000; // (microns)^2/sec
-		final double decayRate = 0.05;
+		final double diffusivity = 900; // (microns)^2/sec
+		final double decayRate = 0.05;		
 		final double productionRate = 1e9; // molecules/sec
+		final double productionDelay = 1;
 		final double threshold = 1e4;  // molecules/(micron)^3
-		final double activationDelay = 1;
 		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity, decayRate);
 	
 		class BSimQuorumBacterium extends BSimBacterium {
@@ -50,7 +46,7 @@ public class BSimQuorumExample {
 				}
 				else {
 					activated = false;
-					if(lastActivated == -1 || (sim.getTime() - lastActivated) > activationDelay) {				
+					if(lastActivated == -1 || (sim.getTime() - lastActivated) > productionDelay) {				
 						field.addQuantity(position, productionRate*sim.getDt());
 					}
 				}

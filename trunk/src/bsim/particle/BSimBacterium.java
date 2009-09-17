@@ -9,8 +9,8 @@ import bsim.BSimChemicalField;
 import bsim.BSimUtils;
 
 /**
- * Class representing a bacterium whose run-tumble motion is affected in a simple way by
- * a single goal chemical 
+ * Class representing a growing, vesiculating bacterium whose run-tumble motion 
+ * is affected in a simple way by a single goal chemical 
  */
 public class BSimBacterium extends BSimParticle {
 	
@@ -96,6 +96,10 @@ public class BSimBacterium extends BSimParticle {
 	}
 	/** Probability per per unit time of ending a tumble */
 	public double pEndTumble() { return pEndTumble; }
+	/* Setters */
+	public void pEndRunUp(double d) { pEndRunUp = d; }
+	public void pEndRunElse(double d) { pEndRunElse = d; }
+	public void pEndTumble(double d) { pEndTumble = d; }
 	
 	public void setMotionState(MotionState s) { motionState = s; }
 	public void setForceMagnitude(double d) { forceMagnitude = d; }
@@ -122,9 +126,6 @@ public class BSimBacterium extends BSimParticle {
 		this.longTermMemoryDuration = longTermMemoryDuration;		
 		this.longTermMemoryLength = sim.timesteps(longTermMemoryDuration);
 	}
-	public void pEndRunUp(double d) { pEndRunUp = d; }
-	public void pEndRunElse(double d) { pEndRunElse = d; }
-	public void pEndTumble(double d) { pEndTumble = d; }
 	
 	public Vector3d getDirection() { return direction; }
 	public MotionState getMotionState() { return motionState; }	
@@ -195,7 +196,9 @@ public class BSimBacterium extends BSimParticle {
 	protected double pVesicle = 0.1; // 1/(typical vesicle surface areas)
 	// mean growth before producing a vesicle = 1/pVesicle = 10 vesicle surface areas ~ 2 seconds 
 	protected Vector<BSimVesicle> vesicleList; // the external list of vesicles (sorry, it's the cleanest way)
-	
+
+	public void setRadiusGrowthRate(double d) { radiusGrowthRate = d; }
+	public void pVesicle(double d) { pVesicle = d; }
 	public void setVesicleList(Vector<BSimVesicle> v) { vesicleList = v; }
 	
 	public void grow() {

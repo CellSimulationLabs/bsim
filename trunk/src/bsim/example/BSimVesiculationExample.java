@@ -19,10 +19,10 @@ public class BSimVesiculationExample {
 	public static void main(String[] args) {
 
 		BSim sim = new BSim();	
-		sim.setSimulationTime(10);
 				
 		final Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();
 		final BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50));
+		bacterium.pVesicle(0.2);
 		bacterium.setVesicleList(vesicles);
 		sim.setTicker(new BSimTicker() {
 			@Override
@@ -43,10 +43,6 @@ public class BSimVesiculationExample {
 			}
 		};	
 		sim.setDrawer(drawer);
-		
-		BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
-		pngExporter.setDt(0.5);
-		sim.addExporter(pngExporter);	
 		
 		sim.preview();
 	}
