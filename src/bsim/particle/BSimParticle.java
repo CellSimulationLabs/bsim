@@ -28,11 +28,14 @@ public abstract class BSimParticle {
 		brownianForceMagnitude = Math.sqrt(2*stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
 	}
 	public void setRadius(double r) { radius = r; }
+	public void setRadiusFromSurfaceArea(double s) { radius = Math.sqrt(s/(4*Math.PI)); }
 	public void addForce(Vector3d f) { force.add(f); }
 	
 	public Vector3d getPosition() { return position; }
 	public Vector3d getForce() { return force; }
 	public double getRadius() { return radius; }
+	public double getSurfaceArea() { return surfaceArea(radius); }
+	public double surfaceArea(double r) { return 4*Math.PI*Math.pow(r,2); }	
 	public double stokesCoefficient() { return 6.0*Math.PI*radius*sim.getVisc(); } // micrometers*Pa sec
 	
 	/**
