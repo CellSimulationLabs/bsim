@@ -1,9 +1,11 @@
-package bsim;
+package bsim.particle;
 
 import java.util.Random;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
+
+import bsim.BSim;
 
 public abstract class BSimParticle {	
 		
@@ -41,7 +43,8 @@ public abstract class BSimParticle {
 	/**
 	 * Update the position of the particle according to Stokes' law
 	 */
-	public void updatePosition() {			
+	public void updatePosition() {
+		brownianForce();
 		Vector3d velocity = new Vector3d();
 		velocity.scale(1/stokesCoefficient(), force); // pN/(micrometers*Pa sec) = micrometers/sec 
 		position.scaleAdd(sim.getDt(), velocity, position);

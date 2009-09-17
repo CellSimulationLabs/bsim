@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import bsim.BSim;
-import bsim.BSimExporter;
 
 public abstract class BSimLogger extends BSimExporter {
 	

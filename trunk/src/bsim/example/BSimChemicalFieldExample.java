@@ -22,13 +22,21 @@ public class BSimChemicalFieldExample {
 		sim.setSolid(true,true,true);
 		sim.setBound(100,100,100);
 			
-		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10});
-		field.linearZ(0,10);
+		final double c = 12e5; // molecules
+		final double diffusivity = 890; // (microns)^2/sec
+		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity);
+//		field.linearZ(0,c);
 				
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
 		while(bacteria.size() < 30) {		
-			BSimBacterium p = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
-			p.setField(field);
+			BSimBacterium p = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z)) {
+				public void action() {
+					super.action();
+					if (Math.random() < sim.getDt())
+						field.addQuantity(position, 1e9);					
+				}
+			};
+			p.setGoal(field);
 			if(!p.intersection(bacteria)) bacteria.add(p);		
 		}
 		
@@ -39,13 +47,14 @@ public class BSimChemicalFieldExample {
 					p.action();		
 					p.updatePosition();
 				}
+				field.diffuse(); 
 			}		
 		});
 
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
-			public void draw(PGraphics3D p3d) {	
-				draw(field, Color.BLUE, 10);						
+			public void scene(PGraphics3D p3d) {	
+				draw(field, Color.BLUE, (float)(255/c));						
 				for(BSimBacterium p : bacteria) draw(p, Color.GREEN);		
 			}
 		});				

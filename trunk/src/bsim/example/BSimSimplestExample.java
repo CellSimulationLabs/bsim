@@ -27,7 +27,7 @@ public class BSimSimplestExample {
 		
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
-			public void draw(PGraphics3D p3d) {							
+			public void scene(PGraphics3D p3d) {							
 				draw(bacterium,Color.GREEN);
 			}
 		});	

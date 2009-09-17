@@ -25,8 +25,9 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimImageExporter;
+import bsim.export.BSimPngExporter;
 import bsim.export.BSimLogger;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
@@ -185,14 +186,15 @@ public class BSimRepressilatorExample {
 		 * Draw the particles such that they are green for low levels of lacI mRNA and get more red
 		 * as the level increases.
 		 */
-		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
+		BSimDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
-			public void draw(PGraphics3D p3d) {	
+			public void scene(PGraphics3D p3d) {	
 				for(BSimRepressilatorBacterium p : bacteria) {
 					draw(p,new Color(4*(int)p.y[2],255 - 4*(int)p.y[2],0));					
 				}			
 			}
-		});				
+		}; 
+		sim.setDrawer(drawer);				
 
 		
 		/** 
@@ -207,7 +209,7 @@ public class BSimRepressilatorExample {
 		/* 
 		 * BSimImageExporter
 		 */
-		BSimImageExporter imageExporter = new BSimImageExporter(sim, "results");
+		BSimPngExporter imageExporter = new BSimPngExporter(sim, drawer, "results");
 		imageExporter.setDt(1);
 		sim.addExporter(imageExporter);			
 

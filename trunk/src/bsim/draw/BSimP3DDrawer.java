@@ -2,15 +2,16 @@ package bsim.draw;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.vecmath.Vector3d;
 
 import processing.core.PFont;
 import processing.core.PGraphics3D;
+import processing.core.PGraphicsJava2D;
 import bsim.BSim;
 import bsim.BSimChemicalField;
-import bsim.BSimDrawer;
-import bsim.BSimParticle;
+import bsim.particle.BSimParticle;
 
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
@@ -33,9 +34,9 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 
 		font = new PFont(PFont.findFont("Trebuchet MS").deriveFont((float)20), true, PFont.DEFAULT_CHARSET);
 	}
-
+	
 	@Override
-	public void draw(Graphics g) {			
+	public void draw(Graphics2D g) {			
 		p3d.beginDraw();
 
 		p3d.textFont(font);
@@ -45,18 +46,43 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.noStroke();		
 		p3d.background(0, 0, 0);	
 
-		draw(p3d);
-		drawBoundaries();
-		drawTime();
+		scene(p3d);
+		boundaries();
+		time();
 
-		p3d.endDraw();		
+		p3d.endDraw();
 		g.drawImage(p3d.image, 0,0, null);
 	}
-
+			
 	/**
 	 * Draws remaining scene objects to the PGraphics3D object
 	 */
-	public abstract void draw(PGraphics3D p3d);
+	public abstract void scene(PGraphics3D p3d);
+	
+	public void boundaries() {
+		p3d.fill(128, 128, 255, 50);
+		p3d.stroke(128, 128, 255);
+		p3d.pushMatrix();
+		p3d.translate((float)boundCentre.x,(float)boundCentre.y,(float)boundCentre.z);
+		p3d.box((float)bound.x, (float)bound.y, (float)bound.z);
+		p3d.popMatrix();
+		p3d.noStroke();
+	}
+	
+	public void boundaryOutline() {
+		p3d.noFill();
+		p3d.stroke(128, 128, 255);
+		p3d.pushMatrix();
+		p3d.translate((float)boundCentre.x,(float)boundCentre.y,(float)boundCentre.z);
+		p3d.box((float)bound.x, (float)bound.y, (float)bound.z);
+		p3d.popMatrix();
+		p3d.noStroke();
+	}
+	
+	public void time() {
+		p3d.fill(255);
+		p3d.text(sim.getFormattedTime(), 50, 50);
+	}
 
 	/**
 	 * Draws a particle p as a sphere of color c 
@@ -73,33 +99,18 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	/**
 	 * Draws a chemical field with alpha per unit concentration alphaGrad
 	 */
-	public void draw(BSimChemicalField field, Color c, int alphaGrad) {
-		int[] partition = field.getPartition();
+	public void draw(BSimChemicalField field, Color c, float alphaGrad) {
+		int[] boxes = field.getBoxes();
 		double[] boxSize = field.getBox();				
-		for(int i=0; i < partition[0]; i++)
-			for(int j=0; j < partition[1]; j++)
-				for(int k=0; k < partition[2]; k++) {							
+		for(int i=0; i < boxes[0]; i++)
+			for(int j=0; j < boxes[1]; j++)
+				for(int k=0; k < boxes[2]; k++) {							
 					p3d.pushMatrix();					
 					p3d.translate((float)(boxSize[0]*i+boxSize[0]/2), (float)(boxSize[1]*j+boxSize[1]/2), (float)(boxSize[2]*k+boxSize[2]/2));
 					p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)field.getConc(i,j,k));
 					p3d.box((float)boxSize[0],(float)boxSize[1],(float)boxSize[2]);
 					p3d.popMatrix();
 				}
-	}
-	
-	public void drawBoundaries() {
-		p3d.fill(128, 128, 255, 50);
-		p3d.stroke(128, 128, 255);
-		p3d.pushMatrix();
-		p3d.translate((float)boundCentre.x,(float)boundCentre.y,(float)boundCentre.z);
-		p3d.box((float)bound.x, (float)bound.y, (float)bound.z);
-		p3d.popMatrix();
-		p3d.noStroke();
-	}
-	
-	public void drawTime() {
-		p3d.fill(255);
-		p3d.text(sim.getFormattedTime(), 50, 50);
 	}
 
 }

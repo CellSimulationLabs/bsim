@@ -1,11 +1,15 @@
 package bsim;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
 import javax.swing.JFrame;
 import javax.vecmath.Vector3d;
+
+import bsim.draw.BSimDrawer;
+import bsim.export.BSimExporter;
 
 public class BSim {
 	
@@ -51,10 +55,10 @@ public class BSim {
 		JFrame frame = new JFrame("BSim Preview") {
 			@Override
 			public void paint(Graphics g) {
-				draw(g);
+				drawer.draw((Graphics2D)g);
 			}
 		};
-		frame.setSize(getWidth(), getHeight());
+		frame.setSize(drawer.getWidth(), drawer.getHeight());
 		frame.setResizable(false);
 		/* TODO frame.addMouseListener(drawer) */
 		frame.setVisible(true);
@@ -86,21 +90,6 @@ public class BSim {
 
 		for(BSimExporter exporter : exporters) exporter.after();			
 	}	
-
-	/**
-	 * Uses the drawer to draw to the graphics object g
-	 */
-	public void draw(Graphics g) {
-		drawer.draw(g);
-	}
-	
-	public int getWidth() {
-		return drawer.getWidth();
-	}
-
-	public int getHeight() {
-		return drawer.getHeight();	
-	}
 		
 	/**
 	 * Returns the number of timesteps in the duration d

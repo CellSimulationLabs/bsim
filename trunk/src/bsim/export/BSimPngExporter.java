@@ -1,6 +1,6 @@
 package bsim.export;
 
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -8,14 +8,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import bsim.BSim;
-import bsim.BSimExporter;
+import bsim.draw.BSimDrawer;
 
-public class BSimImageExporter extends BSimExporter {
+public class BSimPngExporter extends BSimDrawingExporter {
 
 	protected String directory;
 	
-	public BSimImageExporter(BSim sim, String directory) {
-		super(sim);
+	public BSimPngExporter(BSim sim, BSimDrawer drawer, String directory) {
+		super(sim, drawer);
 		this.directory = directory;
 	}
 	
@@ -24,10 +24,10 @@ public class BSimImageExporter extends BSimExporter {
 	
 	@Override
 	public void during() {				
-		BufferedImage img = new BufferedImage(sim.getWidth(), sim.getHeight(), BufferedImage.TYPE_INT_RGB);
-		Graphics g = img.createGraphics();				
-		sim.draw(g);
-		
+		BufferedImage img = new BufferedImage(drawer.getWidth(), drawer.getHeight(), BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();				
+		drawer.draw(g);
+		g.dispose();
 		try {
 			File file = new File(directory + "/" + sim.getFormattedTime() + ".png");
 			ImageIO.write(img, "png", file);
