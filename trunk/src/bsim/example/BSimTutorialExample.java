@@ -54,10 +54,10 @@ public class BSimTutorialExample {
 				}
 			}
 		}		
-		final Vector<BSimTutorialBacterium> tutorialParticles = new Vector<BSimTutorialBacterium>();		
-		while(tutorialParticles.size() < 100) {		
-			BSimTutorialBacterium p = new BSimTutorialBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
-			if(!p.intersection(tutorialParticles)) tutorialParticles.add(p);		
+		final Vector<BSimTutorialBacterium> bacteria = new Vector<BSimTutorialBacterium>();		
+		while(bacteria.size() < 100) {		
+			BSimTutorialBacterium b = new BSimTutorialBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+			if(!b.intersection(bacteria)) bacteria.add(b);		
 		}
 
 		/* 
@@ -66,13 +66,13 @@ public class BSimTutorialExample {
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				for(int i = 1; i < tutorialParticles.size(); i++)
-					for(int j = i+1; j < tutorialParticles.size(); j++)
-						tutorialParticles.get(i).interaction(tutorialParticles.get(j));
+				for(int i = 1; i < bacteria.size(); i++)
+					for(int j = i+1; j < bacteria.size(); j++)
+						bacteria.get(i).interaction(bacteria.get(j));
 
-				for(BSimTutorialBacterium p : tutorialParticles) {
-					p.action();		
-					p.updatePosition();
+				for(BSimTutorialBacterium b : bacteria) {
+					b.action();		
+					b.updatePosition();
 				}
 			}		
 		});
@@ -87,8 +87,8 @@ public class BSimTutorialExample {
 		BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {						
-				for(BSimTutorialBacterium p : tutorialParticles) {
-					draw(p, p.collision ? Color.RED : Color.GREEN);
+				for(BSimTutorialBacterium b : bacteria) {
+					draw(b, b.collision ? Color.RED : Color.GREEN);
 				}			
 			}
 		};
@@ -123,7 +123,7 @@ public class BSimTutorialExample {
 			@Override
 			public void during() {
 				int collisions = 0;
-				for (BSimTutorialBacterium p : tutorialParticles)
+				for (BSimTutorialBacterium p : bacteria)
 					if(p.collision) collisions++;
 				write(sim.getFormattedTime()+","+collisions);
 			}

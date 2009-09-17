@@ -23,8 +23,9 @@ public class BSimChemicalFieldExample {
 		sim.setBound(100,100,100);
 			
 		final double c = 12e5; // molecules
+		final double decayRate = 0.1;
 		final double diffusivity = 890; // (microns)^2/sec
-		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity);
+		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity, decayRate);
 //		field.linearZ(0,c);
 				
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
@@ -43,11 +44,11 @@ public class BSimChemicalFieldExample {
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				for(BSimBacterium p : bacteria) {
-					p.action();		
-					p.updatePosition();
+				for(BSimBacterium b : bacteria) {
+					b.action();		
+					b.updatePosition();
 				}
-				field.diffuse(); 
+				field.update(); 
 			}		
 		});
 
