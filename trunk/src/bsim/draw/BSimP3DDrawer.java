@@ -1,17 +1,16 @@
 package bsim.draw;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javax.vecmath.Vector3d;
 
 import processing.core.PFont;
 import processing.core.PGraphics3D;
-import processing.core.PGraphicsJava2D;
 import bsim.BSim;
 import bsim.BSimChemicalField;
 import bsim.particle.BSimParticle;
+import bsim.particle.BSimVesicle;
 
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
@@ -84,17 +83,28 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.text(sim.getFormattedTime(), 50, 50);
 	}
 
-	/**
-	 * Draws a particle p as a sphere of color c 
-	 */
 	public void draw(BSimParticle p, Color c) {
-		p3d.pushMatrix();					
-		Vector3d position = p.getPosition();
-		p3d.translate((float)position.x, (float)position.y, (float)position.z);
-		p3d.fill(c.getRed(),c.getGreen(),c.getBlue());
-		p3d.sphere((float)p.getRadius());
+		draw(p.getPosition(), p.getRadius(), c);
+	}
+		
+	public void draw(BSimVesicle v, Color c) {		
+		p3d.fill(255, 131, 223, 50);		
+		p3d.pushMatrix();
+		p3d.translate((float)v.getPosition().x, (float)v.getPosition().y,(float)v.getPosition().z);
+		p3d.sphere((float)(100*v.getRadius()));
 		p3d.popMatrix();
-	}	
+		p3d.stroke(255,0,0);
+		p3d.point((float)v.getPosition().x, (float)v.getPosition().y,(float)v.getPosition().z);
+		p3d.noStroke();
+	}
+
+	public void draw(Vector3d position, double radius, Color c) {
+		p3d.pushMatrix();
+		p3d.translate((float) position.x, (float) position.y, (float) position.z);
+		p3d.fill(c.getRed(), c.getGreen(), c.getBlue());
+		p3d.sphere((float) radius);
+		p3d.popMatrix();
+	}
 
 	/**
 	 * Draws a chemical field with alpha per unit concentration alphaGrad

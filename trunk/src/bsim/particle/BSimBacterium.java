@@ -1,5 +1,7 @@
 package bsim.particle;
 
+import java.util.Vector;
+
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
@@ -12,7 +14,9 @@ import bsim.BSimUtils;
  */
 public class BSimBacterium extends BSimParticle {
 	
-	/* MOVEMENT */
+	/* 
+	 * MOVEMENT including CHEMOTAXIS
+	 */
 	public static enum MotionState {
 		/* Quotes from 'Motile behavior of bacteria', Berg */
 		/**
@@ -37,7 +41,6 @@ public class BSimBacterium extends BSimParticle {
 	 */
 	protected Vector3d direction;
 	
-	/* CHEMOTAXIS */
 	/** Bacteria tend to swim towards higher concentrations of this chemical field */
 	protected BSimChemicalField goal;
 	/** Memory of previous concentrations of the goal field */ 
@@ -79,29 +82,21 @@ public class BSimBacterium extends BSimParticle {
 	 */
 	/** Probability per per unit time of ending a run when moving up a chemical gradient */
 	protected double pEndRunUp = 1/1.07; // 1/seconds
+	// mean time to end a run when moving up a gradient = 1/pEndRunUp = 1.07 seconds
 	/** Probability per per unit time of ending a run otherwise */
 	protected double pEndRunElse = 1/0.86; // 1/seconds
+	// mean time to end a run otherwise = 1/pEndRunElse = 0.86 seconds
 	/** Probability per per unit time of ending a tumble */
 	protected double pEndTumble = 1/0.14; // 1/seconds
+	// mean time to end a tumble = 1/pEndTumble = 0.14 seconds
 	/** Probability per per unit time of ending a run */
 	public double pEndRun() {
 		if(goal != null && movingUpGradient()) return pEndRunUp;
 		else return pEndRunElse;
 	}
 	/** Probability per per unit time of ending a tumble */
-	public double pEndTumble() { return pEndTumble; }	
+	public double pEndTumble() { return pEndTumble; }
 	
-			
-	/**
-	 * Creates a RUNNING bacterium of radius 1 micron at the specified position, facing in a
-	 * random direction
-	 */
-	public BSimBacterium(BSim sim, Vector3d position) {
-		super(sim, position, 1); // default radius 1 micron
-		setMotionState(MotionState.RUNNING);
-		setDirection(new Vector3d(Math.random(),Math.random(),Math.random()));	
-	}	
-				
 	public void setMotionState(MotionState s) { motionState = s; }
 	public void setForceMagnitude(double d) { forceMagnitude = d; }
 	/**
@@ -134,27 +129,6 @@ public class BSimBacterium extends BSimParticle {
 	public Vector3d getDirection() { return direction; }
 	public MotionState getMotionState() { return motionState; }	
 	public double getMemoryDuration() { return shortTermMemoryDuration + longTermMemoryDuration; }
-		
-	@Override
-	public void action() {
-		switch(motionState) {
-		case RUNNING:
-			if(Math.random() < pEndRun()*sim.getDt())
-				motionState = MotionState.TUMBLING;
-			break;
-		case TUMBLING:
-			if(Math.random() < pEndTumble()*sim.getDt()) {
-				/* Change the direction at the end of a tumble phase */
-				BSimUtils.rotate(direction, tumbleAngle());
-				motionState = MotionState.RUNNING;
-			}
-			break;
-		default:
-			assert false : motionState;
-		}
-		
-		if(motionState == MotionState.RUNNING) flagellarForce();			
-	}
 	
 	/**
 	 * Applies the flagellar force 
@@ -208,5 +182,76 @@ public class BSimBacterium extends BSimParticle {
         
 		return shortTermMean - longTermMean > sensitivity;
 	}
+	
+	
+	
+	
+	/* 
+	 * GROWTH and VESICULATION 
+	 */		
+	protected double radiusGrowthRate = 1e-3; // microns/s;
+	// corresponds to a surface area growth of about 5 vesicle surface areas / second
+	/** Probability per typical vesicle surface area growth (0.005 microns^2) of producing a vesicle */
+	protected double pVesicle = 0.1; // 1/(typical vesicle surface areas)
+	// mean growth before producing a vesicle = 1/pVesicle = 10 vesicle surface areas ~ 2 seconds 
+	protected Vector<BSimVesicle> vesicleList; // the external list of vesicles (sorry, it's the cleanest way)
+	
+	public void setVesicleList(Vector<BSimVesicle> v) { vesicleList = v; }
+	
+	public void grow() {
+		double oldSurfaceArea = getSurfaceArea();
+		radius += radiusGrowthRate*sim.getDt();
+		double newSurfaceArea = getSurfaceArea();
+		double dS = newSurfaceArea - oldSurfaceArea;
+		if(vesicleList != null && Math.random() < pVesicle*(dS/0.005))
+			vesiculate();		
+	}
+	
+	public void vesiculate() {
+		double r = vesicleRadius();
+		vesicleList.add(new BSimVesicle(sim, new Vector3d(position), r));
+		setRadiusFromSurfaceArea(getSurfaceArea()-surfaceArea(r));
+	}
+	
+	public double vesicleRadius() {
+		return 0.02;
+	}
+	
+	
+	
+			
+	/**
+	 * Creates a RUNNING bacterium of radius 1 micron at the specified position, facing in a
+	 * random direction
+	 */
+	public BSimBacterium(BSim sim, Vector3d position) {
+		super(sim, position, 1); // default radius 1 micron
+		setMotionState(MotionState.RUNNING);
+		setDirection(new Vector3d(Math.random(),Math.random(),Math.random()));	
+	}				
+		
+	@Override
+	public void action() {
+		switch(motionState) {
+		case RUNNING:
+			if(Math.random() < pEndRun()*sim.getDt())
+				motionState = MotionState.TUMBLING;
+			break;
+		case TUMBLING:
+			if(Math.random() < pEndTumble()*sim.getDt()) {
+				/* Change the direction at the end of a tumble phase */
+				BSimUtils.rotate(direction, tumbleAngle());
+				motionState = MotionState.RUNNING;
+			}
+			break;
+		default:
+			assert false : motionState;
+		}
+		
+		if(motionState == MotionState.RUNNING) flagellarForce();	
+		
+		grow();
+	}
+	
 
 }
