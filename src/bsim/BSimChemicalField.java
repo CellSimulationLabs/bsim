@@ -9,6 +9,7 @@ public class BSimChemicalField {
 	
 	protected BSim sim;
 	protected double diffusivity; // (microns)^2/s 
+	protected double decayRate; // fraction of chemical in a box decaying per second
 	/** The quantity of chemical in the box (i,j,k) */
 	protected double[][][] quantity; // number of molecules
 	/** sim.getBound() */
@@ -19,7 +20,7 @@ public class BSimChemicalField {
 	protected double[] box = new double[3]; // microns
 	protected double boxVolume;
 	
-	public BSimChemicalField(BSim sim, int[] boxes, double diffusivity) {
+	public BSimChemicalField(BSim sim, int[] boxes, double diffusivity, double decayRate) {
 		this.sim = sim;
 		this.bound = sim.getBound();
 		this.boxes = boxes;
@@ -29,6 +30,7 @@ public class BSimChemicalField {
 		boxVolume = box[0]*box[1]*box[2];
 		this.quantity = new double[boxes[0]][boxes[1]][boxes[2]]; 
 		this.diffusivity = diffusivity;
+		this.decayRate = decayRate;
 	}	
 	
 	public int[] getBoxes() { return boxes; }
@@ -90,7 +92,16 @@ public class BSimChemicalField {
 	}
 	
 	
+	public void update() {
+		diffuse();
+		decay();
+	}
 	
+	public void decay() {
+		for(int i=0;i<boxes[0];i++)
+			for(int j=0;j<boxes[1];j++)
+				for(int k=0;k<boxes[2];k++) setConc(i,j,k,getConc(i,j,k)*(1-decayRate*sim.getDt()));
+	}	
 	
 	public void diffuse() {
 		double[][][] before = quantity;
