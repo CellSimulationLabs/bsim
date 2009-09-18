@@ -87,7 +87,7 @@ public class BSimChemicalField {
 		return t;
 	}
 	
-	/** Returns the coordinates of the box containing the position v */ 
+	/** Returns the integer coordinates of the box containing the position v */ 
 	public int[] boxCoords(Vector3d v) {
 		return new int[] {(int)(v.x/box[0]), (int)(v.y/box[1]), (int)(v.z/box[2])};	
 	}
@@ -123,6 +123,9 @@ public class BSimChemicalField {
 		for(int i=0;i<boxes[0];i++)
 			for(int j=0;j<boxes[1];j++)
 				for(int k=0;k<boxes[2];k++) {	
+					/* Is this box the last box? 
+					 * 	If so, is the boundary solid? If so, there is no box above, else, the box 'above' is the first box
+					 * 	Else, the box above is the next box */
 					xAbove = (i == boxes[0]-1 ? (sim.getSolid()[0] ? -1 : 0) : i+1);
 					xBelow = (i == 0 ? (sim.getSolid()[0] ? -1 : boxes[0]-1) : i-1);
 					yAbove = (j == boxes[1]-1 ? (sim.getSolid()[1] ? -1 : 0) : j+1);
@@ -130,9 +133,13 @@ public class BSimChemicalField {
 					zAbove = (k == boxes[2]-1 ? (sim.getSolid()[2] ? -1 : 0) : k+1);
 					zBelow = (k == 0 ? (sim.getSolid()[2] ? -1 : boxes[2]-1) : k-1);
 					
+					/* If there is a box above */
 					if(xAbove != -1) {
+						/* Calculate the quantity of chemical leaving the box in this direction */
 						qxAbove = -kX*(before[xAbove][j][k]-before[i][j][k]);
+						/* Add that quantity to the box above */ 
 						quantity[xAbove][j][k] += qxAbove;
+						/* Remove it from this box */
 						quantity[i][j][k] -= qxAbove;
 					}
 					if(xBelow != -1) {
