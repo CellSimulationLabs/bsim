@@ -8,8 +8,9 @@ public class BSimChemicalField {
 	/* 1 mM = 6e5 molecules/(micron)^3 */
 	
 	protected BSim sim;
-	protected double diffusivity; // (microns)^2/s 
-	protected double decayRate; // fraction of chemical in a box decaying per second
+	protected double diffusivity; // (microns)^2/s
+	/** Fraction of chemical decaying per second, quantity(t+dt) = quantity(t)*(1-decayRate*dt) */
+	protected double decayRate; // 1/seconds 
 	/** The quantity of chemical in the box (i,j,k) */
 	protected double[][][] quantity; // number of molecules
 	/** sim.getBound() */
