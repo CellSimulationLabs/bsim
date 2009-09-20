@@ -14,7 +14,7 @@ import bsim.particle.BSimBacterium;
 /**
  * Tests whether the distributions of the run durations and tumble angle are correct.
  */
-public class BSimRunTumbleExample {
+public class BSimRunTumbleTest {
 
 	public static void main(String[] args) {
 

@@ -9,10 +9,9 @@ import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimPngExporter;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
-import bsim.export.BSimPdfExporter;
+import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 
 public class BSimTutorialExample {

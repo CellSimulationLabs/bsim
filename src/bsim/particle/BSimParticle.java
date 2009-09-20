@@ -24,6 +24,9 @@ public abstract class BSimParticle {
 		setBrownianForceMagnitude();
 	}	
 	
+   /**
+   * Sets the magnitude of the Brownian force such that var(X(t)) = var(Y(t)) = var(Z(t)) = 2*D*t
+   */
 	public void setBrownianForceMagnitude() {
 		brownianForceMagnitude = Math.sqrt(2*stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
 	}

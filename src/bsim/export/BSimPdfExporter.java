@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 
-import org.freehep.graphics2d.VectorGraphics;
 import org.freehep.graphicsio.pdf.PDFGraphics2D;
 
 import bsim.BSim;

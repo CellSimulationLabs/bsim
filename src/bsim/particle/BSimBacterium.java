@@ -230,7 +230,7 @@ public class BSimBacterium extends BSimParticle {
 	public BSimBacterium(BSim sim, Vector3d position) {
 		super(sim, position, 1); // default radius 1 micron
 		setMotionState(MotionState.RUNNING);
-		setDirection(new Vector3d(Math.random(),Math.random(),Math.random()));	
+		setDirection(new Vector3d(0.5-Math.random(),0.5-Math.random(),0.5-Math.random()));	
 	}				
 		
 	@Override

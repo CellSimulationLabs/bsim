@@ -10,7 +10,6 @@ import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimVesicle;
 

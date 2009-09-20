@@ -3,7 +3,6 @@ package bsim.draw;
 import java.awt.Graphics2D;
 
 import processing.core.PGraphicsJava2D;
-
 import bsim.BSim;
 
 public abstract class BSimRawP3DDrawer extends BSimP3DDrawer {
