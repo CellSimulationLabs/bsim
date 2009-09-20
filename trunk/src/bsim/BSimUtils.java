@@ -60,7 +60,7 @@ public class BSimUtils {
 	 */
 	public static synchronized void rotate(Vector3d v, double theta) {		
 		/* Obtain a random direction perpendicular to v */		
-		Vector3d random = new Vector3d(Math.random(),Math.random(),Math.random());
+		Vector3d random = new Vector3d(0.5-Math.random(),0.5-Math.random(),0.5-Math.random());
 		Vector3d randomPerp = new Vector3d();
 		randomPerp.cross(v, random);		
 

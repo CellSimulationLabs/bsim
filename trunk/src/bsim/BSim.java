@@ -13,7 +13,7 @@ import bsim.export.BSimExporter;
 
 public class BSim {
 	
-	public static double BOLTZMANN = 1.38 * Math.pow(10,-23);
+	public static double BOLTZMANN = 1.38e-23;
 
 	private double dt = 0.01;
 	private double simulationTime;

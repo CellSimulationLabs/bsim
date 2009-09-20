@@ -10,10 +10,6 @@ import bsim.BSim;
 import bsim.BSimChemicalField;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimPngExporter;
-import bsim.export.BSimLogger;
-import bsim.export.BSimMovExporter;
-import bsim.export.BSimPdfExporter;
 import bsim.particle.BSimBacterium;
 
 public class BSimQuorumOscillatorExample {
