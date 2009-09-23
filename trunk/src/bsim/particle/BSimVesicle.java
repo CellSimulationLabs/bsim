@@ -8,8 +8,6 @@ public class BSimVesicle extends BSimParticle {
 
 	public BSimVesicle(BSim sim, Vector3d position, double radius) {
 		super(sim, position, radius);
-	}
-	
-	public void action() {}
+	}	
 
 }
