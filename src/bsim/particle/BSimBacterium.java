@@ -193,7 +193,7 @@ public class BSimBacterium extends BSimParticle {
 	 * 'Cell Shape Dynamics in Escherichia Coli', Reshes et al. p261 lists growth rates
 	 * of about 1 micron/min
 	 */
-	protected double radiusGrowthRate = 1e-3; // microns/s
+	protected double radiusGrowthRate = 1e-3; // microns/s; corresponds to a surface area growth of about 5 vesicle surface areas / second
 	/*
 	 * 'Some Characteristics of the Outer Membrane Material Released by Growing
 	 * Enterotoxigenic Escherichia Coli', Gankema et al.:
