@@ -101,7 +101,7 @@ public class BSimChemicalField {
 	public void decay() {
 		for(int i=0;i<boxes[0];i++)
 			for(int j=0;j<boxes[1];j++)
-				for(int k=0;k<boxes[2];k++) setConc(i,j,k,getConc(i,j,k)*(1-decayRate*sim.getDt()));
+				for(int k=0;k<boxes[2];k++) quantity[i][j][k] *= (1 - decayRate*sim.getDt());
 	}	
 	
 	public void diffuse() {
