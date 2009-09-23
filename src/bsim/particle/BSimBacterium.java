@@ -189,13 +189,20 @@ public class BSimBacterium extends BSimParticle {
 	
 	/* 
 	 * GROWTH and VESICULATION 
-	 */		
-	protected double radiusGrowthRate = 1e-3; // microns/s;
-	// corresponds to a surface area growth of about 5 vesicle surface areas / second
+	 * 
+	 * 'Cell Shape Dynamics in Escherichia Coli', Reshes et al. p261 lists growth rates
+	 * of about 1 micron/min
+	 */
+	protected double radiusGrowthRate = 1e-3; // microns/s
+	/*
+	 * 'Some Characteristics of the Outer Membrane Material Released by Growing
+	 * Enterotoxigenic Escherichia Coli', Gankema et al.:
+	 * 'The medium vesicles.. accounted for 3 to 5% of the total cellular outer membrane' 
+	 */
 	/** Probability per typical vesicle surface area growth (0.005 microns^2) of producing a vesicle */
-	protected double pVesicle = 0.1; // 1/(typical vesicle surface areas)
-	// mean growth before producing a vesicle = 1/pVesicle = 10 vesicle surface areas ~ 2 seconds 
-	protected Vector<BSimVesicle> vesicleList; // the external list of vesicles (sorry, it's the cleanest way)
+	protected double pVesicle = 0.05; // 1/(typical vesicle surface areas); mean growth before producing a vesicle = 1/pVesicle = 20 vesicle surface areas ~ 4 seconds
+	/** The external list of vesicles (sorry, it's the cleanest way) */
+	protected Vector<BSimVesicle> vesicleList; 
 
 	public void setRadiusGrowthRate(double d) { radiusGrowthRate = d; }
 	public void pVesicle(double d) { pVesicle = d; }
@@ -235,6 +242,8 @@ public class BSimBacterium extends BSimParticle {
 		
 	@Override
 	public void action() {
+		super.action();
+		
 		switch(motionState) {
 		case RUNNING:
 			if(Math.random() < pEndRun()*sim.getDt())

@@ -44,13 +44,12 @@ public abstract class BSimParticle {
 	/**
 	 * Call in BSimTicker#tick() 
 	 */		
-	public abstract void action();
+	public void action() { brownianForce(); }
 	
 	/**
 	 * Update the position of the particle according to Stokes' law
 	 */
-	public void updatePosition() {
-		brownianForce();
+	public void updatePosition() {		
 		Vector3d velocity = new Vector3d();
 		velocity.scale(1/stokesCoefficient(), force); // pN/(micrometers*Pa sec) = micrometers/sec 
 		position.scaleAdd(sim.getDt(), velocity, position);
