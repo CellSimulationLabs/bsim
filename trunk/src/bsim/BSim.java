@@ -47,6 +47,7 @@ public class BSim {
 	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
 	public int getTimestep(){ return timestep;}
 	public double getSimulationTime(){ return simulationTime; }
+	
 	private int timestep;
 
 	/**
@@ -97,12 +98,6 @@ public class BSim {
 	 */
 	public int timesteps(double d) {
 		return (int)(d/dt);
-	}
-	/**
-	 * @return the drawer
-	 */
-	public BSimDrawer getDrawer() {
-		return drawer;
 	}	
 	
 
