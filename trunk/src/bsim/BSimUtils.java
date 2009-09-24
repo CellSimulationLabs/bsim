@@ -1,5 +1,6 @@
 package bsim;
 
+import java.util.Calendar;
 import java.util.Random;
 
 import javax.vecmath.AxisAngle4d;
@@ -71,4 +72,40 @@ public class BSimUtils {
 		/* Apply the rotation */			
 		r.transform(v);			
 	}
+	
+	public static synchronized String timeStamp(){
+		// Build the time stamp of the whole batch (this helps to keep batches together)
+		Calendar calNow = Calendar.getInstance();
+		String yyyyStr, mmStr, ddStr, hhStr, miStr, ssStr, timestampStr;
+		
+		yyyyStr = "" + calNow.get(Calendar.YEAR);
+		mmStr = BSimUtils.padInt2(calNow.get(Calendar.MONTH));
+		ddStr = BSimUtils.padInt2(calNow.get(Calendar.DAY_OF_MONTH));
+		hhStr = BSimUtils.padInt2(calNow.get(Calendar.HOUR_OF_DAY));
+		miStr = BSimUtils.padInt2(calNow.get(Calendar.MINUTE));
+		ssStr = BSimUtils.padInt2(calNow.get(Calendar.SECOND));
+		
+		timestampStr = yyyyStr + "-" + mmStr + "-" + ddStr + "_" +
+			hhStr + "-" + miStr + "-" + ssStr;
+		
+		return timestampStr;
+	}
+	
+	/**
+	* Returns a padded version of the number to a size of two
+	*/
+	public static synchronized String padInt2(int val) {
+		String outStr = "";
+		
+		// Pad with zero if needed
+		if(val<10) {
+			outStr = "0" + val;
+		}
+		else{
+			outStr = "" + val;
+		}
+		
+		return outStr;
+	}
+
 }
