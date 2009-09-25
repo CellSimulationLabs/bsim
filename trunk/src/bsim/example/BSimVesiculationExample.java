@@ -28,8 +28,10 @@ public class BSimVesiculationExample {
 			public void tick() {
 				bacterium.action();		
 				bacterium.updatePosition();
-				for(BSimVesicle vesicle : vesicles) 
-					vesicle.updatePosition();				
+				for(BSimVesicle vesicle : vesicles){
+					vesicle.action();
+					vesicle.updatePosition();	
+				}			
 			}
 		});
 		
