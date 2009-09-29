@@ -40,6 +40,7 @@ public class BSim {
 	
 	public double getDt() { return dt; }
 	public double getSimulationTime(){ return simulationTime; }
+	public double getTimestep() { return timestep; }
 	public double getTime() { return timestep*dt; }
 	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
 	public Vector3d getBound() { return bound; }
