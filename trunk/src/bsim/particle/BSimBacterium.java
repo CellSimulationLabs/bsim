@@ -191,7 +191,7 @@ public class BSimBacterium extends BSimParticle {
 	 * GROWTH and VESICULATION 
 	 * 
 	 * 'Cell Shape Dynamics in Escherichia Coli', Reshes et al. p261 lists growth rates
-	 * of about 1 micron/min
+	 * of about 0.1 micron/min
 	 */
 	protected double radiusGrowthRate = 1e-3; // microns/s; corresponds to a surface area growth of about 5 vesicle surface areas / second
 	/*
@@ -252,7 +252,7 @@ public class BSimBacterium extends BSimParticle {
 		case TUMBLING:
 			if(Math.random() < pEndTumble()*sim.getDt()) {
 				/* Change the direction at the end of a tumble phase */
-				BSimUtils.rotate(direction, tumbleAngle());
+				BSimUtils.rotatePerp(direction, tumbleAngle());
 				motionState = MotionState.RUNNING;
 			}
 			break;

@@ -57,20 +57,26 @@ public class BSimUtils {
 	}
 	
 	/**
-	 * Rotates the vector v by an angle theta in a random direction
+	 * Rotates the vector v by an angle theta in a random direction perpendicular to v
 	 */
-	public static synchronized void rotate(Vector3d v, double theta) {		
+	public static synchronized void rotatePerp(Vector3d v, double theta) {		
 		/* Obtain a random direction perpendicular to v */		
 		Vector3d random = new Vector3d(0.5-Math.random(),0.5-Math.random(),0.5-Math.random());
 		Vector3d randomPerp = new Vector3d();
 		randomPerp.cross(v, random);		
-
-		/* Generate the rotation matrix for rotating about this direction an angle theta */
+		rotate(v, randomPerp, theta);
+	}
+	
+	/**
+	 * Rotates the vector v towards the specified axis by an angle theta
+	 */
+	public static synchronized void rotate(Vector3d v, Vector3d axis, double theta) {
+		/* Generate the rotation matrix for rotating about the axis by an angle theta */
 		Matrix3d r = new Matrix3d();
-		r.set(new AxisAngle4d(randomPerp, theta));
-
+		r.set(new AxisAngle4d(axis, theta));
+		
 		/* Apply the rotation */			
-		r.transform(v);			
+		r.transform(v);
 	}
 	
 	public static synchronized String timeStamp(){
