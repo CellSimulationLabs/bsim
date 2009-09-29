@@ -39,14 +39,13 @@ public class BSim {
 	public void addExporter(BSimExporter e) { exporters.add(e); }	
 	
 	public double getDt() { return dt; }
+	public double getSimulationTime(){ return simulationTime; }
+	public double getTime() { return timestep*dt; }
+	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
 	public Vector3d getBound() { return bound; }
 	public boolean[] getSolid() { return solid; }
 	public double getVisc() { return visc; }
 	public double getTemperature() { return temperature; }
-	public double getTime() { return timestep*dt; }
-	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
-	public int getTimestep(){ return timestep;}
-	public double getSimulationTime(){ return simulationTime; }
 	
 	private int timestep;
 
