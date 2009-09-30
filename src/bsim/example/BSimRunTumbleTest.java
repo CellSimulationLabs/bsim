@@ -12,7 +12,7 @@ import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
 
 /**
- * Tests whether the distributions of the run durations and tumble angle are correct.
+ * Tests whether the distributions of the run durations and tumble angle are correct
  */
 public class BSimRunTumbleTest {
 
@@ -42,6 +42,9 @@ public class BSimRunTumbleTest {
 		
 		class BSimRunTumbleLogger extends BSimLogger {
 			protected BSimBacterium.MotionState lastState;
+			protected double startTimeOfLastRun;
+			protected Vector3d directionAtStartOfLastRun;
+			protected Vector3d directionAtEndOfLastRun;
 			
 			public BSimRunTumbleLogger(BSim sim, String filename) {
 				super(sim, filename);
@@ -52,58 +55,76 @@ public class BSimRunTumbleTest {
 				super.before();
 				assert(bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING);
 				lastState = BSimBacterium.MotionState.RUNNING; 
+				directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());
+				startTimeOfLastRun = 0;
 			}
 			@Override
-			public void during() {								
-				lastState = bacterium.getMotionState();					
+			public void during() {	
+				lastState = bacterium.getMotionState();			
+			}
+			
+			public void set() {
+				if (lastState == BSimBacterium.MotionState.TUMBLING && bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING) {
+					startTimeOfLastRun = sim.getTime();
+					directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());
+				} else if (lastState == BSimBacterium.MotionState.RUNNING && bacterium.getMotionState() == BSimBacterium.MotionState.TUMBLING) {
+					directionAtEndOfLastRun = new Vector3d(bacterium.getDirection());
+				}				
 			}
 		};
 		
 		
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/tumbleAngle.csv") {
-			private Vector3d directionAtStartOfLastRun;
-			
+		sim.addExporter(new BSimRunTumbleLogger(sim, "results/tumbleAngle.csv") {					
 			@Override
 			public void before() {
-				super.before();
-				directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());				
+				super.before();							
 				write("tumbleAngle,sampledTumbleAngle"); // Distributions should be the same
 			}
 			@Override
 			public void during() {								
+				set();
 				if (lastState == BSimBacterium.MotionState.TUMBLING && bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING) {
-					write(Math.toDegrees(bacterium.getDirection().angle(directionAtStartOfLastRun))+","+Math.toDegrees(bacterium.tumbleAngle()));
-					directionAtStartOfLastRun = new Vector3d(bacterium.getDirection());
+					write(Math.toDegrees(bacterium.getDirection().angle(directionAtEndOfLastRun))+","+Math.toDegrees(bacterium.tumbleAngle()));
 				}	
 				super.during();					
 			}
 		});
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/runDuration.csv") {
-			private double startTimeOfLastRun;
-			
+		sim.addExporter(new BSimRunTumbleLogger(sim, "results/runAngle.csv") {					
 			@Override
 			public void before() {
-				super.before();
-				startTimeOfLastRun = 0;
-				assert (bacterium.pEndRun() == 1);
-				write("runDuration"); // Should be exponentially distributed with mean 1
+				super.before();							
+				write("runAngle");
 			}
 			@Override
 			public void during() {								
+				set();
 				if (lastState == BSimBacterium.MotionState.RUNNING && bacterium.getMotionState() == BSimBacterium.MotionState.TUMBLING) {
-					// end of run
-					write(sim.getTime()-startTimeOfLastRun+"");
-				} else if (lastState == BSimBacterium.MotionState.TUMBLING && bacterium.getMotionState() == BSimBacterium.MotionState.RUNNING) {
-					// start of run
-					startTimeOfLastRun = sim.getTime();
-				}				
+					write(Math.toDegrees(bacterium.getDirection().angle(directionAtStartOfLastRun))+"");
+				}	
 				super.during();					
 			}
 		});
 		
-
+		sim.addExporter(new BSimRunTumbleLogger(sim, "results/runDuration.csv") {		
+			@Override
+			public void before() {
+				super.before();				
+				assert (bacterium.pEndRun() == 1);
+				write("runDuration"); // Should be exponentially distributed with mean 1
+			}
+			@Override
+			public void during() {	
+				set();
+				if (lastState == BSimBacterium.MotionState.RUNNING && bacterium.getMotionState() == BSimBacterium.MotionState.TUMBLING) {
+					// end of run
+					write(sim.getTime()-startTimeOfLastRun+"");
+				}			
+				super.during();					
+			}
+		});
+		
 		
 		sim.export();
 

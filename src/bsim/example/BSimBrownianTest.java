@@ -9,20 +9,23 @@ import bsim.BSimTicker;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimVesicle;
 
+/**
+ * Tests whether the magnitude of the Brownian force is correct
+ */
 public class BSimBrownianTest {
 	
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
 
 		BSim sim = new BSim();
-		sim.setBound(10000,10000,10000);
+		double bx = 1000;
+		double by = 1000;
+		double bz = 1000;
+		sim.setBound(bx,by,bz);
 		sim.setSimulationTime(10);
 				
 		final int n = 100;		
 		final Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();
-		for(int i=0;i<n;i++) vesicles.add(new BSimVesicle(sim, new Vector3d(50,50,50), 0.02));
+		for(int i=0;i<n;i++) vesicles.add(new BSimVesicle(sim, new Vector3d(bx/2,by/2,bz/2), 0.02));
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -35,19 +38,34 @@ public class BSimBrownianTest {
 		
 		
 		sim.addExporter(new BSimLogger(sim, "results/vesicleX.csv") {
+			private double[] x = new double[n];
+			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
+			double dx;
+			@Override
+			public void before() {
+				super.before();
+				for(int i=0;i<n;i++) {		
+					x[i] = vesicles.get(i).getPosition().x;
+					lastPosition.add(new Vector3d(vesicles.get(i).getPosition()));
+				}
+			}			
 			@Override
 			public void during() {	
 				String o = "";
-				for(int i=0;i<n;i++) {
-					if(i>0) o += ","; 
-					o += vesicles.get(i).getPosition().x+"";
+				for(int i=0;i<n;i++) {					
+					dx = vesicles.get(i).getPosition().x - lastPosition.get(i).x;
+					x[i] += dx;
+					lastPosition.set(i, new Vector3d(vesicles.get(i).getPosition()));
+					
+					if(i>0) o += ","; 					
+					o += x[i]+"";
 				}
 				write(o);		
 			}
 		});
 		
 		sim.export();
-//		Import into MATLAB
+		
 //		radius = 0.02;
 //		visc = 2.7e-3;
 //		stokesCoefficient = 6*pi*radius*visc;
@@ -56,21 +74,17 @@ public class BSimBrownianTest {
 //		dt = 0.01;
 //		t = 10;
 //		n = t/dt;
-//		x0 = 50;
+//		x0 = 500;
 //
-//		x = data;
+//		x = vesicleX;
 //
 //		plot(0:dt:t,x);
 //		figure;
 //		plot(0:dt:t,(2*boltzmann*temperature*(0:dt:t)/stokesCoefficient)*1e18);
 //		hold all;
-//		y = ((x-x0).^2)';
-//		plot(0:dt:t,mean(y));
-//		legend('theory','experiment');
-//
-//		mean(x(n+1,:)) % should be 0
-//		mean((x(n+1,:)-x0).^2) % should be as below
-//		2*boltzmann*temperature*t/stokesCoefficient*1e18
+//		xx = ((x-x0).^2)';
+//		plot(0:dt:t,mean(xx));
+//		legend('theory','experiment');		
 		
 	}
 
