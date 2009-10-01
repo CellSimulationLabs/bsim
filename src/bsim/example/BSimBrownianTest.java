@@ -7,7 +7,7 @@ import javax.vecmath.Vector3d;
 import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.export.BSimLogger;
-import bsim.particle.BSimVesicle;
+import bsim.particle.BSimParticle;
 
 /**
  * Tests whether the magnitude of the Brownian force is correct
@@ -22,22 +22,29 @@ public class BSimBrownianTest {
 		double bz = 1000;
 		sim.setBound(bx,by,bz);
 		sim.setSimulationTime(10);
+		
+		
+		class BSimBrownianParticle extends BSimParticle {
+			public BSimBrownianParticle (BSim sim, Vector3d position, double radius) {
+				super(sim, position, radius);
+			}
+		}
 				
 		final int n = 100;		
-		final Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();
-		for(int i=0;i<n;i++) vesicles.add(new BSimVesicle(sim, new Vector3d(bx/2,by/2,bz/2), 0.02));
+		final Vector<BSimBrownianParticle> particles = new Vector<BSimBrownianParticle>();
+		for(int i=0;i<n;i++) particles.add(new BSimBrownianParticle(sim, new Vector3d(bx/2,by/2,bz/2), 0.02));
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				for(BSimVesicle vesicle : vesicles) {
-					vesicle.action();		
-					vesicle.updatePosition();
+				for(BSimBrownianParticle particle : particles) {
+					particle.action();		
+					particle.updatePosition();
 				}
 			}
 		});
 		
 		
-		sim.addExporter(new BSimLogger(sim, "results/vesicleX.csv") {
+		sim.addExporter(new BSimLogger(sim, "results/particleX.csv") {
 			private double[] x = new double[n];
 			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
 			double dx;
@@ -45,17 +52,17 @@ public class BSimBrownianTest {
 			public void before() {
 				super.before();
 				for(int i=0;i<n;i++) {		
-					x[i] = vesicles.get(i).getPosition().x;
-					lastPosition.add(new Vector3d(vesicles.get(i).getPosition()));
+					x[i] = particles.get(i).getPosition().x;
+					lastPosition.add(new Vector3d(particles.get(i).getPosition()));
 				}
 			}			
 			@Override
 			public void during() {	
 				String o = "";
 				for(int i=0;i<n;i++) {					
-					dx = vesicles.get(i).getPosition().x - lastPosition.get(i).x;
+					dx = particles.get(i).getPosition().x - lastPosition.get(i).x;
 					x[i] += dx;
-					lastPosition.set(i, new Vector3d(vesicles.get(i).getPosition()));
+					lastPosition.set(i, new Vector3d(particles.get(i).getPosition()));
 					
 					if(i>0) o += ","; 					
 					o += x[i]+"";
@@ -76,7 +83,7 @@ public class BSimBrownianTest {
 //		n = t/dt;
 //		x0 = 500;
 //
-//		x = vesicleX;
+//		x = particleX;
 //
 //		plot(0:dt:t,x);
 //		figure;

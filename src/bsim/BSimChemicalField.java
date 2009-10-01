@@ -4,7 +4,7 @@ import javax.vecmath.Vector3d;
 
 public class BSimChemicalField {
 	
-	/* 1 molecule/(micron)^3 = 1.6 nM = 1.6 nanomol/L */
+	/* 1 molecule/(micron)^3 = 1.7 nM = 1.7 nanomol/L */
 	/* 1 mM = 6e5 molecules/(micron)^3 */
 	
 	protected BSim sim;
@@ -56,6 +56,7 @@ public class BSimChemicalField {
 	/** Adds a quantity of chemical to the box (i,j,k) */
 	public void addQuantity(int i, int j, int k, double q) {
 		quantity[i][j][k] += q;
+		if(quantity[i][j][k] < 0) quantity[i][j][k] = 0;
 	}
 	
 	/** Sets the concentration of the box containing position v */
@@ -66,6 +67,12 @@ public class BSimChemicalField {
 	/** Sets the concentration of the box (i,j,k) */
 	public void setConc(int i, int j, int k, double c) {
 		quantity[i][j][k] = c*boxVolume;
+	}
+	/** Sets the concentration of the field */
+	public void setConc(double c) {		
+		for(int i=0;i<boxes[0];i++)
+			for(int j=0;j<boxes[1];j++)
+				for(int k=0;k<boxes[2];k++) quantity[i][j][k] = c*boxVolume;
 	}
 	
 	/** Gets the concentration of the field at the position v in molecules/(micron)^3 */
