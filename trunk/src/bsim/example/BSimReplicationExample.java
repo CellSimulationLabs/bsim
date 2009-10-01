@@ -15,38 +15,22 @@ public class BSimReplicationExample {
 
 	public static void main(String[] args) {
 
-
 		BSim sim = new BSim();		
-				
-		class BSimReplicatingBacterium extends BSimBacterium {
-			
-			public BSimReplicatingBacterium(BSim sim, Vector3d position) {
-				super(sim, position); // default radius is 1 micron			
-			}
-			
-			@Override
-			public void replicate() {
-				radius = replicationRadius/2;
-				BSimReplicatingBacterium child = new BSimReplicatingBacterium(sim, new Vector3d(position));		
-				child.setRadiusGrowthRate(Math.random());
-				child.setChildList(childList);
-				childList.add(child);
-			}
-		}
-		
-		final Vector<BSimReplicatingBacterium> bacteria = new Vector<BSimReplicatingBacterium>();
-		final Vector<BSimReplicatingBacterium> children = new Vector<BSimReplicatingBacterium>();
-		while(bacteria.size() < 5) {		
-			BSimReplicatingBacterium b = new BSimReplicatingBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+						
+		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
+		final Vector<BSimBacterium> children = new Vector<BSimBacterium>();
+		while(bacteria.size() < 10) {		
+			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+			b.setRadius();
+			b.setRadiusGrowthRate();
 			b.setChildList(children);
-			b.setRadiusGrowthRate(Math.random());
-			if(!b.intersection(bacteria)) bacteria.add(b);		
+			bacteria.add(b);		
 		}
 
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
-				for(BSimReplicatingBacterium b : bacteria) {
+				for(BSimBacterium b : bacteria) {
 					b.action();		
 					b.updatePosition();					
 				}
@@ -59,19 +43,15 @@ public class BSimReplicationExample {
 		BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {						
-				for(BSimReplicatingBacterium b : bacteria) {
+				for(BSimBacterium b : bacteria) {
 					draw(b, Color.GREEN);
 				}			
 			}
 		};
 		sim.setDrawer(drawer);				
 
-		
+	
 		sim.preview();
 
 	}
-
-
-
-
 }

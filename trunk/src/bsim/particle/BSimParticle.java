@@ -20,8 +20,7 @@ public abstract class BSimParticle {
 	public BSimParticle(BSim sim, Vector3d position, double radius) {	
 		this.sim = sim;
 		this.position = position;
-		this.radius = radius;
-		setBrownianForceMagnitude();
+		setRadius(radius);
 	}	
 	
    /**
@@ -30,7 +29,7 @@ public abstract class BSimParticle {
 	public void setBrownianForceMagnitude() {
 		brownianForceMagnitude = Math.sqrt(2*stokesCoefficient()*BSim.BOLTZMANN*sim.getTemperature()/sim.getDt())*Math.pow(10,9);
 	}
-	public void setRadius(double r) { radius = r; }
+	public void setRadius(double r) { radius = r; setBrownianForceMagnitude(); }
 	public void setRadiusFromSurfaceArea(double s) { radius = Math.sqrt(s/(4*Math.PI)); }
 	public void addForce(Vector3d f) { force.add(f); }
 	
@@ -65,8 +64,8 @@ public abstract class BSimParticle {
 	
 	/**
 	 * Applies a Brownian force to the particle. The applied force is a function of 
-	 * radius, viscosity and temperature; if any of these are changed externally, you should call
-	 * setBrownianForceMagnitude() again
+	 * radius, viscosity and temperature; if viscosity or temperature is changed externally, 
+	 * you should call setBrownianForceMagnitude() again
 	 */
 	public void brownianForce() {						
 		Vector3d f = new Vector3d(rng.nextGaussian(), rng.nextGaussian(), rng.nextGaussian());
@@ -111,6 +110,19 @@ public abstract class BSimParticle {
 		addForce(f);
 		f.negate();
 		p.addForce(f);
+	}
+	
+    /**
+     * Applies a reaction force with the properties
+     * F(0) = Inf
+     * F(this.radius + p.radius) = 0
+     * For a particle exerting a force f, the minimum distance of approach to p is
+     * d = (this.radius + p.radius) exp(-f/k)
+     * i.e. if the particle exerts a force 1 pN, then k = 1 will prevent it from
+     * coming closer than (this.radius + p.radius)/e to p. 
+     */
+	public void logReaction(BSimParticle p, double k) {
+		reaction(p, -k*Math.log(this.distance(p)/(this.radius + p.radius)));
 	}
 	
 	/*

@@ -19,15 +19,18 @@ public class BSimVesiculationExample {
 	public static void main(String[] args) {
 
 		BSim sim = new BSim();	
-		sim.setSimulationTime(3);
 				
 		final Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
-		while(bacteria.size() < 30) {		
+		final Vector<BSimBacterium> children = new Vector<BSimBacterium>();
+		while(bacteria.size() < 10) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+			b.setRadius();
+			b.setRadiusGrowthRate();
+			b.setChildList(children);
 			b.pVesicle(0.2);
 			b.setVesicleList(vesicles);
-			if(!b.intersection(bacteria)) bacteria.add(b);		
+			bacteria.add(b);		
 		}
 		
 
@@ -38,6 +41,8 @@ public class BSimVesiculationExample {
 					b.action();		
 					b.updatePosition();
 				}
+				bacteria.addAll(children);
+				children.clear();
 				for(BSimVesicle vesicle : vesicles) {
 					vesicle.action();	
 					vesicle.updatePosition();		
@@ -55,11 +60,7 @@ public class BSimVesiculationExample {
 					draw(vesicle,Color.RED);
 			}
 		};	
-		sim.setDrawer(drawer);
-		
-		BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
-		pngExporter.setDt(0.5);
-		sim.addExporter(pngExporter);	
+		sim.setDrawer(drawer);	
 		
 		sim.preview();
 	}

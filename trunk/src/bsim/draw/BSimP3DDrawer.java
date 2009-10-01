@@ -84,26 +84,27 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	public void draw(BSimParticle p, Color c) {
-		draw(p.getPosition(), p.getRadius(), c);
+		if (p.getRadius() < 1) point(p.getPosition(), c);
+		else sphere(p.getPosition(), p.getRadius(), c, 255);
 	}
 		
-	public void draw(BSimVesicle v, Color c) {		
-		p3d.fill(255, 131, 223, 50);		
-		p3d.pushMatrix();
-		p3d.translate((float)v.getPosition().x, (float)v.getPosition().y,(float)v.getPosition().z);
-		p3d.sphere((float)(100*v.getRadius()));
-		p3d.popMatrix();
-		p3d.stroke(255,0,0);
-		p3d.point((float)v.getPosition().x, (float)v.getPosition().y,(float)v.getPosition().z);
-		p3d.noStroke();
+	public void draw(BSimVesicle v, Color c) {	
+		sphere(v.getPosition(), 100*v.getRadius(), c, 50);
+		point(v.getPosition(),c);
 	}
 
-	public void draw(Vector3d position, double radius, Color c) {
+	public void sphere(Vector3d position, double radius, Color c, int alpha) {
 		p3d.pushMatrix();
 		p3d.translate((float) position.x, (float) position.y, (float) position.z);
-		p3d.fill(c.getRed(), c.getGreen(), c.getBlue());
+		p3d.fill(c.getRed(), c.getGreen(), c.getBlue(), alpha);
 		p3d.sphere((float) radius);
 		p3d.popMatrix();
+	}
+	
+	public void point(Vector3d position, Color c) {
+		p3d.stroke(c.getRed(), c.getGreen(), c.getBlue());
+		p3d.point((float)position.x, (float)position.y,(float)position.z);
+		p3d.noStroke();
 	}
 
 	/**
