@@ -9,6 +9,8 @@ import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
+import bsim.export.BSimLogger;
+import bsim.export.BSimMovExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
@@ -17,11 +19,22 @@ public class BSimLactamExample {
 	
 	public static void main(String[] args) {
 
-		BSim sim = new BSim();		
+		BSim sim = new BSim();
+		sim.setBound(100,100,100);
+		sim.setSimulationTime(10);
+		
+		final double propLactamaseBacteria = 0.1;
+				
+		final int nLactams = 1000;
+		final int nBacteria = 100;
+		final int nThreatenedBacteria = (int) (nBacteria*(1-propLactamaseBacteria));
+		final int nLactamaseBacteria = (int) (nBacteria*propLactamaseBacteria);
+		final double pVesicle = 0.05;
+		final double lactamRadius = 1e-3;
 		
 		class Lactam extends BSimParticle {
-			public Lactam(BSim sim, Vector3d position, double radius) {
-				super(sim, position, radius);
+			public Lactam(BSim sim, Vector3d position) {
+				super(sim, position, lactamRadius);
 			}				
 		}				
 		final Vector<Lactam> lactamsToRemove = new Vector<Lactam>();
@@ -56,7 +69,7 @@ public class BSimLactamExample {
 				setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 				LactamaseBacterium child = new LactamaseBacterium(sim, new Vector3d(position));	
 				child.setRadius(radius);
-				child.setRadiusGrowthRate(radiusGrowthRate);
+				child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 				child.setChildList(childList);
 				child.pVesicle(pVesicle);
 				child.setVesicleList(vesicleList);
@@ -75,7 +88,6 @@ public class BSimLactamExample {
 					logReaction(b, 1);
 			}
 			
-			public boolean vesiculating() { return vesiculating; }
 		}
 		
 		class ThreatenedBacterium extends BSimBacterium {
@@ -86,7 +98,7 @@ public class BSimLactamExample {
 			}
 			@Override
 			public void action() {
-				if(dead()) brownianForce();
+				if(dead) brownianForce();
 				else super.action();
 			}
 			
@@ -95,7 +107,7 @@ public class BSimLactamExample {
 				setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 				ThreatenedBacterium child = new ThreatenedBacterium(sim, new Vector3d(position));
 				child.setRadius(radius);
-				child.setRadiusGrowthRate(radiusGrowthRate);
+				child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 				child.setChildList(childList);
 				childList.add(child);
 			}
@@ -117,7 +129,6 @@ public class BSimLactamExample {
 					logReaction(b, 1);
 			}
 			
-			public boolean dead() { return dead; }
 		}
 		
 		
@@ -127,24 +138,24 @@ public class BSimLactamExample {
 		final Vector<LactamaseBacterium> lactamaseChildren = new Vector<LactamaseBacterium>();
 		final Vector<ThreatenedBacterium> threatenedBacteria = new Vector<ThreatenedBacterium>();
 		final Vector<ThreatenedBacterium> threatenedChildren = new Vector<ThreatenedBacterium>();
-		while(lactamaseBacteria.size() < 100) {		
+		while(lactamaseBacteria.size() < nLactamaseBacteria) {		
 			LactamaseBacterium b = new LactamaseBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			b.setRadius();
-			b.setRadiusGrowthRate();
+			b.setSurfaceAreaGrowthRate();
 			b.setChildList(lactamaseChildren);
-			b.pVesicle(0.05);
+			b.pVesicle(pVesicle);
 			b.setVesicleList(lactamaseVesicles);
 			lactamaseBacteria.add(b);		
 		}			
-		while(threatenedBacteria.size() < 100) {		
+		while(threatenedBacteria.size() < nThreatenedBacteria) {		
 			ThreatenedBacterium b = new ThreatenedBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			b.setRadius();
-			b.setRadiusGrowthRate();
+			b.setSurfaceAreaGrowthRate();
 			b.setChildList(threatenedChildren);			
 			threatenedBacteria.add(b);		
 		}
-		while(lactams.size() < 1000) {
-			Lactam l = new Lactam(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z), 1e-3);
+		while(lactams.size() < nLactams) {
+			Lactam l = new Lactam(sim, new Vector3d(sim.getBound().x/2,sim.getBound().y/2,sim.getBound().z/2));
 			lactams.add(l);
 		}
 		
@@ -215,15 +226,31 @@ public class BSimLactamExample {
 		BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {
-				for(LactamaseBacterium b : lactamaseBacteria) draw(b, b.vesiculating() ? Color.PINK : Color.YELLOW );
-				for(ThreatenedBacterium b : threatenedBacteria) draw(b, b.dead() ? Color.RED : Color.GREEN);
-				for(LactamaseVesicle v : lactamaseVesicles) draw(v, Color.RED);
-				for(Lactam l : lactams) draw(l, Color.RED);
+				for(LactamaseBacterium b : lactamaseBacteria) draw(b, b.vesiculating ? new Color(255,0,255) : new Color(150,0,150));
+				for(ThreatenedBacterium b : threatenedBacteria) draw(b, b.dead ? new Color(0,100,0) : Color.GREEN);
+				for(LactamaseVesicle v : lactamaseVesicles) draw(v, new Color(255,0,255));
+				for(Lactam l : lactams) draw(l, Color.ORANGE);
 			}
 		};
 		sim.setDrawer(drawer);	
 		
-		sim.preview();
+		BSimLogger logger = new BSimLogger(sim, "l_" + 10*propLactamaseBacteria + "_" + System.currentTimeMillis() + ".csv") {
+			@Override
+			public void during() {
+				double alive = threatenedBacteria.size();
+				for (ThreatenedBacterium b : threatenedBacteria)
+					if(b.dead) alive--;
+				alive = alive/(nThreatenedBacteria);
+				write(sim.getFormattedTime()+","+alive);
+			}
+		};
+//		sim.addExporter(logger);
+		
+		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/lactam.mov");	
+		movExporter.setDt(0.03);
+		sim.addExporter(movExporter);
+		
+		sim.export();
 	}
 
 }

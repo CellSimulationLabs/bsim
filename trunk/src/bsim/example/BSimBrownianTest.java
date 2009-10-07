@@ -1,5 +1,6 @@
 package bsim.example;
 
+import java.util.Calendar;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
@@ -44,7 +45,7 @@ public class BSimBrownianTest {
 		});
 		
 		
-		sim.addExporter(new BSimLogger(sim, "results/particleX.csv") {
+		sim.addExporter(new BSimLogger(sim, "results/particleX" + System.currentTimeMillis() + ".csv") {
 			private double[] x = new double[n];
 			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
 			double dx;

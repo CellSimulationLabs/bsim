@@ -9,14 +9,16 @@ import bsim.BSim;
 import bsim.draw.BSimDrawer;
 import bsim.export.quicktime.QuickTimeOutputStream;
 
-public class BSimMovExporter extends BSimDrawingExporter {
+public class BSimMovExporter extends BSimExporter {
 
 	protected QuickTimeOutputStream outputStream;
 	protected String filename;
 	protected int speed = 1;
+	protected BSimDrawer drawer;
 
 	public BSimMovExporter(BSim sim, BSimDrawer drawer, String filename) {
-		super(sim, drawer);
+		super(sim);
+		this.drawer = drawer;
 		this.filename = filename;		
 	}
 	
@@ -31,8 +33,7 @@ public class BSimMovExporter extends BSimDrawingExporter {
 	@Override
 	public void before() {		
 		try {
-			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);
-			outputStream.setVideoCompressionQuality(1f);
+			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);			
 			outputStream.setTimeScale(speed*(int)(1/this.getDt()));
 		} catch (IOException e) {
 			e.printStackTrace();

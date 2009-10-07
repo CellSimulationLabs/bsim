@@ -8,8 +8,11 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
+import bsim.export.BSimMovExporter;
+import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimVesicle;
 
@@ -18,12 +21,9 @@ public class BSimVesicleActivationExample {
 		public static void main(String[] args) {
 
 			BSim sim = new BSim();		
-			sim.setDt(0.01);
 			sim.setSimulationTime(10);
-			sim.setTimeFormat("0.00");
-			sim.setBound(100,100,100);
 			
-			final double productionRate = 0.05;			
+			final double productionRate = 0.1;		
 													
 			class VesicleA extends BSimVesicle {				
 				public VesicleA(BSim sim, Vector3d position, double radius) {
@@ -50,7 +50,7 @@ public class BSimVesicleActivationExample {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 					ProducerA child = new ProducerA(sim, new Vector3d(position));
 					child.setRadius(radius);
-					child.setRadiusGrowthRate(radiusGrowthRate);
+					child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 					child.setChildList(childList);
 					child.pVesicle(pVesicle);
 					child.setVesicleList(vesicleList);
@@ -90,7 +90,7 @@ public class BSimVesicleActivationExample {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 					ProducerB child = new ProducerB(sim, new Vector3d(position));
 					child.setRadius(radius);
-					child.setRadiusGrowthRate(radiusGrowthRate);
+					child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 					child.setChildList(childList);
 					child.pVesicle(pVesicle);
 					child.setVesicleList(vesicleList);
@@ -129,7 +129,7 @@ public class BSimVesicleActivationExample {
 			while(aProducers.size() < 50) {		
 				ProducerA a = new ProducerA(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 				a.setRadius();
-				a.setRadiusGrowthRate();
+				a.setSurfaceAreaGrowthRate();
 				a.setChildList(aChildren);
 				a.pVesicle(productionRate);
 				a.setVesicleList(aVesicles);	
@@ -141,7 +141,7 @@ public class BSimVesicleActivationExample {
 			while(bProducers.size() < 50) {		
 				ProducerB b = new ProducerB(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 				b.setRadius();
-				b.setRadiusGrowthRate();
+				b.setSurfaceAreaGrowthRate();
 				b.setChildList(bChildren);
 				b.pVesicle(productionRate);
 				b.setVesicleList(bVesicles);	
@@ -220,24 +220,27 @@ public class BSimVesicleActivationExample {
 			};
 			sim.setDrawer(drawer);
 			
-			BSimLogger logger = new BSimLogger(sim, "results/vesicleActivation.csv") {
-				@Override
-				public void before() {
-					super.before();
-					write("time,activations"); 
-				}
-				@Override
-				public void during() {
-					int activations = 0;
-					for (ProducerA a : aProducers)
-						if(a.activated) activations++;
-					for (ProducerB b : bProducers)
-						if(b.activated) activations++;
-					write(sim.getFormattedTime()+","+activations);
-				}
-			};
-			sim.addExporter(logger);
-
+//			BSimLogger logger = new BSimLogger(sim, "vesicleActivation" + System.currentTimeMillis() + ".csv") {
+//				@Override
+//				public void during() {
+//					int activations = 0;
+//					for (ProducerA a : aProducers)
+//						if(a.activated) activations++;
+//					for (ProducerB b : bProducers)
+//						if(b.activated) activations++;
+//					write(sim.getFormattedTime()+","+activations);
+//				}
+//			};
+//			sim.addExporter(logger);
+			
+			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/vesicleActivation.mov");
+			movExporter.setDt(0.03);
+			sim.addExporter(movExporter);
+						
+//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+//			pngExporter.setDt(10);
+//			sim.addExporter(pngExporter);
+			
 			sim.export();
 
 		}

@@ -17,7 +17,7 @@ public class BSimTrackingExample {
 
 		BSim sim = new BSim();
 		sim.setBound(1000,1000,1000);
-		sim.setSimulationTime(10);
+		sim.setSimulationTime(30);
 
 		final BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(500,500,500));
 		sim.setTicker(new BSimTicker() {
@@ -41,6 +41,7 @@ public class BSimTrackingExample {
 				write(bacterium.getPosition().x+","+bacterium.getPosition().y);
 			}
 		};
+		trackerXY.setDt(0.1);
 		sim.addExporter(trackerXY);
 
 		sim.export();

@@ -19,10 +19,10 @@ public class BSimReplicationExample {
 						
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
 		final Vector<BSimBacterium> children = new Vector<BSimBacterium>();
-		while(bacteria.size() < 10) {		
+		while(bacteria.size() < 1) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			b.setRadius();
-			b.setRadiusGrowthRate();
+			b.setSurfaceAreaGrowthRate(9);
 			b.setChildList(children);
 			bacteria.add(b);		
 		}

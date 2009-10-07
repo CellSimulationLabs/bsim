@@ -202,25 +202,35 @@ public class BSimBacterium extends BSimParticle {
 	/* 
 	 * GROWTH and REPLICATION
 	 *  
-	 * 'Cell Shape Dynamics in Escherichia Coli', Reshes et al. p261 lists growth rates
-	 * of about 0.1 micron/min ~ 1e-3 microns/s ~ 5 vesicle surface areas/s
+	 * See 'Cell Shape Dynamics in Escherichia Coli', Reshes et al
+	 * 
 	 */
-	protected double radiusGrowthRate = 0; // microns/s
-	public void setRadiusGrowthRate() { radiusGrowthRate = 1e-3; }
-	public void setRadiusGrowthRate(double d) { radiusGrowthRate = d; }
-	
-	protected double replicationRadius = 2; // microns
+	protected double surfaceAreaGrowthRate = 0; // microns^2/s	
+	public void setSurfaceAreaGrowthRate() { surfaceAreaGrowthRate = 0.025; } // 5 typical vesicle surface areas/second 
+	public void setSurfaceAreaGrowthRate(double d) { surfaceAreaGrowthRate = d; }
+		
+	/*
+	 * Generation time T 
+	 * 	= S(T) - S(0) / surfaceAreaGrowthRate	 
+	 * 	= S(T)/(2*surfaceAreaGrowthRate)
+	 * 	= (2*pi*replicationRadius^2)/surfaceAreaGrowthRate
+	 */
+	protected double replicationRadius = Math.sqrt(2); // microns, so birth radius = 1 micron
 	protected void setReplicationRadius(double r) { replicationRadius = r; }
 	/** The external list of children. Required when bacteria reach the replicationRadius */
 	protected Vector childList;
 	public void setChildList(Vector v) { childList = v; }
 	
+	/** Sets the radius so that the surface area of the bacterium is randomly distributed between surfaceArea(replicationRadius)/2 and surfaceArea(replicationRadius) */  
+	public void setRadius() {
+		setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2 + Math.random()*surfaceArea(replicationRadius)/2);
+	}	
+	
 	public void grow() {
-		double oldSurfaceArea = getSurfaceArea();
-		radius += radiusGrowthRate*sim.getDt();
-		double newSurfaceArea = getSurfaceArea();
-		double dS = newSurfaceArea - oldSurfaceArea;
-		if(pVesicle > 0 && Math.random() < pVesicle*(dS/0.005))
+		double dS = surfaceAreaGrowthRate*sim.getDt();
+		setRadiusFromSurfaceArea(getSurfaceArea() + dS);
+
+		if(pVesicle > 0 && Math.random() < pVesicle*(dS/typicalVesicleSurfaceArea))
 			vesiculate();
 		
 		if (radius > replicationRadius)
@@ -231,31 +241,30 @@ public class BSimBacterium extends BSimParticle {
 		setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 		BSimBacterium child = new BSimBacterium(sim, new Vector3d(position));
 		child.setRadius(radius);
-		child.setRadiusGrowthRate(radiusGrowthRate);
+		child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 		child.setChildList(childList);
 		/* Overwrite to allow inheritance of other properties */
 		childList.add(child);
 	}	
-	
-	public void setRadius() {
-		setRadiusFromSurfaceArea(surfaceArea(replicationRadius/2) + Math.random()*surfaceArea(replicationRadius/2));
-	}
 
   
-  /*
+	/*
 	 * VESICULATION 
-	 *
-	 * 'Some Characteristics of the Outer Membrane Material Released by Growing
-	 * Enterotoxigenic Escherichia Coli', Gankema et al.:
-	 * 'The medium vesicles.. accounted for 3 to 5% of the total cellular outer membrane'
-	 * 
-	 * Mean growth before producing a vesicle = 1/pVesicle 
-	 * For pVesicle = 5%, Mean growth before production = 20 vesicle surface areas ~ 4 seconds 	 
-	 */
-	/** Probability per typical vesicle surface area growth (0.005 microns^2) of producing a vesicle */
+	 */		
+	protected double vesicleRadius = 0.02; // microns 
+	public double vesicleRadius() { return vesicleRadius; }
+	public void vesicleRadius(double d) { vesicleRadius = d; }
+	protected double typicalVesicleSurfaceArea = 0.005; // microns^2
+	/*
+	* 'Some Characteristics of the Outer Membrane Material Released by Growing
+	* Enterotoxigenic Escherichia Coli', Gankema et al.:
+	* 'The medium vesicles.. accounted for 3 to 5% of the total cellular outer membrane'
+	* Mean growth before producing a vesicle = 1/pVesicle 
+	* For pVesicle = 5%, Mean growth before production = 20 vesicle surface areas ~ 4 seconds 	 
+	*/
+	/** Probability per typical vesicle surface area growth of producing a vesicle */
 	protected double pVesicle = 0; // 1/(typical vesicle surface areas)
-	public void pVesicle(double d) { pVesicle = d; }
-	public double vesicleRadius() { return 0.02; }	
+	public void pVesicle(double d) { pVesicle = d; }	
 	/** The external list of vesicles. Required when bacteria vesiculate */
 	protected Vector vesicleList; 
 	public void setVesicleList(Vector v) { vesicleList = v; }	
@@ -302,7 +311,7 @@ public class BSimBacterium extends BSimParticle {
 			flagellarForce();			
 		}
 		
-		if(radiusGrowthRate > 0) grow();
+		if(surfaceAreaGrowthRate > 0) grow();
 	}
 	
 

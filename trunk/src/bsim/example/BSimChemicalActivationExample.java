@@ -8,8 +8,11 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
+import bsim.export.BSimMovExporter;
+import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
 
@@ -18,12 +21,9 @@ public class BSimChemicalActivationExample {
 		public static void main(String[] args) {
 
 			BSim sim = new BSim();		
-			sim.setDt(0.01);
 			sim.setSimulationTime(10);
-			sim.setTimeFormat("0.00");
-			sim.setBound(100,100,100);
 			
-			final double productionRate = 10;
+			final double productionRate = 1;
 			final double moleculeRadius = 1e-3;
 													
 			class MoleculeA extends BSimParticle {				
@@ -54,7 +54,7 @@ public class BSimChemicalActivationExample {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 					ProducerA child = new ProducerA(sim, new Vector3d(position));
 					child.setRadius(radius);
-					child.setRadiusGrowthRate(radiusGrowthRate);
+					child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 					child.setChildList(childList);
 					child.setMoleculeList(moleculeList);
 					childList.add(child);
@@ -98,7 +98,7 @@ public class BSimChemicalActivationExample {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
 					ProducerB child = new ProducerB(sim, new Vector3d(position));
 					child.setRadius(radius);
-					child.setRadiusGrowthRate(radiusGrowthRate);
+					child.setSurfaceAreaGrowthRate(surfaceAreaGrowthRate);
 					child.setChildList(childList);
 					child.setMoleculeList(moleculeList);
 					childList.add(child);
@@ -137,7 +137,7 @@ public class BSimChemicalActivationExample {
 			while(aProducers.size() < 50) {		
 				ProducerA a = new ProducerA(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 				a.setRadius();
-				a.setRadiusGrowthRate();
+				a.setSurfaceAreaGrowthRate();
 				a.setChildList(aChildren);				
 				a.setMoleculeList(aMolecules);	
 				aProducers.add(a);
@@ -148,7 +148,7 @@ public class BSimChemicalActivationExample {
 			while(bProducers.size() < 50) {		
 				ProducerB b = new ProducerB(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 				b.setRadius();
-				b.setRadiusGrowthRate();
+				b.setSurfaceAreaGrowthRate();
 				b.setChildList(bChildren);				
 				b.setMoleculeList(bMolecules);	
 				bProducers.add(b);
@@ -225,25 +225,31 @@ public class BSimChemicalActivationExample {
 			};
 			sim.setDrawer(drawer);
 			
-			BSimLogger logger = new BSimLogger(sim, "results/chemicalActivation.csv") {
-				@Override
-				public void before() {
-					super.before();
-					write("time,activations"); 
-				}
-				@Override
-				public void during() {
-					int activations = 0;
-					for (ProducerA a : aProducers)
-						if(a.activated) activations++;
-					for (ProducerB b : bProducers)
-						if(b.activated) activations++;
-					write(sim.getFormattedTime()+","+activations);
-				}
-			};
-			sim.addExporter(logger);
+//			BSimLogger logger = new BSimLogger(sim, "chemicalActivation" + System.currentTimeMillis() + ".csv") {	
+//				@Override
+//				public void during() {
+//					int activations = 0;
+//					for (ProducerA a : aProducers)
+//						if(a.activated) activations++;
+//					for (ProducerB b : bProducers)
+//						if(b.activated) activations++;
+//					write(sim.getFormattedTime()+","+activations);
+//				}
+//			};
+//			sim.addExporter(logger);
+			
+			
+			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/chemicalActivation.mov");
+			movExporter.setDt(0.03);
+			sim.addExporter(movExporter);
 
-			sim.preview();
+			
+//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+//			pngExporter.setDt(10);
+//			sim.addExporter(pngExporter);
+			
+			sim.export();
+			
 
 		}
 

@@ -103,7 +103,7 @@ public class BSimTutorialExample {
 		 * 	BSimMovExporter#setSpeed()
 		 */			
 		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/BSim.mov");
-		movExporter.setSpeed(2);
+		movExporter.setDt(0.03);
 		sim.addExporter(movExporter);			
 
 		/* BSimPngExporter is another concrete BSimExporter for creating png images */
