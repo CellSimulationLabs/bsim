@@ -49,7 +49,7 @@ public class BSimRotationalDiffusionTest {
 			}
 		});	
 		
-		sim.addExporter(new BSimLogger(sim, "results/bacteriumTheta.csv") {
+		sim.addExporter(new BSimLogger(sim, "results/bacteriumTheta" + System.currentTimeMillis() +  ".csv") {
 			@Override
 			public void during() {				
 				String o = "";

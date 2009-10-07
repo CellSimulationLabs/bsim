@@ -26,7 +26,7 @@ public class BSimVesiculationExample {
 		while(bacteria.size() < 10) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			b.setRadius();
-			b.setRadiusGrowthRate();
+			b.setSurfaceAreaGrowthRate();
 			b.setChildList(children);
 			b.pVesicle(0.2);
 			b.setVesicleList(vesicles);

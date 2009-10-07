@@ -23,7 +23,7 @@ public class BSimChemicalFieldExample {
 		sim.setBound(100,100,100);
 			
 		final double c = 12e5; // molecules
-		final double decayRate = 0.1;
+		final double decayRate = 0.9;
 		final double diffusivity = 890; // (microns)^2/sec
 		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity, decayRate);
 //		field.linearZ(0,c);

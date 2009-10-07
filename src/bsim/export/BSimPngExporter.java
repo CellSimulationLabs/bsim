@@ -10,12 +10,14 @@ import javax.imageio.ImageIO;
 import bsim.BSim;
 import bsim.draw.BSimDrawer;
 
-public class BSimPngExporter extends BSimDrawingExporter {
+public class BSimPngExporter extends BSimExporter {
 
 	protected String directory;
+	protected BSimDrawer drawer;
 	
 	public BSimPngExporter(BSim sim, BSimDrawer drawer, String directory) {
-		super(sim, drawer);
+		super(sim);
+		this.drawer = drawer;
 		this.directory = directory;
 	}
 	
