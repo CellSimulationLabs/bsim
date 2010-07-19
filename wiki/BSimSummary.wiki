@@ -11,7 +11,13 @@ Add your content here.
 
 = Details =
 
+As well as being a standalone package, BSim is a versatile library of agent based modelling tools. Therefore it is possible to access the code in two slightly different ways, either as a library (`*`.jar file) or by editing the BSim code directly.
+
+Using BSim as a library - Download the BSim.jar file...
+
+Directly editing the BSim code - use SVN (see below). Also add a .jar with the code?
+
   * BSim as a library
   * The BSim codebase/editing thereof [BSimEclipse (Eclipse and SVN)]
   * Different Branches
-  * BSim manual
+  * BSim manual. The BSim manual (link) contains a series of examples of potential uses of BSim. A more in-depth manual describing the features of BSim is currently being written.
