@@ -1,0 +1,5 @@
+#summary How to set up the "Eclipse for Java" IDE to obtain and edit the BSim codebase.
+
+==Obtaining and Setting Up Eclipse==
+
+==Checking Out and Downloading BSim==
