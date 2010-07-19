@@ -1,6 +1,6 @@
 #summary How to set up the "Eclipse for Java" IDE to obtain and edit the BSim codebase.
 
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 
 ==Obtaining and Setting Up Eclipse==
 
