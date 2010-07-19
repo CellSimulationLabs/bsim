@@ -2,6 +2,10 @@
 
 <wiki:toc max_depth="2" />
 
+19/07/10 - This page is being ported over from the UOB internal wiki and will be complete over the next few days.
+
+Need separate instructions for setting up BSim as a .jar and from SVN? (as SVN public checkout only has the Trunk version...?)
+
 ==Obtaining and Setting Up Eclipse==
 
 ==Checking Out and Downloading BSim==
