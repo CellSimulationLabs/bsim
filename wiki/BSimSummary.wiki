@@ -1,0 +1,15 @@
+#summary A brief introduction to the BSim code
+
+= Introduction =
+
+19/07/10 - will update/complete this page and the rest tomorrow, and correlate everything with the iGEM and UOB wikis.
+
+
+Add your content here.
+
+= Details =
+
+*BSim as a library
+*The BSim codebase/editing thereof (Eclipse and SVN)
+*Different Branches
+*BSim manual
