@@ -9,7 +9,7 @@ Add your content here.
 
 = Details =
 
-*BSim as a library
-*The BSim codebase/editing thereof (Eclipse and SVN)
-*Different Branches
-*BSim manual
+  *BSim as a library
+  *The BSim codebase/editing thereof (Eclipse and SVN)
+  *Different Branches
+  *BSim manual
