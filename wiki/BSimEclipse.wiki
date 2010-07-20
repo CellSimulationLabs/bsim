@@ -6,7 +6,7 @@
 
 The BSim package is available either as a standalone pre-compiled .jar file, an archive of the source code, or directly from the SVN repository. For further details of the differences between BSim versions, please see our [BSimSummary summary] page.
 
-If you do not need to modify the BSim code in any way, pre-compiled versions of the code are available to download (see the [BSimSummary summary] page for further details). These can be used in the same way as any other Java library, by simply using the BSim methods in your code and including the relevant .jar on the Java build path.
+If you do not need to modify the BSim code in any way, pre-compiled versions of the code are available to download (see the [BSimSummary summary] page for further details). These can be compiled against in the same way as any other Java library, by simply using the BSim methods in your code and including the relevant .jar on the Java build path.
 
 In many cases it it likely that the code may need to be extended for a specific purpose. In this case, archived source code is available (see the [BSimSummary summary] page for further details). 
 
