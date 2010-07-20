@@ -2,16 +2,30 @@
 
 <wiki:toc max_depth="2" />
 
-19/07/10 - This page is being ported over from the UOB internal wiki and will be complete over the next few days.
+=Introduction=
 
-Need separate instructions for setting up BSim as a .jar and from SVN? (as SVN public checkout only has the Trunk version...?)
+The BSim package is available either as a standalone pre-compiled .jar file, an archive of the source code, or directly from the SVN repository. For further details of the differences between BSim versions, please see our [BSimSummary summary] page.
 
-==Obtaining and Setting Up Eclipse==
+If you do not need to modify the BSim code in any way, pre-compiled versions of the code are available to download (see the [BSimSummary summary] page for further details). These can be used in the same way as any other Java library, by simply using the BSim methods in your code and including the relevant .jar on the Java build path.
+
+In many cases it it likely that the code may need to be extended for a specific purpose. In this case, archived source code is available (see the [BSimSummary summary] page for further details). 
+
+Additionally it is possible to obtain the source code from the SVN repository. At the time of writing, the "Trunk" corresponds to our working copy for the 2010 iGEM competition and it is therefore recommended that for the majority of users that a more extensively tested version be downloaded (one of the tagged versions). For users unfamiliar with SVN, we provide a brief overview here of setting up an IDE and downloading BSim. It is of course possible to use BSim with any Java IDE or standalone SVN clients, the method illustrated here is just the one with which I am most familiar.
+
+=Downloading BSim using SVN with Eclipse=
+[http://www.eclipse.org/ Eclipse] is a popular IDE for Java which includes subversion management. For the purposes of this tutorial, we will be using the "*Eclipse IDE for Java Developers*", with the "*Subclipse*" subversion plugin.
+
+==Obtaining Eclipse==
+The latest version of Eclipse can be downloaded from [http://www.eclipse.org/downloads/ here]. In this tutorial we use the "Eclipse IDE for Java Developers", please be aware that other versions (e.g. those specifically for web developers) may include an incompatible version of Java by default which is why we are using this version.
+
+_Note:_ When you start up Eclipse, it will ask for a workspace directory. This can be any directory of your choice but bear in mind that this is the directory where Eclipse will store all of your code in a session. You can create more than one workspace folder for different projects etc.
 
 ==Checking Out and Downloading BSim==
 
 Image test:
 
-http://code.google.com/p/bsim-bccs/source/browse/#svn/wiki/img
+http://bsim-bccs.googlecode.com/svn/wiki/img/Image1.jpg
+
+more text....
 
 Text below the image...
