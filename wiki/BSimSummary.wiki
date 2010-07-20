@@ -8,6 +8,8 @@ The BSim framework is a cross platform Java based programming API that has been 
 
 It was initially developed as part of the [http://2008.igem.org/Team:BCCS-Bristol Bristol University entry] in the [http://2008.igem.org iGEM 2008] competition in which the team won a bronze medal and overall best model prize. Since then it has also been used by the [http://2009.igem.org/Team:BCCS-Bristol BCCS-Bristol in 2009], where a gold medal was won and overall best model prize retained. iGEM is an international student competition which aims to promote the use of synthetic biology in solving problems in a new way. The BSim system is designed to be highly extendible and available for Windows, Mac OS X and UNIX systems. 
 
+As well as being a standalone package, BSim is a versatile library of agent based modelling tools. It is possible to use the code in two slightly different ways, either as a library (`*`.jar file) or by downloading from the SVN repository, both of which are described below. We have also provided an example of setting up the BSim code in the Eclipse IDE [BSimEclipse here].
+
 =The BSim Package=
 
 So far there are two versions of BSim available for download, from the BCCS-Bristol iGEM projects from 2008 and 2009. We are currently working on updating and expanding the 2009 version to assist in modelling work for our 2010 iGEM entry.
@@ -27,24 +29,11 @@ svn checkout http://bsim-bccs.googlecode.com/svn/tags/1.0/ bsim-bccs-read-only
 ==BSim 2009 (_BSim 2.0_)==
 In 2009, the BSim package was updated to iclude fully 3-D motion of bacteria as well as an updated model of chemical fields, gene regulatory networks and numerous further features. More details of the new features can be found [http://2009.igem.org/Team:BCCS-Bristol/BSim#Features here]. 
 
-*Important note:* Unlike BSim 1.0, this version relies on the use of two external libraries, [http://processing.org/ Processing] for graphics and the Java vecmath library for some mathematical operations. It is therefore important to ensure that these two libraries are in your Java build path. If you are using SVN, the libraries _should_ be automatically downloaded by the SVN client (they are in the ./lib directory). If you download the source code archive, the libraries are also available from the [Downloads downloads] page (core.jar and vecmath.jar).
+*Important note:* Unlike BSim 1.0, this version relies on the use of two external libraries, [http://processing.org/ Processing] for graphics and the Java vecmath library for some mathematical operations. It is therefore important to ensure that these two libraries are in your Java build path. If you are using SVN, the libraries _should_ be automatically downloaded by the SVN client (they are in the ./lib directory). If you download the source code archive, the libraries are also available from the [http://code.google.com/p/bsim-bccs/downloads/list downloads] page (core.jar and vecmath.jar).
 
-An archive of the source code along with a pre-compiled version is available from the [Downloads downloads] page as a .jar archive. 
+An archive of the source code along with a pre-compiled version is available from the [http://code.google.com/p/bsim-bccs/downloads/list downloads] page as a .jar archive. 
 
 It is also possible to checkout a read-only working copy anonymously over HTTP:
 {{{
 svn checkout http://bsim-bccs.googlecode.com/svn/tags/2.0/ bsim-bccs-read-only 
 }}}
-
-= Details =
-
-As well as being a standalone package, BSim is a versatile library of agent based modelling tools. Therefore it is possible to access the code in two slightly different ways, either as a library (`*`.jar file) or by editing the BSim code directly.
-
-Using BSim as a library - Download the BSim.jar file...
-
-Directly editing the BSim code - use SVN (see below). Also add a .jar with the code?
-
-  * BSim as a library
-  * The BSim codebase/editing thereof [BSimEclipse (Eclipse and SVN)]
-  * Different Branches
-  * BSim manual. The BSim manual (link) contains a series of examples of potential uses of BSim. A more in-depth manual describing the features of BSim is currently being written.
