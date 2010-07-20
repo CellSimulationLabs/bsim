@@ -8,18 +8,33 @@ The BSim framework is a cross platform Java based programming API that has been 
 
 It was initially developed as part of the [http://2008.igem.org/Team:BCCS-Bristol Bristol University entry] in the [http://2008.igem.org iGEM 2008] competition in which the team won a bronze medal and overall best model prize. Since then it has also been used by the [http://2009.igem.org/Team:BCCS-Bristol BCCS-Bristol in 2009], where a gold medal was won and overall best model prize retained. iGEM is an international student competition which aims to promote the use of synthetic biology in solving problems in a new way. The BSim system is designed to be highly extendible and available for Windows, Mac OS X and UNIX systems. 
 
-==BSim Package==
+=The BSim Package=
 
 So far there are two versions of BSim available for download, from the BCCS-Bristol iGEM projects from 2008 and 2009. We are currently working on updating and expanding the 2009 version to assist in modelling work for our 2010 iGEM entry.
 
 Both the 2008 and 2009 versions of BSim are available to download from the SVN repository, and their final versions are tagged as 1.0 and 2.0 respectively. They are also available as standalone .jar archives, further details of which are provided below.
 
-===BSim 2008 - BSim 1.0===
+==BSim 2008 (_BSim 1.0_)==
+BSim 1.0 is a two-dimensional version of BSim that was designed primarily for investigating the chemotactic behaviour of E-coli. A full description of the project can be found [http://2008.igem.org/Team:BCCS-Bristol/Modeling here].
 
+A pre-compiled version and an archive of the source code can be dowloaded from [http://2008.igem.org/Team:BCCS-Bristol/Modeling-Software here].
 
-===BSim 2009 - BSim 2.0===
+It is also possible to checkout a read-only working copy anonymously over HTTP:
+{{{
+svn checkout http://bsim-bccs.googlecode.com/svn/tags/1.0/ bsim-bccs-read-only 
+}}}
 
+==BSim 2009 (_BSim 2.0_)==
+In 2009, the BSim package was updated to iclude fully 3-D motion of bacteria as well as an updated model of chemical fields, gene regulatory networks and numerous further features. More details of the new features can be found [http://2009.igem.org/Team:BCCS-Bristol/BSim#Features here]. 
 
+*Important note:* Unlike BSim 1.0, this version relies on the use of two external libraries, [http://processing.org/ Processing] for graphics and the Java vecmath library for some mathematical operations. It is therefore important to ensure that these two libraries are in your Java build path. If you are using SVN, the libraries _should_ be automatically downloaded by the SVN client (they are in the ./lib directory). If you download the source code archive, the libraries are also available from the [Downloads downloads] page (core.jar and vecmath.jar).
+
+An archive of the source code along with a pre-compiled version is available from the [Downloads downloads] page as a .jar archive. 
+
+It is also possible to checkout a read-only working copy anonymously over HTTP:
+{{{
+svn checkout http://bsim-bccs.googlecode.com/svn/tags/2.0/ bsim-bccs-read-only 
+}}}
 
 = Details =
 
