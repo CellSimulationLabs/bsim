@@ -50,7 +50,7 @@ http://bsim-bccs.googlecode.com/svn/trunk/
 }}}
 and click next to come up with a list of folders.
 
-(*_Note:_* as mentioned previously, the Trunk version is currently our working version. Stable versions can be anonymously checked out in a similar manner, by changing "trunk/" in the above URL to the correct address in the repository, for example to "tags/2.0/" to download the 2009 version).
+(*_Note:_* as mentioned previously, the Trunk version is currently our working version. Stable versions can be anonymously checked out in a similar manner, by changing "trunk/" in the above URL to the correct address in the repository, for example to "tags/2.0/" to download the 2009 version: `http://bsim-bccs.googlecode.com/svn/tags/2.0/`).
 
 *_Note for Committers:_* Please login to Google code use the URL from the instructions found [http://code.google.com/p/bsim-bccs/source/checkout here] to be able to commit code (Eclipse will ask for your password later on).
 
