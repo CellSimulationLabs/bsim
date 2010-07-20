@@ -9,3 +9,9 @@ Need separate instructions for setting up BSim as a .jar and from SVN? (as SVN p
 ==Obtaining and Setting Up Eclipse==
 
 ==Checking Out and Downloading BSim==
+
+Image test:
+
+http://code.google.com/p/bsim-bccs/source/browse/#svn/wiki/img
+
+Text below the image...
