@@ -4,10 +4,22 @@
 
 = Introduction =
 
-19/07/10 - will update/complete this page and the rest tomorrow, and correlate everything with the iGEM and UOB wikis.
+The BSim framework is a cross platform Java based programming API that has been developed from scratch to model the stochastic interactions of bacteria and particles in a fluid based environment. 
+
+It was initially developed as part of the [http://2008.igem.org/Team:BCCS-Bristol Bristol University entry] in the [http://2008.igem.org iGEM 2008] competition in which the team won a bronze medal and overall best model prize. Since then it has also been used by the [http://2009.igem.org/Team:BCCS-Bristol BCCS-Bristol in 2009], where a gold medal was won and overall best model prize retained. iGEM is an international student competition which aims to promote the use of synthetic biology in solving problems in a new way. The BSim system is designed to be highly extendible and available for Windows, Mac OS X and UNIX systems. 
+
+==BSim Package==
+
+So far there are two versions of BSim available for download, from the BCCS-Bristol iGEM projects from 2008 and 2009. We are currently working on updating and expanding the 2009 version to assist in modelling work for our 2010 iGEM entry.
+
+Both the 2008 and 2009 versions of BSim are available to download from the SVN repository, and their final versions are tagged as 1.0 and 2.0 respectively. They are also available as standalone .jar archives, further details of which are provided below.
+
+===BSim 2008 - BSim 1.0===
 
 
-Add your content here.
+===BSim 2009 - BSim 2.0===
+
+
 
 = Details =
 
