@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
+import com.obj.Face;
+import com.obj.Group;
+import com.obj.Vertex;
+import com.obj.WavefrontObject;
+
 /**
  * Abstract 3-D mesh surface class, represented as indexed list of vertices,
  * or points in 3-D, of which the mesh faces are composed.
@@ -39,6 +44,45 @@ public abstract class BSimMesh {
 	 * Abstract method in which the vertices and faces of the mesh should be defined.
 	 */
 	protected abstract void createMesh();
+	
+	/**
+	 * Loads an OBJ file from disk and puts relevant parameters into a BSimMesh
+	 * @param filename Path to the OBJ file
+	 */
+	public void load(String filename) {
+		
+	    WavefrontObject obj = new WavefrontObject(filename);
+	    
+	    // Groups - should not be using groups at the moment (in mesh files) as we are generally 
+	    // 			only looking to import a single mesh
+	    ArrayList<Group> groups = obj.getGroups();
+	    for( int gi = 0; gi < groups.size(); gi++ )
+	    {
+	      Group g = (Group)groups.get(gi);
+	      
+	      // Set up and add vertices to the BSimMesh
+	      for( int vi = 0; vi < obj.getVertices().size(); vi++ )
+	      {
+	        Vertex v = (Vertex)obj.getVertices().get(vi);
+	        this.addVertex(new Point3d(v.getX(), v.getY(), v.getZ()));
+	      }
+	      
+	      // Set up and add faces (needs to be after vertices at the moment as we need to
+	      // compute face normals.
+	      for( int fi = 0; fi < g.getFaces().size(); fi++)
+	      {
+	        Face f = g.getFaces().get(fi);
+	        int[] idx = f.vertIndices;
+
+	        BSimTriangle face = new BSimTriangle(idx[0], idx[1], idx[2], this);
+
+	        this.addTriangle(face);
+	      }
+	    }
+	    
+	    // Trim lists
+	    cleanUp(false);
+	}
 	
 	/**
 	 *  Add a vertex to the vertex list (based on x,y,z coordinates).
