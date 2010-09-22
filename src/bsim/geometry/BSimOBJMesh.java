@@ -23,7 +23,7 @@ package bsim.geometry;
 
 import java.util.ArrayList;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 import com.obj.Face;
 import com.obj.Group;
@@ -61,7 +61,7 @@ public class BSimOBJMesh extends BSimMesh{
 	      for( int vi = 0; vi < obj.getVertices().size(); vi++ )
 	      {
 	        Vertex v = (Vertex)obj.getVertices().get(vi);
-	        this.addVertex(new Point3d(v.getX(), v.getY(), v.getZ()));
+	        this.addVertex(new Vector3d(v.getX(), v.getY(), v.getZ()));
 	      }
 	      
 	      // Set up and add faces (needs to be after vertices at the moment as we need to

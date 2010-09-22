@@ -49,9 +49,9 @@ public abstract class BSimMesh {
 	}
 	
 	/**
-	 *  Add a vertex to the vertex list (using a Point3d).
+	 *  Add a vertex to the vertex list (using a Vector3d).
 	 */
-	public int addVertex(Point3d p){
+	public int addVertex(Vector3d p){
 		return addVertex(p.x,p.y,p.z);
 	}
 
@@ -170,7 +170,7 @@ public abstract class BSimMesh {
 	 * 						(1.0 = no scaling, 2.0 = double size, 0.5 = half size, etc.)
 	 * @param scaleOn		The point from which the mesh will be scaled.
 	 */
-	public void scale(double scaleFactor, Point3d scaleOn){
+	public void scale(double scaleFactor, Vector3d scaleOn){
 		for(BSimVertex v:vertices){
 			Vector3d current = new Vector3d(v.getLocation());
 			Vector3d scaleVec = new Vector3d();
@@ -187,7 +187,7 @@ public abstract class BSimMesh {
 	 * @param scaleFactor	The factor by which the mesh will be scaled.
 	 */
 	public void scale(double scaleFactor){
-		scale(scaleFactor, new Point3d(0,0,0));
+		scale(scaleFactor, new Vector3d(0,0,0));
 	}
 		
 	/**
@@ -201,7 +201,7 @@ public abstract class BSimMesh {
 		
 		// Sum x, y, z coords
 		for(BSimVertex v: vertices){
-			Point3d vLoc = v.getLocation();
+			Vector3d vLoc = v.getLocation();
 			
 			xTotal += vLoc.getX();
 			yTotal += vLoc.getY();
@@ -253,7 +253,7 @@ public abstract class BSimMesh {
 	 * @param i Index of the vertex for which to get coordinates (0, 1, 2)
 	 * @return
 	 */
-	public Point3d getTCoords(BSimTriangle t, int i){
+	public Vector3d getTCoords(BSimTriangle t, int i){
 		int index = t.getPoints()[i];
 		BSimVertex v = vertices.get(index);
 		return (v.getLocation());
@@ -264,17 +264,17 @@ public abstract class BSimMesh {
 	 * @param t
 	 * @return
 	 */
-	public Point3d getTCentre(BSimTriangle t){
+	public Vector3d getTCentre(BSimTriangle t){
 		double x, y, z;
-		Point3d a = vertices.get(t.getP1()).getLocation();
-		Point3d b = vertices.get(t.getP2()).getLocation();
-		Point3d c = vertices.get(t.getP3()).getLocation();
+		Vector3d a = vertices.get(t.getP1()).getLocation();
+		Vector3d b = vertices.get(t.getP2()).getLocation();
+		Vector3d c = vertices.get(t.getP3()).getLocation();
 		
 		x = (a.x + b.x + c.x)/3;
 		y = (a.y + b.y + c.y)/3;
 		z = (a.z + b.z + c.z)/3;
 
-		return (new Point3d(x,y,z));
+		return (new Vector3d(x,y,z));
 	}
 
 	

@@ -18,7 +18,6 @@ package bsim.geometry;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 /**
@@ -64,20 +63,20 @@ public class BSimSphereMesh extends BSimMesh {
         /*
          * Add vertices of Icosahedron to main vertex list
          */
-        addScaledVertex(new Point3d(-1,  golden,  0));
-        addScaledVertex(new Point3d( 1,  golden,  0));
-        addScaledVertex(new Point3d(-1, -golden,  0));
-        addScaledVertex(new Point3d( 1, -golden,  0));
+        addScaledVertex(new Vector3d(-1,  golden,  0));
+        addScaledVertex(new Vector3d( 1,  golden,  0));
+        addScaledVertex(new Vector3d(-1, -golden,  0));
+        addScaledVertex(new Vector3d( 1, -golden,  0));
  
-        addScaledVertex(new Point3d( 0, -1,  golden));
-        addScaledVertex(new Point3d( 0,  1,  golden));
-        addScaledVertex(new Point3d( 0, -1, -golden));
-        addScaledVertex(new Point3d( 0,  1, -golden));
+        addScaledVertex(new Vector3d( 0, -1,  golden));
+        addScaledVertex(new Vector3d( 0,  1,  golden));
+        addScaledVertex(new Vector3d( 0, -1, -golden));
+        addScaledVertex(new Vector3d( 0,  1, -golden));
  
-        addScaledVertex(new Point3d( golden,  0, -1));
-        addScaledVertex(new Point3d( golden,  0,  1));
-        addScaledVertex(new Point3d(-golden,  0, -1));
-        addScaledVertex(new Point3d(-golden,  0,  1));
+        addScaledVertex(new Vector3d( golden,  0, -1));
+        addScaledVertex(new Vector3d( golden,  0,  1));
+        addScaledVertex(new Vector3d(-golden,  0, -1));
+        addScaledVertex(new Vector3d(-golden,  0,  1));
         
         /*
          * Add faces to main triangle list
@@ -150,7 +149,7 @@ public class BSimSphereMesh extends BSimMesh {
 	 * but scales the vertex position to be a unit distance from the origin.
 	 * @param p The vertex coordinates in 3D space.
 	 */
-	protected int addScaledVertex(Point3d p){
+	protected int addScaledVertex(Vector3d p){
     	double length = Math.sqrt(p.x*p.x + p.y*p.y + p.z*p.z);
     	p.scale(1/length);
     	
@@ -179,7 +178,7 @@ public class BSimSphereMesh extends BSimMesh {
 		}
 		
 		// Otherwise, create the midpoint.
-		Point3d middle = new Point3d();
+		Vector3d middle = new Vector3d();
 		middle.add((vertices.get(p1)).getLocation(), (vertices.get(p2)).getLocation());
 		middle.scale(0.5);
 		

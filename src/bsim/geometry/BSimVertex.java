@@ -7,18 +7,18 @@ package bsim.geometry;
 
 import java.util.ArrayList;
 
-import javax.vecmath.Point3d;
+import javax.vecmath.Vector3d;
 
 /**
  *  Mesh vertex.
- *  Defines the location of a mesh vertex in 3-D space as a Point3d,
+ *  Defines the location of a mesh vertex in 3-D space as a Vector3d,
  *  and also stores a cached list of the faces which are attached to
  *  this vertex.
  */
 public class BSimVertex {
 	
 	/** The Cartesian coordinates of the vertex in 3-D space. */
-	protected Point3d location;
+	protected Vector3d location;
 	
 	/**
 	 * List of the indices of the faces which use this vertex.
@@ -31,19 +31,19 @@ public class BSimVertex {
 	 * Constructor: create a new mesh vertex from three points; x,y,z
 	 */
 	public BSimVertex(double newX, double newY, double newZ){
-		Point3d newLocation = new Point3d(newX,newY,newZ);
+		Vector3d newLocation = new Vector3d(newX,newY,newZ);
 		location = newLocation;
 	}
 	
 	/**
-	 * Constructor: create a new mesh vertex from a Point3d
+	 * Constructor: create a new mesh vertex from a Vector3d
 	 */
-	public BSimVertex(Point3d newLocation){
+	public BSimVertex(Vector3d newLocation){
 		location = newLocation;
 	}
 	
 	// Parameter getters.
-	public Point3d getLocation(){ return location;}
+	public Vector3d getLocation(){ return location;}
 	public ArrayList<Integer> getFaces(){ return faces;}
 }
 
