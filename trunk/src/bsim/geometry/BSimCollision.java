@@ -2,7 +2,6 @@ package bsim.geometry;
 
 import java.util.ArrayList;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimParticle;
