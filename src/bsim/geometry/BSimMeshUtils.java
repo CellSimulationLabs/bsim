@@ -136,8 +136,8 @@ public class BSimMeshUtils {
 		Vector3d ac = new Vector3d();
 		Vector3d qp = new Vector3d();
 		
-		ab.sub(tri.parentMesh.getTCoords(tri, 1), tri.parentMesh.getTCoords(tri, 0));
-		ac.sub(tri.parentMesh.getTCoords(tri, 2), tri.parentMesh.getTCoords(tri, 0));
+		ab.sub(tri.getTCoords(1), tri.getTCoords(0));
+		ac.sub(tri.getTCoords(2), tri.getTCoords(0));
 		qp.sub(startPos, endPos);
 		
 		// ******* If this is changed to precomputed (stored) normals, make sure they're 
@@ -157,7 +157,7 @@ public class BSimMeshUtils {
 		// dividing by d until intersection has been found to pierce triangle
 	
 		Vector3d ap = new Vector3d();
-		ap.sub(startPos, tri.parentMesh.getTCoords(tri, 0));
+		ap.sub(startPos, tri.getTCoords(0));
 		
 		double oodenom = 1.0/denom;
 		

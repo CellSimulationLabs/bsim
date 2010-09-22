@@ -9,6 +9,7 @@
 
 package bsim.geometry;
 
+import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 /**
@@ -58,6 +59,18 @@ public class BSimTriangle {
 		normal.negate();
 	}
 		
+	/**
+	 * Get the vertex coordinates of a given triangle
+	 * @param t
+	 * @param i Index of the vertex for which to get coordinates (0, 1, 2)
+	 * @return
+	 */
+	public Point3d getTCoords(int i){
+		int index = this.getPoints()[i];
+		BSimVertex v = parentMesh.vertices.get(index);
+		return (v.getLocation());
+	}
+	
 	/**
 	 * Set parent mesh to which this face belongs.
 	 * @param mesh Parent BSimMesh
