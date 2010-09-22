@@ -20,15 +20,10 @@ import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimChemicalField;
 import bsim.OctreeNode;
-
-import bsim.mesh.BSimFVMesh;
-import bsim.mesh.BSimSphereMesh;
 import bsim.geometry.BSimMesh;
 import bsim.geometry.BSimTriangle;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
-
-import java.util.Random;
 
 
 /**
@@ -153,12 +148,11 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	/**
-	 * Somewhat naive implementation of a mesh draw (draws each triangle of the
-	 * mesh individually). Also draws face normals as a red line from the face.
+	 * Mesh draw (draws each triangle of the mesh individually). 
+	 * Also draws face normals as a red line from the face.
 	 * @param mesh	The mesh you want to draw...
-	 * @param normalScaleFactor	Scale factor for normal vector length (makes them easier to see.)
+	 * @param normalScaleFactor	Scale factor for normal vector length. Set to zero to disable normal drawing.
 	 */
-	//public void draw(BSimFVMesh mesh, double normalScaleFactor){
 	public void draw(BSimMesh mesh, double normalScaleFactor){
 		p3d.fill(128,128,255,50);
 		p3d.stroke(128,128,255,100);
@@ -169,8 +163,10 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 			vertex(mesh.getTCoords(t,2));
 		}
 		p3d.endShape();
-		for(BSimTriangle t:mesh.getFaces()){
-			vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
+		if(normalScaleFactor != 0){
+			for(BSimTriangle t:mesh.getFaces()){
+				vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
+			}
 		}
 	}
 	
