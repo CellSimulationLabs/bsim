@@ -10,8 +10,6 @@
 
 package bsim.geometry;
 
-import java.util.Vector;
-
 import javax.vecmath.Vector3d;
 
 import bsim.OctreeNode;
