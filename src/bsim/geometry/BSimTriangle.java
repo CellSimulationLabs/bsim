@@ -72,6 +72,7 @@ public class BSimTriangle {
 	public Vector3d getNormal(){ return normal;}
 	public Vector3d getNormalN(){Vector3d nn = new Vector3d(normal); nn.normalize(); return nn;}
 	
+	public BSimMesh getParentMesh(){ return parentMesh; }
 	public int getP1(){ return tVertices[0];}
 	public int getP2(){ return tVertices[1];}
 	public int getP3(){ return tVertices[2];}
