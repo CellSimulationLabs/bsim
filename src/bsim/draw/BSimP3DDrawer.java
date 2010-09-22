@@ -19,10 +19,17 @@ import processing.core.PFont;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimChemicalField;
+import bsim.OctreeNode;
+
 import bsim.mesh.BSimFVMesh;
-import bsim.mesh.BSimTriangle;
+import bsim.mesh.BSimSphereMesh;
+import bsim.geometry.BSimMesh;
+import bsim.geometry.BSimTriangle;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
+
+import java.util.Random;
+
 
 /**
  * Scene preview and visualisation renderer (extends BSimDrawer). Uses 
@@ -151,17 +158,18 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	 * @param mesh	The mesh you want to draw...
 	 * @param normalScaleFactor	Scale factor for normal vector length (makes them easier to see.)
 	 */
-	public void draw(BSimFVMesh mesh, double normalScaleFactor){
+	//public void draw(BSimFVMesh mesh, double normalScaleFactor){
+	public void draw(BSimMesh mesh, double normalScaleFactor){
 		p3d.fill(128,128,255,50);
 		p3d.stroke(128,128,255,100);
 		p3d.beginShape(PConstants.TRIANGLES);
-		for(BSimTriangle t:mesh.getTriangles()){
+		for(BSimTriangle t:mesh.getFaces()){
 			vertex(mesh.getTCoords(t,0));
 			vertex(mesh.getTCoords(t,1));
 			vertex(mesh.getTCoords(t,2));
 		}
 		p3d.endShape();
-		for(BSimTriangle t:mesh.getTriangles()){
+		for(BSimTriangle t:mesh.getFaces()){
 			vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
 		}
 	}
@@ -231,5 +239,59 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 					p3d.popMatrix();
 				}
 	}
+	
+	
+	
+//////////////////////////////////////////////////////////////////////////////////
+	
+	//Drawing functions for octrees
+	
+	/**Post order hierarchy display drawing function for Octree
+	 * takes color as a parameter*/
+	public  void draw(OctreeNode t, Color c, float alphaGrad){
+		if(t!=null){
+			
+			for (int i=0;  i<8; i++){			
+				draw(t.getsubNode(i), c,  alphaGrad);				
+			}
+			
+			
+				p3d.pushMatrix();	
+				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
+				p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
+				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
+				p3d.popMatrix();
+			
+			
+			
+		}
+	}
+	
+	
+	/**Post order hierarchy display drawing - uses internal color value for individual nodes
+	 * Not the fastest while rendering....
+	 * */
+	public  void draw(OctreeNode t, float alphaGrad){
+		if(t!=null){
+			
+			for (int i=0;  i<8; i++){			
+				draw(t.getsubNode(i), alphaGrad);				
+			}
+			
+				p3d.pushMatrix();	
+				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
+				if(t.getnodeColor()==Color.cyan){p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), 100);}
+				else{
+				p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), alphaGrad);}
+				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
+				p3d.popMatrix();
+			
+			
+			
+		}
+	}
+	
+	
+
 
 }
