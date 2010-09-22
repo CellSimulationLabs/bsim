@@ -44,7 +44,7 @@ public class BSimCollision {
 		public static void collideAndRepel(BSimParticle p, BSimMesh theMesh){
 			boolean meshIntersection = false;
 			
-			Point3d pOnTri = new Point3d();
+			Vector3d pOnTri = new Vector3d();
 			Vector3d norm = new Vector3d();
 			Vector3d pa = new Vector3d();
 			ArrayList<Integer> potentialIntersections = new ArrayList<Integer>();			
@@ -55,7 +55,7 @@ public class BSimCollision {
 				BSimTriangle t = theMesh.getFaces().get(i);
 				
 				// Plane corresponding to a triangle of the mesh
-				if(BSimMeshUtils.intersectSpherePlane(p, t.getNormalN(),new Vector3d(theMesh.getTCoords(t, 0)))){
+				if(BSimMeshUtils.intersectSpherePlane(p, t.getNormal(),new Vector3d(theMesh.getTCoords(t, 0)))){
 					potentialIntersections.add(i);
 				}
 			}
@@ -70,7 +70,7 @@ public class BSimCollision {
 												pOnTri);
 
 				if(meshIntersection){
-					norm = t.getNormalN();
+					norm = t.getNormal();
 					pa = new Vector3d(theMesh.getTCoords(t, 0));
 					
 					double dist = Math.abs(p.getPosition().dot(norm) - norm.dot(pa)); //(d = normal.dot.some_point)

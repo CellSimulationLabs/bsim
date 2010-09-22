@@ -176,7 +176,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	 * @param theVector		The vector.
 	 * @param scaleFactor	Scalar by which the vector is multiplied for drawing purposes.
 	 */
-	public void vector(Point3d origin, Vector3d theVector, double scaleFactor, Color c){
+	public void vector(Vector3d origin, Vector3d theVector, double scaleFactor, Color c){
 		p3d.stroke(c.getRed(),c.getGreen(),c.getBlue(),c.getAlpha());
 		p3d.line((float)origin.x, (float)origin.y, (float)origin.z,
 				(float)(origin.x + scaleFactor*theVector.x), (float)(origin.y + scaleFactor*theVector.y), (float)(origin.z + scaleFactor*theVector.z));
@@ -186,7 +186,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	 * Define a p3d vertex when constructing shapes, directly from a Point3d.
 	 * @param newPoint The Point3d representing the vertex coordinates.
 	 */
-	public void vertex(Point3d newPoint){
+	public void vertex(Vector3d newPoint){
 		p3d.vertex((float)newPoint.x, (float)newPoint.y, (float)newPoint.z);
 	}
 	

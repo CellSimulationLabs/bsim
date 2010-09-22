@@ -9,7 +9,6 @@
 
 package bsim.geometry;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 /**
@@ -18,6 +17,8 @@ import javax.vecmath.Vector3d;
  */
 public class BSimTriangle {
 	protected int[] tVertices = new int[3];
+	
+	/** Triangle normal. Assumed to be normalised on creation. */
 	protected Vector3d normal = new Vector3d();
 	protected BSimMesh parentMesh;
 	
@@ -65,7 +66,7 @@ public class BSimTriangle {
 	 * @param i Index of the vertex for which to get coordinates (0, 1, 2)
 	 * @return
 	 */
-	public Point3d getTCoords(int i){
+	public Vector3d getTCoords(int i){
 		int index = this.getPoints()[i];
 		BSimVertex v = parentMesh.vertices.get(index);
 		return (v.getLocation());
@@ -82,8 +83,8 @@ public class BSimTriangle {
 	/*
 	 * Getter methods for triangle parameters.
 	 */
+	/** Gets the triangle normal vector. Assumed normalised in BSimMesh	 */
 	public Vector3d getNormal(){ return normal;}
-	public Vector3d getNormalN(){Vector3d nn = new Vector3d(normal); nn.normalize(); return nn;}
 	
 	public BSimMesh getParentMesh(){ return parentMesh; }
 	public int getP1(){ return tVertices[0];}
