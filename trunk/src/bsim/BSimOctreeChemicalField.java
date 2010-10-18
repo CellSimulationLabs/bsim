@@ -58,7 +58,7 @@ public class BSimOctreeChemicalField
 	//constructors
 	
 	/**Basic Constructor*/
-	public BSimOctreeChemicalField(BSim sim, int MaxDepth){
+	public BSimOctreeChemicalField(BSim sim, int MaxDepth, double decayRate){
 		
 		this.sim=sim; 
 		this.bound=sim.getBound();
@@ -66,6 +66,7 @@ public class BSimOctreeChemicalField
 		/**The maximum number of nodes in any direction (x,y,z)*/
 		this.Resolution = (int) Math.pow(2,MaxDepth);
 		this.SpaceLookup = new OctreeNode[Resolution][Resolution][Resolution];
+		this.decayRate = decayRate; 
 		
 		int z=0;
 		
@@ -106,12 +107,15 @@ public class BSimOctreeChemicalField
 	public void addQuantity(Vector3d v, double q){
 		
 		getOctree(v).quantity+=q;
+		getOctree(v).colorFromConc();
 		
 	}
 
 	/**Sets the concentration of chemical (quantity/volume) to octree node containing position v*/
 	public void setConc(Vector3d v, double c){
-		getOctree(v).quantity=c*(getOctree(v).volume); 
+		OctreeNode temp = getOctree(v);
+		temp.quantity=c;//*(getOctree(v).volume); 
+		getOctree(v).quantity=c;//*(getOctree(v).volume); 
 	}
 	
 	/**Sets the concentration (quantity/volume) for the entire field*/
@@ -153,29 +157,31 @@ public class BSimOctreeChemicalField
 	
 	/**Decays each box as per it's decay rate, currently decay rate is global to FIELD*/
 	public void decay(){
+		
+		/**
 		for(int i=0; i<this.Resolution; i++){
 			for(int j=0; j<this.Resolution; j++){
 				for(int k=0; k<this.Resolution; k++){
+					
 					this.SpaceLookup[i][j][k].quantity *= (1-decayRate*sim.getDt());
+					
 				}
 			}
-		}
+		}*/
 		
 	}
 	
 	/**Diffuse is a bit more tricky............ Implemented diffuse as a function on the node level
 	 * that way it is easier to know what is going on*/
 	public void diffuse(){
-		
 		for(int i=0; i<this.Resolution; i++){
 			for(int j=0; j<this.Resolution; j++){
 				for(int k=0; k<this.Resolution; k++){
-					this.SpaceLookup[i][j][k].diffusivity = this.diffusivity; //horrible hack to populate diffusivity CHANGE THIS
-					
-					this.SpaceLookup[i][j][k].diffuse();
+				//	this.SpaceLookup[i][j][k].diffuse(diffusivity, sim.getDt());
 				}
 			}
 		}
+		
 			
 	}
 
@@ -330,8 +336,8 @@ public class BSimOctreeChemicalField
 			Vector3d ac = new Vector3d();
 			Vector3d qp = new Vector3d();
 			
-			ab.sub(tri.getTCoords(tri, 1), tri.getTCoords(tri, 0));
-			ac.sub(tri.getTCoords(tri, 2), tri.getTCoords(tri, 0));
+			ab.sub(tri.getTCoords( 1), tri.getTCoords( 0));
+			ac.sub(tri.getTCoords( 2), tri.getTCoords( 0));
 			qp.sub(startPos, endPos); //value of vec3d is difference between startpos and endpos
 			
 			// ******* If this is changed to precomputed (stored) normals, make sure they're 
@@ -351,7 +357,7 @@ public class BSimOctreeChemicalField
 			// dividing by d until intersection has been found to pierce triangle
 		
 			Vector3d ap = new Vector3d();
-			ap.sub(startPos, tri.getTCoords(tri, 0));
+			ap.sub(startPos, tri.getTCoords( 0));
 			
 			double oodenom = 1.0/denom;
 			
