@@ -21,7 +21,7 @@ public class OctreeNode
 	 /**Not sure how to compute diffusion function, may use diffusion
 	  * as a property of an individual node rather than a field
 	  */
-	 protected double diffusivity; 
+	// protected double diffusivity; 
 	 
 	 /**Volume of node (simply length^3*/
 	 protected double volume; 
@@ -373,9 +373,17 @@ public class OctreeNode
 		this.nodeColor = new Color((int)this.centre.x, (int)this.centre.y, (int)this.centre.z );
 	}
 	
+	/**Sets nodeCololr value as a function of amount of chemical in box
+	 * 
+	 * @param t
+	 */
+	public void colorFromConc(){
+		this.nodeColor = new Color((int)this.quantity , 0, 0);
+	}
+	
 	
 	/**Not sure yet if it's a good idea to put the diffuse function in the octree node*/
-	public void diffuse(){
+	public void diffuse(double diffusivity, double Dt){
 		
 		//System.out.print("Diffusing....\n");
 		/*
@@ -391,7 +399,7 @@ public class OctreeNode
 		 * THESE AS ARE NECESSARY
 		 * 
 		 */
-		double k = (diffusivity*0.01)/Math.pow(length,2);
+		//double k = (diffusivity*0.01)/Math.pow(length,2);
 		
 		/*How much junk is going to leave this box?
 		 * 
@@ -399,20 +407,50 @@ public class OctreeNode
 		
 		//rough approximations to get things going....
 		
-		for(int i=0; i<6; i++){
-			if (neighbors[i].quantity < quantity){
-				neighbors[i].quantity += quantity/10; 
-				quantity -= quantity/10;
-				
-				this.nodeColor = new Color((int)quantity);
-				
-				//work on this, all above is shit
+		//Math.random()*255
+		
+		double test = Math.random()*255;
+		double test2 = Math.random()*255;
+		double test3 = Math.random()*255;
+		
+		this.nodeColor = new Color((int)0, (int)0, (int)0 );
 
-			}
+		if(this.quantity==100){
+			//this.nodeColor = new Color((int)test, (int)test2, (int)test3 );
+			
+			
+				}
+		
+		
+		for(int i=0; i<6; i++){
+			
+		//	if (neighbors[i].quantity < quantity){
+				
+		//		neighbors[i].nodeColor = new Color((int)test, (int)test2, (int)test3 );
+
+	
+
+			//}
 		}
 		
 		
+	}
+	
+	
+	public void decay(OctreeNode t, double decayRate,double Dt){
+		//post order traverse of structure to do the decay
 		
+		if(t!=null){
+			
+			for (int i=0;  i<8; i++){
+				decay(t.subNodes[i], decayRate, Dt);
+			
+			}
+		
+		
+			t.quantity *= (1-decayRate*Dt);
+			
+		}
 	}
 	
 	
