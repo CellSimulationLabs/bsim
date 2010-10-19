@@ -254,7 +254,12 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 			
 				p3d.pushMatrix();	
 				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-				p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
+				//p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
+				
+				//filling like before 
+				p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.quantity);
+			//	System.out.print(t.quantity);System.out.print("\n");
+				
 				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
 				p3d.popMatrix();
 			
