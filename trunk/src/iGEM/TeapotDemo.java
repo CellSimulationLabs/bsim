@@ -47,7 +47,7 @@ class TeapotDemo{
 	public static void main(String args[]){
 		
 		//parameters
-		int maxdepth = 3; 
+		int maxdepth = 5; 
 		final double c = 12e8; // molecules
 		final double decayRate = 0.9;
 		final double diffusivity = 890; // (microns)^2/sec
@@ -88,7 +88,7 @@ class TeapotDemo{
 		
 		
 		//size of initial octree (same as sim)
-		double OctBagLength = 25;
+		double OctBagLength = 100;
 		double OctPotLength = 100; 
 		
 		//Center of first octree
@@ -176,11 +176,14 @@ class TeapotDemo{
 			public void action(){
 				super.action();
 				if (Math.random() < 0.1)
-					OctPotField.addQuantity(position, 5); //used to be 1e9
+		
+					//HERE IS ADD QUANTITY
+					
+					
+					//OctPotField.addQuantity(position, 1e9); //used to be 1e9
 				BSimCollision.collideAndRepel(this, theTeapot);
 			}
 		}
-		
 		
 		
 		
@@ -192,7 +195,7 @@ class TeapotDemo{
 		
 		
 		
-		while(bacteria.size() < 5) {			
+		while(bacteria.size() < 1) {			
 			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, new Vector3d((Math.random()-0.5)*25+50,
 																	(Math.random()-0.5)*25+50,
 																	(Math.random()-0.5)*25+50));
@@ -245,7 +248,13 @@ class TeapotDemo{
 					vesicle.action();	
 					vesicle.updatePosition();		
 				}
+				if(Math.random() < 0.9){
+					Vector3d temp = new Vector3d(50,70,85);
+					OctPotField.addQuantity(temp, 1e9);
+
+				}
 				OctPot.decay(OctPot,decayRate, 0.01);
+				OctPot.diffuse(OctPot, diffusivity, 0.01);
 			}
 		});
 
@@ -272,14 +281,14 @@ class TeapotDemo{
 				p3d.translate(-50, -50, -50);
 				
 				//Draw calls for the octree and the mesh
-				//draw(OctBag, (float)(20));
+				draw(OctBag, (float)(20));
 				
-				draw(OctPot, (float)(255/c));	
+				draw(OctPot,  Color.BLUE,(float)(255/c));	
 				
 				
 				for(BSimBacterium p : bacteria) draw(p, Color.GREEN);
 				
-				//draw(theBag, 0);
+				draw(theBag, 0);
 				draw(theTeapot, 0);
 				
 			}
