@@ -177,59 +177,59 @@ public class OctreeNode
 		 * 2 is +y dir, 3 is -y dir, 4 is +z dir, 5 is -zdir. 
 		 */
 				this.subNodes[0].neighbors[0]=this.subNodes[1];
-				this.subNodes[0].neighbors[1]=this.parent;
-				this.subNodes[0].neighbors[2]=this.parent;
+				this.subNodes[0].neighbors[1]=this.subNodes[0].parent;
+				this.subNodes[0].neighbors[2]=this.subNodes[0].parent;
 				this.subNodes[0].neighbors[3]=this.subNodes[2];
 				this.subNodes[0].neighbors[4]=this.subNodes[4];
-				this.subNodes[0].neighbors[5]=this.parent;
+				this.subNodes[0].neighbors[5]=this.subNodes[0].parent;
 
-				this.subNodes[1].neighbors[0]=this.parent;
+				this.subNodes[1].neighbors[0]=this.subNodes[1].parent;
 				this.subNodes[1].neighbors[1]=this.subNodes[0];
-				this.subNodes[1].neighbors[2]=this.parent;
+				this.subNodes[1].neighbors[2]=this.subNodes[1].parent;
 				this.subNodes[1].neighbors[3]=this.subNodes[3];
 				this.subNodes[1].neighbors[4]=this.subNodes[5];
-				this.subNodes[1].neighbors[5]=this.parent;
+				this.subNodes[1].neighbors[5]=this.subNodes[1].parent;
 				
 				this.subNodes[2].neighbors[0]=this.subNodes[3];
-				this.subNodes[2].neighbors[1]=this.parent;
+				this.subNodes[2].neighbors[1]=this.subNodes[2].parent;
 				this.subNodes[2].neighbors[2]=this.subNodes[0];
-				this.subNodes[2].neighbors[3]=this.parent;
+				this.subNodes[2].neighbors[3]=this.subNodes[2].parent;
 				this.subNodes[2].neighbors[4]=this.subNodes[6];
-				this.subNodes[2].neighbors[5]=this.parent;
+				this.subNodes[2].neighbors[5]=this.subNodes[2].parent;
 				
-				this.subNodes[3].neighbors[0]=this.parent;
+				this.subNodes[3].neighbors[0]=this.subNodes[3].parent;
 				this.subNodes[3].neighbors[1]=this.subNodes[2];
 				this.subNodes[3].neighbors[2]=this.subNodes[1];
-				this.subNodes[3].neighbors[3]=this.parent;
+				this.subNodes[3].neighbors[3]=this.subNodes[3].parent;
 				this.subNodes[3].neighbors[4]=this.subNodes[7];
-				this.subNodes[3].neighbors[5]=this.parent;
+				this.subNodes[3].neighbors[5]=this.subNodes[3].parent;
 				
 				this.subNodes[4].neighbors[0]=this.subNodes[5];
-				this.subNodes[4].neighbors[1]=this.parent;
-				this.subNodes[4].neighbors[2]=this.parent;
+				this.subNodes[4].neighbors[1]=this.subNodes[4].parent;
+				this.subNodes[4].neighbors[2]=this.subNodes[4].parent;
 				this.subNodes[4].neighbors[3]=this.subNodes[6];
-				this.subNodes[4].neighbors[4]=this.parent;
+				this.subNodes[4].neighbors[4]=this.subNodes[4].parent;
 				this.subNodes[4].neighbors[5]=this.subNodes[0];
 				
-				this.subNodes[5].neighbors[0]=this.parent;
+				this.subNodes[5].neighbors[0]=this.subNodes[5].parent;
 				this.subNodes[5].neighbors[1]=this.subNodes[4];
-				this.subNodes[5].neighbors[2]=this.parent;
+				this.subNodes[5].neighbors[2]=this.subNodes[5].parent;
 				this.subNodes[5].neighbors[3]=this.subNodes[7];
-				this.subNodes[5].neighbors[4]=this.parent;
+				this.subNodes[5].neighbors[4]=this.subNodes[5].parent;
 				this.subNodes[5].neighbors[5]=this.subNodes[1];
 				
 				this.subNodes[6].neighbors[0]=this.subNodes[7];
-				this.subNodes[6].neighbors[1]=this.parent;
+				this.subNodes[6].neighbors[1]=this.subNodes[6].parent;
 				this.subNodes[6].neighbors[2]=this.subNodes[4];
-				this.subNodes[6].neighbors[3]=this.parent;
-				this.subNodes[6].neighbors[4]=this.parent;
+				this.subNodes[6].neighbors[3]=this.subNodes[6].parent;
+				this.subNodes[6].neighbors[4]=this.subNodes[6].parent;
 				this.subNodes[6].neighbors[5]=this.subNodes[2];
 				
-				this.subNodes[7].neighbors[0]=this.parent;
+				this.subNodes[7].neighbors[0]=this.subNodes[7].parent;
 				this.subNodes[7].neighbors[1]=this.subNodes[6];
 				this.subNodes[7].neighbors[2]=this.subNodes[5];
-				this.subNodes[7].neighbors[3]=this.parent;
-				this.subNodes[7].neighbors[4]=this.parent;
+				this.subNodes[7].neighbors[3]=this.subNodes[7].parent;
+				this.subNodes[7].neighbors[4]=this.subNodes[7].parent;
 				this.subNodes[7].neighbors[5]=this.subNodes[3];
 				
 				//end of massive combinatorics exercise!
@@ -382,8 +382,8 @@ public class OctreeNode
 	}
 	
 	
-	/**Not sure yet if it's a good idea to put the diffuse function in the octree node*/
-	public void diffuse(double diffusivity, double Dt){
+	/**Diffuses chemicals through whole octree chemi field*/
+	public void diffuse(OctreeNode t, double diffusivity, double Dt){
 		
 		//System.out.print("Diffusing....\n");
 		/*
@@ -401,38 +401,41 @@ public class OctreeNode
 		 */
 		//double k = (diffusivity*0.01)/Math.pow(length,2);
 		
-		/*How much junk is going to leave this box?
-		 * 
-		 */
+			//post order traverse of structure to do the diffusion
 		
-		//rough approximations to get things going....
-		
-		//Math.random()*255
-		
-		double test = Math.random()*255;
-		double test2 = Math.random()*255;
-		double test3 = Math.random()*255;
-		
-		this.nodeColor = new Color((int)0, (int)0, (int)0 );
-
-		if(this.quantity==100){
-			//this.nodeColor = new Color((int)test, (int)test2, (int)test3 );
+		if(t!=null){
 			
+			for (int i=0;  i<8; i++){
+				diffuse(t.subNodes[i], diffusivity, Dt);
 			
-				}
+			}
 		
 		
-		for(int i=0; i<6; i++){
-			
-		//	if (neighbors[i].quantity < quantity){
+			//INSERT ACTIONABLE CODE HERE
+			for(int i=0; i<6; i++){
 				
-		//		neighbors[i].nodeColor = new Color((int)test, (int)test2, (int)test3 );
+				double Before = 0; 
+				Before= this.quantity;
+				
+				if(t.neighbors[i]!=null){
+					
+					double k = (diffusivity*Dt)/Math.pow(this.length,2);
+					
+					double q = k*(t.neighbors[i].quantity - Before);
+					
+					t.neighbors[i].quantity+=q;
+					t.quantity-=q;
+								/*	if (t.neighbors[i].quantity < t.quantity){
+									t.neighbors[i].quantity += t.quantity/2;
+									t.quantity = t.quantity/2;} */
+				
+				}
+			}
 
-	
-
-			//}
 		}
 		
+								
+								
 		
 	}
 	
