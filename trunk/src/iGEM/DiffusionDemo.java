@@ -46,7 +46,7 @@ class DiffusionDemo{
 	 
 	public static void main(String args[]){
 		
-		int maxdepth=2;
+		int maxdepth=3;
 		final double decayRate = 0.5; 
 		final double diffusivity = 890;
 		final double c = 12e8; // molecules
@@ -60,6 +60,14 @@ class DiffusionDemo{
 		
 		double length = 100; 
 		
+		Vector3d meshPos = new Vector3d(50,50,50);
+		double meshScale = 19;
+		BSimMesh newMesh;
+		//make a sphere
+		newMesh = new BSimSphereMesh(meshPos, meshScale, 2);
+		final BSimMesh theMesh = newMesh;
+		
+		
 		//Center of first octree
 		Vector3d OTcentre = new Vector3d(50,50,50);		
 		
@@ -67,19 +75,20 @@ class DiffusionDemo{
 		final OctreeNode a = new OctreeNode(OTcentre,length);
 		
 		final BSimOctreeChemicalField testfield = new BSimOctreeChemicalField(sim,maxdepth,0.1);
-
 		
-		a.setKids(testfield);
+		a.setSpaceLookup(testfield);
 		
-		for(int i=0; i<8; i++){
-			a.getsubNode(i).setKids(testfield);
-		}
+		(testfield.getOctree(OTcentre)).setKids(testfield);	
+		
+		testfield.FitOctreeFieldToMesh(theMesh, maxdepth);
+		
+		
 		
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
 				if(Math.random() < 0.1){
-					Vector3d temp = new Vector3d(50,70,85);
+					Vector3d temp = new Vector3d(50,50,60);
 					testfield.addQuantity(temp, 1e9);
 
 				}
@@ -113,6 +122,7 @@ class DiffusionDemo{
 			
 				draw(a,  Color.BLUE,(float)(255/c));	
 				draw(a,(float)(20));
+				draw(theMesh, 0);
 				
 			
 				
