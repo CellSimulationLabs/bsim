@@ -107,7 +107,7 @@ public class BSimOctreeChemicalField
 	public void addQuantity(Vector3d v, double q){
 		
 		getOctree(v).quantity+=q;
-		getOctree(v).colorFromConc();
+		//getOctree(v).colorFromConc();
 		
 	}
 
@@ -155,34 +155,16 @@ public class BSimOctreeChemicalField
 		decay();
 	}
 	
+	
+	//Decay and diffuse implemented on node level
+	
 	/**Decays each box as per it's decay rate, currently decay rate is global to FIELD*/
 	public void decay(){
-		
-		/**
-		for(int i=0; i<this.Resolution; i++){
-			for(int j=0; j<this.Resolution; j++){
-				for(int k=0; k<this.Resolution; k++){
-					
-					this.SpaceLookup[i][j][k].quantity *= (1-decayRate*sim.getDt());
-					
-				}
-			}
-		}*/
-		
 	}
 	
 	/**Diffuse is a bit more tricky............ Implemented diffuse as a function on the node level
 	 * that way it is easier to know what is going on*/
-	public void diffuse(){
-		for(int i=0; i<this.Resolution; i++){
-			for(int j=0; j<this.Resolution; j++){
-				for(int k=0; k<this.Resolution; k++){
-				//	this.SpaceLookup[i][j][k].diffuse(diffusivity, sim.getDt());
-				}
-			}
-		}
-		
-			
+	public void diffuse(){	
 	}
 
 	
