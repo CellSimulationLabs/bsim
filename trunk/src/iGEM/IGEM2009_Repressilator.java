@@ -1,5 +1,5 @@
 /**
- * BSimRepressilatorExample.java
+ * IGEM2009_Repressilator.java
  * 
  * Simulation file containing an example of how to use ODEs inside a particle.
  * The ODEs simulate a repressilator GRN inside a particle. GRNs are linked via an
@@ -11,7 +11,7 @@
  *  Updated 16/11/2010
  */
 
-package bsim.example;
+package iGEM;
 
 import java.awt.Color;
 import java.io.File;
@@ -33,7 +33,7 @@ import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 import bsim.particle.BSimBacterium;
 
-public class BSimRepressilatorExample {
+public class IGEM2009_Repressilator {
 
 	// Initial conditions of the GRNs - Used for convenience
 	public static int ICS_RANDOM = 1;
@@ -44,7 +44,7 @@ public class BSimRepressilatorExample {
 	 *********************************************************/
 	 public static void main(String[] args) {
 
-		 
+
 		/*********************************************************
 		 * Create a new directory for the simulation results
 		 *********************************************************/
