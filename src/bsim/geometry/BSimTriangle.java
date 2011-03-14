@@ -20,7 +20,12 @@ public class BSimTriangle {
 	
 	/** Triangle normal. Assumed to be normalised on creation. */
 	protected Vector3d normal = new Vector3d();
+	
+	/**	The mesh to which this triangle belongs. */
 	protected BSimMesh parentMesh;
+	
+	/** Time stamp. Used in collision calculations. */
+	protected long timeStamp;
 	
 	/**
 	 * Constructor: New triangular face from three individual vertex indices.
@@ -36,13 +41,18 @@ public class BSimTriangle {
 	 * Constructor: New triangular face from array of vertex indices.
 	 */
 	public BSimTriangle(int[] newPoints, BSimMesh mesh){
-		if(newPoints.length == 3){
-			tVertices = newPoints;
-			setMesh(mesh);
-		} else {
-			System.err.println("Error: Triangle requires *three* vertex indices.");
-			System.exit(1);
-		}
+		// Check that we have the right number of vertices
+		assert newPoints.length == 3 : "Error: Triangle requires *three* vertex indices.";
+		
+		// Set up the new triangle
+		tVertices = newPoints;
+		setMesh(mesh);
+	}
+	
+	public BSimTriangle(BSimTriangle tri){
+		this(tri.getPoints(), tri.getParentMesh());
+		normal = new Vector3d(tri.getNormal());
+		timeStamp = tri.getTimeStamp();
 	}
 	
 	/**
@@ -65,7 +75,7 @@ public class BSimTriangle {
 	 * @param i Index of the vertex for which to get coordinates (0, 1, 2)
 	 * @return
 	 */
-	public Vector3d getTCoords(int i){
+	public Vector3d getVertCoords(int i){
 		int index = this.getPoints()[i];
 		BSimVertex v = parentMesh.vertices.get(index);
 		return (v.getLocation());
@@ -79,12 +89,20 @@ public class BSimTriangle {
 		parentMesh = mesh;
 	}
 	
+	/**
+	 * Set the time stamp associated with the triangle.
+	 */
+	public void setTimeStamp(long newTimeStamp){
+		timeStamp = newTimeStamp;
+	}
+	
 	/*
 	 * Getter methods for triangle parameters.
 	 */
 	/** Gets the triangle normal vector. Assumed normalised in BSimMesh	 */
 	public Vector3d getNormal(){ return normal;}
 	
+	public long getTimeStamp(){return timeStamp;}
 	public BSimMesh getParentMesh(){ return parentMesh; }
 	public int getP1(){ return tVertices[0];}
 	public int getP2(){ return tVertices[1];}
