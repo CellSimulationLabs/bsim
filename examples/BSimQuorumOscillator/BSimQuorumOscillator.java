@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.awt.Color;
 import java.util.Vector;
@@ -12,7 +11,7 @@ import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.particle.BSimBacterium;
 
-public class BSimQuorumOscillatorExample {
+public class BSimQuorumOscillator {
 
 	public static void main(String[] args) {
 

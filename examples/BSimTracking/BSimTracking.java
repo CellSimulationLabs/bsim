@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.awt.Color;
 
@@ -11,7 +10,7 @@ import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
 
-public class BSimTrackingExample {
+public class BSimTracking {
 
 	public static void main(String[] args) {
 

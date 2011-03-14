@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.awt.Color;
 
@@ -10,7 +9,7 @@ import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.particle.BSimBacterium;
 
-public class BSimSimplestExample {
+public class BSimSimplest {
 	
 	public static void main(String[] args) {
 
