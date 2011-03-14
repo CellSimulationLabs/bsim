@@ -1,3 +1,5 @@
+package BSimLogic;
+
 /**
  * BSimLogic.java
  * 
