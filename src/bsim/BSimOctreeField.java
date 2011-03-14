@@ -418,7 +418,7 @@ public class BSimOctreeField
 	public static void preOrderfull(BSimOctreeField t){
 		
 		if(t!=null){
-			visit(t);	//visit tree root
+			t.visit(t);	//visit tree root
 			
 			
 			for (int i=0;  i<8; i++){
@@ -433,7 +433,7 @@ public class BSimOctreeField
 		if(t!=null){
 			
 			inOrderfull(t.subNodes[0]);
-			visit(t);
+			t.visit(t);
 			inOrderfull(t.subNodes[1]);
 			
 			inOrderfull(t.subNodes[2]);
@@ -462,7 +462,7 @@ public class BSimOctreeField
 			
 			}
 			
-			visit(t);
+			t.visit(t);
 		}
 	}
 	
@@ -516,7 +516,7 @@ public class BSimOctreeField
 	}
 	
 	/**Troubleshooting visiting function, outputs useful stuff*/
-	public static void visit(BSimOctreeField t){
+	public void visit(BSimOctreeField t){
 		System.out.print(t.centre + " ");
 		System.out.print(t.depth + " ");
 	}

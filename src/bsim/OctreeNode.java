@@ -484,7 +484,7 @@ public class OctreeNode
 				if(intersect[12]==true){
 					//troubleshooting output:
 					t.visit(t);
-					System.out.print("\n");
+					//System.out.print("\n");
 				
 				
 				t.processed=true; //wont cover this again
@@ -578,7 +578,7 @@ public class OctreeNode
 	public static void preOrderfull(OctreeNode t){
 		
 		if(t!=null){
-			visit(t);	//visit tree root
+			t.visit(t);	//visit tree root
 			
 			
 			for (int i=0;  i<8; i++){
@@ -593,7 +593,7 @@ public class OctreeNode
 		if(t!=null){
 			
 			inOrderfull(t.subNodes[0]);
-			visit(t);
+			t.visit(t);
 			inOrderfull(t.subNodes[1]);
 			
 			inOrderfull(t.subNodes[2]);
@@ -622,7 +622,7 @@ public class OctreeNode
 			
 			}
 			
-			visit(t);
+			t.visit(t);
 		}
 	}
 	
@@ -653,7 +653,7 @@ public class OctreeNode
 	}
 	
 	/**Troubleshooting visiting function, outputs useful stuff*/
-	public static void visit(OctreeNode t){
+	public void visit(OctreeNode t){
 		System.out.print(t.centre + " ");
 		System.out.print(t.depth + " ");
 	}
