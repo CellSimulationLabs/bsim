@@ -9,7 +9,8 @@ import bsim.particle.BSimParticle;
 public class BSimCollision {
 		protected double t;
 		protected Vector3d pos;
-				
+		public static boolean recursiveCollisions = false;
+		
 		public BSimCollision(){
 			t = Double.NaN;
 			pos = new Vector3d();
@@ -19,9 +20,9 @@ public class BSimCollision {
 			t = tVal;
 			
 			Vector3d newpos = new Vector3d();
-			newpos.scale(u,tri.parentMesh.vertices.get(tri.getP1()).location);
-			newpos.scaleAdd(v, tri.parentMesh.vertices.get(tri.getP2()).location,newpos);
-			newpos.scaleAdd(w, tri.parentMesh.vertices.get(tri.getP3()).location,newpos);
+			newpos.scale(u,tri.getVertCoords(0));
+			newpos.scaleAdd(v, tri.getVertCoords(1),newpos);
+			newpos.scaleAdd(w, tri.getVertCoords(2),newpos);
 			pos.set(newpos);
 		}
 		
@@ -32,13 +33,15 @@ public class BSimCollision {
 			pos.set(newP);
 		}
 		
+		public void set(BSimCollision col){
+			t = col.getTVal();
+			pos.set(col.getLocation());
+		}
 		
 		public double getTVal(){ return t;}
 		public Vector3d getLocation(){return pos;}
 		
-		
-		public static boolean recursiveCollisions = false;
-		public static void setRecursiveCollisions(boolean setRC){ recursiveCollisions = setRC;}
+		public static void setRecursiveCollisions(boolean recursiveCollisionsActive){ recursiveCollisions = recursiveCollisionsActive;}
 
 		public static void collideAndRepel(BSimParticle p, BSimMesh theMesh){
 			boolean meshIntersection = false;
@@ -54,7 +57,7 @@ public class BSimCollision {
 				BSimTriangle t = theMesh.getFaces().get(i);
 				
 				// Plane corresponding to a triangle of the mesh
-				if(BSimMeshUtils.intersectSpherePlane(p, t.getNormal(),new Vector3d(theMesh.getTCoords(t, 0)))){
+				if(BSimMeshUtils.intersectSpherePlane(p, t.getNormal(),new Vector3d(t.getVertCoords(0)))){
 					potentialIntersections.add(i);
 				}
 			}
@@ -63,14 +66,14 @@ public class BSimCollision {
 			for(Integer i:potentialIntersections){
 				BSimTriangle t = theMesh.getFaces().get(i);
 
-				meshIntersection = BSimMeshUtils.intersectSphereTriangle(p, theMesh.getTCoords(t, 0),
-												theMesh.getTCoords(t, 1), 
-												theMesh.getTCoords(t, 2),
+				meshIntersection = BSimMeshUtils.intersectSphereTriangle(p, t.getVertCoords(0),
+												theMesh.getVertCoordsOfTri(t, 1), 
+												theMesh.getVertCoordsOfTri(t, 2),
 												pOnTri);
 
 				if(meshIntersection){
 					norm = t.getNormal();
-					pa = new Vector3d(theMesh.getTCoords(t, 0));
+					pa = new Vector3d(theMesh.getVertCoordsOfTri(t, 0));
 					
 					double dist = Math.abs(p.getPosition().dot(norm) - norm.dot(pa)); //(d = normal.dot.some_point)
 					
@@ -90,6 +93,14 @@ public class BSimCollision {
 
 			BSimCollision iPos = new BSimCollision();
 			
+			// TODO: Needs to be more robust.
+			// At the moment this just uses the first collision that is detected (in tri list order, not spatially)
+			// This may not be robust enough for complex boundaries where a ray might intersect multiple triangles
+			// Solution: change the method so that all triangles are checked and the first intersection (spatially)
+			// is used i.e. the closest point of intersection to the ray origin.
+			// May be possible to achieve a speedup by testing against planes first.
+			// Judicious use of kdtree/octree will reduce the overhead of no longer having the early-out 
+			// which results from breaking when a triangle is hit
 			for(BSimTriangle t: theMesh.getFaces()){					
 				if(BSimMeshUtils.intersectVectorTriangle(p1, p2, t, iPos)){
 
