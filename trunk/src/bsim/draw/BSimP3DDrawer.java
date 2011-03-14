@@ -158,9 +158,9 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.stroke(128,128,255,100);
 		p3d.beginShape(PConstants.TRIANGLES);
 		for(BSimTriangle t:mesh.getFaces()){
-			vertex(mesh.getTCoords(t,0));
-			vertex(mesh.getTCoords(t,1));
-			vertex(mesh.getTCoords(t,2));
+			vertex(mesh.getVertCoordsOfTri(t,0));
+			vertex(mesh.getVertCoordsOfTri(t,1));
+			vertex(mesh.getVertCoordsOfTri(t,2));
 		}
 		p3d.endShape();
 		if(normalScaleFactor != 0){
