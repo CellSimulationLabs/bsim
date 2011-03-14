@@ -1,3 +1,4 @@
+package BSimTracking;
 
 import java.awt.Color;
 
@@ -6,9 +7,11 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
+import bsim.particle.BSimVesicle;
 
 public class BSimTracking {
 
@@ -44,7 +47,6 @@ public class BSimTracking {
 		sim.addExporter(trackerXY);
 
 		sim.export();
-
 	}
 
 }

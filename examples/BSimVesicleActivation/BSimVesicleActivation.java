@@ -1,3 +1,4 @@
+package BSimVesicleActivation;
 
 import java.awt.Color;
 import java.util.Vector;
@@ -240,7 +241,8 @@ public class BSimVesicleActivation {
 //			pngExporter.setDt(10);
 //			sim.addExporter(pngExporter);
 			
-			sim.export();
+			//sim.export();
+			sim.preview();
 
 		}
 
