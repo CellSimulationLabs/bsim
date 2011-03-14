@@ -92,7 +92,8 @@ public abstract class BSimParticle {
 	/**
 	 * Tests if this particle is intersecting with any in the vector
 	 */
-	public boolean intersection(Vector<BSimParticle> particles) {
+	@SuppressWarnings("unchecked")
+	public boolean intersection(@SuppressWarnings("rawtypes") Vector particles) {
 		for(BSimParticle p : (Vector<BSimParticle>)particles)
 			if (outerDistance(p) < 0) return true;	
 		return false;
