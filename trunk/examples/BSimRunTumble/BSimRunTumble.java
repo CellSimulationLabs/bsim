@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.awt.Color;
 
@@ -14,7 +13,7 @@ import bsim.particle.BSimBacterium;
 /**
  * Tests whether the distributions of the run durations and tumble angle are correct
  */
-public class BSimRunTumbleTest {
+public class BSimRunTumble {
 
 	public static void main(String[] args) {
 

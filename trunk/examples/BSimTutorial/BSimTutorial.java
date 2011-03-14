@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.awt.Color;
 import java.util.Vector;
@@ -14,7 +13,7 @@ import bsim.export.BSimMovExporter;
 import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 
-public class BSimTutorialExample {
+public class BSimTutorial {
 
 	public static void main(String[] args) {
 
