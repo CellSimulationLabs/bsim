@@ -136,8 +136,8 @@ public class BSimMeshUtils {
 		Vector3d ac = new Vector3d();
 		Vector3d qp = new Vector3d();
 		
-		ab.sub(tri.getTCoords(1), tri.getTCoords(0));
-		ac.sub(tri.getTCoords(2), tri.getTCoords(0));
+		ab.sub(tri.getVertCoords(1), tri.getVertCoords(0));
+		ac.sub(tri.getVertCoords(2), tri.getVertCoords(0));
 		qp.sub(startPos, endPos);
 		
 		// ******* If this is changed to precomputed (stored) normals, make sure they're 
@@ -157,7 +157,7 @@ public class BSimMeshUtils {
 		// dividing by d until intersection has been found to pierce triangle
 	
 		Vector3d ap = new Vector3d();
-		ap.sub(startPos, tri.getTCoords(0));
+		ap.sub(startPos, tri.getVertCoords(0));
 		
 		double oodenom = 1.0/denom;
 		
@@ -184,6 +184,30 @@ public class BSimMeshUtils {
 		return true;
 	
 	}
+		
+	/**
+	 * Compute the intersection of a vector p1 + t*dir (line segment) and a plane
+	 * @param p1 Line segment origin
+	 * @param direction Line segment direction (UNNORMALISED = p2 - p1)
+	 * @param normalPlane Plane normal
+	 * @param dPlane Plane d value = DOT(normal, point_on_plane)
+	 * @return
+	 */
+	public static BSimCollision intersectVectorPlane(Vector3d p1, Vector3d direction, Vector3d normalPlane, double dPlane)
+	{
+		// Compute the t value for the directed line (p1 + t*direction) intersecting the plane
+		double t = (dPlane - normalPlane.dot(p1)) / normalPlane.dot(direction);
+		// If t in the interval [0..1] compute and return intersection point
+		if (t >= 0.0 && t <= 1.0){
+			
+			BSimCollision col = new BSimCollision();
+			col.set(t, direction, p1);
+		
+			return col;
+		}
+		// Else no intersection
+		return null;
+	}	
 	
 	/**
 	 * Test for intersection of a triangle against an octree node
@@ -215,9 +239,9 @@ public class BSimMeshUtils {
 		double hLengthZ = boxDim.z * 0.5;
 
 		// Triangle vertices
-		Vector3d v0 = new Vector3d(t.getTCoords(0));
-		Vector3d v1 = new Vector3d(t.getTCoords(1));
-		Vector3d v2 = new Vector3d(t.getTCoords(2));
+		Vector3d v0 = new Vector3d(t.getVertCoords(0));
+		Vector3d v1 = new Vector3d(t.getVertCoords(1));
+		Vector3d v2 = new Vector3d(t.getVertCoords(2));
 
 		// Translate triangle - (conceptually moving box to the origin)
 		v0.sub(boxCentre);
@@ -383,54 +407,5 @@ public class BSimMeshUtils {
 		
 		// Intersection occurs when distance s falls within [-r,+r] interval
 		return (Math.abs(s) <= r);
-	}
-	
-	
-	/**
-	 * Intersection of a vector with an axis aligned bounding box
-	 */
-	public static void intersectVectorAAB(){
-
-	}
-	
-	/**
-	 * Intersection of a sphere with and AABB
-	 */
-	public static void intersectSphereAAB(){
-
-	}
-	
-	
-	/**
-	 * Test if a point in 3d space is inside a <b>*convex*</b> polyhedron.
-	 */
-	public static void pointInPolyhedron(){
-		
-	}
-	
-	/**
-	 * Intersection of a vector in 3d space with a plane
-	 */
-	public static void intersectVectorPlane(){
-		
-	}
-	
-	/**
-	 * Test if a vector in 3d space intersects a sphere
-	 * @param v 
-	 * @param s
-	 */
-	public static void intersectVectorSphere(Vector3d v, BSimParticle s){
-
-	}
-	
-	/**
-	 * Test for intersection of moving sphere vs moving sphere
-	 * @param s1 First sphere
-	 * @param s2 Second sphere
-	 */
-	public static void intersectSphereSphereDynamic(BSimParticle s1, BSimParticle s2){
-
-	}
-	
+	}	
 }
