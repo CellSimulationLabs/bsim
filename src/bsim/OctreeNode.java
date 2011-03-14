@@ -1,10 +1,10 @@
 package bsim; 
 
-import javax.vecmath.Vector3d;
 import java.awt.Color;
-import bsim.BSimOctreeChemicalField;
 import bsim.geometry.BSimMesh;
 import bsim.geometry.BSimTriangle;
+
+import javax.vecmath.Vector3d;
 
 public class OctreeNode
 {
@@ -672,7 +672,11 @@ public class OctreeNode
 	 * @param t
 	 */
 	public void colorFromConc(){
-		this.nodeColor = new Color((int)this.quantity , 0, 0);
+		int tempQ = (int)this.quantity;
+		tempQ = tempQ > 255 ? 255 : tempQ;
+		tempQ = tempQ < 0 ? 0 : tempQ;
+
+		this.nodeColor = new Color(tempQ , 0, 0);
 	}
 	
 	
@@ -778,8 +782,8 @@ public class OctreeNode
 		Vector3d ac = new Vector3d();
 		Vector3d qp = new Vector3d();
 		
-		ab.sub(tri.getTCoords(1), tri.getTCoords(0));
-		ac.sub(tri.getTCoords(2), tri.getTCoords(0));
+		ab.sub(tri.getVertCoords(1), tri.getVertCoords(0));
+		ac.sub(tri.getVertCoords(2), tri.getVertCoords(0));
 		qp.sub(startPos, endPos);
 		
 		// ******* If this is changed to precomputed (stored) normals, make sure they're 
@@ -799,7 +803,7 @@ public class OctreeNode
 		// dividing by d until intersection has been found to pierce triangle
 	
 		Vector3d ap = new Vector3d();
-		ap.sub(startPos, tri.getTCoords(0));
+		ap.sub(startPos, tri.getVertCoords(0));
 		
 		double oodenom = 1.0/denom;
 		
