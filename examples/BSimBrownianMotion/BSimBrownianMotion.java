@@ -44,7 +44,7 @@ public class BSimBrownianMotion {
 		});
 		
 		
-		sim.addExporter(new BSimLogger(sim, "results/particleX" + System.currentTimeMillis() + ".csv") {
+		sim.addExporter(new BSimLogger(sim, "particleX" + System.currentTimeMillis() + ".csv") {
 			private double[] x = new double[n];
 			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
 			double dx;
@@ -72,8 +72,8 @@ public class BSimBrownianMotion {
 		});
 		
 		sim.export();
-		
-//		radius = 0.02;
+
+		//		radius = 0.02;
 //		visc = 2.7e-3;
 //		stokesCoefficient = 6*pi*radius*visc;
 //		boltzmann = 1.38e-23;
