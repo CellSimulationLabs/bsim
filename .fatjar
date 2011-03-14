@@ -1,0 +1,14 @@
+#Fat Jar Configuration File
+#Mon Mar 14 16:26:35 GMT 2011
+onejar.license.required=false
+manifest.classpath=
+manifest.removesigners=true
+onejar.checkbox=false
+jarname=lib/BSim_fat.jar
+manifest.mergeall=true
+manifest.mainclass=
+manifest.file=<createnew>
+jarname.isextern=false
+onejar.expand=
+excludes=
+includes=
