@@ -1,11 +1,7 @@
 package bsim.geometry;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
-import java.util.TreeSet;
 
-import javax.vecmath.Tuple3d;
 import javax.vecmath.Vector3d;
 
 /**
@@ -36,7 +32,9 @@ public class KdNode {
 	
 	public BSimMesh parentMesh;
 	
-	private static Random rng = new Random();	
+	// Not currently used - TODO: will be implemented in the median choosing 
+	// method again once bugs are squashed
+//	private static Random rng = new Random();	
 	
 	/**
 	 * Default constructor.
