@@ -362,6 +362,7 @@ public class KdNode {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	private static void test(){
 		KdNode tree = new KdNode();
 		
