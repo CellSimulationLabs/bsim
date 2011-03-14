@@ -1,17 +1,3 @@
-/**
- * IGEM2009_Repressilator.java
- * 
- * Simulation file containing an example of how to use ODEs inside a particle.
- * The ODEs simulate a repressilator GRN inside a particle. GRNs are linked via an
- * external quorum coupling mechanism.
- *  
- *  Garcia-Ojalvo: 'Modeling a synthetic multicellular clock: Repressilators coupled by quorum sensing'
- *  http://www.pnas.org/content/101/30/10955.full
- *  
- *  Updated 16/11/2010
- */
-
-package iGEM;
 
 import java.awt.Color;
 import java.io.File;

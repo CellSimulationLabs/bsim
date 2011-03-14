@@ -1,4 +1,3 @@
-package bsim.example;
 
 import java.util.Calendar;
 import java.util.Vector;
