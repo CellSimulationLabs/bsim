@@ -13,7 +13,7 @@ import bsim.export.BSimMovExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
 
-public class BSimChemicalActivationExample {
+public class BSimChemicalActivation {
 	
 		public static void main(String[] args) {
 
