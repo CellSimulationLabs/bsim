@@ -2,12 +2,7 @@ package bsim;
 
 import javax.vecmath.Vector3d;
 import java.awt.Color;
-import bsim.BSimOctreeChemicalField;
-import bsim.geometry.BSimCollision;
 import bsim.geometry.BSimMesh;
-import bsim.geometry.BSimOBJMesh;
-import bsim.geometry.BSimMeshUtils;
-import bsim.geometry.BSimSphereMesh;
 import bsim.geometry.BSimTriangle;
 
 
@@ -687,7 +682,7 @@ public class BSimOctreeField
 		
 		// Segment/ray intersects triangle.
 		t *= oodenom;
-		double u = 1.0f - v - w;
+		//double u = 1.0f - v - w;
 		
 	//	coll.set(t, qp, startPos);
 		
