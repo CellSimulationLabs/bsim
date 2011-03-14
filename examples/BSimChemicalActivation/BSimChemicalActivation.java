@@ -1,4 +1,4 @@
-package bsim.example;
+package BSimChemicalActivation;
 
 import java.awt.Color;
 import java.util.Vector;
