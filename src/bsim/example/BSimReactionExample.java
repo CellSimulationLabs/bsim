@@ -34,7 +34,7 @@ public class BSimReactionExample {
 			
 			double od = a.outerDistance(b);
 			if(od < 0) {
-				double d = a.distance(b);
+				//double d = a.distance(b);
 				a.logReaction(b, 1);
 			}
 			
