@@ -41,7 +41,6 @@ public class BSimTriangle {
 			setMesh(mesh);
 		} else {
 			System.err.println("Error: Triangle requires *three* vertex indices.");
-			// TODO: Exceptions...
 			System.exit(1);
 		}
 	}
