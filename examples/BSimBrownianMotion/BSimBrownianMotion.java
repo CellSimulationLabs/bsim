@@ -13,7 +13,7 @@ import bsim.particle.BSimParticle;
 /**
  * Tests whether the magnitude of the Brownian force is correct
  */
-public class BSimBrownianTest {
+public class BSimBrownianMotion {
 	
 	public static void main(String[] args) {
 
