@@ -641,8 +641,8 @@ public class BSimOctreeField
 		Vector3d ac = new Vector3d();
 		Vector3d qp = new Vector3d();
 		
-		ab.sub(tri.getTCoords(1), tri.getTCoords(0));
-		ac.sub(tri.getTCoords(2), tri.getTCoords(0));
+		ab.sub(tri.getVertCoords(1), tri.getVertCoords(0));
+		ac.sub(tri.getVertCoords(2), tri.getVertCoords(0));
 		qp.sub(startPos, endPos);
 		
 		// ******* If this is changed to precomputed (stored) normals, make sure they're 
@@ -662,7 +662,7 @@ public class BSimOctreeField
 		// dividing by d until intersection has been found to pierce triangle
 	
 		Vector3d ap = new Vector3d();
-		ap.sub(startPos, tri.getTCoords(0));
+		ap.sub(startPos, tri.getVertCoords(0));
 		
 		double oodenom = 1.0/denom;
 		
