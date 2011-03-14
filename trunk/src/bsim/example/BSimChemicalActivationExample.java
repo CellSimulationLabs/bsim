@@ -8,11 +8,8 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
-import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
-import bsim.export.BSimPngExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
 
