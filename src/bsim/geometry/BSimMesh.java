@@ -244,7 +244,13 @@ public abstract class BSimMesh {
 	
 	// TODO: better getters for vertices etc.
 	// Getters
+	public ArrayList<BSimVertex> getVertices(){ return vertices;}
+	public BSimVertex getVertex(int i){ return vertices.get(i);}
+	
 	public ArrayList<BSimTriangle> getFaces(){ return faces;}
+	public BSimTriangle getFace(int i){ return faces.get(i);}
+
+	public Vector3d getVertCoords(int vertIndex){return vertices.get(vertIndex).getLocation();}
 	
 	/**
 	 * Get the vertex coordinates of a given triangle
@@ -252,7 +258,7 @@ public abstract class BSimMesh {
 	 * @param i Index of the vertex for which to get coordinates (0, 1, 2)
 	 * @return
 	 */
-	public Vector3d getTCoords(BSimTriangle t, int i){
+	public Vector3d getVertCoordsOfTri(BSimTriangle t, int i){
 		int index = t.getPoints()[i];
 		BSimVertex v = vertices.get(index);
 		return (v.getLocation());
