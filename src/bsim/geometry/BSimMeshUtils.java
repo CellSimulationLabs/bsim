@@ -177,7 +177,7 @@ public class BSimMeshUtils {
 		
 		// Segment/ray intersects triangle.
 		t *= oodenom;
-		double u = 1.0f - v - w;
+		//double u = 1.0f - v - w;
 		
 		coll.set(t, qp, startPos);
 		
