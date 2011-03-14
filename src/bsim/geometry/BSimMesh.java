@@ -202,9 +202,9 @@ public abstract class BSimMesh {
 		for(BSimVertex v: vertices){
 			Vector3d vLoc = v.getLocation();
 			
-			xTotal += vLoc.getX();
-			yTotal += vLoc.getY();
-			zTotal += vLoc.getZ();
+			xTotal += vLoc.x;
+			yTotal += vLoc.y;
+			zTotal += vLoc.z;
 		}
 		
 		// Scale coords by reciprocal of total number of vertices 
