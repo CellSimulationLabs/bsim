@@ -11,12 +11,12 @@ package bsim.draw;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import javax.vecmath.Point3d;
 import javax.vecmath.Vector3d;
 
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PGraphics3D;
+
 import bsim.BSim;
 import bsim.BSimChemicalField;
 import bsim.OctreeNode;

@@ -268,7 +268,8 @@ public class QuickTimeOutputStream {
          * Returns the offset of this atom to the beginning of the random access file
          * @return
          */
-        public long getOffset() {
+        @SuppressWarnings("unused")
+		public long getOffset() {
             return offset;
         }
 
@@ -333,7 +334,8 @@ public class QuickTimeOutputStream {
          * Returns the offset of this atom to the beginning of the random access file
          * @return
          */
-        public long getOffset() {
+        @SuppressWarnings("unused")
+		public long getOffset() {
             return offset;
         }
 

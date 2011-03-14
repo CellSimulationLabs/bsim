@@ -218,8 +218,8 @@ public class BSimBacterium extends BSimParticle {
 	protected double replicationRadius = Math.sqrt(2); // microns, so birth radius = 1 micron
 	protected void setReplicationRadius(double r) { replicationRadius = r; }
 	/** The external list of children. Required when bacteria reach the replicationRadius */
-	protected Vector childList;
-	public void setChildList(Vector v) { childList = v; }
+	protected Vector<BSimBacterium> childList;
+	public void setChildList(Vector<BSimBacterium> v) { childList = v; }
 	
 	/** Sets the radius so that the surface area of the bacterium is randomly distributed between surfaceArea(replicationRadius)/2 and surfaceArea(replicationRadius) */  
 	public void setRadius() {
@@ -266,8 +266,8 @@ public class BSimBacterium extends BSimParticle {
 	protected double pVesicle = 0; // 1/(typical vesicle surface areas)
 	public void pVesicle(double d) { pVesicle = d; }	
 	/** The external list of vesicles. Required when bacteria vesiculate */
-	protected Vector vesicleList; 
-	public void setVesicleList(Vector v) { vesicleList = v; }	
+	protected Vector<BSimVesicle> vesicleList; 
+	public void setVesicleList(Vector<BSimVesicle> v) { vesicleList = v; }	
 	
 	public void vesiculate() {
 		double r = vesicleRadius();

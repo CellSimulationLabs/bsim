@@ -54,7 +54,9 @@ public class BSim {
 	 * Runs the simulation in a frame until the frame is closed, ignoring exporters. 
 	 */
 	public void preview() {
+		@SuppressWarnings("serial")
 		JFrame frame = new JFrame("BSim Preview") {
+
 			@Override
 			public void paint(Graphics g) {
 				drawer.draw((Graphics2D)g);
@@ -62,7 +64,7 @@ public class BSim {
 		};
 		frame.setSize(drawer.getWidth(), drawer.getHeight());
 		frame.setResizable(false);
-		/* TODO frame.addMouseListener(drawer) */
+		/* frame.addMouseListener(drawer) */
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

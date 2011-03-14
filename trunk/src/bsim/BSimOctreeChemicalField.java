@@ -1,12 +1,9 @@
 package bsim; 
 
 import javax.vecmath.Vector3d;
-import java.awt.Color;
 import java.lang.Math;
 import bsim.OctreeNode;
 import bsim.geometry.BSimMesh;
-import bsim.geometry.BSimOBJMesh;
-import bsim.geometry.BSimSphereMesh;
 import bsim.geometry.BSimTriangle;
 
 /**Chemical field that covers the whole Simulation area*/
@@ -15,6 +12,7 @@ public class BSimOctreeChemicalField
 	protected BSim sim;	
 	
 	/**Maximum depth of octree structure*/
+	@SuppressWarnings("unused")
 	private int MaxDepth;
 	
 	/** sim.getBound() */
@@ -68,7 +66,7 @@ public class BSimOctreeChemicalField
 		this.SpaceLookup = new OctreeNode[Resolution][Resolution][Resolution];
 		this.decayRate = decayRate; 
 		
-		int z=0;
+		//int z=0;
 		
 		 
 	}
@@ -359,7 +357,7 @@ public class BSimOctreeChemicalField
 			
 			// Segment/ray intersects triangle.
 			t *= oodenom;
-			double u = 1.0f - v - w;
+			//double u = 1.0f - v - w;
 			
 			//COMMENTED THIS OUT TO MAKES IT WORKS
 			//coll.set(t, qp, startPos);
