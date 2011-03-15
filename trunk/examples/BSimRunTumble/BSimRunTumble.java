@@ -7,6 +7,7 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
@@ -39,6 +40,11 @@ public class BSimRunTumble {
 				draw(bacterium,Color.GREEN);
 			}
 		});	
+		
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
 		
 		class BSimRunTumbleLogger extends BSimLogger {
 			protected BSimBacterium.MotionState lastState;
@@ -78,7 +84,7 @@ public class BSimRunTumble {
 		
 		
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/tumbleAngle.csv") {					
+		sim.addExporter(new BSimRunTumbleLogger(sim, resultsDir + "tumbleAngle.csv") {					
 			@Override
 			public void during() {								
 				set();
@@ -89,7 +95,7 @@ public class BSimRunTumble {
 			}
 		});
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/runAngle.csv") {					
+		sim.addExporter(new BSimRunTumbleLogger(sim, resultsDir + "runAngle.csv") {					
 			@Override
 			public void during() {								
 				set();
@@ -100,7 +106,7 @@ public class BSimRunTumble {
 			}
 		});
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/runDuration.csv") {		
+		sim.addExporter(new BSimRunTumbleLogger(sim, resultsDir + "runDuration.csv") {		
 			@Override
 			public void during() {	
 				set();
@@ -112,7 +118,7 @@ public class BSimRunTumble {
 			}
 		});
 		
-		sim.addExporter(new BSimRunTumbleLogger(sim, "results/tumbleDuration.csv") {		
+		sim.addExporter(new BSimRunTumbleLogger(sim, resultsDir + "tumbleDuration.csv") {		
 			@Override
 			public void during() {	
 				set();

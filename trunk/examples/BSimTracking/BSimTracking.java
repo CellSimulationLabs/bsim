@@ -7,6 +7,7 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
@@ -37,7 +38,12 @@ public class BSimTracking {
 			}
 		});	
 
-		BSimLogger trackerXY = new BSimLogger(sim, "results/trackerXY.csv") {
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+		
+		BSimLogger trackerXY = new BSimLogger(sim, resultsDir + "trackerXY.csv") {
 			@Override
 			public void during() {
 				write(bacterium.getPosition().x+","+bacterium.getPosition().y);

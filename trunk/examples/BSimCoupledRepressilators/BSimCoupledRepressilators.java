@@ -35,16 +35,7 @@ public class BSimCoupledRepressilators {
 		/*********************************************************
 		 * Create a new directory for the simulation results
 		 *********************************************************/
-		String filePath = new String();
-		filePath = "results/Repressilator/" + BSimUtils.timeStamp() +"/";
-		
-		// Check that path is valid and that it exists, if it doesn't then create it
-		File testPath = new File(filePath);
-		if(!testPath.exists()){
-			// Create directories as required
-			testPath.mkdirs();
-		}
-		
+		String filePath = BSimUtils.generateDirectoryPath("results/" + BSimUtils.timeStamp() +"/");			
 		
 		/*********************************************************
 		 * Create a new simulation object

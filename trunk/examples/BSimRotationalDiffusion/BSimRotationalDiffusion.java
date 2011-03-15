@@ -9,6 +9,7 @@ import processing.core.PGraphics3D;
 
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
@@ -40,7 +41,6 @@ public class BSimRotationalDiffusion {
 			}
 		});
 		
-		
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {	
@@ -49,7 +49,12 @@ public class BSimRotationalDiffusion {
 			}
 		});	
 		
-		sim.addExporter(new BSimLogger(sim, "results/bacteriumTheta" + System.currentTimeMillis() +  ".csv") {
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+		
+		sim.addExporter(new BSimLogger(sim, resultsDir+ "bacteriumTheta" + System.currentTimeMillis() +  ".csv") {
 			@Override
 			public void during() {				
 				String o = "";
@@ -60,7 +65,6 @@ public class BSimRotationalDiffusion {
 				write(o);		
 			}
 		});
-		
 		
 		sim.export();
 		

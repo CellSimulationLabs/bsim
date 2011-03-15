@@ -101,10 +101,15 @@ class BSimMeshMobility {
 		};			
 		sim.setDrawer(drawer);
 		
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+
 		/**
 		 * Create exporter of the distance traveled from start position
 		 */
-		BSimLogger tracker = new BSimLogger(sim, "results.csv") {
+		BSimLogger tracker = new BSimLogger(sim, resultsDir + "results.csv") {
 			@Override
 			public void before() {
 				int i = 1;
