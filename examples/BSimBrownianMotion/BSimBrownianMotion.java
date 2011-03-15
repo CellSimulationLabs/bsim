@@ -1,12 +1,12 @@
 package BSimBrownianMotion;
 
-import java.util.Calendar;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimParticle;
 
@@ -44,8 +44,12 @@ public class BSimBrownianMotion {
 			}
 		});
 		
-		
-		sim.addExporter(new BSimLogger(sim, "particleX" + System.currentTimeMillis() + ".csv") {
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+
+		sim.addExporter(new BSimLogger(sim, resultsDir + "particleX" + System.currentTimeMillis() + ".csv") {
 			private double[] x = new double[n];
 			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
 			double dx;

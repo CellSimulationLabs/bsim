@@ -1,6 +1,7 @@
 package BSimChemicalActivation;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
@@ -8,7 +9,9 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
+import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;
@@ -222,7 +225,12 @@ public class BSimChemicalActivation {
 			};
 			sim.setDrawer(drawer);
 			
-//			BSimLogger logger = new BSimLogger(sim, "chemicalActivation" + System.currentTimeMillis() + ".csv") {	
+			/*
+			 * Create a new directory for the simulation results
+			 */
+			String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+			
+//			BSimLogger logger = new BSimLogger(sim, resultsDir + "chemicalActivation" + System.currentTimeMillis() + ".csv") {	
 //				@Override
 //				public void during() {
 //					int activations = 0;
@@ -236,12 +244,12 @@ public class BSimChemicalActivation {
 //			sim.addExporter(logger);
 			
 			
-			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/chemicalActivation.mov");
+			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, resultsDir + "chemicalActivation.mov");
 			movExporter.setDt(0.03);
 			sim.addExporter(movExporter);
 
 			
-//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, resultsDir);
 //			pngExporter.setDt(10);
 //			sim.addExporter(pngExporter);
 			

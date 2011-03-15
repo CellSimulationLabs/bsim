@@ -8,6 +8,7 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
@@ -234,7 +235,12 @@ public class BSimLactam {
 		};
 		sim.setDrawer(drawer);	
 		
-		BSimLogger logger = new BSimLogger(sim, "l_" + 10*propLactamaseBacteria + "_" + System.currentTimeMillis() + ".csv") {
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+		
+		BSimLogger logger = new BSimLogger(sim, resultsDir + "l_" + 10*propLactamaseBacteria + "_" + System.currentTimeMillis() + ".csv") {
 			@Override
 			public void during() {
 				double alive = threatenedBacteria.size();
@@ -246,7 +252,7 @@ public class BSimLactam {
 		};
 //		sim.addExporter(logger);
 		
-		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/lactam.mov");	
+		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, resultsDir + "lactam.mov");	
 		movExporter.setDt(0.03);
 		sim.addExporter(movExporter);
 		

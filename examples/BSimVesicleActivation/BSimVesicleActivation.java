@@ -220,7 +220,13 @@ public class BSimVesicleActivation {
 			};
 			sim.setDrawer(drawer);
 			
-//			BSimLogger logger = new BSimLogger(sim, "vesicleActivation" + System.currentTimeMillis() + ".csv") {
+			/*
+			 * Create a new directory for the simulation results
+			 */
+			String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+
+			
+//			BSimLogger logger = new BSimLogger(sim, resultsDir + "vesicleActivation" + System.currentTimeMillis() + ".csv") {
 //				@Override
 //				public void during() {
 //					int activations = 0;
@@ -233,11 +239,11 @@ public class BSimVesicleActivation {
 //			};
 //			sim.addExporter(logger);
 			
-			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/vesicleActivation.mov");
+			BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, resultsDir+ "vesicleActivation.mov");
 			movExporter.setDt(0.03);
 			sim.addExporter(movExporter);
 						
-//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+//			BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, resultsDir);
 //			pngExporter.setDt(10);
 //			sim.addExporter(pngExporter);
 			

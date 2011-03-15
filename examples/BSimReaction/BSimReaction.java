@@ -7,6 +7,7 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
@@ -51,7 +52,12 @@ public class BSimReaction {
 		}
 	});	
 	
-	BSimLogger logger = new BSimLogger(sim, "results/reaction.csv") {
+	/*
+	 * Create a new directory for the simulation results
+	 */
+	String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+
+	BSimLogger logger = new BSimLogger(sim, resultsDir + "reaction.csv") {
 		@Override
 		public void during() {
 			// equilibrium distance d(1) = 2/e = 0.7357;

@@ -8,6 +8,7 @@ import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
+import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
@@ -97,23 +98,29 @@ public class BSimTutorial {
 		 * Step 5: Implement before(), during() and after() on BSimExporters and add them to the simulation
 		 * Available setters:
 		 * 	BSimExporter#setDt()
-		 * 
-		 * BSimMovExporter is a concrete BSimExporter for creating Quicktime movies
+		 */
+		
+		/*
+		 * Create a new directory for the simulation results
+		 */
+		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
+
+		/* BSimMovExporter is a concrete BSimExporter for creating Quicktime movies
 		 * Available setters:
 		 * 	BSimMovExporter#setSpeed()
 		 */			
-		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, "results/BSim.mov");
+		BSimMovExporter movExporter = new BSimMovExporter(sim, drawer, resultsDir + "BSim.mov");
 		movExporter.setDt(0.03);
 		sim.addExporter(movExporter);			
 
 		/* BSimPngExporter is another concrete BSimExporter for creating png images */
-		BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, "results");
+		BSimPngExporter pngExporter = new BSimPngExporter(sim, drawer, resultsDir);
 		pngExporter.setDt(0.5);
 		sim.addExporter(pngExporter);			
 
 		/* BSimLogger is an abstract BSimExporter that requires an implementation of during() 
 		 * It provides the convinience method write() */
-		BSimLogger logger = new BSimLogger(sim, "results/tutorialExample.csv") {
+		BSimLogger logger = new BSimLogger(sim, resultsDir + "tutorialExample.csv") {
 			@Override
 			public void before() {
 				super.before();
