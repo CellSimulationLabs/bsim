@@ -241,9 +241,9 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	 * @param field		The chemical field structure to be rendered.
 	 * @param c			Desired colour of the chemical field.
 	 * @param alphaGrad	Alpha per unit concentration of the field.
-	 * @param alphaMin	Minimum alpha value (enables better viewing).
+	 * @param alphaMin	Maximum alpha value (enables better viewing).
 	 */
-	public void draw(BSimChemicalField field, Color c, double alphaGrad, double alphaMin) {
+	public void draw(BSimChemicalField field, Color c, double alphaGrad, double alphaMax) {
 		int[] boxes = field.getBoxes();
 		double[] boxSize = field.getBox();
 		double alpha = 0.0f;
@@ -253,7 +253,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 					p3d.pushMatrix();					
 					p3d.translate((float)(boxSize[0]*i+boxSize[0]/2), (float)(boxSize[1]*j+boxSize[1]/2), (float)(boxSize[2]*k+boxSize[2]/2));
 					alpha = alphaGrad*field.getConc(i,j,k);
-					if (alpha < alphaMin) alpha = alphaMin;
+					if (alpha > alphaMax) alpha = alphaMax;
 					p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),(float)alpha);
 					p3d.box((float)boxSize[0],(float)boxSize[1],(float)boxSize[2]);
 					p3d.popMatrix();
