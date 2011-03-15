@@ -1,5 +1,6 @@
 package bsim;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -112,6 +113,24 @@ public class BSimUtils {
 		}
 		
 		return outStr;
+	}
+	
+	/**
+	 * Method to check existence of a desired path. If the path does not exist,
+	 * then the method will generate the necessary directories
+	 * @param dirPath The desired directory path to check and generate
+	 * @return String representation of the desired directory path
+	 */
+	public static String generateDirectoryPath(String dirPath) {
+
+		// Check that path is valid and that it exists, if it doesn't then create it
+		File testPath = new File(dirPath);
+		if(!testPath.exists()){
+			// Create directories as required
+			testPath.mkdirs();
+		}
+		
+		return dirPath;
 	}
 
 }
