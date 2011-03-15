@@ -1,7 +1,6 @@
 package BSimChemicalActivation;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
@@ -11,7 +10,6 @@ import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.BSimUtils;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimLogger;
 import bsim.export.BSimMovExporter;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimParticle;

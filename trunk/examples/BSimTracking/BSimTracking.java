@@ -8,11 +8,9 @@ import processing.core.PGraphics3D;
 import bsim.BSim;
 import bsim.BSimTicker;
 import bsim.BSimUtils;
-import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
-import bsim.particle.BSimVesicle;
 
 public class BSimTracking {
 
