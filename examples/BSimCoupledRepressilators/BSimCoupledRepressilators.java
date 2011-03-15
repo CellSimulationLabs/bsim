@@ -1,7 +1,6 @@
 package BSimCoupledRepressilators;
 
 import java.awt.Color;
-import java.io.File;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Vector;

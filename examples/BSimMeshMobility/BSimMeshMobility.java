@@ -10,16 +10,19 @@ package BSimMeshMobility;
  */
 
 import java.awt.Color;
-import java.io.File;
-import java.util.*;
-import javax.vecmath.Vector3d;
-import processing.core.PGraphics3D;
+import java.util.Vector;
 
-import bsim.*;
-import bsim.draw.*;
-import bsim.export.*;
-import bsim.particle.*;
-import bsim.geometry.*;
+import javax.vecmath.Vector3d;
+
+import processing.core.PGraphics3D;
+import bsim.BSim;
+import bsim.BSimTicker;
+import bsim.BSimUtils;
+import bsim.draw.BSimP3DDrawer;
+import bsim.export.BSimLogger;
+import bsim.geometry.BSimCollision;
+import bsim.geometry.BSimOBJMesh;
+import bsim.particle.BSimBacterium;
 
 class BSimMeshMobility {
 	static BSimOBJMesh theMesh;
