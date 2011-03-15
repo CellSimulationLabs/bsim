@@ -34,7 +34,9 @@ public class BSimMovExporter extends BSimExporter {
 	public void before() {		
 		try {
 			outputStream = new QuickTimeOutputStream(new File(filename), QuickTimeOutputStream.VideoFormat.JPG);			
-			outputStream.setTimeScale(speed*(int)(1/this.getDt()));
+			int timescale = (int)((double)speed*(1.0/(double)this.getDt()));
+			if (timescale < 1) timescale = 1;
+			outputStream.setTimeScale(timescale);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}			
