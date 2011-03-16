@@ -10,7 +10,6 @@ package BSimMeshMobility;
  */
 
 import java.awt.Color;
-import java.io.File;
 import java.util.*;
 import javax.vecmath.Vector3d;
 import processing.core.PGraphics3D;
