@@ -10,19 +10,16 @@ package BSimMeshMobility;
  */
 
 import java.awt.Color;
-import java.util.Vector;
-
+import java.io.File;
+import java.util.*;
 import javax.vecmath.Vector3d;
-
 import processing.core.PGraphics3D;
-import bsim.BSim;
-import bsim.BSimTicker;
-import bsim.BSimUtils;
-import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimLogger;
-import bsim.geometry.BSimCollision;
-import bsim.geometry.BSimOBJMesh;
-import bsim.particle.BSimBacterium;
+
+import bsim.*;
+import bsim.draw.*;
+import bsim.export.*;
+import bsim.particle.*;
+import bsim.geometry.*;
 
 class BSimMeshMobility {
 	static BSimOBJMesh theMesh;
@@ -32,9 +29,9 @@ class BSimMeshMobility {
 		 * Create a new simulation object
 		 */
 		BSim sim = new BSim();		
-		sim.setDt(0.2);
+		sim.setDt(0.01);
 		sim.setTimeFormat("0.00");
-		sim.setSimulationTime(1000.0);
+		sim.setSimulationTime(60.0);
 		sim.setSolid(true,true,true);
 		sim.setBound(100000,100000,100000);
 
@@ -43,7 +40,7 @@ class BSimMeshMobility {
 		 */
 		theMesh = new BSimOBJMesh();
 		theMesh.load("Mesh_Intact.obj");
-		// theMesh.load("Mesh_20PctRemoved.obj");
+		//theMesh.load("Mesh_20PctRemoved.obj");
 		// theMesh.load("Mesh_40PctRemoved.obj");
 		
 		/**
@@ -72,7 +69,7 @@ class BSimMeshMobility {
 		 * independantly.
 		 */
 		final Vector<BSimCollidingBacterium> bacteria = new Vector<BSimCollidingBacterium>();	
-		while(bacteria.size() < 1000) {		
+		while(bacteria.size() < 10) {		
 			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, new Vector3d(50000.0,50000.0,50000.0));
 			bacteria.add(b);
 		}
@@ -104,23 +101,18 @@ class BSimMeshMobility {
 		};			
 		sim.setDrawer(drawer);
 		
-		/*
-		 * Create a new directory for the simulation results
-		 */
-		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
-
 		/**
 		 * Create exporter of the distance traveled from start position
 		 */
-		BSimLogger tracker = new BSimLogger(sim, resultsDir + "results.csv") {
+		BSimLogger tracker = new BSimLogger(sim, "results.csv") {
 			@Override
 			public void before() {
 				int i = 1;
 				super.before();
 				String buffer = new String();
 				buffer = "time(seconds)";
-				for(BSimCollidingBacterium b : bacteria) {
-					buffer = buffer + ",Bac" + i;
+				for(@SuppressWarnings("unused") BSimCollidingBacterium b : bacteria) {
+					buffer = buffer + ",Bac" + i + "X" + ",Bac" + i + "Y" + ",Bac" + i + "Z";
 					i++;
 				}
 				write(buffer); 
@@ -132,18 +124,18 @@ class BSimMeshMobility {
 				// Logs distance moved from start point
 				for(BSimCollidingBacterium b : bacteria) {
 					if (i > 0) buffer = buffer + ",";
-					buffer = buffer + Math.sqrt(Math.pow(50000.0-b.getPosition().x,2) + 
-						Math.pow(50000.0-b.getPosition().y,2) + 
-						Math.pow(50000.0-b.getPosition().z,2));
+					buffer = buffer + b.getPosition().x + "," + b.getPosition().y + ","+ b.getPosition().z;
 					i++;
 				}
 				write(sim.getFormattedTime() + "," + buffer);
 			}
 		};
-		tracker.setDt(1.0);
+		tracker.setDt(2.0);
 		sim.addExporter(tracker);
-		sim.export();
+		
+		// Uncomment to export movement data
+		// sim.export();
 
-		// sim.preview();	
+		sim.preview();	
 	}	
 }
