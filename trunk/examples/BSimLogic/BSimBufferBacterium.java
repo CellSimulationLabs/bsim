@@ -1,10 +1,8 @@
 package BSimLogic;
 
-import java.util.*;
 import javax.vecmath.Vector3d;
 
 import bsim.*;
-import bsim.particle.*;
 
 /** 
  * Buffer bacterium logic gate 
