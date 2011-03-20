@@ -17,7 +17,6 @@ import processing.core.PGraphics3D;
 import bsim.*;
 import bsim.draw.*;
 import bsim.export.*;
-import bsim.particle.*;
 
 public class BSimLogic {
 	

@@ -1,6 +1,5 @@
 package BSimLogic;
 
-import java.util.*;
 import javax.vecmath.Vector3d;
 
 import bsim.*;
