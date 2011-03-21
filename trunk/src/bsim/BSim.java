@@ -19,7 +19,10 @@ public class BSim {
 	private double simulationTime;
 	private DecimalFormat timeFormat = new DecimalFormat("0.00");	
 	private Vector3d bound = new Vector3d(100,100,100);
+	 /* Wrapping boundaries (x, y, z) */
 	private boolean[] solid = {false, false, false};
+	/* Can chemicals can leak out of the boundaries (x_top, x_bottom, y_top, y_bottom, z_top, z_bottom) */
+	private boolean[] leaky = {false, false, false, false, false, false}; 
 	/* Conditions of 'Chemotaxis in Escherichia Coli', Berg at al. */
 	private double visc = 2.7e-3; // Pa s
 	private double temperature = 305; // K	
@@ -32,6 +35,7 @@ public class BSim {
 	public void setTimeFormat(String s) { timeFormat = new DecimalFormat(s); }
 	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z);	}
 	public void setSolid(boolean x, boolean y, boolean z) { solid = new boolean[]{x,y,z}; }
+	public void setLeaky(boolean xTop, boolean xBottom, boolean yTop, boolean yBottom, boolean zTop, boolean zBottom) { leaky = new boolean[]{xTop,xBottom,yTop,yBottom,zTop,zBottom}; }
 	public void setVisc(double v) { visc = v; }
 	public void setTemperature(double t) { temperature = t; }	
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
@@ -45,6 +49,7 @@ public class BSim {
 	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
 	public Vector3d getBound() { return bound; }
 	public boolean[] getSolid() { return solid; }
+	public boolean[] getLeaky() { return leaky; }
 	public double getVisc() { return visc; }
 	public double getTemperature() { return temperature; }
 	
