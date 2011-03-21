@@ -25,9 +25,9 @@ public class BSimChemicalField {
 		this.sim = sim;
 		this.bound = sim.getBound();
 		this.boxes = boxes;
-		box[0] = bound.x/boxes[0];
-		box[1] = bound.y/boxes[1];
-		box[2] = bound.z/boxes[2];
+		box[0] = bound.x/(double)boxes[0];
+		box[1] = bound.y/(double)boxes[1];
+		box[2] = bound.z/(double)boxes[2];
 		boxVolume = box[0]*box[1]*box[2];
 		this.quantity = new double[boxes[0]][boxes[1]][boxes[2]]; 
 		this.diffusivity = diffusivity;
