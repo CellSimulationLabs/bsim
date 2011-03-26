@@ -47,6 +47,7 @@ public class BSimChemicalActivation {
 					super(sim, position);		
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void replicate() {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
@@ -91,6 +92,7 @@ public class BSimChemicalActivation {
 					super(sim, position);		
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void replicate() {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);

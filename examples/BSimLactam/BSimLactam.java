@@ -57,6 +57,7 @@ public class BSimLactam {
 			public LactamaseBacterium(BSim sim, Vector3d position) {
 				super(sim, position);
 			}
+			@SuppressWarnings("unchecked")
 			public void vesiculate() {
 				if (vesiculating) {
 					double r = vesicleRadius();
@@ -65,6 +66,7 @@ public class BSimLactam {
 				}
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public void replicate() {
 				setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
@@ -103,6 +105,7 @@ public class BSimLactam {
 				else super.action();
 			}
 			
+			@SuppressWarnings("unchecked")
 			@Override
 			public void replicate() {
 				setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
@@ -240,6 +243,7 @@ public class BSimLactam {
 		 */
 		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
 		
+		@SuppressWarnings("unused")
 		BSimLogger logger = new BSimLogger(sim, resultsDir + "l_" + 10*propLactamaseBacteria + "_" + System.currentTimeMillis() + ".csv") {
 			@Override
 			public void during() {

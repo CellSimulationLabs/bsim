@@ -43,6 +43,7 @@ public class BSimVesicleActivation {
 					super(sim, position);		
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void replicate() {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
@@ -67,6 +68,7 @@ public class BSimVesicleActivation {
 					}
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void vesiculate() {
 					double r = vesicleRadius();
@@ -83,6 +85,7 @@ public class BSimVesicleActivation {
 					super(sim, position); // default radius is 1 micron			
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void replicate() {
 					setRadiusFromSurfaceArea(surfaceArea(replicationRadius)/2);
@@ -112,6 +115,7 @@ public class BSimVesicleActivation {
 						logReaction(b, 1);
 				}
 				
+				@SuppressWarnings("unchecked")
 				@Override
 				public void vesiculate() {
 					double r = vesicleRadius();
