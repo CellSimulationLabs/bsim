@@ -86,6 +86,7 @@ public class BSimCollision {
 				}
 			}	
 		}
+
 		
 		// NOTE that this is colliding a ray with a triangle (NOT in fact a swept sphere vs triangle)
 		// and therefore is less accurate for larger particles. drat...
