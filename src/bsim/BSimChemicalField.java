@@ -117,6 +117,8 @@ public class BSimChemicalField {
 		int xAbove, xBelow, yAbove, yBelow, zAbove, zBelow;
 		/* Quantity of chemical leaving the box in the positive (negative) .. direction */
 		double qxAbove, qxBelow, qyAbove, qyBelow, qzAbove, qzBelow;
+		/* Flags for leakiness at borders */
+		boolean leaky[] = sim.getLeaky();
 		/*
 		 * Flux of molecules crossing in the positive x-direction (Fick's law)
 		 * 	J = -D(dC/dx) = -D*(C(x+dx)-C(x))/dx =  -D*(N(x+dx)-N(x))/((dx)^2*dy*dz)  molecules/(micron)^2/sec
@@ -140,7 +142,6 @@ public class BSimChemicalField {
 					zAbove = (k == boxes[2]-1 ? (sim.getSolid()[2] ? -1 : 0) : k+1);
 					zBelow = (k == 0 ? (sim.getSolid()[2] ? -1 : boxes[2]-1) : k-1);
 					
-					/* If there is a box above */
 					if(xAbove != -1) {
 						/* Calculate the quantity of chemical leaving the box in this direction */
 						qxAbove = -kX*(before[xAbove][j][k]-before[i][j][k]);
@@ -148,32 +149,70 @@ public class BSimChemicalField {
 						quantity[xAbove][j][k] += qxAbove;
 						/* Remove it from this box */
 						quantity[i][j][k] -= qxAbove;
+					} else {
+						if (leaky[0]) {
+							/* Calculate the quantity of chemical leaving the box in this direction (0 outside box if leaky)*/
+							qxAbove = -kX*(0-before[i][j][k]);
+							/* Remove it from this box */
+							quantity[i][j][k] -= qxAbove;
+						}
 					}
+					
 					if(xBelow != -1) {
 						qxBelow = -kX*(before[xBelow][j][k]-before[i][j][k]);
 						quantity[xBelow][j][k] += qxBelow;
 						quantity[i][j][k] -= qxBelow;
+					} else {
+						if (leaky[1]) {
+							qxBelow = -kX*(0-before[i][j][k]);
+							quantity[i][j][k] -= qxBelow;
+						}
 					}
+					
 					if(yAbove != -1) {
 						qyAbove = -kY*(before[i][yAbove][k]-before[i][j][k]);
 						quantity[i][yAbove][k] += qyAbove;
 						quantity[i][j][k] -= qyAbove;
+					} else {
+						if (leaky[2]) {
+							qyAbove = -kX*(0-before[i][j][k]);
+							quantity[i][j][k] -= qyAbove;
+						}
 					}
+					
 					if(yBelow != -1) {
 						qyBelow = -kY*(before[i][yBelow][k]-before[i][j][k]);
 						quantity[i][yBelow][k] += qyBelow;
 						quantity[i][j][k] -= qyBelow;
+					} else {
+						if (leaky[3]) {
+							qyBelow = -kX*(0-before[i][j][k]);
+							quantity[i][j][k] -= qyBelow;
+						}
 					}
+					
 					if(zAbove != -1) {
 						qzAbove = -kZ*(before[i][j][zAbove]-before[i][j][k]);
 						quantity[i][j][zAbove] += qzAbove;
 						quantity[i][j][k] -= qzAbove;
+					} else {
+						if (leaky[4]) {
+							qzAbove = -kX*(0-before[i][j][k]);
+							quantity[i][j][k] -= qzAbove;
+						}
 					}
+					
 					if(zBelow != -1) {
 						qzBelow = -kZ*(before[i][j][zBelow]-before[i][j][k]);
 						quantity[i][j][zBelow] += qzBelow;
 						quantity[i][j][k] -= qzBelow;
+					} else {
+						if (leaky[3]) {
+							qzBelow = -kX*(0-before[i][j][k]);
+							quantity[i][j][k] -= qzBelow;
+						}
 					}
+					
 				}
 		
 	}
