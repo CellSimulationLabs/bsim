@@ -119,6 +119,7 @@ public class BSimChemicalField {
 		double qxAbove, qxBelow, qyAbove, qyBelow, qzAbove, qzBelow;
 		/* Flags for leakiness at borders */
 		boolean leaky[] = sim.getLeaky();
+		double  leakyRate[] = sim.getLeakyRate();
 		/*
 		 * Flux of molecules crossing in the positive x-direction (Fick's law)
 		 * 	J = -D(dC/dx) = -D*(C(x+dx)-C(x))/dx =  -D*(N(x+dx)-N(x))/((dx)^2*dy*dz)  molecules/(micron)^2/sec
@@ -126,9 +127,12 @@ public class BSimChemicalField {
 		 * 	xAbove = J*(dy*dz)*dt = -((D*dt)/(dx)^2)*(N(x+dx)-N(x)) = -kX*(N(x+dx)-N(x))
 		 * where kX = (D*dt)/(dx)^2 is a dimensionless constant
 		 */
-		double kX = (diffusivity*sim.getDt())/Math.pow(box[0],2);
-		double kY = (diffusivity*sim.getDt())/Math.pow(box[1],2);
-		double kZ = (diffusivity*sim.getDt())/Math.pow(box[2],2);
+		double normX = sim.getDt()/Math.pow(box[0],2);
+		double normY = sim.getDt()/Math.pow(box[1],2);
+		double normZ = sim.getDt()/Math.pow(box[2],2);
+		double kX = diffusivity*normX;
+		double kY = diffusivity*normY;
+		double kZ = diffusivity*normZ;
 		for(int i=0;i<boxes[0];i++)
 			for(int j=0;j<boxes[1];j++)
 				for(int k=0;k<boxes[2];k++) {	
@@ -152,7 +156,7 @@ public class BSimChemicalField {
 					} else {
 						if (leaky[0]) {
 							/* Calculate the quantity of chemical leaving the box in this direction (0 outside box if leaky)*/
-							qxAbove = -kX*(0-before[i][j][k]);
+							qxAbove = normX*leakyRate[0]*before[i][j][k];
 							/* Remove it from this box */
 							quantity[i][j][k] -= qxAbove;
 						}
@@ -164,7 +168,7 @@ public class BSimChemicalField {
 						quantity[i][j][k] -= qxBelow;
 					} else {
 						if (leaky[1]) {
-							qxBelow = -kX*(0-before[i][j][k]);
+							qxBelow = normX*leakyRate[1]*before[i][j][k];
 							quantity[i][j][k] -= qxBelow;
 						}
 					}
@@ -175,7 +179,7 @@ public class BSimChemicalField {
 						quantity[i][j][k] -= qyAbove;
 					} else {
 						if (leaky[2]) {
-							qyAbove = -kX*(0-before[i][j][k]);
+							qyAbove = normY*leakyRate[2]*before[i][j][k];
 							quantity[i][j][k] -= qyAbove;
 						}
 					}
@@ -186,7 +190,7 @@ public class BSimChemicalField {
 						quantity[i][j][k] -= qyBelow;
 					} else {
 						if (leaky[3]) {
-							qyBelow = -kX*(0-before[i][j][k]);
+							qyBelow = normY*leakyRate[3]*before[i][j][k];
 							quantity[i][j][k] -= qyBelow;
 						}
 					}
@@ -197,7 +201,7 @@ public class BSimChemicalField {
 						quantity[i][j][k] -= qzAbove;
 					} else {
 						if (leaky[4]) {
-							qzAbove = -kX*(0-before[i][j][k]);
+							qzAbove = normZ*leakyRate[4]*before[i][j][k];
 							quantity[i][j][k] -= qzAbove;
 						}
 					}
@@ -208,7 +212,7 @@ public class BSimChemicalField {
 						quantity[i][j][k] -= qzBelow;
 					} else {
 						if (leaky[3]) {
-							qzBelow = -kX*(0-before[i][j][k]);
+							qzBelow = normZ*leakyRate[5]*before[i][j][k];
 							quantity[i][j][k] -= qzBelow;
 						}
 					}
