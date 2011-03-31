@@ -148,6 +148,31 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	/**
+	 * Mesh draw with a given color (draws each triangle of the mesh individually). 
+	 * Also draws face normals as a red line from the face.
+	 * @param mesh	The mesh you want to draw...
+	 * @param normalScaleFactor	Scale factor for normal vector length. Set to zero to disable normal drawing.
+	 */
+	public void draw(BSimMesh mesh, Color c, double normalScaleFactor){
+		p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),c.getAlpha());
+		int lineAlpha = c.getAlpha() + 50;
+		if (lineAlpha > 255) lineAlpha = 255;
+		p3d.stroke(c.getRed(),c.getGreen(),c.getBlue(),lineAlpha);
+		p3d.beginShape(PConstants.TRIANGLES);
+		for(BSimTriangle t:mesh.getFaces()){
+			vertex(mesh.getVertCoordsOfTri(t,0));
+			vertex(mesh.getVertCoordsOfTri(t,1));
+			vertex(mesh.getVertCoordsOfTri(t,2));
+		}
+		p3d.endShape();
+		if(normalScaleFactor != 0){
+			for(BSimTriangle t:mesh.getFaces()){
+				vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
+			}
+		}
+	}
+	
+	/**
 	 * Mesh draw (draws each triangle of the mesh individually). 
 	 * Also draws face normals as a red line from the face.
 	 * @param mesh	The mesh you want to draw...
