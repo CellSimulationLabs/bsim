@@ -407,5 +407,5 @@ public class BSimMeshUtils {
 		
 		// Intersection occurs when distance s falls within [-r,+r] interval
 		return (Math.abs(s) <= r);
-	}	
+	}
 }

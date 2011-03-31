@@ -145,4 +145,14 @@ public class BSimCollision {
 		}
 		
 		
+		public static boolean collideAndCross(Vector3d p1, Vector3d p2, BSimMesh theMesh){
+			BSimCollision iPos = new BSimCollision();
+
+			for (BSimTriangle t: theMesh.getFaces()) {					
+				if (BSimMeshUtils.intersectVectorTriangle(p1, p2, t, iPos)) {
+					return true;
+				}
+			}
+			return false;
+		}
 }
