@@ -1,7 +1,7 @@
 package BSimMultiThreaded;
 
 import java.awt.Color;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.vecmath.Vector3d;
 
@@ -32,8 +32,8 @@ public class BSimMultiThreaded {
 		/**
 		 * Create a default bacterial population.
 		 */
-		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
-		while(bacteria.size() < 50000) {		
+		final ArrayList<BSimBacterium> bacteria = new ArrayList<BSimBacterium>();		
+		while(bacteria.size() < 200000) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			bacteria.add(b);		
 		}
@@ -63,7 +63,7 @@ public class BSimMultiThreaded {
 					BSimBacterium b;
 					for (int i = startIndex; i < endIndex; i++) {
 						b = bacteria.get(i);
-						b.action();		
+						b.action();
 						b.updatePosition();
 					}
 				}
@@ -98,7 +98,7 @@ public class BSimMultiThreaded {
 			/**
 			 * Create my new threaded ticker using 2 threads and attach to simulation
 			 */
-			MyTicker ticker = new MyTicker(4);
+			MyTicker ticker = new MyTicker(2);
 			sim.setTicker((BSimTicker)ticker);
 		}
 		else {
@@ -109,7 +109,10 @@ public class BSimMultiThreaded {
 			sim.setTicker(new BSimTicker() {
 				@Override
 				public void tick() {
-					for (BSimBacterium b : bacteria) {
+					BSimBacterium b;
+					int endIndex = bacteria.size();
+					for (int i = 0; i < endIndex; i++) {
+						b = bacteria.get(i);
 						b.action();		
 						b.updatePosition();	
 					}
