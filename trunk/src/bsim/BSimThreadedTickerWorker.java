@@ -5,60 +5,52 @@ import java.util.concurrent.CyclicBarrier;
 
 public abstract class BSimThreadedTickerWorker implements Runnable {
 
-	protected int threadID;
-	protected int threads;
-	private boolean alive = true;
-	protected static CyclicBarrier barrier = null;
-	protected BSimNotifier myNotifier;
+	protected int threadID; // The ID of this worker
+	protected int threads; // Total number of threads in the pool
+	protected static CyclicBarrier barrier1; // Shared barrier to enable synchronisation of all threads at start of update.
+	protected static CyclicBarrier barrier2; // Shared barrier to enable synchronisation of all threads at end of update.
+	protected static BSimNotifier notifier; // Notifier for the worker (used to trigger execution)
 	
+	/**
+	 * Created a new worker for the BSimThreadedTicker.
+	 * @param threadID Unique thread ID for the worker.
+	 * @param threads Total number of threads.
+	 */
 	public BSimThreadedTickerWorker(int threadID, int threads) {
 		this.threadID = threadID;
 		this.threads = threads;
-		myNotifier = new BSimNotifier();
-		if (barrier == null) barrier = new CyclicBarrier(threads);
+		if (threadID == 0) {
+			notifier = new BSimNotifier();
+			barrier1 = new CyclicBarrier(threads);
+			barrier2 = new CyclicBarrier(threads);
+		}
 	}
 	
+	/**
+	 * Threaded function. The first (threadID = 0) is treated specially as this is 
+	 * the main application thread and therefore should not enter a waiting state.
+	 */
 	final public void run() {
 		if (threadID == 0) {
-			// Run the worker
-			threadedTick(threadID, threads);
 			try {
-				// Wait until other threads are done
-				barrier.await();
-				barrier.reset();
+				barrier1.await(); // Make sure all threads are ready to start
+				barrier1.reset();
+				threadedTick(threadID, threads); // Run the worker
+				barrier2.await(); // Wait until other threads are done
+				barrier2.reset();
 			}
-			catch (Exception e) {
-				// Do nothing
-			}
+			catch (Exception e) { }
 		}
 		else {
 			while (true) {
 				try {
-					// Wait on trigger
-					myNotifier.waitForNotify();
-					// Check if worker has been killed
-					if (!alive) break;
-					// Run the worker
-					threadedTick(threadID, threads);
-					// Wait until other threads are done
-					barrier.await();
+					barrier1.await(); // Wait on trigger
+					threadedTick(threadID, threads); // Run the worker
+					barrier2.await(); // Wait until other threads are done
 				}
-				catch (Exception e) {
-					// Break cleanly ensuring any waiting threads are released
-					break;
-				}
+				catch (Exception e) { break; }
 			}
 		}
-	}
-	
-	final public void trigger() {
-		// Kick off another cycle of the worker
-		myNotifier.notifyWaiter();
-	}
-	
-	final public void kill() {
-		alive = false;
-		myNotifier.notifyWaiter();
 	}
 	
 	/**

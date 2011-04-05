@@ -5,10 +5,17 @@ import java.util.Vector;
 
 public abstract class BSimThreadedTicker extends BSimTicker {
 	
-	protected int threads;
-	protected Vector<BSimThreadedTickerWorker> workers;
-	protected BSimThreadedTickerWorker myWorker;
+	protected int threads; // Total number of threads (including main one)
+	protected Vector<BSimThreadedTickerWorker> workers; // List of workers to call upon
+	protected BSimThreadedTickerWorker myWorker; // A local working for the main thread to call directly
 	
+	/**
+	 * Creates a threaded ticker that uses a fixed size pool of threads. These are
+	 * not recreated each call due to the sizable overhead in Java, but instead
+	 * a pool of worker threads is blocked and notified to carry out work each
+	 * time the ticker is called.
+	 * @param threads Total number of threads to use
+	 */
 	public BSimThreadedTicker (int threads) {
 		this.threads = threads;
 		// Create a pool of worker threads
@@ -22,15 +29,13 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 		}
 	}
 	
+	/**
+	 * Called at each time step by the BSim simulation object
+	 */
 	@Override
 	final public void tick() {
 		sequentialBefore();
-		// Trigger the other workers to run in parallel
-		for (int i = 0; i < workers.size(); i++) {
-			workers.get(i).trigger();
-		}
-		// This will automatically wait for all other workers to finish
-		myWorker.run(); 
+		myWorker.run(); // This will automatically trigger and wait for all other workers to finish
 		sequentialAfter();
 	}
 	
@@ -42,11 +47,10 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	public abstract void sequentialAfter();
 	
 	/**
-	 * 
-	 * @param threadID the unique thread ID
-	 * @param threads the total number of threads that are being used
-	 * @param notifier should be sent to the worker constructor to signal when done
-	 * @return The worker that will be called in parallel
+	 * For the user to overwrite to create suitable workers for this ticker.
+	 * @param threadID Unique thread ID
+	 * @param threads Total number of threads
+	 * @return New worker object that will be called in parallel
 	 */
 	public abstract BSimThreadedTickerWorker createWorker (int threadID, int threads);
 }
