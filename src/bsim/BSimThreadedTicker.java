@@ -7,15 +7,15 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	
 	protected int threads;
 	protected Vector<BSimThreadedTickerWorker> workers;
-	protected BSimNotifier notifier;
+	protected BSimThreadedTickerWorker myWorker;
 	
-	public BSimThreadedTicker (int totalThreads) {
-		threads = totalThreads;
+	public BSimThreadedTicker (int threads) {
+		this.threads = threads;
 		// Create a pool of worker threads
-		notifier = new BSimNotifier();
-		workers = new Vector<BSimThreadedTickerWorker>(totalThreads);
-		for (int i = 0; i < totalThreads; i++) { 
-			BSimThreadedTickerWorker worker = createWorker(i, totalThreads, notifier);
+		workers = new Vector<BSimThreadedTickerWorker>(threads);
+		myWorker = createWorker(0, threads);
+		for (int i = 1; i < threads; i++) { 
+			BSimThreadedTickerWorker worker = createWorker(i, threads);
 			workers.add(worker);
 			Thread t = new Thread(worker);
 			t.start();
@@ -25,17 +25,12 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	@Override
 	final public void tick() {
 		sequentialBefore();
-		try {
-			for (int i = 0; i < threads; i++) {
-				workers.get(i).trigger();
-			}
-			// Wait until all threads have finished their work
-			notifier.waitForNotify();
+		// Trigger the other workers to run in parallel
+		for (int i = 0; i < workers.size(); i++) {
+			workers.get(i).trigger();
 		}
-		catch (InterruptedException e) {
-			// Do Nothing
-		}
-		BSimThreadedTickerWorker.resetBarrier();
+		// This will automatically wait for all other workers to finish
+		myWorker.run(); 
 		sequentialAfter();
 	}
 	
@@ -53,5 +48,5 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	 * @param notifier should be sent to the worker constructor to signal when done
 	 * @return The worker that will be called in parallel
 	 */
-	public abstract BSimThreadedTickerWorker createWorker (int threadID, int threads, BSimNotifier notifier);
+	public abstract BSimThreadedTickerWorker createWorker (int threadID, int threads);
 }

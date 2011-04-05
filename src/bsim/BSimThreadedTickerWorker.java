@@ -9,42 +9,46 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 	protected int threads;
 	private boolean alive = true;
 	protected static CyclicBarrier barrier = null;
-	protected BSimNotifier tickerNotifier;
 	protected BSimNotifier myNotifier;
 	
-	public BSimThreadedTickerWorker(int threadID, int threads, BSimNotifier notifier) {
+	public BSimThreadedTickerWorker(int threadID, int threads) {
 		this.threadID = threadID;
 		this.threads = threads;
-		this.tickerNotifier = notifier;
 		myNotifier = new BSimNotifier();
 		if (barrier == null) barrier = new CyclicBarrier(threads);
 	}
 	
 	final public void run() {
-		while (true) {
+		if (threadID == 0) {
+			// Run the worker
+			threadedTick(threadID, threads);
 			try {
-				// Wait on trigger
-				myNotifier.waitForNotify();
-				// Check if worker has been killed
-				if (!alive) break;
-				// Run the worker
-				threadedTick(threadID, threads);
-				// Only the first thread needs to notify the threaded ticker
-				if (barrier.await() == 0) {
-					// Notify threaded ticker that all workers are done
-					tickerNotifier.notifyAllWaiters();
-				}
+				// Wait until other threads are done
+				barrier.await();
+				barrier.reset();
 			}
 			catch (Exception e) {
-				// Break cleanly ensuring any waiting threads are released
-				tickerNotifier.notifyAllWaiters();
-				break;
+				// Do nothing
 			}
-		}		
-	}
-	
-	final public static void resetBarrier() {
-		barrier.reset();
+		}
+		else {
+			while (true) {
+				try {
+					// Wait on trigger
+					myNotifier.waitForNotify();
+					// Check if worker has been killed
+					if (!alive) break;
+					// Run the worker
+					threadedTick(threadID, threads);
+					// Wait until other threads are done
+					barrier.await();
+				}
+				catch (Exception e) {
+					// Break cleanly ensuring any waiting threads are released
+					break;
+				}
+			}
+		}
 	}
 	
 	final public void trigger() {

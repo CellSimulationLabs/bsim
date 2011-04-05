@@ -28,7 +28,7 @@ public class BSimMultiThreaded {
 		 * Create a default bacterial population.
 		 */
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
-		while(bacteria.size() < 10000) {		
+		while(bacteria.size() < 5000) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			if(!b.intersection(bacteria)) bacteria.add(b);		
 		}
@@ -39,8 +39,8 @@ public class BSimMultiThreaded {
 		 * given.
 		 */
 		class MyWorker extends BSimThreadedTickerWorker {
-			public MyWorker (int threadID, int threads, BSimNotifier notifier) {
-				super(threadID, threads, notifier);
+			public MyWorker (int threadID, int threads) {
+				super(threadID, threads);
 			}
 			
 			public void threadedTick(int threadID, int threads) {
@@ -76,12 +76,15 @@ public class BSimMultiThreaded {
 			 */
 			public void sequentialBefore() { System.out.println("Running sequentialBefore()"); }
 			public void sequentialAfter() { System.out.println("Running sequentialAfter()"); }
-			public BSimThreadedTickerWorker createWorker (int threadID, int threads, BSimNotifier notifier) {
-				MyWorker w = new MyWorker(threadID, threads, notifier);
+			public BSimThreadedTickerWorker createWorker (int threadID, int threads) {
+				MyWorker w = new MyWorker(threadID, threads);
 				return (BSimThreadedTickerWorker)w;
 			}
 		}
 		
+		/**
+		 * Create my new threaded ticker using 2 threads and attach to simulation
+		 */
 		MyTicker ticker = new MyTicker(2);
 		sim.setTicker((BSimTicker)ticker);
 		
@@ -92,7 +95,7 @@ public class BSimMultiThreaded {
 			@Override
 			public void scene(PGraphics3D p3d) {
 				for(BSimBacterium b : bacteria) {
-					draw(b,Color.YELLOW);
+					draw(b,Color.GREEN);
 				}
 			}
 		});	
