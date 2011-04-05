@@ -9,31 +9,35 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 	protected int threads;
 	private boolean alive = true;
 	protected static CyclicBarrier barrier = null;
-	protected Object notifier;
+	protected BSimNotifier tickerNotifier;
+	protected BSimNotifier myNotifier;
 	
-	BSimThreadedTickerWorker(int threadID, int threads, Object notifier) {
+	public BSimThreadedTickerWorker(int threadID, int threads, BSimNotifier notifier) {
 		this.threadID = threadID;
 		this.threads = threads;
-		this.notifier = notifier;
+		this.tickerNotifier = notifier;
+		myNotifier = new BSimNotifier();
 		if (barrier == null) barrier = new CyclicBarrier(threads);
 	}
 	
 	final public void run() {
 		while (true) {
-			// Wait on trigger
 			try {
-				this.wait();
+				// Wait on trigger
+				myNotifier.waitForNotify();
 				// Check if worker has been killed
 				if (!alive) break;
 				// Run the worker
 				threadedTick(threadID, threads);
+				// Only the first thread needs to notify the threaded ticker
 				if (barrier.await() == 0) {
 					// Notify threaded ticker that all workers are done
-					notifier.notifyAll();
+					tickerNotifier.notifyAllWaiters();
 				}
 			}
 			catch (Exception e) {
-				notifier.notifyAll();
+				// Break cleanly ensuring any waiting threads are released
+				tickerNotifier.notifyAllWaiters();
 				break;
 			}
 		}		
@@ -45,12 +49,12 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 	
 	final public void trigger() {
 		// Kick off another cycle of the worker
-		this.notify();
+		myNotifier.notifyWaiter();
 	}
 	
 	final public void kill() {
 		alive = false;
-		this.notify();
+		myNotifier.notifyWaiter();
 	}
 	
 	/**
