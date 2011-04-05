@@ -28,7 +28,7 @@ public class BSimMultiThreaded {
 		 * Create a default bacterial population.
 		 */
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
-		while(bacteria.size() < 1000) {		
+		while(bacteria.size() < 10000) {		
 			BSimBacterium b = new BSimBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
 			if(!b.intersection(bacteria)) bacteria.add(b);		
 		}
