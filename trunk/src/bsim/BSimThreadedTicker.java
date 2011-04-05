@@ -25,11 +25,11 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	@Override
 	final public void tick() {
 		sequentialBefore();
-		for (int i = 0; i < threads; i++) {
-			workers.get(i).trigger();
-		}
-		// Wait until all threads have finished their work
 		try {
+			for (int i = 0; i < threads; i++) {
+				workers.get(i).trigger();
+			}
+			// Wait until all threads have finished their work
 			notifier.waitForNotify();
 		}
 		catch (InterruptedException e) {
