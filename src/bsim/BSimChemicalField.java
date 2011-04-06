@@ -100,9 +100,9 @@ public class BSimChemicalField {
 		int x = (int)(v.x/box[0]);
 		int y = (int)(v.y/box[1]);
 		int z = (int)(v.z/box[2]);
-		x = (x > boxes[0]-1 ? boxes[0]-1 : x);
-		y = (y > boxes[0]-1 ? boxes[0]-1 : y);
-		z = (z > boxes[0]-1 ? boxes[0]-1 : z);
+		x = (x >= boxes[0] ? boxes[0]-1 : x);
+		y = (y >= boxes[1] ? boxes[1]-1 : y);
+		z = (z >= boxes[2] ? boxes[2]-1 : z);
 		if (x < 0) x = 0;
 		if (y < 0) y = 0;
 		if (z < 0) z = 0;
