@@ -96,7 +96,18 @@ public class BSimChemicalField {
 	
 	/** Returns the integer coordinates of the box containing the position v */ 
 	public int[] boxCoords(Vector3d v) {
-		return new int[] {(int)(v.x/box[0]), (int)(v.y/box[1]), (int)(v.z/box[2])};	
+		/* Check the bounds are valid */
+		int x, y, z;
+		x = (int)(v.x/box[0]);
+		y = (int)(v.y/box[1]);
+		z = (int)(v.z/box[2]);
+		x = (x > boxes[0] ? boxes[0] : x);
+		y = (y > boxes[0] ? boxes[0] : y);
+		z = (z > boxes[0] ? boxes[0] : z);
+		if (x < 0) x = 0;
+		if (y < 0) y = 0;
+		if (z < 0) z = 0;
+		return new int[] {x, y, z};	
 	}
 	
 	
