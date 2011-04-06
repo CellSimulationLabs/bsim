@@ -136,6 +136,6 @@ public class BSimMultiThreaded {
 		});	
 		
 		oldTime = System.nanoTime();
-		sim.export();
+		sim.preview();
 	}
 }

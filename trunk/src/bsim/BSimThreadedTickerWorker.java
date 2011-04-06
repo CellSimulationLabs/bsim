@@ -9,7 +9,6 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 	protected int threads; // Total number of threads in the pool
 	protected static CyclicBarrier barrier1; // Shared barrier to enable synchronisation of all threads at start of update.
 	protected static CyclicBarrier barrier2; // Shared barrier to enable synchronisation of all threads at end of update.
-	protected static BSimNotifier notifier; // Notifier for the worker (used to trigger execution)
 	
 	/**
 	 * Created a new worker for the BSimThreadedTicker.
@@ -20,7 +19,6 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 		this.threadID = threadID;
 		this.threads = threads;
 		if (threadID == 0) {
-			notifier = new BSimNotifier();
 			barrier1 = new CyclicBarrier(threads);
 			barrier2 = new CyclicBarrier(threads);
 		}
