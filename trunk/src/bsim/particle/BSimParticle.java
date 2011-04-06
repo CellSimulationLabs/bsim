@@ -132,27 +132,45 @@ public abstract class BSimParticle {
 	 */	
 	protected void xAbove() { 
 		if(sim.getSolid()[0]) position.x = bounceAbove(position.x,sim.getBound().x);
-		else position.x = wrapAbove(position.x,sim.getBound().x); 		
+		else position.x = wrapAbove(position.x,sim.getBound().x);
+		// Ensure in small environments that the new position is not outside
+		if (position.x > sim.getBound().x) { position.x = sim.getBound().x; }
+		else { if (position.x < 0) { position.x = 0; } }
 	}
 	protected void xBelow() { 
 		if(sim.getSolid()[0]) position.x = bounceBelow(position.x,sim.getBound().x);
-		else position.x = wrapBelow(position.x,sim.getBound().x); 		
+		else position.x = wrapBelow(position.x,sim.getBound().x);
+		// Ensure in small environments that the new position is not outside
+		if (position.x > sim.getBound().x) { position.x = sim.getBound().x; }
+		else { if (position.x < 0) { position.x = 0; } }
 	}
 	protected void yAbove() { 
 		if(sim.getSolid()[1]) position.y = bounceAbove(position.y,sim.getBound().y);
-		else position.y = wrapAbove(position.y,sim.getBound().y); 		
+		else position.y = wrapAbove(position.y,sim.getBound().y);
+		// Ensure in small environments that the new position is not outside
+		if (position.y > sim.getBound().y) { position.y = sim.getBound().y; }
+		else { if (position.y < 0) { position.y = 0; } }
 	}
 	protected void yBelow() { 
 		if(sim.getSolid()[1]) position.y = bounceBelow(position.y,sim.getBound().y);
-		else position.y = wrapBelow(position.y,sim.getBound().y); 		
+		else position.y = wrapBelow(position.y,sim.getBound().y); 
+		// Ensure in small environments that the new position is not outside
+		if (position.y > sim.getBound().y) { position.y = sim.getBound().y; }
+		else { if (position.y < 0) { position.y = 0; } }
 	}
 	protected void zAbove() { 
 		if(sim.getSolid()[2]) position.z = bounceAbove(position.z,sim.getBound().z);
-		else position.z = wrapAbove(position.z,sim.getBound().z); 		
+		else position.z = wrapAbove(position.z,sim.getBound().z);
+		// Ensure in small environments that the new position is not outside
+		if (position.z > sim.getBound().z) { position.z = sim.getBound().z; }
+		else { if (position.z < 0) { position.z = 0; } }
 	}
 	protected void zBelow() { 
 		if(sim.getSolid()[2]) position.z = bounceBelow(position.z,sim.getBound().z);
-		else position.z = wrapBelow(position.z,sim.getBound().z); 		
+		else position.z = wrapBelow(position.z,sim.getBound().z);
+		// Ensure in small environments that the new position is not outside
+		if (position.z > sim.getBound().z) { position.z = sim.getBound().z; }
+		else { if (position.z < 0) { position.z = 0; } }
 	}
 	
 	/*
