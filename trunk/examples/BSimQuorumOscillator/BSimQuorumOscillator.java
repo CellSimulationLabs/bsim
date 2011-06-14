@@ -13,7 +13,7 @@ import bsim.draw.BSimP3DDrawer;
 import bsim.particle.BSimBacterium;
 
 /**
- * Example illustrating simple interaction
+ * Example illustrating simple interaction of bacteria with a chemical field.
  */
 public class BSimQuorumOscillator {
 

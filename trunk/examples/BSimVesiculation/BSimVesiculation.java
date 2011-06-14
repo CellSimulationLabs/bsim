@@ -13,12 +13,21 @@ import bsim.draw.BSimP3DDrawer;
 import bsim.particle.BSimBacterium;
 import bsim.particle.BSimVesicle;
 
+/**
+ * A simple example to test built-in vesiculation.
+ */
 public class BSimVesiculation {
 	
 	public static void main(String[] args) {
 
+		/*********************************************************
+		 * Set up the simulation
+		 */
 		BSim sim = new BSim();	
-				
+			
+		/*********************************************************
+		 * Set up the lists for storing vesicles and add bacteria to the simulation.
+		 */
 		final Vector<BSimVesicle> vesicles = new Vector<BSimVesicle>();
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();		
 		final Vector<BSimBacterium> children = new Vector<BSimBacterium>();
@@ -32,7 +41,9 @@ public class BSimVesiculation {
 			bacteria.add(b);		
 		}
 		
-
+		/*********************************************************
+		 * Set up the ticker
+		 */
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -49,6 +60,9 @@ public class BSimVesiculation {
 			}
 		});
 		
+		/*********************************************************
+		 * Set up the drawer
+		 */
 		BSimDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {							
@@ -61,6 +75,7 @@ public class BSimVesiculation {
 		};	
 		sim.setDrawer(drawer);	
 		
+		// reun the simulation
 		sim.preview();
 	}
 
