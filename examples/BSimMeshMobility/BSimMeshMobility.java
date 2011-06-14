@@ -1,14 +1,5 @@
 package BSimMeshMobility;
 
-/**
- * BSimMeshMobility.java
- * 
- * Simulation that illustrates the effect that complex microscale environments can have on bacterial
- * motility. Work derived from the BCCS-Bristol iGEM 2010 project 'argEcoli', see the following URL
- * for further details:
- *                            http://2010.igem.org/Team:BCCS-Bristol
- */
-
 import java.awt.Color;
 import java.util.*;
 import javax.vecmath.Vector3d;
@@ -20,6 +11,14 @@ import bsim.export.*;
 import bsim.particle.*;
 import bsim.geometry.*;
 
+/**
+ * BSimMeshMobility.java
+ * 
+ * Simulation that illustrates the effect that complex microscale environments can have on bacterial
+ * motility. Work derived from the BCCS-Bristol iGEM 2010 project 'argEcoli', see the following URL
+ * for further details:
+ *                            http://2010.igem.org/Team:BCCS-Bristol
+ */
 class BSimMeshMobility {
 	static BSimOBJMesh theMesh;
 	public static void main(String args[]){

@@ -1,12 +1,5 @@
 package BSimMeshBehavior;
 
-/**
- * BSimMeshBehavior.java
- * 
- * Simulation that illustrates how a mesh can be used to alter the behavior of bacteria. This could
- * be used in practice to represent spatially varying parameters.
- */
-
 import java.awt.Color;
 import java.io.File;
 import java.util.*;
@@ -23,6 +16,12 @@ import bsim.export.*;
 import bsim.particle.*;
 import bsim.geometry.*;
 
+/**
+ * BSimMeshBehavior.java
+ * 
+ * Simulation that illustrates how a mesh can be used to alter the behavior of bacteria. This could
+ * be used in practice to represent spatially varying parameters.
+ */
 class BSimMeshBehavior{
 	static BSimOBJMesh theMesh;
 	static boolean exportData;

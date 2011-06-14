@@ -21,6 +21,10 @@ import bsim.particle.BSimBacterium;
 
 /**
  * Simulation of bacteria with repressilator GRNs coupled by a chemical field.</br>
+ * 
+ * ODE system for the repressilator taken from:
+ * "Modeling a synthetic multicellular clock: Repressilators coupled by quorum sensing"
+ * PNAS 2004 101 (30) 10955-10960; doi:10.1073/pnas.0307095101
  */
 public class BSimCoupledRepressilators {
 
