@@ -15,8 +15,14 @@ import bsim.particle.BSimParticle;
  */
 public class BSimBrownianMotion {
 	
+	/*********************************************************
+	 * Simulation Definition
+	 *********************************************************/
 	public static void main(String[] args) {
 
+		/*********************************************************
+		 * Create a new simulation object and set up simulation settings
+		 */
 		BSim sim = new BSim();
 		double bx = 1000;
 		double by = 1000;
@@ -24,7 +30,9 @@ public class BSimBrownianMotion {
 		sim.setBound(bx,by,bz);
 		sim.setSimulationTime(10);
 		
-		
+		/*********************************************************
+		 * Set up the particles
+		 */		
 		class BSimBrownianParticle extends BSimParticle {
 			public BSimBrownianParticle (BSim sim, Vector3d position, double radius) {
 				super(sim, position, radius);
@@ -44,11 +52,14 @@ public class BSimBrownianMotion {
 			}
 		});
 		
-		/*
+		/*********************************************************
 		 * Create a new directory for the simulation results
 		 */
 		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
 
+		/*********************************************************
+		 * Set up exporters
+		 */
 		sim.addExporter(new BSimLogger(sim, resultsDir + "particleX" + System.currentTimeMillis() + ".csv") {
 			private double[] x = new double[n];
 			private Vector<Vector3d> lastPosition = new Vector<Vector3d>();
@@ -76,28 +87,7 @@ public class BSimBrownianMotion {
 			}
 		});
 		
-		sim.export();
-
-		//		radius = 0.02;
-//		visc = 2.7e-3;
-//		stokesCoefficient = 6*pi*radius*visc;
-//		boltzmann = 1.38e-23;
-//		temperature = 305;
-//		dt = 0.01;
-//		t = 10;
-//		n = t/dt;
-//		x0 = 500;
-//
-//		x = particleX;
-//
-//		plot(0:dt:t,x);
-//		figure;
-//		plot(0:dt:t,(2*boltzmann*temperature*(0:dt:t)/stokesCoefficient)*1e18);
-//		hold all;
-//		xx = ((x-x0).^2)';
-//		plot(0:dt:t,mean(xx));
-//		legend('theory','experiment');		
-		
+		sim.export();		
 	}
 
 }
