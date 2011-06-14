@@ -88,143 +88,7 @@ public class OctreeNode
 		return this.nodeColor;
 	}
 		
-	/**setKids method can be applied to any Octree node. It initializes all the subNodes with 
-	 * appropriate neighbors/centers and lengths. All other properties are inherited from the 
-	 * parent node. 
-	 * 
-	 * This method is used with an OctreeChemicalField object. When a field is given as an argument
-	 * the positions of the subNodes with respect to the field are computed and stored in the 
-	 * 'setSpaceLookup' structure in the Field
-	 */
-	public void setKids(BSimOctreeChemicalField Field){ 
-			
-		Vector3d plusX = new Vector3d((this.length)/4, 0, 0);
-		Vector3d plusY = new Vector3d(0,(this.length)/4, 0);
-		Vector3d plusZ = new Vector3d(0,0,(this.length)/4);
-
-		//sets the length to be 1/2 that of previous generation		
-		for (int i=0;  i<8; i++){
-			this.subNodes[i]= new OctreeNode(); 
-			this.subNodes[i].length=this.length/2;
-			this.volume = Math.pow(this.length, 3);
-			this.subNodes[i].parent=this;
-			this.subNodes[i].depth = this.depth+1; 
-		}
-
-		//initializes centers to be same as parent		
-		for (int i=0;  i<8; i++){
-			
-			Vector3d temp = new Vector3d(0,0,0);
-			this.centre.get(temp);
-			this.subNodes[i].centre= temp;
-			
-		}
-		
-		
-		/**The following sets the centres for the subNodes of an octree 
-		 */
-		this.subNodes[0].centre.sub(this.subNodes[0].centre,plusX);
-		this.subNodes[0].centre.add(this.subNodes[0].centre,plusY);
-		this.subNodes[0].centre.sub(this.subNodes[0].centre,plusZ);
-		
-		this.subNodes[1].centre.add(this.subNodes[1].centre,plusX);
-		this.subNodes[1].centre.add(this.subNodes[1].centre,plusY);
-		this.subNodes[1].centre.sub(this.subNodes[1].centre,plusZ);
-		
-		this.subNodes[2].centre.sub(this.subNodes[2].centre,plusX);
-		this.subNodes[2].centre.sub(this.subNodes[2].centre,plusY);
-		this.subNodes[2].centre.sub(this.subNodes[2].centre,plusZ);
-		
-		this.subNodes[3].centre.add(this.subNodes[3].centre,plusX);
-		this.subNodes[3].centre.sub(this.subNodes[3].centre,plusY);
-		this.subNodes[3].centre.sub(this.subNodes[3].centre,plusZ);
-		
-		this.subNodes[4].centre.sub(this.subNodes[4].centre,plusX);
-		this.subNodes[4].centre.add(this.subNodes[4].centre,plusY);
-		this.subNodes[4].centre.add(this.subNodes[4].centre,plusZ);
-		
-		this.subNodes[5].centre.add(this.subNodes[5].centre,plusX);
-		this.subNodes[5].centre.add(this.subNodes[5].centre,plusY);
-		this.subNodes[5].centre.add(this.subNodes[5].centre,plusZ);
-		
-		this.subNodes[6].centre.sub(this.subNodes[6].centre,plusX);
-		this.subNodes[6].centre.sub(this.subNodes[6].centre,plusY);
-		this.subNodes[6].centre.add(this.subNodes[6].centre,plusZ);
-		
-		this.subNodes[7].centre.add(this.subNodes[7].centre,plusX);
-		this.subNodes[7].centre.sub(this.subNodes[7].centre,plusY);
-		this.subNodes[7].centre.add(this.subNodes[7].centre,plusZ);
-		
-		
-		//Set their entry in the space lookup field
-		for (int i=0;  i<8; i++){
-			this.subNodes[i].setSpaceLookup(Field);
-		}
 	
-				
-		/**Following sets the neighbors of the octree subnodes. 
-		 * The indices correspond to 0th is +x dir, 1 is -x dir, 
-		 * 2 is +y dir, 3 is -y dir, 4 is +z dir, 5 is -zdir. 
-		 */
-				this.subNodes[0].neighbors[0]=this.subNodes[1];
-				this.subNodes[0].neighbors[1]=this.subNodes[0].parent;
-				this.subNodes[0].neighbors[2]=this.subNodes[0].parent;
-				this.subNodes[0].neighbors[3]=this.subNodes[2];
-				this.subNodes[0].neighbors[4]=this.subNodes[4];
-				this.subNodes[0].neighbors[5]=this.subNodes[0].parent;
-
-				this.subNodes[1].neighbors[0]=this.subNodes[1].parent;
-				this.subNodes[1].neighbors[1]=this.subNodes[0];
-				this.subNodes[1].neighbors[2]=this.subNodes[1].parent;
-				this.subNodes[1].neighbors[3]=this.subNodes[3];
-				this.subNodes[1].neighbors[4]=this.subNodes[5];
-				this.subNodes[1].neighbors[5]=this.subNodes[1].parent;
-				
-				this.subNodes[2].neighbors[0]=this.subNodes[3];
-				this.subNodes[2].neighbors[1]=this.subNodes[2].parent;
-				this.subNodes[2].neighbors[2]=this.subNodes[0];
-				this.subNodes[2].neighbors[3]=this.subNodes[2].parent;
-				this.subNodes[2].neighbors[4]=this.subNodes[6];
-				this.subNodes[2].neighbors[5]=this.subNodes[2].parent;
-				
-				this.subNodes[3].neighbors[0]=this.subNodes[3].parent;
-				this.subNodes[3].neighbors[1]=this.subNodes[2];
-				this.subNodes[3].neighbors[2]=this.subNodes[1];
-				this.subNodes[3].neighbors[3]=this.subNodes[3].parent;
-				this.subNodes[3].neighbors[4]=this.subNodes[7];
-				this.subNodes[3].neighbors[5]=this.subNodes[3].parent;
-				
-				this.subNodes[4].neighbors[0]=this.subNodes[5];
-				this.subNodes[4].neighbors[1]=this.subNodes[4].parent;
-				this.subNodes[4].neighbors[2]=this.subNodes[4].parent;
-				this.subNodes[4].neighbors[3]=this.subNodes[6];
-				this.subNodes[4].neighbors[4]=this.subNodes[4].parent;
-				this.subNodes[4].neighbors[5]=this.subNodes[0];
-				
-				this.subNodes[5].neighbors[0]=this.subNodes[5].parent;
-				this.subNodes[5].neighbors[1]=this.subNodes[4];
-				this.subNodes[5].neighbors[2]=this.subNodes[5].parent;
-				this.subNodes[5].neighbors[3]=this.subNodes[7];
-				this.subNodes[5].neighbors[4]=this.subNodes[5].parent;
-				this.subNodes[5].neighbors[5]=this.subNodes[1];
-				
-				this.subNodes[6].neighbors[0]=this.subNodes[7];
-				this.subNodes[6].neighbors[1]=this.subNodes[6].parent;
-				this.subNodes[6].neighbors[2]=this.subNodes[4];
-				this.subNodes[6].neighbors[3]=this.subNodes[6].parent;
-				this.subNodes[6].neighbors[4]=this.subNodes[6].parent;
-				this.subNodes[6].neighbors[5]=this.subNodes[2];
-				
-				this.subNodes[7].neighbors[0]=this.subNodes[7].parent;
-				this.subNodes[7].neighbors[1]=this.subNodes[6];
-				this.subNodes[7].neighbors[2]=this.subNodes[5];
-				this.subNodes[7].neighbors[3]=this.subNodes[7].parent;
-				this.subNodes[7].neighbors[4]=this.subNodes[7].parent;
-				this.subNodes[7].neighbors[5]=this.subNodes[3];
-				
-					
-		
-	}
 	/**Setter to populate kids with appropriate centers, lengths WITHOUT FIELD*/
 	
 	/**setKids function can be applied to any Octree node. It initializes all the subNodes with 
@@ -502,59 +366,6 @@ public class OctreeNode
 	
 	
 	
-	/**Populates the OctreeChemicalField SpaceLookup structure with the location of a new node
-	 */
-	public void setSpaceLookup(BSimOctreeChemicalField Field){
-		
-
-		
-		if(parent==null){
-			//condition where this is the first octree, so occupies all SpaceLookup
-			for(int i=0; i<Field.Resolution; i++){
-				for(int j=0; j<Field.Resolution; j++){
-					for(int k=0; k<Field.Resolution; k++){
-						
-						Field.SpaceLookup[i][j][k]=this; 
-						
-						//sets color value to be centre
-						colorFromCentre(this);
-						
-						
-					
-					}
-				}
-			}
-			
-		}
-		
-		
-		//Works out where to start and end.....
-		int Xl=(int)(Field.Resolution*((centre.x-(length/2))/Field.bound.x));
-		int Xh=(int)(Field.Resolution*((centre.x+(length/2))/Field.bound.x));
-		int Yl=(int)(Field.Resolution*((centre.y-(length/2))/Field.bound.y));
-		int Yh=(int)(Field.Resolution*((centre.y+(length/2))/Field.bound.y));
-		int Zl=(int)(Field.Resolution*((centre.z-(length/2))/Field.bound.z));
-		int Zh=(int)(Field.Resolution*((centre.z+(length/2))/Field.bound.z));
-		
-		//uses these to put record in appropriate spatial index boxes
-		for(int i=Xl; i<Xh; i++){
-			for(int j=Yl; j<Yh; j++){
-				for(int k=Zl; k<Zh; k++){
-					
-			
-					
-					Field.SpaceLookup[i][j][k]=this; 
-					
-					//sets color value to be centre
-					colorFromCentre(this);
-				
-				}
-			}
-		}
-		
-		
-		
-	}
 	
 
 	//////////////////////////////////////////////////////////////////////////////
@@ -770,7 +581,7 @@ public class OctreeNode
 		}
 	}
 	
-	/**Intersection method used in other OctreeNode methods
+	/**
 	 */
 	public static boolean intersectVectorTriangle(Vector3d startPos, Vector3d endPos, BSimTriangle tri){
 		Vector3d ab = new Vector3d();
