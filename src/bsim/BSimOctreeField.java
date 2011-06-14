@@ -7,9 +7,12 @@ import bsim.geometry.BSimTriangle;
 
 
 /**Octree Chemical Field, uses an octree structure to compute a chemical field of an arbitrary shape
- * Only one object needs to be created by the user, it subdivides into an appropriate shape with the 
- * 'fit field to mesh' command. 
+ * Only one BSimOctree Field object needs to be created by the user, it subdivides into an appropriate shape with the 
+ * 'fitFieldtoMesh' command. 
  * Decay and Diffusion are performed through post order traversals. 
+ * 
+ * This class should be used over the depreciated BSimOctreeChemicalField class
+ * 
  * @author tt9671
  *
  */
@@ -50,15 +53,11 @@ public class BSimOctreeField
 	 
 	 /**number of molecules in the chemical field box*/
 	 protected double quantity; 
-	
-	
-	//////////////////////////////////////////////////////////////////////////////
-	//Constructors//
 	 
 	/**Basic Constructor*/
 	public BSimOctreeField(){}
 	
-	/**Root Constructor - only used to make first octree*/
+	/**Root Constructor - only used to make first root Octree Node*/
 	public BSimOctreeField(Vector3d Centre, double Length) 
 	{
 		
@@ -78,8 +77,6 @@ public class BSimOctreeField
 		
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////
-	//Getters//	
 	
 	/**Getter for depth*/
 	public int getDepth(){
@@ -121,8 +118,9 @@ public class BSimOctreeField
 		this.nodeColor = c;
 	}
 	
-	/**setKids function populates the subNodes of a given node
-	 * Centers, lengths and neighbors are initialized here. 
+	/**setKids method can be applied to any Octree node. It initializes all the subNodes with 
+	 * appropriate neighbors/centers and lengths. All other properties are inherited from the 
+	 * parent node.
 	 */
 	public void setKids(){ 
 			
@@ -151,9 +149,7 @@ public class BSimOctreeField
 		}
 		
 		
-		/**The following sets the centers for the subNodes of an octree.
-		 * There is probably a more elegant way to do this (cyclic
-		 * permutation function or something?). 
+		/**The following sets the centers for the subNodes of an octree.. 
 		 */
 		
 		this.subNodes[0].centre.sub(this.subNodes[0].centre,plusX);
@@ -190,9 +186,8 @@ public class BSimOctreeField
 		
 		
 				
-		/**Following sets the neighbors of the octree subnodes, again
-		 * there is probably a more elegant way to do this, but it is easier
-		 * to visualise. The indices correspond to 0th is +x dir, 1 is -x dir, 
+		/**Following sets the neighbors of the octree subnodes
+		 * The indices correspond to 0th is +x dir, 1 is -x dir, 
 		 * 2 is +y dir, 3 is -y dir, 4 is +z dir, 5 is -zdir. 
 		 */
 				this.subNodes[0].neighbors[0]=this.subNodes[1];
@@ -255,11 +250,11 @@ public class BSimOctreeField
 		
 	}
 	
-	/**Collides octree against a mesh and splits into subNodes when there is a collision
+	/**Fits octreeField against a mesh and splits into subNodes when there is a collision with the mesh boundary
 	 * Creates a finer octree structure each time this function is called. Should be called
 	 * in a loop,with the number of repetitions being the maximum depth of the octree structure
-	 * @param theMesh
-	 * @param t
+	 * @param theMesh - BSimMesh object that the OctreeField is going to be fit to
+	 * @param t - the OctreeField that will be fit to the mesh
 	 */
 	public void setNodestoMesh(BSimMesh theMesh, BSimOctreeField t){
 		
@@ -276,12 +271,7 @@ public class BSimOctreeField
 							
 							//Set processed to true. 
 							t.processed = true; 
-							
-							
-							//WARNING: FOLLOWING IS A DISGUSTING BRUTE FORCE METHOD: 
-							//key to points in 19-09-10 page of notebook. Key as in
-							//conversion from octree index to actual geometry - will
-							//include this in documentation
+						
 								
 							
 								//Array to store the 8 corners of the node being tested
@@ -392,8 +382,7 @@ public class BSimOctreeField
 								}
 							}
 							
-							break; //breaks is to stop dividing once you've detected your first intersection
-							//WHAT'S TO SAY THE FIRST INTERSECTION IS THE MOST IMPORTANT ? 
+							break; //breaks is to stop dividing once you've detected your first intersection? 
 							}
 							
 							
@@ -412,9 +401,11 @@ public class BSimOctreeField
 	
 
 	//////////////////////////////////////////////////////////////////////////////
-	//Traversers - recursive functions that go through octree structure in different ways//
+	//Traverser's - recursive functions that go through octree structure in different ways//
 	
-	/**Pre-Order full traverse*/
+	/**Pre-Order full traverse - traverses from the root, a direction to the
+	 * deepest subnode, back to the node, and then down into other roots.
+	 * Not recommended*/
 	public static void preOrderfull(BSimOctreeField t){
 		
 		if(t!=null){
@@ -428,7 +419,10 @@ public class BSimOctreeField
 		
 	}
 	
-	/**In-Order full traverse*/ 
+	/**inOrder traverse, traverses from the deepest subnode, to the root
+	 * and then back down to other deep nodes. 
+	 * Not recommended
+	 */
 	public static void inOrderfull(BSimOctreeField t){	
 		if(t!=null){
 			
@@ -452,8 +446,8 @@ public class BSimOctreeField
 	}
 	
 	/**Post order traverse with visit function. This is the most logical
-	 * traverse, outputs octrees in 'left to right, bottom to top' sense
-	 * this is the one you'd use if outputting to screen*/
+	 * traverse and visits octrees in 'left to right, bottom to top' sense
+	 * this is used to traversing octree structures*/
 	public static void postOrderfull(BSimOctreeField t){
 		if(t!=null){
 			
@@ -470,9 +464,9 @@ public class BSimOctreeField
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
-	//Miscellanious Functions//
+	//Miscellaneous Functions//
 	
-	/**Gets an octree from lowest depth*/
+	/**Gets a subnode of given index from lowest depth*/
 	public BSimOctreeField nodeFinder(BSimOctreeField t, Vector3d location){
 		BSimOctreeField temp = new BSimOctreeField();
 		
@@ -515,7 +509,9 @@ public class BSimOctreeField
 		
 	}
 	
-	/**Troubleshooting visiting function, outputs useful stuff*/
+	/**The visit method simply prints the location and depth of
+	 * a node, useful for troubleshooting
+	 */
 	public void visit(BSimOctreeField t){
 		System.out.print(t.centre + " ");
 		System.out.print(t.depth + " ");
@@ -539,7 +535,12 @@ public class BSimOctreeField
 	}
 	
 	
-	/**Diffuses chemicals through whole octree chemi field*/
+	/**Diffuses chemicals through whole the octreeField structure, using Fick's law to determine
+	 * how much of the chemical gets pushed into neighboring nodes over each time iteration
+	 * @param diffusivity - the diffusivity in (microns)^2/s
+	 * @param Dt - time steps, seconds
+	 * @param depth - maximum depth to go to in diffusion
+	 */
 	public void diffuse(BSimOctreeField t, double diffusivity, double Dt, int depth){
 		
 		//System.out.print("Diffusing....\n");
@@ -618,7 +619,12 @@ public class BSimOctreeField
 		
 	}
 	
-	
+	/**Decays the chemical field in an octreeField Node,visits each node in the tree structure
+	 * using a post-order traverse
+	 * @param t - the octree Node
+	 * @param decayRate - in inverse seconds
+	 * @param Dt - timestep size to use (s)
+	 */
 	public void decay(BSimOctreeField t, double decayRate,double Dt){
 		//post order traverse of structure to do the decay
 		
