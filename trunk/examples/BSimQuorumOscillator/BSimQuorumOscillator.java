@@ -12,10 +12,16 @@ import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.particle.BSimBacterium;
 
+/**
+ * Example illustrating simple interaction
+ */
 public class BSimQuorumOscillator {
 
 	public static void main(String[] args) {
 
+		/*********************************************************
+		 * Set up the simulation parameters etc.
+		 */
 		BSim sim = new BSim();		
 		
 		final double diffusivity = 900; // (microns)^2/sec
@@ -25,17 +31,25 @@ public class BSimQuorumOscillator {
 		final double threshold = 1e4;  // molecules/(micron)^3
 		final BSimChemicalField field = new BSimChemicalField(sim, new int[]{10,10,10}, diffusivity, decayRate);
 	
+		/*********************************************************
+		 * Define and set up the quorum sensing bacterium type.
+		 */
 		class BSimQuorumBacterium extends BSimBacterium {
 			private boolean activated = false;
 			private double lastActivated = -1;
 
+			/*
+			 * Default constructor
+			 */
 			public BSimQuorumBacterium(BSim sim, Vector3d position) {
 				super(sim, position); // default radius is 1 micron			
 			}
 
 			@Override
 			public void action() {
-				super.action();				
+				super.action();	
+				
+				// activation if current chemical conc. exceeds a threshold
 				if(field.getConc(position) > threshold) {
 					activated = true; 
 					lastActivated = sim.getTime();
@@ -50,11 +64,16 @@ public class BSimQuorumOscillator {
 		}		
 		final Vector<BSimQuorumBacterium> bacteria = new Vector<BSimQuorumBacterium>();		
 		while(bacteria.size() < 100) {		
-			BSimQuorumBacterium p = new BSimQuorumBacterium(sim, new Vector3d(Math.random()*sim.getBound().x, Math.random()*sim.getBound().y, Math.random()*sim.getBound().z));
+			BSimQuorumBacterium p = new BSimQuorumBacterium(sim, 
+					new Vector3d(Math.random()*sim.getBound().x, 
+							Math.random()*sim.getBound().y, 
+							Math.random()*sim.getBound().z));
 			if(!p.intersection(bacteria)) bacteria.add(p);		
 		}
 
-
+		/*********************************************************
+		 * Set up the ticker, action to take at each time step
+		 */
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -66,7 +85,9 @@ public class BSimQuorumOscillator {
 			}		
 		});
 
-
+		/*********************************************************
+		 * Set up the drawer
+		 */
 		BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {		
@@ -78,12 +99,8 @@ public class BSimQuorumOscillator {
 		};
 		sim.setDrawer(drawer);				
 
-		
+		// run the simulation
 		sim.preview();
 
 	}
-
-
-
-
 }
