@@ -13,19 +13,31 @@ import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
 
 /**
- * Tests whether the distributions of the run durations and tumble angle are correct
+ * Example to test whether the distributions of the run durations and tumble angle are correct.
  */
 public class BSimRunTumble {
 
 	public static void main(String[] args) {
-
+		
+		/*********************************************************
+		 * Set the simulation properties
+		 */
 		BSim sim = new BSim();		
 		sim.setDt(0.01);
 		sim.setSimulationTime(5000);
 		sim.setTimeFormat("0.00");
 		sim.setBound(100,100,100);
 				
-		final BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50));		
+		/*********************************************************
+		 * Set up and create the bacteria
+		 * 
+		 * In this case the default, built in, BSimBacterium
+		 */
+		final BSimBacterium bacterium = new BSimBacterium(sim, new Vector3d(50,50,50));	
+		
+		/*********************************************************
+		 * Set up the ticker
+		 */
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -34,6 +46,9 @@ public class BSimRunTumble {
 			}
 		});
 		
+		/*********************************************************
+		 * Set up the drawer
+		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {							
@@ -41,9 +56,10 @@ public class BSimRunTumble {
 			}
 		});	
 		
-		/*
-		 * Create a new directory for the simulation results
+		/*********************************************************
+		 * Set up and create loggers for the run and tumble state data
 		 */
+		// Create a new directory for the simulation results	 
 		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
 		
 		class BSimRunTumbleLogger extends BSimLogger {
@@ -81,7 +97,6 @@ public class BSimRunTumble {
 				}				
 			}
 		};
-		
 		
 		
 		sim.addExporter(new BSimRunTumbleLogger(sim, resultsDir + "tumbleAngle.csv") {					
@@ -130,7 +145,7 @@ public class BSimRunTumble {
 			}
 		});
 		
-		
+		// Run the simulation
 		sim.export();
 	}
 

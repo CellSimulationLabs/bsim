@@ -14,14 +14,23 @@ import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
 
+/**
+ * Example to test Rotational diffusion in a fluid environment.
+ */
 public class BSimRotationalDiffusion {
 	
 	public static void main(String[] args) {
 
+		/*********************************************************
+		 * Set simulation properties
+		 */
 		BSim sim = new BSim();
 		sim.setDt(0.01);
 		sim.setSimulationTime(10);
 				
+		/*********************************************************
+		 * Set up and create the bacteria
+		 */
 		final int n = 100;		
 		final Vector3d startDirection = new Vector3d(1,1,1);		
 		final Vector<BSimBacterium> bacteria = new Vector<BSimBacterium>();
@@ -31,6 +40,10 @@ public class BSimRotationalDiffusion {
 			bacterium.setDirection(new Vector3d(startDirection));
 			bacteria.add(bacterium);		
 		}
+		
+		/*********************************************************
+		 * Set up the ticker
+		 */
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -41,6 +54,9 @@ public class BSimRotationalDiffusion {
 			}
 		});
 		
+		/*********************************************************
+		 * Set up the drawer
+		 */
 		sim.setDrawer(new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {	
@@ -49,9 +65,10 @@ public class BSimRotationalDiffusion {
 			}
 		});	
 		
-		/*
-		 * Create a new directory for the simulation results
+		/*********************************************************
+		 * Set up exporters
 		 */
+		//Create a new directory for the simulation results
 		String resultsDir = BSimUtils.generateDirectoryPath("./results/");			
 		
 		sim.addExporter(new BSimLogger(sim, resultsDir+ "bacteriumTheta" + System.currentTimeMillis() +  ".csv") {
@@ -66,31 +83,9 @@ public class BSimRotationalDiffusion {
 			}
 		});
 		
+		// Run the simulation
 		sim.export();
-		
-//		radius = 1;
-//		visc = 2.7e-3;
-//		rotationalStokesCoefficient = 8*pi*radius^3*visc;
-//		boltzmann = 1.38e-23;
-//		temperature = 305;
-//		dt = 0.01;
-//		t = 10;
-//		n = t/dt;
-//
-//		% we have actually measured mod_pi(abs(theta)
-//		x = bacteriumTheta;
-//
-//		plot(0:dt:t,x);
-//		figure;
-//		plot(0:dt:t,(4*boltzmann*temperature*(0:dt:t)/rotationalStokesCoefficient)*1e18);
-//		hold all;
-//		y = (x.^2)';
-//		plot(0:dt:t,mean(y));
-//		legend('theory','experiment');
-		
-
-
-		
+				
 	}
 
 }
