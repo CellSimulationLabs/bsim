@@ -6,53 +6,44 @@ import bsim.geometry.BSimTriangle;
 
 import javax.vecmath.Vector3d;
 
+
 public class OctreeNode
 {
-	/**Parent of node, for root this is null*/
+	/**This is the root of the Octree data structure*/
 	 protected OctreeNode parent; 
 	 
-	 /**Color of the node, used when drawing*/
+	 /**Color of the node, used when rendering it*/
 	 protected Color nodeColor = Color.blue; 
 	
-	 /**Location of centre of node in space*/
+	 /**Location of center of node in space*/
 	 protected Vector3d centre; 
 	
 	 /**Dimension of the node*/
 	 protected double length; 
 	 
-	 /**Not sure how to compute diffusion function, may use diffusion
-	  * as a property of an individual node rather than a field
-	  */
-	// protected double diffusivity; 
-	 
-	 /**Volume of node (simply length^3*/
+	 /**Volume of node (simply length^3)*/
 	 protected double volume; 
 	
-	 /**Depth in octree structure, root has depth 0*/
+	 /**Depth of a node in the Octree structure, root has depth 0*/
 	 protected int depth = 0; 
 	
-	 /**subNodes of octree, these can have subnodes of their own*/
+	 /**subNodes of Octree, these can have subnodes of their own*/
 	 protected OctreeNode subNodes[] = new OctreeNode[8]; 
 	 
-	 /**For checking in division algorithm*/
+	 /**Holds a status indicating whether or not the node has been processed in diffusion algorithm*/
 	 public boolean processed = false; 
 	 
-	 /**stores the neighbors of an octree node 
-	  * (necessary for the diffusion function), computed with setKids() function
+	 /**Stores the neighbors of an octree node (necessary for the diffusion function), computed with setKids() function
 	  */
 	 private OctreeNode neighbors[] = new OctreeNode[6];
 	 
-	 /**number of molecules in the chemical field box*/
+	 /**Number of molecules in the chemical field box*/
 	 public double quantity; 
-	
-	
-	//////////////////////////////////////////////////////////////////////////////
-	//Constructors//
-	 
+
 	/**Basic Constructor*/
 	public OctreeNode(){}
 	
-	/**Root Constructor - only used to make first octree*/
+	/**Root Constructor - used to make first Octree node, the parent node. It is furthersubdivided using the setKids() function*/
 	public OctreeNode(Vector3d Centre, double Length) 
 	{
 		
@@ -65,32 +56,29 @@ public class OctreeNode
 			subNodes[i]=new OctreeNode();
 		}
 		
-		//All of the root nodes neighbors are itself, to halt diffusion out of it
+		//The neighbors of the root node are the root node itself. 
 		for (int i=0; i<6; i++){
 			this.neighbors[i]=this; 
 		}
 		
 	}
 	
-	//////////////////////////////////////////////////////////////////////////////
-	//Getters//	
-	
 	/**Getter for depth*/
 	public int getDepth(){
 		return this.depth; 
 	}
 	
-	/**Getter for centre*/
+	/**Getter for the position of the center of the node*/
 	public Vector3d getCentre(){
 		return this.centre;
 	}
 	
-	/**Getter for length*/
+	/**Getter for length of the node*/
 	public double getLength(){
 		return this.length;
 	}
 	
-	/**Getter for subNode, i is index of subnode*/
+	/**Getter for a nodes subNode, i is index of subNode*/
 	public OctreeNode getsubNode(int i){
 		return this.subNodes[i]; 
 	}
@@ -99,11 +87,15 @@ public class OctreeNode
 	public Color getnodeColor(){
 		return this.nodeColor;
 	}
-	
-	
-	
-	
-	/**Setter to populate kids with appropriate centers, lengths*/
+		
+	/**setKids method can be applied to any Octree node. It initializes all the subNodes with 
+	 * appropriate neighbors/centers and lengths. All other properties are inherited from the 
+	 * parent node. 
+	 * 
+	 * This method is used with an OctreeChemicalField object. When a field is given as an argument
+	 * the positions of the subNodes with respect to the field are computed and stored in the 
+	 * 'setSpaceLookup' structure in the Field
+	 */
 	public void setKids(BSimOctreeChemicalField Field){ 
 			
 		Vector3d plusX = new Vector3d((this.length)/4, 0, 0);
@@ -129,11 +121,8 @@ public class OctreeNode
 		}
 		
 		
-		/**The following sets the centres for the subNodes of an octree.
-		 * There is probably a more elegant way to do this (cyclic
-		 * permutation function or something?). 
+		/**The following sets the centres for the subNodes of an octree 
 		 */
-		
 		this.subNodes[0].centre.sub(this.subNodes[0].centre,plusX);
 		this.subNodes[0].centre.add(this.subNodes[0].centre,plusY);
 		this.subNodes[0].centre.sub(this.subNodes[0].centre,plusZ);
@@ -173,9 +162,8 @@ public class OctreeNode
 		}
 	
 				
-		/**Following sets the neighbors of the octree subnodes, again
-		 * there is probably a more elegant way to do this, but it is easier
-		 * to visualise. The indices correspond to 0th is +x dir, 1 is -x dir, 
+		/**Following sets the neighbors of the octree subnodes. 
+		 * The indices correspond to 0th is +x dir, 1 is -x dir, 
 		 * 2 is +y dir, 3 is -y dir, 4 is +z dir, 5 is -zdir. 
 		 */
 				this.subNodes[0].neighbors[0]=this.subNodes[1];
@@ -234,11 +222,15 @@ public class OctreeNode
 				this.subNodes[7].neighbors[4]=this.subNodes[7].parent;
 				this.subNodes[7].neighbors[5]=this.subNodes[3];
 				
-				//end of massive combinatorics exercise!
 					
 		
 	}
 	/**Setter to populate kids with appropriate centers, lengths WITHOUT FIELD*/
+	
+	/**setKids function can be applied to any Octree node. It initializes all the subNodes with 
+	 * appropriate neighbors/centers and lengths. All other properties are inherited from the 
+	 * parent node. 
+	 */
 	public void setKids(){ 
 			
 		Vector3d plusX = new Vector3d((this.length)/4, 0, 0);
@@ -372,8 +364,11 @@ public class OctreeNode
 		
 	}
 	
-	/**method to set nodes to mesh without chemial field. Field can now be discarded
-	 * all methods are performed on the level of the octree*/
+
+	/**setNodestoMesh takes an octree node and divides its subnodes in such a way that the 
+	 * nodes conform to a coarse grained version of the shape of the mesh. 
+	 * A similar method exists for OctreeChemicalFields, this method requires only an octree
+	 * node*/
 	public void setNodestoMesh(BSimMesh theMesh, OctreeNode t){
 		
 			if(t!=null){
@@ -387,13 +382,7 @@ public class OctreeNode
 				
 				//now it has been processed
 				t.processed = true; 
-				
-				
-				//WARNING: FOLLOWING IS A DISGUSTING BRUTE FORCE METHOD: 
-				//key to points in 19-09-10 page of notebook. Key as in
-				//conversion from octree index to actual geometry - will
-				//include this in documentation
-					
+								
 				
 					//array of vectors to store corners
 					Vector3d p[] = new Vector3d[8];
@@ -513,14 +502,11 @@ public class OctreeNode
 	
 	
 	
-	/**Populates the OctreeChemicalField SpaceLookup structure with the location of a new Octree
-	 * BAD CODE FOLLOWS.....:( WILL IMPROVE*/
+	/**Populates the OctreeChemicalField SpaceLookup structure with the location of a new node
+	 */
 	public void setSpaceLookup(BSimOctreeChemicalField Field){
 		
-		//needs to take the center and the length, work out what bits of the 
-		//spaceLookup structure that it is going to cover and then 
-		//Maybe it should look at what it's parent was up to? That way you don't
-		//have octrees that think they occupy the same border area
+
 		
 		if(parent==null){
 			//condition where this is the first octree, so occupies all SpaceLookup
@@ -541,7 +527,7 @@ public class OctreeNode
 			
 		}
 		
-		//following for parent not equal null.....
+		
 		//Works out where to start and end.....
 		int Xl=(int)(Field.Resolution*((centre.x-(length/2))/Field.bound.x));
 		int Xh=(int)(Field.Resolution*((centre.x+(length/2))/Field.bound.x));
@@ -572,9 +558,12 @@ public class OctreeNode
 	
 
 	//////////////////////////////////////////////////////////////////////////////
-	//Traversers - recursive functions that go through octree structure in different ways//
 	
-	/**Pre-Order full traverse*/
+	//Traverses - recursive functions that go through octree structure in different ways//
+	
+	/**Pre-Order full traverse - traverses from the root, a direction to the
+	 * deepest subnode, back to the node, and then down into other roots.
+	 * Not recommended*/
 	public static void preOrderfull(OctreeNode t){
 		
 		if(t!=null){
@@ -589,6 +578,10 @@ public class OctreeNode
 	}
 	
 	/**In-Order full traverse*/ 
+	/**inOrder traverse, traverses from the deepest subnode, to the root
+	 * and then back down to other deep nodes. 
+	 * Not recommended
+	 */
 	public static void inOrderfull(OctreeNode t){	
 		if(t!=null){
 			
@@ -612,8 +605,8 @@ public class OctreeNode
 	}
 	
 	/**Post order traverse with visit function. This is the most logical
-	 * traverse, outputs octrees in 'left to right, bottom to top' sense
-	 * this is the one you'd use if outputting to screen*/
+	 * traverse and visits octrees in 'left to right, bottom to top' sense
+	 * this is used to traversing octree structures*/
 	public static void postOrderfull(OctreeNode t){
 		if(t!=null){
 			
@@ -632,8 +625,7 @@ public class OctreeNode
 	//////////////////////////////////////////////////////////////////////////////
 	//Miscellanious Functions//
 	
-	/**Gets a sample octree from lowest depth*/
-	
+	/**Gets a subnode of given index from lowest depth*/
 	public OctreeNode NodeFinder(OctreeNode t, int depth){
 		OctreeNode temp= null;
 		if(t!=null){
@@ -653,6 +645,10 @@ public class OctreeNode
 	}
 	
 	/**Troubleshooting visiting function, outputs useful stuff*/
+	
+	/**The visit method simply prints the location and depth of
+	 * a node, useful for troubleshooting
+	 */
 	public void visit(OctreeNode t){
 		System.out.print(t.centre + " ");
 		System.out.print(t.depth + " ");
@@ -661,15 +657,12 @@ public class OctreeNode
 	
 	/**Sets the nodeColor value as a function of the position of octree, 
 	 * useful for troubleshooting
-	 * @param t
 	 */
 	public void colorFromCentre(OctreeNode t){
 		this.nodeColor = new Color((int)this.centre.x, (int)this.centre.y, (int)this.centre.z );
 	}
 	
 	/**Sets nodeCololr value as a function of amount of chemical in box
-	 * 
-	 * @param t
 	 */
 	public void colorFromConc(){
 		int tempQ = (int)this.quantity;
@@ -680,7 +673,12 @@ public class OctreeNode
 	}
 	
 	
-	/**Diffuses chemicals through whole octree chemi field*/
+	/**Diffuses chemicals through whole the octree structure, using Fick's law to determine
+	 * how much of the chemical gets pushed into neighboring nodes over each time iteration
+	 * @param diffusivity - the diffusivity in (microns)^2/s
+	 * @param Dt - time steps, seconds
+	 * @param depth - maximum depth to go to in diffusion
+	 */
 	public void diffuse(OctreeNode t, double diffusivity, double Dt, int depth){
 		
 		//System.out.print("Diffusing....\n");
@@ -728,7 +726,7 @@ public class OctreeNode
 									
 									//checks for non-null neighbors AND neighbors of the correct depth
 									
-									if(t.neighbors[i] != null && t.neighbors[i].getDepth() == depth){ //DIFFUSES INTO ITSELF! STUPID!
+									if(t.neighbors[i] != null && t.neighbors[i].getDepth() == depth){ 
 										
 										
 										double k = (diffusivity*Dt)/Math.pow(this.length,2);
@@ -745,21 +743,17 @@ public class OctreeNode
 			}
 			
 			} 
-			
-			
-		
-		
-		
-
-		
-			
-
-			
-								
+					
 		
 	}
 	
 	
+	/**Decays the chemical field in an octree Node,visits each node in the tree structure
+	 * using a post-order traverse
+	 * @param t - the octree Node
+	 * @param decayRate - in inverse seconds
+	 * @param Dt - timestep size to use (s)
+	 */
 	public void decay(OctreeNode t, double decayRate,double Dt){
 		//post order traverse of structure to do the decay
 		
@@ -776,7 +770,8 @@ public class OctreeNode
 		}
 	}
 	
-	
+	/**Intersection method used in other OctreeNode methods
+	 */
 	public static boolean intersectVectorTriangle(Vector3d startPos, Vector3d endPos, BSimTriangle tri){
 		Vector3d ab = new Vector3d();
 		Vector3d ac = new Vector3d();
