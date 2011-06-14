@@ -19,6 +19,9 @@ import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 import bsim.particle.BSimBacterium;
 
+/**
+ * Simulation of bacteria with repressilator GRNs coupled by a chemical field.</br>
+ */
 public class BSimCoupledRepressilators {
 
 	// Initial conditions of the GRNs - Used for convenience
@@ -27,18 +30,18 @@ public class BSimCoupledRepressilators {
 
 	/*********************************************************
 	 * Simulation Definition
-	 *********************************************************/
+	 */
 	 public static void main(String[] args) {
 
 
 		/*********************************************************
 		 * Create a new directory for the simulation results
-		 *********************************************************/
+		 */
 		String filePath = BSimUtils.generateDirectoryPath("results/" + BSimUtils.timeStamp() +"/");			
 		
 		/*********************************************************
 		 * Create a new simulation object
-		 *********************************************************/
+		 */
 		BSim sim = new BSim();			// New Sim object
 		sim.setDt(0.01);				// Simulation Timestep
 		sim.setSimulationTime(10); 		// Simulation Length (6000 = 100 minutes)
@@ -48,8 +51,8 @@ public class BSimCoupledRepressilators {
 		
 		/*********************************************************
 		 * Set up some constants
-		 *********************************************************/
-		// XXX: diffusivity of AI in (microns^2/sec)? (Chofski BSim 1.0: diffusion coeff. of AHL = 0.23 per second)
+		 */
+		// diffusivity of AI in (microns^2/sec)? (BSim 1.0: diffusion coeff. of AHL = 0.23 per second)
 		final double diffusivity = 100;  	// Diffusivity of AHL
 		final double decayRate = 0.01/60; 	// Decay Rate (0.1666 = 10 per minute, 0.01/60 = 1e-2 per min)
 		
@@ -62,7 +65,7 @@ public class BSimCoupledRepressilators {
 		
 		/*********************************************************
 		 * BSimBacterium with a repressilator inside
-		 *********************************************************/
+		 */
 		class BSimRepressilatorBacterium extends BSimBacterium {
 			protected QuorumRepressilator repGRN;	// Instance of internal class
 			protected double[] y, yNew;				// Local values of ODE variables
@@ -106,7 +109,7 @@ public class BSimCoupledRepressilators {
 				// Adjust the external chemical field
 				deltaChem = externalChem - y[6];
 								
-				//( note - 11/2010 -  ehm not sure quite why this is still an if statement as both the same...)
+				//( note - 11/2010 -  not sure quite why this is still an if statement as both the same...)
 				// Well, it works fine but there is obviously some redundant code :)
 				if( deltaChem < 0){
 					field.addQuantity(position, cellWallDiffusivity*(-deltaChem));
@@ -124,7 +127,7 @@ public class BSimCoupledRepressilators {
 				private Random r = new Random();	// Random number generator
 				private double Se = 0;				// External chemical level
 				
-				// The actual equations
+				// The equations
 				public double[] derivativeSystem(double x, double[] y) {
 					double[] dy = new double[numEq];
 					// Various parameters from the paper:
@@ -194,7 +197,7 @@ public class BSimCoupledRepressilators {
 		
 		/*********************************************************
 		 * Create the vector of all bacteria used in the simulation 
-		 *********************************************************/
+		 */
 		final Vector<BSimRepressilatorBacterium> bacteria = new Vector<BSimRepressilatorBacterium>();
 		
 		// Add randomly positioned bacteria to the vector
@@ -209,7 +212,7 @@ public class BSimCoupledRepressilators {
 		
 		/********************************************************* 
 		 * Implement tick() on a BSimTicker and add the ticker to the simulation	  
-		 *********************************************************/
+		 */
 		sim.setTicker(new BSimTicker() {
 			@Override
 			public void tick() {
@@ -232,7 +235,7 @@ public class BSimCoupledRepressilators {
 		 * Draw the particles such that they are yellow for low 
 		 * levels of lacI mRNA and get more red as the level 
 		 * increases.
-		 *********************************************************/
+		 */
 		BSimDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {
@@ -257,7 +260,7 @@ public class BSimCoupledRepressilators {
 		/********************************************************* 
 		 * Implement before(), during() and after() on BSimExporters
 		 * and add them to the simulation
-		 *********************************************************/
+		 */
 		// MOVIES
 //		BSimMovExporter movieExporter = new BSimMovExporter(sim, drawer, filePath + "Repressilator.mov");
 //		movieExporter.setSpeed(10);
@@ -276,7 +279,7 @@ public class BSimCoupledRepressilators {
 		 *  - Time series of lacI mRNA concentration for every bacterium.
 		 *  
 		 *  setDt() to reduce the amount of data.
-		 *********************************************************/	
+		 */
 		BSimLogger stats_Logger = new BSimLogger(sim, filePath + "Settings.csv") {
 			long tStart = 0;
 			long tEnd = 0;
@@ -358,7 +361,7 @@ public class BSimCoupledRepressilators {
 		/*********************************************************
 		 * Call sim.preview() to preview the scene 
 		 * or sim.export() to set exporters working 
-		 *********************************************************/
+		 */
 		sim.preview();
 	}
 }
