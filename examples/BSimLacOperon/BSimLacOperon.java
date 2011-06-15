@@ -17,7 +17,10 @@ import bsim.export.BSimLogger;
 import bsim.particle.BSimBacterium;
 
 /*********************************************************
- * Simulation definition for embedded ODE model of lac operon.
+ * Simulation definition for bacteria with embedded ODE model of lac operon.
+ * 
+ * Population effects resulting from small local changes in the GRN,
+ * investigation of the effects of induced state on growth rate.
  */
 public class BSimLacOperon {
 
@@ -26,7 +29,6 @@ public class BSimLacOperon {
 	 * @param args Command line arguments for batch jobs
 	 */
 	public static void main(String[] args) {
-		
 		
 		/*********************************************************
 		 * Basic setup if we have command line arguments
@@ -53,13 +55,15 @@ public class BSimLacOperon {
 			CONSTANT_CHEM_FIELD = true;
 		}
 		
-		
 		/*********************************************************
 		 * GLOBAL PARAMETERS ETC
 		 */
 		// Run simulation in export mode?
 		boolean exportData = true;
 			
+		// Stable population number of bacteria
+		int populationLimit = 500;
+		
 		// Path to results directory (for exported data)
 		String exportPath = new String("./results/" + timestamp + "/");		
 		
@@ -76,12 +80,9 @@ public class BSimLacOperon {
 		 * Set up the chemical field
 		 */
 		// External inducer (e.g., TMG)
-//		final BSimChemicalField externalInducerField = new BSimChemicalField(sim, new int[] {20,20,5}, 0.01, 0);
 		final BSimChemicalField externalInducerField = new BSimChemicalField(sim, new int[] {10,10,10}, 1, 0);
 
-		// add uM, scaled to actually be uM
-//		double fieldScalingVolume = 1000000; // Volume of box that conc is being added to 
-//		externalInducerField.addQuantity(0, 0, 0, 200*fieldScalingVolume);
+		// Constant level from args (if it's set)
 		if(CONSTANT_CHEM_FIELD){
 			externalInducerField.setConc(externalChem);
 		} else {
@@ -89,7 +90,7 @@ public class BSimLacOperon {
 		}
 		
 		/*********************************************************
-		 * Set up the beasties
+		 * Set up the bacteria
 		 */		
 		// All bacteria
 		final Vector<BSimLacBacterium> bacteria = new Vector<BSimLacBacterium>();
@@ -101,7 +102,6 @@ public class BSimLacOperon {
 		final Vector<BSimLacBacterium> deadBacteria = new Vector<BSimLacBacterium>();
 		
 		// Add randomly positioned bacteria to the main vector
-		int populationLimit = 500;
 		while(bacteria.size() < populationLimit) {		
 			BSimLacBacterium b = new BSimLacBacterium(sim, 
 										  new Vector3d(Math.random()*sim.getBound().x,
@@ -121,8 +121,8 @@ public class BSimLacOperon {
 				
 		/*********************************************************
 		 * Custom BSimTicker definition and creation.
-		 * The reason for this monstrosity is to allow access to parameters of 
-		 * the main BSim simulation (specifically time, for time-dependent functionality)
+		 * The reason is to allow access to parameters of the main BSim simulation 
+		 * (specifically time, for time-dependent functionality)
 		 */
 		class BSimTickerPlus extends BSimTicker{
 			
@@ -176,9 +176,7 @@ public class BSimLacOperon {
 				else {
 					newChemState = 0.0;
 				}
-				
-//				System.out.println(newChemState);
-				
+								
 				return newChemState;
 			}
 			
@@ -193,14 +191,18 @@ public class BSimLacOperon {
 					b.updatePosition();					
 				}
 				
+				// Remove all dead bacteria
 				bacteria.removeAll(deadBacteria);
 				deadBacteria.clear();
 				
+				// Add freshly bred bacteria
 				bacteria.addAll(childBacteria);
 				childBacteria.clear();
 				
-				bacteria.trimToSize();
+				// Trim the vector of bacteria
+				// bacteria.trimToSize();
 				
+				// Chemical field update (if it's time-varying)
 				if(!enableConstantChemField){
 					// Set the external chemical field forcing
 					chemicalInputState = chemicalInjector(chemicalInputState);
@@ -209,15 +211,10 @@ public class BSimLacOperon {
 							externalInducerField.setConc(i,j,0, chemicalInputState);
 						}
 					}
-					
 					// Update our chemical fields
 					externalInducerField.update();
 				}
 				
-				
-//				System.out.print(sim.getTime());
-//				System.out.print(", ");
-//				System.out.println(externalInducerField.getConc(0, 0, 0));
 			}
 		}
 
@@ -234,14 +231,7 @@ public class BSimLacOperon {
 			@Override
 			public void scene(PGraphics3D p3d) {
 				for(BSimLacBacterium b : bacteria) {
-					
-					// Oscillate from pale yellow to red.
-//					int R = 255, 
-//						G = 255 - (int)(255*b.y[2]*0.0111), 
-//						B = 128 - (int)(128*b.y[2]*0.0111);
-//					// Clamp these bad boys to [0, 255] to avoid errors
-//					if(G < 0) G = 0;
-//					if(B < 0) B = 0;
+					// TODO - colour based on induction soft computation
 					Color bacCol = new Color(255,0,0);
 					if(b.y[1]>1000){
 						bacCol = Color.red;
