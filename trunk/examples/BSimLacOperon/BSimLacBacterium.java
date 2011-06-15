@@ -12,7 +12,7 @@ import bsim.ode.BSimOdeSystem;
 import bsim.particle.BSimBacterium;
 
 /*********************************************************
- * A {@link BSimBacterium} with two dimensional ODE system.
+ * A {@link BSimBacterium} with two dimensional ODE system representing lactose-permease interaction.
  * 
  * Deterministic continuous-time representation of bistable lactose operon behaviour,
  * with two variables (internal permease and inducer).
@@ -21,6 +21,8 @@ import bsim.particle.BSimBacterium;
  * 
  */
 public class BSimLacBacterium extends BSimBacterium {
+	
+	// TODO - add induced state soft computation via clamped exponential.
 	
 	protected static Random bacRng = new Random();
 	
@@ -33,12 +35,23 @@ public class BSimLacBacterium extends BSimBacterium {
 	// Local values of ODE variables
 	protected double[] y, yNew;				
 	
-	// Sets whether a bacterium being in an 'uninduced' lactose state grows faster 
+	// Sets whether a bacterium being in an 'uninduced' lactose state grows faster:
 	// Modeling network dynamics: the lac operon, a case study 
 	// Jose M.G. Vilar, Calin C. Guet, and Stanislas Leibler 
 	// J Cell Biol 2003 161:471-476. Published May 12, 2003, doi:10.1083/jcb.200301125
 	protected boolean INDUCTION_AFFECTS_GROWTH = false;
 	
+	// Stable population number in the region under investigation in the simulation
+	protected double populationLimit = 100;
+	public void setPopLimit(double newPopLimit){populationLimit = newPopLimit; }
+	
+	// Bacteria in the simulation
+	protected Vector<BSimLacBacterium> bacteriaList;
+	public void setBacteriaList(Vector<BSimLacBacterium> v) { bacteriaList = v; }
+	
+	// Dead bacteria
+	protected Vector<BSimLacBacterium> deathList;
+	public void setDeathList(Vector<BSimLacBacterium> v) { deathList = v; }
 
 	/*********************************************************
 	 * Constructor for a {@link BSimLacBacterium}.
@@ -82,7 +95,6 @@ public class BSimLacBacterium extends BSimBacterium {
 		grow();
 	}
 
-	
 	/*********************************************************
 	 * Growth and replication.
 	 */
@@ -95,6 +107,12 @@ public class BSimLacBacterium extends BSimBacterium {
 		double P_generation = sim.getDt()/tGeneration;
 		double P_death = sim.getDt()/tDeath;
 		
+		/*
+		 * Currently assume that the population has stabilised and that therefore there
+		 * is a limiting factor controlling the population growth and death - the rates of change
+		 * will act to bring the population to equilibrium, in this case the original number 
+		 * of bacteria in the simulation.
+		 */
 //        P_generation = (sim.getDt()/tGeneration)*(Math.pow(2, 1 - bacteriaList.size()/populationLimit));
 //        P_death = (sim.getDt()/tDeath)*(Math.pow(2, -(1 - bacteriaList.size()/populationLimit)));
         P_generation = (sim.getDt()/tGeneration)*(2.5-(bacteriaList.size()/populationLimit));
@@ -114,29 +132,17 @@ public class BSimLacBacterium extends BSimBacterium {
 		}
 		
 	}
-	
-	protected double populationLimit = 100;
-	public void setPopLimit(double newPopLimit){populationLimit = newPopLimit; }
-	
-	protected Vector<BSimLacBacterium> bacteriaList;
-	public void setBacteriaList(Vector<BSimLacBacterium> v) { bacteriaList = v; }
-	
-	protected Vector<BSimLacBacterium> deathList;
-	public void setDeathList(Vector<BSimLacBacterium> v) { deathList = v; }
-	
+		
+	/**
+	 * Cell death - add to list for removal from the simulation
+	 */
 	public void die(){
 		deathList.add(this);
 	}
 	
 	/**
 	 * Replication method.
-	 * 
-	 * Complete override:
-	 * <ul>
-	 * <li>age changes</li>
-	 * <li>state inheritance (GRN)</li>	 
-	 * <li>death probability</li>
- 	 * </ul>
+	 * (Complete override)
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -156,8 +162,6 @@ public class BSimLacBacterium extends BSimBacterium {
 		
 		childList.add(child);
 	}	
-
-	
 	
 	/*********************************************************
 	 * Lac Operon GRN.
