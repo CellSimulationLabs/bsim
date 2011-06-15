@@ -1,14 +1,14 @@
 #Fat Jar Configuration File
-#Mon Mar 14 16:26:35 GMT 2011
+#Tue Jun 14 18:25:23 PDT 2011
 onejar.license.required=false
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
-jarname=lib/BSim_fat.jar
+jarname=lib/BSim3.0.jar
 manifest.mergeall=true
 manifest.mainclass=
 manifest.file=<createnew>
 jarname.isextern=false
 onejar.expand=
-excludes=
+excludes=<po|BSim>~BSimBrownianMotion/;<po|BSim>~BSimChemicalActivation/;<po|BSim>~BSimChemicalFieldTest/;<po|BSim>~BSimCoupledRepressilators/;<po|BSim>~BSimLacOperon/;<po|BSim>~BSimLactam/;<po|BSim>~BSimLogic/;<po|BSim>~BSimMeshBehavior/;<po|BSim>~BSimMeshMobility/;<po|BSim>~BSimMultiThreaded/;<po|BSim>~BSimQuorumOscillator/;<po|BSim>~BSimReaction/;<po|BSim>~BSimReplication/;<po|BSim>~BSimRotationalDiffusion/;<po|BSim>~BSimRunTumble/;<po|BSim>~BSimSimplest/;<po|BSim>~BSimTracking/;<po|BSim>~BSimTutorial/;<po|BSim>~BSimVesicleActivation/;<po|BSim>~BSimVesiculation/
 includes=
