@@ -232,15 +232,10 @@ public class BSimLacOperon {
 			public void scene(PGraphics3D p3d) {
 				for(BSimLacBacterium b : bacteria) {
 					Color bacCol;
-					double inducedness = 0;
 					
 					// Yellow if induced, red if not
-					if(b.y[1] <= 10000){
-						inducedness = Math.exp(0.0025*(b.y[1] - 10000));
-					} else {
-						inducedness = 1;
-					}
-					bacCol = new Color(255, (int)(255*(inducedness)), 0);
+					bacCol = new Color(255, (int)(255*b.inducedState()), 0);
+					
 					draw(b, bacCol);
 				}
 								
@@ -401,11 +396,7 @@ public class BSimLacOperon {
 					// Compute the proportion of the bacteria that are 'induced' 
 					double inducedProportion = 0;
 					for(BSimLacBacterium b : bacteria){
-						if(b.y[1] <= 10000){
-							inducedProportion += Math.exp(0.0025*(b.y[1] - 10000));
-						} else {
-							inducedProportion += 1;
-						}
+						inducedProportion += b.inducedState();
 					}
 					inducedProportion = inducedProportion/bacteria.size();
 					
