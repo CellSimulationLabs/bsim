@@ -68,7 +68,7 @@ public class BSimLacBacterium extends BSimBacterium {
 		grn = new BSimLacBacteriumGRN();
 		
 		grn.RANDOM_ICS = true;
-		grn.POPULATION_VARIANCE = false;
+		grn.POPULATION_VARIANCE = true;
 		
 		INDUCTION_AFFECTS_GROWTH = true;
 		
