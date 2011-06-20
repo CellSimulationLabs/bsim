@@ -1,0 +1,3 @@
+				
+			for (CustomBacterium bacterium : bacteria) {
+				bacterium.action();

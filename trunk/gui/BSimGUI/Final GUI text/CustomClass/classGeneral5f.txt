@@ -1,0 +1,14 @@
+				
+				return ics;
+			}
+				
+		
+			public int getNumEq() {
+				return numEq;
+			}
+		}	 
+			
+	}
+
+		
+	final Vector<CustomBacterium> bacteria = new Vector<CustomBacterium>();

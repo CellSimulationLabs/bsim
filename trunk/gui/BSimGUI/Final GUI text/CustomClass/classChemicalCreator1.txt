@@ -1,0 +1,1 @@
+			field.addQuantity(position, productionRate*sim.getDt());   //chemical creator bacterium
