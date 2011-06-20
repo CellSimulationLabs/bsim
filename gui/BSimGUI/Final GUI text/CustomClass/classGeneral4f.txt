@@ -1,0 +1,9 @@
+				return dy;
+			}
+
+				
+			//
+			 // Create the initial conditions of the ODE system
+			 //
+			public double[] getICs() {
+				// Start synchronised

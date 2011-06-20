@@ -1,0 +1,4 @@
+			if(field.getConc(position) > threshold)  //threshold signalling bacterium
+				activated = true;
+			else
+				activated = false; 
