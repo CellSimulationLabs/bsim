@@ -1,3 +1,5 @@
+package BSimGUI;
+
 import java.awt.BorderLayout;
 import java.lang.Object;
 import java.awt.Color;
