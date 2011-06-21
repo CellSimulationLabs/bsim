@@ -1,5 +1,7 @@
 set DISTDIR=BSimGUI
 
+set RARDIR="C:\Program Files\WinRAR\"
+
 mkdir %DISTDIR%
 
 xcopy BSimGUI.java %DISTDIR%
@@ -18,8 +20,8 @@ cd ..
 
 del release\BSimGUI.zip
 
-"C:\Program Files\WinRAR\"rar a release/BSimGUI.zip -apBSimGUI lib 
-"C:\Program Files\WinRAR\"rar a release/BSimGUI.zip -apBSimGUI -ep @"release\resource\file_list"
+%RARDIR%rar a release/BSimGUI.zip -apBSimGUI lib 
+%RARDIR%rar a release/BSimGUI.zip -apBSimGUI -ep @"release\resource\file_list"
 
 del BSimGUI.jar
 rd /s %DISTDIR%
