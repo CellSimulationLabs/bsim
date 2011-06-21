@@ -981,15 +981,17 @@ public class BSimGUI extends javax.swing.JFrame {
 
 private String ReadTextFileExample(String filename, String foldername)
 	{
+	 		ClassLoader loader = this.getClass().getClassLoader();
 
-			File file = new File("./Final GUI text/"+foldername+"/"+filename+".txt");
+			InputStream file = loader.getResourceAsStream("BSimGUI/Final GUI text/"+foldername+"/"+filename+".txt");
+			
 			StringBuffer contents = new StringBuffer();
 			String ourText;
 			BufferedReader reader = null;
 			 
 			try
 			  {
-			   reader = new BufferedReader(new FileReader(file));
+			   reader = new BufferedReader(new InputStreamReader(file));
 			   String text = null;
 			 
 			   // repeat until all lines is read
