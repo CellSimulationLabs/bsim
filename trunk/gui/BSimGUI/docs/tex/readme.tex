@@ -2,20 +2,32 @@
 \documentclass[a4paper,11pt]{article}
 
 %%% ------------ PACKAGES ------------ %%%
-\usepackage{a4wide}				% Wide margins (can also use fullpage)
+%\usepackage{a4wide}				% Wide margins (can also use fullpage)
 \usepackage{tgpagella}
 \usepackage{tgadventor}
 \usepackage{sectsty}
 \usepackage[colorlinks=true]{hyperref}
 
 %%% ------------ PREAMBLE ------------ %%%
+% CUSTOM COMMANDS
 
+\newenvironment{revisionList}
+{\begin{itemize}%
+	\setlength{\itemsep}{0.1em}%
+	\setlength{\parskip}{0pt}%
+	\setlength{\parsep}{0pt}}
+{\end{itemize}}
+
+% FORMATTING
 \allsectionsfont{\sffamily}
 
-
-\title{BSim GUI - Readme (v0.1 beta)}
+% TITLE MATTER
+\title{BSim GUI \emph{beta} - Readme}
 \author{BSim Team\footnote{\href{mailto:bsimbccs@gmail.com}{bsimbccs@gmail.com}}}
-\date{\today}
+\date{This version generated \today}
+
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
 
 %%% ------------ BODY TEXT ------------ %%%
 \begin{document}
@@ -26,21 +38,42 @@
 \rule{0.9\textwidth}{0.5pt}
 
 \section{What is BSim GUI?}
+The BSimGUI package is an experimental graphical user interface (GUI) for the BSim agent-based bacterial population modelling package.
+For more information on the BSim software itself please visit the \href{http://bsim-bccs.sourceforge.net/}{BSim website} on Sourceforge.
+The GUI was originally intended to provide a layer of abstraction over the raw Java in which BSim is coded, thus simplifying the process of creating BSim simulations.
+A brief overview of the original design intentions and a more detailed overview of creating BSim simulations using the GUI can be found at the \href{http://2010.igem.org/Team:BCCS-Bristol/Modelling/BSIM/GUI}{BCCS-Bristol 2010 iGEM entry}.
 
 \section{Running BSim GUI}
-
-\subsection{Windows}
-
-\subsection{UNIX}
+The GUI itself is compiled and packaged into a runnable Java \texttt{.jar} file.
+Additionally included in the release should be this file (\texttt{readme.pdf}), the BSim 3.0 library, and shell scripts \texttt{run\_all} and \texttt{run\_output\_only} (\texttt{*.cmd} for windows, \texttt{*.sh} for UNIX, Mac OS).
+The GUI works by generating a BSim simulation file which is then compiled and run.
+The script \texttt{run\_all} will run the GUI, wait for the simulation to be generated, compile the simulation and run it.
+The script \texttt{run\_output\_only} will compile the generated simulation file if necessary and run it, without starting the GUI.
+It is of course possible to start the GUI directly rather than through a script either by double-clicking on it or by running the command \texttt{"java -jar BSimGUI.jar"}.
 
 \section{Known issues}
 
 \subsection{Command order dependency}
-The scene creation process must take place in the correct order.
-
+The scene creation process must take place in the order that components appear in the GUI menu (i.e., the order specified on the \href{http://2010.igem.org/Team:BCCS-Bristol/Modelling/BSIM/GUI}{BSimGUI iGEM page}, where more detailed instructions and descriptions of the available options can be found in the section "Interface Design").
+This is a limitation of the current GUI implementation and will be resolved in a future version.
 
 \section{Revision history}
+\subsubsection{21st June 2011}
+Repackaged release of the BSimGUI experimental beta with some small fixes.
+\begin{revisionList}
+\item Repackaged classes into single runnable \texttt{.jar}.
+\item Removed the need to compile the GUI itself.
+\item Included BSim release library --- \texttt{BSim3.0.jar}.
+\item Small bug fixes regarding resource paths.
+\item Created readme.
+\end{revisionList}
 
+\subsubsection{4th November 2010}
+Initial beta release of BSimGUI.
+\begin{revisionList}
+\item BSimGUI source with scripts to compile and run.
+\item Packaged with Java runtime.
+\end{revisionList}
 
 \end{document}
 
