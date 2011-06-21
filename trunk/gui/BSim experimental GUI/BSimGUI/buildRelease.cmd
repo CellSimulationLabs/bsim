@@ -8,7 +8,7 @@ xcopy BSimGUI.java %DISTDIR%
 
 xcopy /s "Final GUI text" "%DISTDIR%\Final GUI text"
 
-xcopy ..\..\lib\BSim3.0.jar ".\lib"
+xcopy ..\..\..\lib\BSim3.0.jar ".\lib"
 
 javac %DISTDIR%\BSimGUI.java
 
@@ -20,9 +20,9 @@ cd ..
 
 del release\BSimGUI.zip
 
-%RARDIR%rar a release/BSimGUI.zip -apBSimGUI lib 
-%RARDIR%rar a release/BSimGUI.zip -apBSimGUI -ep @"release\resource\file_list"
-
+%RARDIR%winrar a -afzip -apBSimGUI release/BSimGUI lib 
+%RARDIR%winrar a -afzip -apBSimGUI release/BSimGUI -ep @"release\resource\file_list"
+pause
 del BSimGUI.jar
 rd /s %DISTDIR%
 rd /s .\lib
