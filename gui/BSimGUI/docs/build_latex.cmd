@@ -1,1 +1,1 @@
-xelatex -aux-directory=tex/auxilliary -interaction=nonstopmode -output-directory=. tex/readme.tex
+xelatex -aux-directory=tex/build.aux -interaction=nonstopmode -output-directory=. tex/readme.tex
