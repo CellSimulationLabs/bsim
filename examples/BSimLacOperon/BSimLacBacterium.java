@@ -47,9 +47,9 @@ public class BSimLacBacterium extends BSimBacterium {
 	protected Vector<BSimLacBacterium> bacteriaList;
 	public void setBacteriaList(Vector<BSimLacBacterium> v) { bacteriaList = v; }
 	
-	// Dead bacteria
-	protected Vector<BSimLacBacterium> deathList;
-	public void setDeathList(Vector<BSimLacBacterium> v) { deathList = v; }
+	// Bacteria to be removed
+	protected Vector<BSimLacBacterium> removalList;
+	public void setRemovalList(Vector<BSimLacBacterium> v) { removalList = v; }
 
 	/*********************************************************
 	 * Constructor for a {@link BSimLacBacterium}.
@@ -68,7 +68,7 @@ public class BSimLacBacterium extends BSimBacterium {
 		grn.RANDOM_ICS = true;
 		grn.POPULATION_VARIANCE = true;
 		
-		INDUCTION_AFFECTS_GROWTH = true;
+		INDUCTION_AFFECTS_GROWTH = false;
 		
 		y = grn.getICs();
 	}
@@ -100,31 +100,33 @@ public class BSimLacBacterium extends BSimBacterium {
 	public void grow() {
 		
 		double tGeneration = 3600; 
-		double tDeath = 3600;
+		double tRemoval = 3600;
 
 		double P_generation = sim.getDt()/tGeneration;
-		double P_death = sim.getDt()/tDeath;
+		double P_removal = sim.getDt()/tRemoval;
 		
 		/*
 		 * Currently assume that the population has stabilised and that therefore there
-		 * is a limiting factor controlling the population growth and death - the rates of change
+		 * is a limiting factor controlling the population growth and removal - the rates of change
 		 * will act to bring the population to equilibrium, in this case the original number 
 		 * of bacteria in the simulation.
 		 */
-//        P_generation = (sim.getDt()/tGeneration)*(Math.pow(2, 1 - bacteriaList.size()/populationLimit));
-//        P_death = (sim.getDt()/tDeath)*(Math.pow(2, -(1 - bacteriaList.size()/populationLimit)));
-        P_generation = (sim.getDt()/tGeneration)*(2.5-(bacteriaList.size()/populationLimit));
-        P_death = (sim.getDt()/tDeath)*(bacteriaList.size()/populationLimit);
+        P_generation = (sim.getDt()/tGeneration)*(Math.pow(2, 1 - bacteriaList.size()/populationLimit));
+        P_removal = (sim.getDt()/tRemoval)*(Math.pow(2, -(1 - bacteriaList.size()/populationLimit)));
+//        P_generation = (sim.getDt()/tGeneration)*(2.5-(bacteriaList.size()/populationLimit));
+//        P_removal = (sim.getDt()/tRemoval)*(bacteriaList.size()/populationLimit);
 
         if(INDUCTION_AFFECTS_GROWTH){
-        	double maxFractionChange = 0.1;
-        	double inductionStateScaling = 1 + Math.exp(-0.0025*y[1])*maxFractionChange;
+        	double maxFractionChange = 0.1; 
+
+        	//double inductionStateScaling = 1 + Math.exp(-0.0025*y[1])*maxFractionChange;
+			double inductionStateScaling = 1 + (1 - inducedState())*maxFractionChange;
         	P_generation *= inductionStateScaling;
         }
         
-		// If the bacterium is dead then it can't replicate:
-		if(Math.random() < P_death){
-			die();
+		// If the bacterium is removed then it can't replicate:
+		if(Math.random() < P_removal){
+			remove();
 		}else if(Math.random() < P_generation){
 			replicate();
 		}
@@ -132,10 +134,10 @@ public class BSimLacBacterium extends BSimBacterium {
 	}
 		
 	/**
-	 * Cell death - add to list for removal from the simulation
+	 * Cell removal - add to list for removal from the simulation
 	 */
-	public void die(){
-		deathList.add(this);
+	public void remove(){
+		removalList.add(this);
 	}
 	
 	/**
@@ -150,7 +152,7 @@ public class BSimLacBacterium extends BSimBacterium {
 		child.setRadius();
 		
 		child.setChildList(childList);
-		child.setDeathList(deathList);
+		child.setRemovalList(removalList);
 		child.setBacteriaList(bacteriaList);
 		
 		child.setPopLimit(populationLimit);
@@ -277,7 +279,7 @@ public class BSimLacBacterium extends BSimBacterium {
 				}else{
 					// All uninduced
 					ics[0] = 0.025 + 0.005*bacRng.nextGaussian();
-					ics[1] = 2.5*bacRng.nextGaussian();				
+					ics[1] = 2.5*bacRng.nextGaussian();
 					}				
 			}else{
 				// All uninduced, uniform ICS
