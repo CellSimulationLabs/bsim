@@ -37,7 +37,7 @@ public class BSimLacOperon {
 		int simTimeSeconds;
 		if(args.length != 0){
 			/*
-			 * What do we want to set form args?
+			 * What do we want to set from args?
 			 * Timestamp - results directory
 			 * 
 			 */
@@ -45,11 +45,11 @@ public class BSimLacOperon {
 			simTimeSeconds = Integer.parseInt(args[1]);
 		} else {
 			timestamp = BSimUtils.timeStamp();
-			simTimeSeconds = 60000;
+			simTimeSeconds = 120000;
 		}
 		
 		double externalChem = 200;
-		boolean CONSTANT_CHEM_FIELD = true;
+		boolean CONSTANT_CHEM_FIELD = false;
 		if(args.length >= 3){
 			externalChem = Double.parseDouble(args[2]);
 			CONSTANT_CHEM_FIELD = true;
@@ -59,10 +59,10 @@ public class BSimLacOperon {
 		 * GLOBAL PARAMETERS ETC
 		 */
 		// Run simulation in export mode?
-		boolean exportData = false;
+		boolean exportData = true;
 			
 		// Stable population number of bacteria
-		int populationLimit = 100;
+		int populationLimit = 500;
 		
 		// Path to results directory (for exported data)
 		String exportPath = new String("./results/" + timestamp + "/");		
@@ -98,8 +98,8 @@ public class BSimLacOperon {
 		// Temporary children vector for when bacteria replicate
 		final Vector<BSimLacBacterium> childBacteria = new Vector<BSimLacBacterium>();
 		
-		// Temporary vector of death
-		final Vector<BSimLacBacterium> deadBacteria = new Vector<BSimLacBacterium>();
+		// Temporary vector of removed bacteria
+		final Vector<BSimLacBacterium> removedBacteria = new Vector<BSimLacBacterium>();
 		
 		// Add randomly positioned bacteria to the main vector
 		while(bacteria.size() < populationLimit) {		
@@ -111,7 +111,7 @@ public class BSimLacOperon {
 			b.setRadius();
 			
 			b.setChildList(childBacteria);
-			b.setDeathList(deadBacteria);
+			b.setRemovalList(removedBacteria);
 			b.setBacteriaList(bacteria);
 			
 			b.setPopLimit(populationLimit);			
@@ -191,9 +191,9 @@ public class BSimLacOperon {
 					b.updatePosition();					
 				}
 				
-				// Remove all dead bacteria
-				bacteria.removeAll(deadBacteria);
-				deadBacteria.clear();
+				// Remove all removable bacteria
+				bacteria.removeAll(removedBacteria);
+				removedBacteria.clear();
 				
 				// Add freshly bred bacteria
 				bacteria.addAll(childBacteria);
@@ -264,7 +264,7 @@ public class BSimLacOperon {
 
 			// IMAGES
 //			BSimPngExporter imageExporter = new BSimPngExporter(sim, drawer, exportPath);
-//			imageExporter.setDt(10);
+//			imageExporter.setDt(600);
 //			sim.addExporter(imageExporter);	
 
 			/*********************************************************
@@ -297,7 +297,7 @@ public class BSimLacOperon {
 			sim.addExporter(statsLogger);
 
 			/*********************************************************
-			 * Population statistics logger
+			 * Internal lac logger
 			 */
 			BSimLogger lacLogger = new BSimLogger(sim, exportPath + "internalLactose.csv") {
 				@Override
@@ -322,7 +322,7 @@ public class BSimLacOperon {
 			sim.addExporter(lacLogger);
 			
 			/*********************************************************
-			 * Population statistics logger
+			 * Internal permease logger
 			 */
 			BSimLogger permLogger = new BSimLogger(sim, exportPath + "internalPermease.csv") {
 				@Override
