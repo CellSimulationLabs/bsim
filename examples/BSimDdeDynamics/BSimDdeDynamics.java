@@ -41,19 +41,18 @@ public class BSimDdeDynamics {
 		/*********************************************************
 		 * BSimBacterium with a repressilator inside
 		 */
-		class BSimRepressilatorBacterium extends BSimBacterium {
-			protected QuorumRepressilator repGRN;	// Instance of internal class
+		class BSimDdeBacterium extends BSimBacterium {
+			protected DdeDyanmics repGRN;	// Instance of internal class
 			protected double[] y, yNew;				// Local values of ODE variables
 
 			/*
 			 * Constructor for a repressilator GRN bacterium.
 			 */
-			public BSimRepressilatorBacterium(BSim sim, Vector3d position){
+			public BSimDdeBacterium(BSim sim, Vector3d position){
 				super(sim, position);
 				
 				// Create the parameters and initial conditions for the ODE system
 				repGRN = new QuorumRepressilator();
-				repGRN.generateBeta();
 				y = repGRN.getICs();
 			}
 			
@@ -66,41 +65,18 @@ public class BSimDdeDynamics {
 				// Movement etc:
 				super.action();
 				
-				// Variables for chemical field response:
-				double externalChem;	// External chem. field
-				double deltaChem;		// Change in chemical quantity
-				
-				// external chemical level at position of the bacterium:
-				externalChem = field.getConc(position);
-				
-				// Get the external chemical field level for the GRN ode system later on:
-				repGRN.setExternalQuorumLevel(externalChem);
-				
 				// Solve the ode system
 				// IMPORTANT: re-scale the time units correctly (GRN equations are in minutes, BSim works in seconds)
-				yNew = BSimOdeSolver.rungeKutta45(repGRN, sim.getTime()/60, y, sim.getDt()/60);
-				y = yNew;
-				
-				// Adjust the external chemical field
-				deltaChem = externalChem - y[6];
-								
-				//( note - 11/2010 -  not sure quite why this is still an if statement as both the same...)
-				// Well, it works fine but there is obviously some redundant code :)
-				if( deltaChem < 0){
-					field.addQuantity(position, cellWallDiffusivity*(-deltaChem));
-				}else if(deltaChem > 0){
-					field.addQuantity(position, cellWallDiffusivity*(-deltaChem));
-				}				
+				yNew = BSimDdeSolver.rungeKutta45(repGRN, sim.getTime()/60, y, sim.getDt()/60);
+				y = yNew;			
 			}
 			
 			/*
 			 * Representation of the repressilator ODE system with quorum coupling
 			 */
-			class QuorumRepressilator implements BSimDdeSystem{
-				private int numEq = 7;				// System of 7 equations
-				private double beta;				// beta parameter
+			class DdeDyanmics implements BSimDdeSystem{
+				private int numEq = 2;				// System of 7 equations
 				private Random r = new Random();	// Random number generator
-				private double Se = 0;				// External chemical level
 				
 				// The equations
 				public double[] derivativeSystem(double x, double[] y) {
@@ -128,12 +104,7 @@ public class BSimDdeDynamics {
 					return dy;
 				}
 				
-				// Set up what the external chemical level is:
-				public void setExternalQuorumLevel(double externalQuorumField){
-					Se = externalQuorumField;
-				}
-				
-				// Initial conditions for the ODE system
+				// Initial conditions for the DDE system
 				public double[] getICs() {
 					double[] ics = new double[numEq];
 					
@@ -155,13 +126,6 @@ public class BSimDdeDynamics {
 					}
 					return ics;
 				}
-				
-				
-				// Parameter Beta - ratio between mRNA and protein lifetimes
-				public void generateBeta(){
-					// Garcia-Ojalvo paper part 1:
-					beta = 1.0 + 0.05*r.nextGaussian();
-				}
 		
 				public int getNumEq() {
 					return numEq;
@@ -173,11 +137,11 @@ public class BSimDdeDynamics {
 		/*********************************************************
 		 * Create the vector of all bacteria used in the simulation 
 		 */
-		final Vector<BSimRepressilatorBacterium> bacteria = new Vector<BSimRepressilatorBacterium>();
+		final Vector<BSimDdeBacterium> bacteria = new Vector<BSimDdeBacterium>();
 		
 		// Add randomly positioned bacteria to the vector
 		while(bacteria.size() < 200) {		
-			BSimRepressilatorBacterium p = new BSimRepressilatorBacterium(sim, 
+			BSimDdeBacterium p = new BSimDdeBacterium(sim, 
 										  new Vector3d(Math.random()*sim.getBound().x,
 													   Math.random()*sim.getBound().y,
 													   Math.random()*sim.getBound().z));
@@ -191,12 +155,10 @@ public class BSimDdeDynamics {
 			public void tick() {
 				
 				// Update the bacteria at each time step
-				for(BSimRepressilatorBacterium p : bacteria) {
+				for(BSimDdeBacterium p : bacteria) {
 					p.action();		
 					p.updatePosition();
 				}
-				// Update the chemical field
-				field.update();
 			}		
 		});
 
@@ -205,7 +167,7 @@ public class BSimDdeDynamics {
 		BSimDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
 			@Override
 			public void scene(PGraphics3D p3d) {
-				for(BSimRepressilatorBacterium p : bacteria) {		
+				for(BSimDdeBacterium p : bacteria) {		
 					draw(p,Color.RED);
 				}
 			}
