@@ -1,20 +1,14 @@
 package BSimDdeDynamics;
 
 import java.awt.Color;
-import java.util.Calendar;
-import java.util.Random;
 import java.util.Vector;
-
 import javax.vecmath.Vector3d;
-
 import processing.core.PGraphics3D;
 import bsim.BSim;
-import bsim.BSimChemicalField;
 import bsim.BSimTicker;
-import bsim.BSimUtils;
 import bsim.draw.BSimDrawer;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.BSimLogger;
+//import bsim.export.BSimLogger;
 import bsim.dde.BSimDdeSolver;
 import bsim.dde.BSimDdeSystem;
 import bsim.particle.BSimBacterium;
@@ -32,7 +26,7 @@ public class BSimDdeDynamics {
 		 * Create a new simulation object
 		 */
 		BSim sim = new BSim();			// New Sim object
-		sim.setDt(0.01);				// Simulation Timestep
+		sim.setDt(0.1);				    // Simulation Timestep
 		sim.setSimulationTime(10); 		// Simulation Length (6000 = 100 minutes)
 		sim.setTimeFormat("0.00");		// Time Format for display
 		sim.setBound(100,100,100);		// Simulation Boundaries
@@ -42,8 +36,8 @@ public class BSimDdeDynamics {
 		 * BSimBacterium with a repressilator inside
 		 */
 		class BSimDdeBacterium extends BSimBacterium {
-			protected DdeDyanmics repGRN;	// Instance of internal class
-			protected double[] y, yNew;				// Local values of ODE variables
+			protected DdeDyanmics ddeGRN;	// Instance of internal class
+			protected Vector<double[]> s;				// Local values of ODE variables
 
 			/*
 			 * Constructor for a repressilator GRN bacterium.
@@ -52,8 +46,8 @@ public class BSimDdeDynamics {
 				super(sim, position);
 				
 				// Create the parameters and initial conditions for the ODE system
-				repGRN = new QuorumRepressilator();
-				y = repGRN.getICs();
+				ddeGRN = new DdeDyanmics();
+				s = BSimDdeSolver.getInitialState(ddeGRN, sim.getDt());
 			}
 			
 			/*
@@ -67,68 +61,48 @@ public class BSimDdeDynamics {
 				
 				// Solve the ode system
 				// IMPORTANT: re-scale the time units correctly (GRN equations are in minutes, BSim works in seconds)
-				yNew = BSimDdeSolver.rungeKutta45(repGRN, sim.getTime()/60, y, sim.getDt()/60);
-				y = yNew;			
+				//BSimDdeSolver.rungeKutta45(repGRN, sim.getTime()/60, ys, sim.getDt()/60);
+				BSimDdeSolver.euler(ddeGRN, sim.getTime(), s, sim.getDt());
 			}
 			
 			/*
 			 * Representation of the repressilator ODE system with quorum coupling
 			 */
 			class DdeDyanmics implements BSimDdeSystem{
-				private int numEq = 2;				// System of 7 equations
-				private Random r = new Random();	// Random number generator
 				
 				// The equations
-				public double[] derivativeSystem(double x, double[] y) {
-					double[] dy = new double[numEq];
-					// Various parameters from the paper:
-					double alpha = 216, 
-						nExp = 2.0, 
-						eta = cellWallDiffusivity, 
-						ks0 = 1, 
-						ks1 = 0.01, 
-						kappa = 20;
+				public double[] derivativeSystem(double x, double[] y, Vector<double[]> ys) {
+					double[] dy = new double[2];
+					double[] tm1 = BSimDdeSolver.getDelayedState(ys, sim.getDt(), 1.0);
+					double[] tm2 = BSimDdeSolver.getDelayedState(ys, sim.getDt(), 2.0);
 					
-					// rate of change of a, b, c: mRNA transcribed from tetR, cI, lacI respectively
-					dy[0] = -y[0] + alpha/(1 + Math.pow(y[5], nExp));
-					dy[1] = -y[1] + alpha/(1 + Math.pow(y[3], nExp));
-					dy[2] = -y[2] + alpha/(1 + Math.pow(y[4], nExp)) + (kappa*y[6])/(1 + y[6]);
+					dy[0] = 1.1 * tm1[0];
+					dy[1] = 1.1 * tm2[1];
 					
-					// rate of change of A, B, C: proteins corresponding to a,b,c above
-					dy[3] = beta*(y[0]-y[3]);
-					dy[4] = beta*(y[1]-y[4]);
-					dy[5] = beta*(y[2]-y[5]);
-					
-					// rate of change of AI inside the cell
-					dy[6] = -ks0*y[6] + ks1*y[3] - eta*(y[6] - Se);
 					return dy;
 				}
 				
 				// Initial conditions for the DDE system
 				public double[] getICs() {
-					double[] ics = new double[numEq];
-					
-					if(theInitialConditions == ICS_UNIFORM){
-						// Start synchronised
-						ics[0] = 1.728;
-						ics[1] = 0.4414;
-						ics[2] = 184;
-						ics[3] = 9.363;
-						ics[4] = 0.4414;
-						ics[5] = 155.1;
-						ics[6] = 1.5;
-					}else{
-						// Start random
-						for(int i =0;i<numEq-1;i++){
-							ics[i] = 100*r.nextDouble();
-						}
-						ics[6] = 0.5*r.nextDouble();
-					}
+					double[] ics = new double[2];
+					ics[0] = 1.0;
+					ics[1] = 1.1;	
 					return ics;
 				}
 		
 				public int getNumEq() {
-					return numEq;
+					return 2;
+				}
+				
+				public double getMaxDelay() {
+					return 3.0;
+					
+				}
+				
+				public void setInitialHistory(Vector<double[]> ys) {
+					for (int i=0; i<ys.size(); i++){
+						ys.set(i, this.getICs());
+					}
 				}
 			}
 		}
