@@ -74,6 +74,7 @@ public class BSimDdeSolver {
 	 */
 	public static Vector<double[]> euler(BSimDdeSystem ddes, double t, Vector<double[]> ys, double h){
 		int numEq = ddes.getNumEq();
+		System.out.println("Size of ys = " + ys.size());
 		double[] dydx = ddes.derivativeSystem(t, ys.get(0), ys);
 		BSimDdeSolver.shiftState(ys);
 		double[] y = ys.get(0);
