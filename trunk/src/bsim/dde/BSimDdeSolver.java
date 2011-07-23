@@ -4,32 +4,11 @@ import java.util.Vector;
 
 import bsim.dde.BSimDdeSystem;
 
-/*
- * Most likely these will have to be updated or overloaded (some more)
- * to be able to cope with stochastic odes [honeycutt: stochastic rk algorithms]
- */
-
 /**
- * Solver routines for numerical simulation of DDEs (Fixed time-step):
- * <ul>
- * <li>Euler's method</li>
- * <li>second order Runge-Kutta</li>
- * <li>fourth order Runge-Kutta</li>
- * </ul>
- * 
- * Each method will estimate the change of the dependent variable based
- * on the previous value of the dependent (y) and independent (x) variables, 
- * and return the new value of the dependent variable.</br>
- * 
- * The methods are in order of increasing accuracy for a given time-step;
- * Euler's method is the most basic, but the fastest as a result of having to 
- * perform relatively few calculations, while the Runge-Kutta methods use an
- * intermediate trial step at the midpoint of an interval to cancel lower order 
- * error terms. </br>
- * 
- * If the time step is too large an Euler solution will quickly diverge from
- * the true solution, therefore it is recommended to use a higher order solution 
- * if the time-step cannot reasonably be decreased.
+ * Solver routines for numerical simulation of DDEs (Fixed time-step). 
+ * These make use of basic ODE solvers and so stability is not ensured
+ * in all cases. Be sure to run simulations with smaller time steps to
+ * check that the results are accurate.
  */
 public class BSimDdeSolver {
 	
@@ -89,9 +68,9 @@ public class BSimDdeSolver {
 	// --------------------------------------------------
 	
 	/** 
-	 * Numerically solve an ODE system with 2nd order Runge-Kutta method.
+	 * Numerically solve an DDE system with 2nd order Runge-Kutta method.
 	 * 
-	 * @param odes The {@link BSimOdeSystem} to solve.
+	 * @param odes The {@link BSimDdeSystem} to solve.
 	 * @param t Independent variable.
 	 * @param y Vector of dependent variables.
 	 * @param h Time step for ode solution.
@@ -129,9 +108,9 @@ public class BSimDdeSolver {
 	// --------------------------------------------------
 	
 	/**
-	 * Numerically solve an ODE system with 4th order Runge-Kutta method
+	 * Numerically solve an DDE system with 4th order Runge-Kutta method
 	 *  
-	 * @param odes The {@link BSimOdeSystem} to solve.
+	 * @param odes The {@link BSimDdeSystem} to solve.
 	 * @param t Independent variable.
 	 * @param y Vector of dependent variables.
 	 * @param h Time step for ode solution.
