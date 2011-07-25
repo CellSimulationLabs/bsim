@@ -74,7 +74,7 @@ We can't add the external libraries yet as they haven't been downloaded, so Fini
 
 And we're ready to roll. Your Eclipse workspace should look something like the following:
 
-http://bsim-bccs.googlecode.com/svn/wiki/img/Image2.jpg
+http://bsim-bccs.googlecode.com/svn/wiki/img/ImageEclipseMac.jpg
 
 To test if everything is working OK, pick an example file and run it. (Best are the ones with 'sim.preview()' at the end of the file, rather than 'sim.export()', as you will get visual confirmation that something is happening). Examples can be found in 'src/bsim.example'.
 
