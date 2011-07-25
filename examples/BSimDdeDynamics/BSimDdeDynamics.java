@@ -80,9 +80,10 @@ public class BSimDdeDynamics {
 				public double[] derivativeSystem(double x, double[] y, Vector<double[]> ys) {
 					double[] dy = new double[3];
 					// Get the state for a 600 seconds delay
-					double[] yd = BSimDdeSolver.getDelayedState(ys, sim.getDt(), 600.0);
+					//double[] yd = BSimDdeSolver.getDelayedState(ys, sim.getDt(), 600.0);
 					
 					// Parameters for the equations (time is in seconds)
+					/* TODO
 					double tFac = 60.0; // Factor used to ensure constants use time in seconds
 					double CA   = 1.0;
 					double CI   = 4.0;
@@ -98,8 +99,8 @@ public class BSimDdeDynamics {
 					double g    = 0.01;
 					double d    = 1.0; // We consider a fixed population (TODO)
 					double d0   = 0.88;
-					
-					double P = (s + (a * yd[2]*yd[2])) / (1 + (k1 * yd[2]*yd[2]));
+					*/
+					//double P = (s + (a * yd[2]*yd[2])) / (1 + (k1 * yd[2]*yd[2]));
 					
 					// A (AiiA)
 					dy[0] = 0;
