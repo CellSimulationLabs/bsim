@@ -282,7 +282,7 @@ public class BSimChemicalActivation {
 		 //			sim.addExporter(pngExporter);
 
 		 // run the simulation.
-		 sim.export();
+		 sim.preview();
 
 	}
 }

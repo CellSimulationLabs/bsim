@@ -22,7 +22,7 @@ public class BSimLactam {
 
 		BSim sim = new BSim();
 		sim.setBound(100,100,100);
-		sim.setSimulationTime(10);
+		sim.setSimulationTime(30);
 		
 		final double propLactamaseBacteria = 0.1;
 				
@@ -260,7 +260,7 @@ public class BSimLactam {
 		movExporter.setDt(0.03);
 		sim.addExporter(movExporter);
 		
-		sim.export();
+		sim.preview();
 	}
 
 }
