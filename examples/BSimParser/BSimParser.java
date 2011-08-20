@@ -1,5 +1,8 @@
 package BSimParser;
 
+import java.io.*;
+import java.util.*;
+
 
 public class BSimParser {
 	
@@ -19,32 +22,30 @@ public class BSimParser {
      * Function that parses the associated parameter file and returns an equivalent 
      * BSimParameters object.
      */
-    public void parseFile(){
-        /*    
-    	
+    public void parseFile(File paramFile){
+
     	// Parameters object to hold the parsed file contents
-            BSimParameters params = new BSimParameters();
-            Scanner scanner;
-            int lineCounter = 1;
-            try { scanner = new Scanner(paramFile);
-                    try {
-                            while(scanner.hasNextLine()) {
-                                    processLine(scanner.nextLine().split("\t"), params,lineCounter);
-                                    lineCounter++;
-                            }
-                    } finally { scanner.close(); }
-            } catch(FileNotFoundException e) {System.err.println("Parameter file not found"); }
-            
-            
-            // Return the output parameters object
-            return params;
-            */
+    	sim = new BSimFromFile();
+    	Scanner scanner;
+    	int lineCounter = 1;
+    	try { scanner = new Scanner(paramFile);
+    	try {
+    		while(scanner.hasNextLine()) {
+    			processLine(scanner.nextLine().split(":"), lineCounter);
+    			lineCounter++;
+    		}
+    	} finally { scanner.close(); }
+    	} catch(FileNotFoundException e) {System.err.println("Input file not found"); }
+
+
+    	// Return the output parameters object
+    	//return params;
     }
     
     /**
      * Use data following line header to set parameters in BSimParameters object
      */
-    private void processLine(String[] line, BSimFromFile p, int lineNo) {
+    private void processLine(String[] line, int lineNo) {
             /*
     		double[] args = parseLine(line);
             int temp;
