@@ -7,7 +7,6 @@ package BSimParser;
 import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.*;
 
 import bsim.*;
 import bsim.particle.*;
@@ -28,7 +27,19 @@ class BSimFromFile {
 		sim = new BSim();
 		bacteria = new HashMap<String, Vector<BSimBacterium>>();
 		particles = new HashMap<String, Vector<BSimParticle>>();
+		outputPath = "";
+		dataFileName = "bsim_data.txt";
+		movieFileName = "bsim_movie.mov";
 	}
+	
+	
+	
+	public void setOutputPath (String newPath) { outputPath = newPath; }
+	
+	public void setDataFileName (String newFileName) { dataFileName = newFileName; }
+	
+	public void setMovieFileName (String newFileName) { movieFileName = newFileName; }
+	
 	
 	
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
