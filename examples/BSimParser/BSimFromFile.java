@@ -16,8 +16,10 @@ class BSimFromFile {
 	
 	// Simulation details
 	private BSim sim;
+	
 	private HashMap<String, Vector<BSimBacterium>> bacteria;
 	private HashMap<String, Vector<BSimParticle>> particles;
+	private HashMap<String, BSimChemicalField> fields;
 	
 	private String outputPath;
 	private String dataFileName;
@@ -27,6 +29,7 @@ class BSimFromFile {
 		sim = new BSim();
 		bacteria = new HashMap<String, Vector<BSimBacterium>>();
 		particles = new HashMap<String, Vector<BSimParticle>>();
+		fields = new HashMap<String, BSimChemicalField>();
 		outputPath = "";
 		dataFileName = "bsim_data.txt";
 		movieFileName = "bsim_movie.mov";
@@ -40,11 +43,13 @@ class BSimFromFile {
 	
 	public void setMovieFileName (String newFileName) { movieFileName = newFileName; }
 	
-	
+	public BSim getSim() { return sim; }
 	
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
 	
 	public void addParicles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
+	
+	public void addChemicalField (String name, BSimChemicalField newField) { fields.put(name, newField); }
 	
 	
 	/**
