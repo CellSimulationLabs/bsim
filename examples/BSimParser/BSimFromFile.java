@@ -46,6 +46,10 @@ class BSimFromFile {
 	
 	public void addParicles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
 	
+	
+	/**
+	 * Run the simulation
+	 */
 	public void run() { sim.export(); }
 	
 	
