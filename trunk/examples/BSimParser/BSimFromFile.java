@@ -143,6 +143,7 @@ class BSimFromFile {
 		@Override
 		public void tick() {
 			
+			// Update all bacteria
 			for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
 				for(BSimBacterium bacterium : bacPop.getValue()) {
 					bacterium.action();
@@ -150,12 +151,18 @@ class BSimFromFile {
 				}
 			}
 			
+			// Update all particles
 			for (Map.Entry<String,Vector<BSimParticle>> partPop : particles.entrySet()) {
 				for(BSimParticle particle : partPop.getValue()) {
 					particle.action();
 					particle.updatePosition();
 				}
 			}
+			
+			// Update all chemical fields
+			for (Map.Entry<String,BSimChemicalField> chemField : fields.entrySet()) {
+				chemField.getValue().update();
+			}	
 		}
 	}
 	
