@@ -25,23 +25,25 @@ class BSimFromFile {
 	
 	// Objects in the simulation (most are referenced by 'name')
 	private HashMap<String, Vector<BSimBacterium>> bacteria;
-	private HashMap<String, Vector<BSimParticle>> particles;
-	private HashMap<String, BSimChemicalField> fields;
-	private BSimOBJMesh mesh;
+	private HashMap<String, Vector<BSimParticle>>  particles;
+	private HashMap<String, BSimChemicalField>     fields;
+	private BSimOBJMesh                            mesh;
 	
 	// Output related parameters
 	private boolean outputData;
-	private boolean outputMovie;
-	private String outputPath;
-	private String dataFileName;
+	private String  outputPath;
+	private String  dataFileName;
 	
-	private String movieFileName;
-	private int movieSpeed;
-	private double movieDt;
-	private int movieWidth;
-	private int movieHeight;
+	// Movie related parameters
+	private boolean outputMovie;
+	private String  movieFileName;
+	private int     movieSpeed;
+	private double  movieDt;
+	private int     movieWidth;
+	private int     movieHeight;
 	
 	public BSimFromFile () {
+		
 		// Create the simulation
 		sim = new BSim();
 		
@@ -57,7 +59,7 @@ class BSimFromFile {
 		outputPath = "";
 		dataFileName = "bsim_data.txt";
 		
-		// Movie related parameters
+		// Defaults for movie related parameters
 		movieFileName = "bsim_movie.mov";
 		movieSpeed = 1;
 		movieDt = 1.0;
