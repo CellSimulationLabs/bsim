@@ -70,45 +70,43 @@ class BSimFromFile {
 		sim.setTicker(new BSimFromFileTicker());
 	}
 	
-	
+	/** Get the actual BSim simulation */
 	public BSim getSim() { return sim; }
 	
-	
+	/** Add bacterial population to simulation */
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
-	
+	/** Add particle population to simulation */
 	public void addParicles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
-	
+	/** Add chemical field to simulation */
 	public void addChemicalField (String name, BSimChemicalField newField) { fields.put(name, newField); }
-	
-	
-	public void setOutputPath (String newPath) { outputPath = newPath; }
-	
-	public void setDataFileName (String newFileName) { dataFileName = newFileName; }
-	
-	
-	public void setMovieFileName (String newFileName) { movieFileName = newFileName; }
-	
-	public void setMovieSpeed (int speed) { movieSpeed = speed; }
-	
-	public void setMovieDt (double dt) { movieDt = dt; }
-	
-	public void setMovieWidth (int width) { movieWidth = width; }
-	
-	public void setMovieHeight (int height) { movieHeight = height; }
-	
-	
+	/** Set simulation mesh */
 	public void setMesh (String filename) {
 		try { mesh.load(filename); }
 		catch (Exception e) { System.err.println("Could not load mesh"); }
 	}
 	
+	/** Set if data should be output */
 	public void setOutputData (boolean flag) { outputData = flag; }
+	/** Set simulation output path */
+	public void setOutputPath (String newPath) { outputPath = newPath; }
+	/** Set output data file name */
+	public void setDataFileName (String newFileName) { dataFileName = newFileName; }
 	
+	/** Set if movie should be output */
 	public void setOutputMovie (boolean flag) { outputMovie = flag; }
-
+	/** Set output movie file name */
+	public void setMovieFileName (String newFileName) { movieFileName = newFileName; }
+	/** Set output movie speed */
+	public void setMovieSpeed (int speed) { movieSpeed = speed; }
+	/** Set output movie dt */
+	public void setMovieDt (double dt) { movieDt = dt; }
+	/** Set output movie width */
+	public void setMovieWidth (int width) { movieWidth = width; }
+	/** Set output movie height */
+	public void setMovieHeight (int height) { movieHeight = height; }
 	
 	/**
-	 * Run the simulation
+	 * Run the simulation. Generates necessary exporters and runs export() for the simulation.
 	 */
 	public void run() { 
 		
