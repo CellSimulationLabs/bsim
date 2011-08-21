@@ -49,12 +49,14 @@ public class BSimParser {
     	// For each type of parameter run the associated loader
     	
     	// Time Step
-    	if (line[0].equals("DT:")) 
+    	if (line[0].equals("DT")) 
     		sim.getSim().setDt(parseToDouble(line[1]));
 
-    	// Create a new chemical field
+    	// Create a new chemical field, options of the form CHEM_FIELD:name:param1=value1,param2=value2...
     	else if(line[0].equals("CHEM_FIELD"))
     		sim.addChemicalField(line[1], BSimChemicalFieldFactory.parse(line[2]));
+    	
+    	// Add all the other possible inputs here
     	
     	// Generic comments of lines that are not use
     	else if(line[0].equals("***")) { } // Do nothing - comment
