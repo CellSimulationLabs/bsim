@@ -39,6 +39,10 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	protected Vector3d bound;
 	protected Vector3d boundCentre;
 
+	// With updated Processing library (1.5.1), looks like begindraw() will reset the camera
+	// after 1st frame has been drawn, so this provides a workaround for now.
+	private boolean cameraIsInitialised = false;
+	
 	/**
 	 * Default constructor for initialising a Processing3D rendering context.
 	 * @param sim	The simulation we wish to render.
@@ -55,10 +59,9 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d = new PGraphics3D();
 		p3d.setPrimary(true); 
 		p3d.setSize(width, height);				
-		p3d.camera(-(float)bound.x*0.7f, -(float)bound.y*0.3f, -(float)bound.z*0.5f, (float)bound.x, (float)bound.y, (float)bound.z, 0, 1, 0);
-		font = new PFont(PFont.findFont("Trebuchet MS").deriveFont((float)20), true, PFont.DEFAULT_CHARSET);
+		font = new PFont(PFont.findFont("Trebuchet MS").deriveFont((float)20), true, PFont.CHARSET);
 	}
-	
+		
 	/**
 	 * Render all simulation and scene elements to the Processing3D graphics
 	 * context 'p3d' (effectively the render buffer), then draw the rendered 
@@ -67,9 +70,16 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	 * 			rendered scene.
 	 */
 	@Override
-	public void draw(Graphics2D g) {			
+	public void draw(Graphics2D g) {
 		p3d.beginDraw();
 
+		if(!cameraIsInitialised){
+			p3d.camera(-(float)bound.x*0.7f, -(float)bound.y*0.3f, -(float)bound.z*0.5f, 
+				(float)bound.x, (float)bound.y, (float)bound.z, 
+				0, 1, 0);
+			cameraIsInitialised = true;
+		}
+		
 		p3d.textFont(font);
 		p3d.textMode(PConstants.SCREEN);
 
