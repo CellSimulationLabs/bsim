@@ -45,7 +45,7 @@ public class BSimLacOperon {
 			simTimeSeconds = Integer.parseInt(args[1]);
 		} else {
 			timestamp = BSimUtils.timeStamp();
-			simTimeSeconds = 120000;
+			simTimeSeconds = 54000;
 		}
 		
 		double externalChem = 200;
@@ -353,7 +353,7 @@ public class BSimLacOperon {
 				@Override
 				public void before() {
 					super.before();
-					write("time,Iex,I_avg,I_min,I_max,inducedproportion,population");
+					write("time,Yex,Yavg,Ymin,Ymax,inducedproportion,population");
 				}
 				
 				@Override
@@ -376,7 +376,7 @@ public class BSimLacOperon {
 					// Population average inducer
 					double bacInducerAvg = 0;
 					for(BSimLacBacterium b: bacteria){
-						bacInducerAvg += b.y[1];
+						bacInducerAvg += b.y[0];
 					}
 					bacInducerAvg = bacInducerAvg/bacteria.size();
 										
@@ -386,10 +386,10 @@ public class BSimLacOperon {
 					double bacInducerMax = 0.0;
 					
 					for(BSimLacBacterium b:bacteria){
-						if(b.y[1] < bacInducerMin){
-							bacInducerMin = b.y[1];
-						} else if(b.y[1] > bacInducerMax){
-							bacInducerMax = b.y[1];
+						if(b.y[0] < bacInducerMin){
+							bacInducerMin = b.y[0];
+						} else if(b.y[0] > bacInducerMax){
+							bacInducerMax = b.y[0];
 						}
 					}
 					
