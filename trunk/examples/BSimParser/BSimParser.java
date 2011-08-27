@@ -144,8 +144,25 @@ public class BSimParser {
     	return result;
     }
     
-    public static Vector<Vector<BSimParserAttributeValue>> parseAttributeValuePairs (String str) {
+    public static Vector<BSimParserAttributeValue> parseAttributeValuePairs (String str) {
+    	Vector<BSimParserAttributeValue> pairList = new Vector<BSimParserAttributeValue>();
     	
-    	return null;
+    	// Split the string on ',' character to get pairs and the split 
+    	// again on '=' to get an individual pair
+    	
+    	String [] strPairList = str.split(",");
+    	for(String strPair : strPairList ){		
+    		String [] strAttVal = strPair.split("=");
+    		if (strAttVal.length != 2) {
+    			System.err.println("Encountered invalid attribute value pair");
+    			break;
+    		}
+    		else {
+    			// Create the pair and add to our vector
+    			BSimParserAttributeValue curPair = new BSimParserAttributeValue(strAttVal[0], strAttVal[1]);
+    			pairList.add(curPair);
+    		}
+    	}
+    	return pairList;
     }
 }
