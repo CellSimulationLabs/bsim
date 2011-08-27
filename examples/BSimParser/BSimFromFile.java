@@ -76,7 +76,7 @@ class BSimFromFile {
 	/** Add bacterial population to simulation */
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
 	/** Add particle population to simulation */
-	public void addParicles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
+	public void addParticles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
 	/** Add chemical field to simulation */
 	public void addChemicalField (String name, BSimChemicalField newField) { fields.put(name, newField); }
 	/** Set simulation mesh */
