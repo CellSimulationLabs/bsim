@@ -2,6 +2,7 @@ package BSimParser;
 
 import java.io.*;
 import java.util.*;
+import javax.vecmath.Vector3d;
 
 public class BSimParser {
 	
@@ -62,17 +63,17 @@ public class BSimParser {
     	// Create a new bacterial population, options of the form BACTERIA:name:param1=value1,param2=value2...
     	// See BSimChemicalFieldFactory for more details.
     	else if(line[0].equals("BACTERIA"))
-    		sim.addBacteria(line[1], BSimBacteriumFactory.parse(line[2]));
+    		sim.addBacteria(line[1], BSimBacteriumFactory.parse(line[2]), sim.getSim());
     	
     	// Create a new particle population, options of the form PARTICLES:name:param1=value1,param2=value2...
     	// See BSimChemicalFieldFactory for more details.
     	else if(line[0].equals("PARTICLES"))
-    		sim.addParticles(line[1], BSimParticleFactory.parse(line[2]));
+    		sim.addParticles(line[1], BSimParticleFactory.parse(line[2]), sim.getSim());
     	
     	// Create a new chemical field, options of the form CHEM_FIELD:name:param1=value1,param2=value2...
     	// See BSimChemicalFieldFactory for more details.
     	else if(line[0].equals("CHEM_FIELD"))
-    		sim.addChemicalField(line[1], BSimChemicalFieldFactory.parse(line[2]));
+    		sim.addChemicalField(line[1], BSimChemicalFieldFactory.parse(line[2]), sim.getSim());
     	
     	// --------------------------------------------------------------
     	// Output Related Parameters
@@ -163,5 +164,10 @@ public class BSimParser {
     		}
     	}
     	return pairList;
+    }
+    
+    public static Vector3d randomVector3d(Vector3d boundStart, Vector3d boundEnd) {
+    	
+    	return null;
     }
 }

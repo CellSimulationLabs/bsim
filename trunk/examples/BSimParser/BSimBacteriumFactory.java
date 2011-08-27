@@ -2,6 +2,7 @@ package BSimParser;
 
 import java.util.Vector;
 import bsim.particle.BSimBacterium;
+import bsim.BSim;
 
 /**
  * Factory to generate set of particles having been given a
@@ -9,7 +10,7 @@ import bsim.particle.BSimBacterium;
  */
 class BSimBacteriumFactory {
 	
-	public static Vector<BSimBacterium> parse (String params) {
+	public static Vector<BSimBacterium> parse (String params, BSim sim) {
 		
 		
 		return null;
