@@ -11,6 +11,9 @@ class BSimParticleFactory {
 	
 	public static Vector<BSimParticle> parse (String params) {
 		
+		// Grab the attribute value pairs that we need
+		
+		
 		
 		return null;
 	}
