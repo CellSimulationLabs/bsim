@@ -1,6 +1,7 @@
 package BSimParser;
 
 import bsim.BSimChemicalField;
+import bsim.BSim;
 
 /**
  * Factory to generate set of particles having been given a
@@ -8,7 +9,7 @@ import bsim.BSimChemicalField;
  */
 class BSimChemicalFieldFactory {
 	
-	public static BSimChemicalField parse (String params) {
+	public static BSimChemicalField parse (String params, BSim sim) {
 		
 		
 		return null;
