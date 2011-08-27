@@ -7,7 +7,7 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSim;
 
-public abstract class BSimParticle {	
+public class BSimParticle {	
 		
 	protected static Random rng = new Random();
 	
@@ -189,7 +189,5 @@ public abstract class BSimParticle {
 	protected double bounceBelow(double coord, double edge) {
 		return coord + 2*-coord;		
 	}
-	
-		
 }
 

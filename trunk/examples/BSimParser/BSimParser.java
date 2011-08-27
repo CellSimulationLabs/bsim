@@ -2,9 +2,12 @@ package BSimParser;
 
 import java.io.*;
 import java.util.*;
+
 import javax.vecmath.Vector3d;
 
 public class BSimParser {
+	
+	private static Random rng = new Random();
 	
 	public static void main (String[] args) {
 		
@@ -145,6 +148,7 @@ public class BSimParser {
     	return result;
     }
     
+    /** Create a map of attribute names to their values (held as the original Strings) */
     public static HashMap<String,String> parseAttributeValuePairs (String str) {
     	HashMap<String,String> pairList = new HashMap<String,String>();
     	
@@ -166,8 +170,17 @@ public class BSimParser {
     	return pairList;
     }
     
-    public static Vector3d randomVector3d(Vector3d boundStart, Vector3d boundEnd) {
-    	
-    	return null;
+    /** Generate a random position vector within specified bounds */
+    public static Vector3d randomVector3d(Vector3d boundStart, Vector3d boundEnd) { 
+    	double newX = 0.0;
+    	double newY = 0.0;
+    	double newZ = 0.0;
+
+    	// Generate new random positions in the range
+    	newX = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
+    	newY = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
+    	newZ = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
+
+    	return new Vector3d(newX, newY, newZ);
     }
 }
