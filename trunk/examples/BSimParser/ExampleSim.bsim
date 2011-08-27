@@ -15,10 +15,11 @@ MOVIE_DT:1.0
 MOVIE_WIDTH:640
 MOVIE_HEIGHT:480
 *** ===============================================================
-*** Simulation Objects (Mesh, Chemical Fields, Particles, Bacteria
+*** Simulation Objects (Chemical Fields, Particles, Bacteria)
+*** Ensure the mesh comes first as used by other objects
 *** ===============================================================
-CHEM_FIELD:CF1: Antos to fill in some normal parameters
 MESH:FullPathToMesh/MeshFileName.obj
+CHEM_FIELD:CF1: Antos to fill in some normal parameters
 PARTICLES:PP1: Antos to fill in some normal parameters
 PARTICLES:PP2: Antos to fill in some normal parameters
 BACTERIA:BP1: Antos to fill in some normal parameters
