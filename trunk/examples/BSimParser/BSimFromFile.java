@@ -71,7 +71,7 @@ class BSimFromFile {
 	}
 	
 	/** Get the actual BSim simulation */
-	public BSim getSim() { return sim; }
+	public BSim getSim () { return sim; }
 	
 	/** Add bacterial population to simulation */
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
@@ -108,7 +108,7 @@ class BSimFromFile {
 	/**
 	 * Run the simulation. Generates necessary exporters and runs export() for the simulation.
 	 */
-	public void run() { 
+	public void run () { 
 		
 		// Create a data exporter if required
 		if (outputData) {
@@ -139,7 +139,7 @@ class BSimFromFile {
 	
 	class BSimFromFileTicker extends BSimTicker {
 		@Override
-		public void tick() {
+		public void tick () {
 			
 			// Update all bacteria
 			for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
@@ -171,11 +171,11 @@ class BSimFromFile {
 			fileName = newFileName;
 		}
 		@Override
-		public void before() {}
+		public void before () {}
 		@Override
-		public void during() {}
+		public void during () {}
 		@Override
-		public void after() {
+		public void after () {
 			try{
 				// Open the file for writing
 				FileWriter writer = new FileWriter(new File(fileName));
@@ -215,7 +215,7 @@ class BSimFromFile {
 			super(sim, width, height);
 		}
 		@Override
-		public void scene(PGraphics3D p3d) {
+		public void scene (PGraphics3D p3d) {
 			// Do drawing here...
 		}
 	}

@@ -5,7 +5,7 @@ import java.util.*;
 
 public class BSimParser {
 	
-	public static void main(String[] args) {
+	public static void main (String[] args) {
 		
 		// Open the file from args
         File paramFile = new File(args[0]);        
@@ -20,7 +20,7 @@ public class BSimParser {
 	/**
      * Parses a parameter file and returns a new simulation.
      */
-    public static BSimFromFile parseFile(File paramFile){
+    public static BSimFromFile parseFile (File paramFile){
 
     	// Parameters object to hold the parsed file contents
     	BSimFromFile sim = new BSimFromFile();
@@ -44,7 +44,7 @@ public class BSimParser {
     /**
      * Use data following line header to set parameters in BSimFromFile object
      */
-    private static void processLine(String[] line, BSimFromFile sim, int lineNo) {
+    private static void processLine (String[] line, BSimFromFile sim, int lineNo) {
     	
     	// --------------------------------------------------------------
     	// Simulation Parameters (inc. meshes, chemical fields, etc)
@@ -121,7 +121,7 @@ public class BSimParser {
     /**
      * Convert String into a double handling possible errors (returning 0.0 if problem found)
      */
-    private static double parseToDouble(String str) {
+    public static double parseToDouble (String str) {
     	double result;
     	try{ result = Double.parseDouble(str); }
     	catch(Exception e){ 
@@ -134,7 +134,7 @@ public class BSimParser {
     /**
      * Convert String into an int handling possible errors (returning 0 if problem found)
      */
-    private static int parseToInt(String str) {
+    public static int parseToInt (String str) {
     	int result;
     	try{ result = Integer.parseInt(str); }
     	catch(Exception e){ 
@@ -142,5 +142,10 @@ public class BSimParser {
     		result = 0;
     	}
     	return result;
+    }
+    
+    public static Vector<Vector<BSimParserAttributeValue>> parseAttributeValuePairs (String str) {
+    	
+    	return null;
     }
 }
