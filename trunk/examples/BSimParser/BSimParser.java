@@ -144,8 +144,8 @@ public class BSimParser {
     	return result;
     }
     
-    public static Vector<BSimParserAttributeValue> parseAttributeValuePairs (String str) {
-    	Vector<BSimParserAttributeValue> pairList = new Vector<BSimParserAttributeValue>();
+    public static HashMap<String,String> parseAttributeValuePairs (String str) {
+    	HashMap<String,String> pairList = new HashMap<String,String>();
     	
     	// Split the string on ',' character to get pairs and the split 
     	// again on '=' to get an individual pair
@@ -158,9 +158,8 @@ public class BSimParser {
     			break;
     		}
     		else {
-    			// Create the pair and add to our vector
-    			BSimParserAttributeValue curPair = new BSimParserAttributeValue(strAttVal[0], strAttVal[1]);
-    			pairList.add(curPair);
+    			// Create the pair in the map
+    			pairList.put(strAttVal[0], strAttVal[1]);
     		}
     	}
     	return pairList;
