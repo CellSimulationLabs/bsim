@@ -2,6 +2,7 @@ package BSimParser;
 
 import java.util.HashMap;
 import java.util.Vector;
+import javax.vecmath.Vector3d;
 import bsim.particle.BSimParticle;
 import bsim.BSim;
 
@@ -17,14 +18,10 @@ class BSimParticleFactory {
 		HashMap<String,String> params = BSimParser.parseAttributeValuePairs(paramStr);
 		
 		// Parameters for the particle population
-		int    popSize  = 1;
-		double partSize = 1.0;
-		double locX1 = 0.0;
-		double locY1 = 0.0;
-		double locZ1 = 0.0;
-		double locX2 = 10.0;
-		double locY2 = 10.0;
-		double locZ2 = 10.0;
+		int      popSize     = 1;
+		double   partSize    = 1.0;
+		Vector3d bndStartVec = new Vector3d(0.0, 0.0, 0.0);
+		Vector3d bndEndVec   = new Vector3d(10.0, 10.0, 10.0);
 		
 		// Update the population size
 		if (params.containsKey("Population")) { 
@@ -44,9 +41,9 @@ class BSimParticleFactory {
 				System.err.println("Problem extracting the BoundStart for a particle population");
 			}
 			else {
-				locX1 = BSimParser.parseToDouble(bndStart[0]);
-				locY1 = BSimParser.parseToDouble(bndStart[1]);
-				locZ1 = BSimParser.parseToDouble(bndStart[2]);
+				bndStartVec.set(BSimParser.parseToDouble(bndStart[0]),
+								BSimParser.parseToDouble(bndStart[1]),
+								BSimParser.parseToDouble(bndStart[2]));
 			}
 		}
 		
@@ -55,25 +52,22 @@ class BSimParticleFactory {
 			// Split the positions on ';' character
 			String[] bndEnd = params.get("BoundEnd").split(";");
 			if (bndEnd.length != 3) {
-				System.err.println("Problem extracting the BoundStart for a particle population");
+				System.err.println("Problem extracting the BoundEnd for a particle population");
 			}
 			else {
-				locX2 = BSimParser.parseToDouble(bndEnd[0]);
-				locY2 = BSimParser.parseToDouble(bndEnd[1]);
-				locZ2 = BSimParser.parseToDouble(bndEnd[2]);
+				bndEndVec.set(BSimParser.parseToDouble(bndEnd[0]),
+						      BSimParser.parseToDouble(bndEnd[1]),
+						      BSimParser.parseToDouble(bndEnd[2]));
 			}
 		}
-		
 		
 		// Generate the population
 		Vector<BSimParticle> particles = new Vector<BSimParticle>(popSize);
 		for (int i=0; i<popSize; i++) {
-			BSimParticle p = new BSimParticle(sim, new Vector3f(), partSize);
-			Vector3d
-			
+			BSimParticle p = new BSimParticle(sim, BSimParser.randomVector3d(bndStartVec, bndEndVec), partSize);
 			particles.add(p);
 		}
 
-		return null;
+		return particles;
 	}
 }
