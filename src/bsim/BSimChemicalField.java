@@ -38,14 +38,21 @@ public class BSimChemicalField {
 	public double[] getBox() { return box; }	
 	
 	/**
-	 * Creates a linear concentration gradient in the z direction
+	 * Creates a linear concentration gradient in the direction specified by 'axis' (x=0, y=1, z=2)
 	 */
-	public void linearZ(double startConc, double endConc) {
+	public void linearGradient(int axis, double startConc, double endConc) {
+		assert ((axis >= 0) && (axis <= 2)) :
+			"Chemical field gradient - axis selection out of range [0,2]\n" +
+			"Check axis is one of: x-axis = '0', y = '1', or z = '2'";
+		
+		
+		int[] index = {0,0,0};
+		
 		double grad = (endConc - startConc)/boxes[2];		
-		for(int i=0;i<boxes[0];i++)
-			for(int j=0;j<boxes[1];j++)
-				for(int k=0;k<boxes[2];k++)
-					setConc(i,j,k, startConc + k*grad);
+		for(index[0] = 0; index[0]<boxes[0]; index[0]++)
+			for(index[1] = 0; index[1]<boxes[1]; index[1]++)
+				for(index[2] = 0; index[2]<boxes[2]; index[2]++)
+					setConc(index[0], index[1], index[2], startConc + index[axis]*grad);
 	}
 	
 	/** Adds a quantity of chemical to the box containing position v */
