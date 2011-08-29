@@ -5,18 +5,22 @@ package BSimParser;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Vector;
+
 import javax.vecmath.Vector3d;
 
 import processing.core.PGraphics3D;
-
-import bsim.*;
-import bsim.geometry.*;
-import bsim.particle.*;
+import bsim.BSim;
+import bsim.BSimChemicalField;
+import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
-import bsim.export.*;
+import bsim.export.BSimExporter;
+import bsim.export.BSimMovExporter;
+import bsim.geometry.BSimOBJMesh;
+import bsim.particle.BSimBacterium;
+import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -129,6 +133,24 @@ class BSimFromFile {
 		
 		// Export the results to file and movie (if required)
 		sim.export();
+	}
+	
+	
+	/**
+	 * Assign to the bacteria any necessary chemical fields
+	 */
+	public void assignBacteriaChemicalFieldsFromNames() {
+		for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
+			for(BSimBacterium bacterium : bacPop.getValue()) {
+				// TODO: refactor this to be less grim...
+				if(bacterium instanceof BSimFromFileBacterium) {
+					BSimFromFileBacterium fileBacterium = (BSimFromFileBacterium)bacterium;
+					fileBacterium.setGoal(fields.get((fileBacterium.getChemotaxisGoalFieldName())));
+					fileBacterium.setInput(fields.get((fileBacterium.getChemicalInputName())));
+					fileBacterium.setOutput(fields.get((fileBacterium.getChemicalOutputName())));
+				}
+			}
+		}
 	}
 	
 	

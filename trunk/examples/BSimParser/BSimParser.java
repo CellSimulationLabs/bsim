@@ -1,7 +1,10 @@
 package BSimParser;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.Scanner;
 
 import javax.vecmath.Vector3d;
 
@@ -41,6 +44,9 @@ public class BSimParser {
     	} finally { scanner.close(); }
     	} catch(FileNotFoundException e) {System.err.println("Input file not found"); }
 
+    	// Now that valid objects have been created, try to assign chemical fields to bacteria
+    	sim.assignBacteriaChemicalFieldsFromNames();
+    	
     	// Return the output parameters object
     	return sim;
     }
