@@ -31,39 +31,15 @@ class BSimBacteriumFactory {
 		double chemicalOutRate = 1;
 		
 		// read in the desired population size
-		if (params.containsKey("PopulationSize")) {
-			populationSize = BSimParser.parseToInt(params.get("PopulationSize"));
-		}
+		BSimParser.assignParamToInt(params, "PopulationSize", populationSize);
 
 		// read in the boundaries of the creation region
 		// Positions of the form BoundStart=0.1;2.4;5.1
-		if (params.containsKey("BoundStart")) {
-			// Split the positions on ';' character
-			String[] boundaryStart = params.get("BoundStart").split(";");
-			if (boundaryStart.length != 3) {
-				System.err.println("Problem extracting the BoundStart for a bacterial population");
-			}
-			else {
-				boundaryStartVec.set(BSimParser.parseToDouble(boundaryStart[0]),
-								BSimParser.parseToDouble(boundaryStart[1]),
-								BSimParser.parseToDouble(boundaryStart[2]));
-			}
-		}
+		BSimParser.assignParamToVector3d(params, "BoundStart", boundaryStartVec);
 		
 		// Positions of the form BoundEnd=0.1;2.4;5.1
-		if (params.containsKey("BoundEnd")) {
-			// Split the positions on ';' character
-			String[] boundaryEnd = params.get("BoundEnd").split(";");
-			if (boundaryEnd.length != 3) {
-				System.err.println("Problem extracting the BoundEnd for a bacterial population");
-			}
-			else {
-				boundaryEndVec.set(BSimParser.parseToDouble(boundaryEnd[0]),
-						      BSimParser.parseToDouble(boundaryEnd[1]),
-						      BSimParser.parseToDouble(boundaryEnd[2]));
-			}
-		}
-		
+		BSimParser.assignParamToVector3d(params, "BoundEnd", boundaryEndVec);
+
 		// Field name for chemotaxis
 		if (params.containsKey("ChemotaxisField")) {
 			chemotaxisGoalField = params.get("ChemotaxisField");
@@ -71,21 +47,17 @@ class BSimBacteriumFactory {
 		
 		// ChemicalField name for input from 
 		if (params.containsKey("InputChemicalField")) {
-			// Chemical input rate
-			if (params.containsKey("InputChemicalRate")) {
-				chemicalInRate = BSimParser.parseToDouble(params.get("InputChemicalRate"));
-			}
+			
+			BSimParser.assignParamToDouble(params, "InputChemicalRate", chemicalInRate);
 			
 			inputChemicalField = params.get("InputChemicalField");
 		}
 
 		// ChemicalField name for output to
 		if (params.containsKey("OutputChemicalField")) {
-			// Chemical output rate
-			if (params.containsKey("OutputChemicalRate")) {
-				chemicalOutRate = BSimParser.parseToDouble(params.get("OutputChemicalRate"));
-			}
-
+			
+			BSimParser.assignParamToDouble(params, "OutputChemicalRate", chemicalOutRate);
+			
 			outputChemicalField = params.get("OutputChemicalField");
 		}
 
