@@ -176,6 +176,37 @@ public class BSimParser {
     	return pairList;
     }
     
+    /** Assign integer variable from string parameters */
+    public static void assignParamToInt(HashMap<String, String> params, String paramName, int variable){
+		if (params.containsKey(paramName)) {
+			variable = BSimParser.parseToInt(params.get(paramName));
+		}
+    }
+    
+    /** Assign double variable from string parameters */
+    public static void assignParamToDouble(HashMap<String, String> params, String paramName, double variable){
+		if (params.containsKey(paramName)) {
+			variable = BSimParser.parseToDouble(params.get(paramName));
+		}
+    }
+    
+    /** Assign Vector3d variable from string parameters */
+    public static void assignParamToVector3d(HashMap<String, String> params, String paramName, Vector3d variable){
+		if (params.containsKey(paramName)) {
+			// Split the positions on ';' character
+			String[] vectorTriplet = params.get(paramName).split(";");
+			if (vectorTriplet.length != 3) {
+				// TODO: line number (or better error indicator)
+				System.err.println("Problem extracting the " + paramName + ", Line: ");
+			}
+			else {
+				variable.set(BSimParser.parseToDouble(vectorTriplet[0]),
+								BSimParser.parseToDouble(vectorTriplet[1]),
+								BSimParser.parseToDouble(vectorTriplet[2]));
+			}
+		}
+    } 
+    
     /** Generate a random position vector within specified bounds */
     public static Vector3d randomVector3d(Vector3d boundStart, Vector3d boundEnd) { 
     	double newX = 0.0;

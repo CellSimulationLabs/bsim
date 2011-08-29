@@ -24,42 +24,16 @@ class BSimParticleFactory {
 		Vector3d bndEndVec   = new Vector3d(10.0, 10.0, 10.0);
 		
 		// Update the population size
-		if (params.containsKey("Population")) { 
-			popSize = BSimParser.parseToInt(params.get("Population"));
-		}
-		
+		BSimParser.assignParamToInt(params, "Population", popSize);
+				
 		// Update the particle size (microns)
-		if (params.containsKey("ParticleSize")) {
-			partSize = BSimParser.parseToDouble(params.get("ParticleSize"));
-		}
+		BSimParser.assignParamToDouble(params, "ParticleSize", partSize);
 		
 		// Positions of the form BoundStart=0.1;2.4;5.1
-		if (params.containsKey("BoundStart")) {
-			// Split the positions on ';' character
-			String[] bndStart = params.get("BoundStart").split(";");
-			if (bndStart.length != 3) {
-				System.err.println("Problem extracting the BoundStart for a particle population");
-			}
-			else {
-				bndStartVec.set(BSimParser.parseToDouble(bndStart[0]),
-								BSimParser.parseToDouble(bndStart[1]),
-								BSimParser.parseToDouble(bndStart[2]));
-			}
-		}
+		BSimParser.assignParamToVector3d(params, "BoundStart", bndStartVec);
 		
 		// Positions of the form BoundEnd=0.1;2.4;5.1
-		if (params.containsKey("BoundEnd")) {
-			// Split the positions on ';' character
-			String[] bndEnd = params.get("BoundEnd").split(";");
-			if (bndEnd.length != 3) {
-				System.err.println("Problem extracting the BoundEnd for a particle population");
-			}
-			else {
-				bndEndVec.set(BSimParser.parseToDouble(bndEnd[0]),
-						      BSimParser.parseToDouble(bndEnd[1]),
-						      BSimParser.parseToDouble(bndEnd[2]));
-			}
-		}
+		BSimParser.assignParamToVector3d(params, "BoundEnd", bndEndVec);
 		
 		// Generate the population
 		Vector<BSimParticle> particles = new Vector<BSimParticle>(popSize);

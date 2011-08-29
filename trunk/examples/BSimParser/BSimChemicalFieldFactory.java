@@ -22,7 +22,7 @@ class BSimChemicalFieldFactory {
 		
 		
 		// set the chemical field discretisation (number of boxes)
-		// Boxes=nBoxesInXDirection;nBoxesInYDirection;nBoxesInZDirection
+		// Boxes=nBoxesInXDirection;nBoxesInYDirection;nBoxesInZDirection		
 		if (params.containsKey("Boxes")) {
 			// Split the positions on ';' character
 			String[] boxes = params.get("Boxes").split(";");
@@ -36,15 +36,8 @@ class BSimChemicalFieldFactory {
 			}
 		}
 
-		// Update the diffusivity
-		if (params.containsKey("Diffusivity")) {
-			diffusivity = BSimParser.parseToDouble(params.get("Diffusivity"));
-		}
-
-		// Update the decay rate
-		if (params.containsKey("DecayRate")) {
-			decayRate = BSimParser.parseToDouble(params.get("DecayRate"));
-		}
+		BSimParser.assignParamToDouble(params, "Diffusivity", diffusivity);
+		BSimParser.assignParamToDouble(params, "DecayRate", decayRate);
 				
 		// generate the chemical field
 		BSimChemicalField theField = new BSimChemicalField(sim, numBoxes, diffusivity, decayRate);
