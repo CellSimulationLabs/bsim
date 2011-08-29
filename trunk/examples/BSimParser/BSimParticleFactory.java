@@ -25,7 +25,7 @@ class BSimParticleFactory {
 		
 		// Update the population size
 		if (params.containsKey("Population")) { 
-			popSize = BSimParser.parseToInt(params.get("Populations"));
+			popSize = BSimParser.parseToInt(params.get("Population"));
 		}
 		
 		// Update the particle size (microns)
