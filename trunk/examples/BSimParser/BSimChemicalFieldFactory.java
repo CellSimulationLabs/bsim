@@ -15,7 +15,7 @@ class BSimChemicalFieldFactory {
 		// get the attribute-value pairs for the chemical field
 		HashMap<String, String> params = BSimParser.parseAttributeValuePairs(paramString);
 
-		// set the default chemical field values
+		// set the default chemical field values for discretisation, diffusivity, and chemical decay rate
 		int[] numBoxes = {10,10,10};
 		double diffusivity = 0;
 		double decayRate = 0;
@@ -52,7 +52,7 @@ class BSimChemicalFieldFactory {
 		// set up chemical field gradient if one is defined
 		if (params.containsKey("GradientDirection")) {
 			if (params.containsKey("GradientLimits")) {
-				
+				// Split the minimum and maximum values on ';'
 				String[] gradientMinMax = params.get("GradientLimits").split(";");
 				
 				if (gradientMinMax.length != 2) {
@@ -61,8 +61,8 @@ class BSimChemicalFieldFactory {
 				else {
 					String gradientDirection = params.get("GradientDirection");
 					
+					// Setup the gradient direction 
 					int axis = -1;
-					
 					if (gradientDirection.equals("x") || gradientDirection.equals("X")) axis = 0;
 					else if (gradientDirection.equals("y") || gradientDirection.equals("Y")) axis = 1;
 					else if (gradientDirection.equals("z") || gradientDirection.equals("Z")) axis = 2;
