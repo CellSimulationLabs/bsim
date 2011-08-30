@@ -20,6 +20,7 @@ import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
+import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -201,6 +202,9 @@ class BSimFromFile {
 				// Open the file for writing
 				FileWriter writer = new FileWriter(new File(fileName));
 
+				// Write the bacteria section
+				writer.write("Bacteria\n");
+				
 				// Export the last positions of each bacterial population
 				// Format:
 				// PopName1,x1,y1,z1,x2,y2,y2,...
@@ -220,7 +224,30 @@ class BSimFromFile {
 					// Move to the next population (on a new line)
 					writer.write("\n");
 				}
+				
+				// Write the particles section
+				writer.write("Particles\n");
+				
+				// Export the last positions of each particle population
+				// Format:
+				// PopName1,x1,y1,z1,x2,y2,y2,...
+				// PopName2,x1,y1,z1,x2,y2,z2,...
+				// ...
+				for (Map.Entry<String,Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
 
+					// Write the population name to file
+					writer.write(partPop.getKey());
+
+					// Cycle through each particle in the population and output 3D position
+					for(BSimFromFileParticle particle : partPop.getValue()) {
+						Vector3d pos = particle.getPosition();
+						writer.write("," + pos.x + "," + pos.y + "," + pos.z);
+					}
+
+					// Move to the next population (on a new line)
+					writer.write("\n");
+				}
+				
 				// Ensure everything has been written and close
 				writer.flush();
 				writer.close();
@@ -237,7 +264,19 @@ class BSimFromFile {
 		}
 		@Override
 		public void scene (PGraphics3D p3d) {
-			// Do drawing here...
+			
+			// Draw the bacteria
+			// TODO: Antos one for you ;)
+			
+			// Draw the particles
+			for (Map.Entry<String,Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
+				for(BSimFromFileParticle particle : partPop.getValue()) {
+					draw((BSimParticle)particle, particle.getColor());
+				}
+			}
+			
+			// Draw the chemical fields (including the parameters for nice rendering (min, max, gradient for alpha)
+			// TODO: Antos one for you ;)
 		}
 	}
 }
