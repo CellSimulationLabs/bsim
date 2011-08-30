@@ -20,8 +20,8 @@ class BSimBacteriumFactory {
 		
 		// set default parameters
 		int 		populationSize = 100;
-		Vector3d 	boundaryStartVec = new Vector3d(0, 0, 0);
-		Vector3d 	boundaryEndVec = new Vector3d(1,1,1);
+		Vector3d 	bndStartVec = new Vector3d(0, 0, 0);
+		Vector3d 	bndEndVec = new Vector3d(1,1,1);
 		
 		String 		chemotaxisGoalField = "";
 		String 		inputChemicalField = "";
@@ -34,15 +34,16 @@ class BSimBacteriumFactory {
 
 		
 		// read in the desired population size
-		BSimParser.assignParamToInt(params, "PopulationSize", populationSize);
+		if (params.containsKey("PopulationSize")) {
+			populationSize = BSimParser.parseToInt(params.get("PopulationSize"));
+		}
 
-		// read in the boundaries of the creation region
 		// Positions of the form BoundStart=0.1;2.4;5.1
-		BSimParser.assignParamToVector3d(params, "BoundStart", boundaryStartVec);
+		BSimParser.assignParamToVector3d(params, "BoundStart", bndStartVec);
 		
 		// Positions of the form BoundEnd=0.1;2.4;5.1
-		BSimParser.assignParamToVector3d(params, "BoundEnd", boundaryEndVec);
-
+		BSimParser.assignParamToVector3d(params, "BoundEnd", bndEndVec);
+		
 		// Field name for chemotaxis
 		if (params.containsKey("ChemotaxisField")) {
 			chemotaxisGoalField = params.get("ChemotaxisField");
@@ -50,17 +51,21 @@ class BSimBacteriumFactory {
 		
 		// ChemicalField name for input from 
 		if (params.containsKey("InputChemicalField")) {
-			
-			BSimParser.assignParamToDouble(params, "InputChemicalRate", chemicalInRate);
+			// Chemical input rate
+			if (params.containsKey("InputChemicalRate")) {
+				chemicalInRate = BSimParser.parseToDouble(params.get("InputChemicalRate"));
+			}
 			
 			inputChemicalField = params.get("InputChemicalField");
 		}
 
 		// ChemicalField name for output to
 		if (params.containsKey("OutputChemicalField")) {
-			
-			BSimParser.assignParamToDouble(params, "OutputChemicalRate", chemicalOutRate);
-			
+			// Chemical output rate
+			if (params.containsKey("OutputChemicalRate")) {
+				chemicalOutRate = BSimParser.parseToDouble(params.get("OutputChemicalRate"));
+			}
+
 			outputChemicalField = params.get("OutputChemicalField");
 		}
 		
@@ -72,7 +77,7 @@ class BSimBacteriumFactory {
 		Vector<BSimFromFileBacterium> bacteria = new Vector<BSimFromFileBacterium>(populationSize);
 		for (int i = 0; i < bacteria.size(); i++) {
 			
-			BSimFromFileBacterium b = new BSimFromFileBacterium(sim, BSimParser.randomVector3d(boundaryStartVec, boundaryEndVec), bacColor);
+			BSimFromFileBacterium b = new BSimFromFileBacterium(sim, BSimParser.randomVector3d(bndStartVec, bndEndVec), bacColor);
 			
 			// assign the names of chemical fields with which the bacteria interact
 			if (!chemotaxisGoalField.equals("")) b.setChemotaxisGoalFieldName(chemotaxisGoalField);

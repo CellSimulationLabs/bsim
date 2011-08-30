@@ -26,15 +26,42 @@ class BSimChemicalFieldFactory {
 		
 		
 		// set the chemical field discretisation (number of boxes)
-		// Boxes=nBoxesInXDirection;nBoxesInYDirection;nBoxesInZDirection		
-		assignParamToIntArray(params, "Boxes", numBoxes);
+		// Boxes=nBoxesInXDirection;nBoxesInYDirection;nBoxesInZDirection
+		if (params.containsKey("Boxes")) {
+			// Split the positions on ';' character
+			String[] paramArray = params.get("Boxes").split(";");
+			
+			int dimension = numBoxes.length;
+			
+			if (paramArray.length != dimension) {
+				System.err.println("Problem extracting " + "Boxes" + " for chemical field");
+			}
+			else {
+				for (int i = 0; i < dimension; i++) {
+					numBoxes[i] = BSimParser.parseToInt(paramArray[i]);
+				}
+			}
+		}
 		
-		BSimParser.assignParamToDouble(params, "Diffusivity", diffusivity);
-		BSimParser.assignParamToDouble(params, "DecayRate", decayRate);
-				
-		// Update the chemical field's colour properties
-		BSimParser.assignParamToDouble(params, "AlphaPerUnit", alphaPerUnit);
-		BSimParser.assignParamToDouble(params, "AlphaMax", alphaMax);
+		// Update the diffusivity
+		if (params.containsKey("Diffusivity")) {
+			diffusivity = BSimParser.parseToDouble(params.get("Diffusivity"));
+		}
+
+		// Update the decay rate
+		if (params.containsKey("DecayRate")) {
+			decayRate = BSimParser.parseToDouble(params.get("DecayRate"));
+		}
+		
+		// Update the alpha per unit
+		if (params.containsKey("AlphaPerUnit")) {
+			alphaPerUnit = BSimParser.parseToDouble(params.get("AlphaPerUnit"));
+		}
+
+		// Update the max alpha
+		if (params.containsKey("AlphaMax")) {
+			alphaMax = BSimParser.parseToDouble(params.get("AlphaMax"));
+		}
 				
 		Color tempCol = BSimParser.getColorFromParam(params, "Color");
 		if (tempCol != null) { chemFieldCol = tempCol; }
@@ -69,25 +96,5 @@ class BSimChemicalFieldFactory {
 		}
 
 		return theField;
-	}
-	
-    private static void assignParamToIntArray(HashMap<String, String> params, String paramName, int[] variable){
-		if (params.containsKey(paramName)) {
-			// Split the positions on ';' character
-			String[] paramArray = params.get(paramName).split(";");
-			
-			int dimension = variable.length;
-			
-			if (paramArray.length != dimension) {
-				System.err.println("Problem extracting " + paramName + " for chemical field");
-			}
-			else {
-				for (int i = 0; i < dimension; i++) {
-					variable[i] = BSimParser.parseToInt(paramArray[i]);
-				}
-			}
-		}
-    }
-
-	
+	}	
 }
