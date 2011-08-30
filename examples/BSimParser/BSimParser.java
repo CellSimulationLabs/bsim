@@ -90,11 +90,12 @@ public class BSimParser {
     	// --------------------------------------------------------------
     	
     	// Time Step
-    	if (line[0].equals("DT")) 
+    	if (line[0].equals("DT")){
     		sim.getSim().setDt(parseToDouble(line[1]));
+    	}
     	
     	// Simulation bounds
-    	if (line[0].equals("BOUNDS")) {
+    	else if (line[0].equals("BOUNDS")) {
     		HashMap<String,String> boundParams = parseAttributeValuePairs(line[1]);
 
     		// Extract the bounds from the parameters and update simulation
