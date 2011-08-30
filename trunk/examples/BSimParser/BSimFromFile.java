@@ -19,6 +19,7 @@ import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
+import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -35,6 +36,7 @@ class BSimFromFile {
 	private boolean outputData;
 	private String  outputPath;
 	private String  dataFileName;
+	private boolean	previewMode;
 	
 	// Movie related parameters
 	private boolean outputMovie;
@@ -60,6 +62,7 @@ class BSimFromFile {
 		outputMovie = false;
 		outputPath = "";
 		dataFileName = "bsim_data.txt";
+		previewMode = false;
 		
 		// Defaults for movie related parameters
 		movieFileName = "bsim_movie.mov";
@@ -93,6 +96,8 @@ class BSimFromFile {
 	public void setOutputPath (String newPath) { outputPath = newPath; }
 	/** Set output data file name */
 	public void setDataFileName (String newFileName) { dataFileName = newFileName; }
+	/** Set state of preview mode */
+	public void setPreviewMode (boolean previewModeState) { previewMode = previewModeState; }
 	
 	/** Set if movie should be output */
 	public void setOutputMovie (boolean flag) { outputMovie = flag; }
@@ -130,7 +135,11 @@ class BSimFromFile {
 		}
 		
 		// Export the results to file and movie (if required)
-		sim.export();
+		if(previewMode){
+			sim.preview();
+		} else {
+			sim.export();
+		}
 	}
 	
 	
@@ -140,9 +149,15 @@ class BSimFromFile {
 	public void assignBacteriaChemicalFieldsFromNames() {
 		for (Map.Entry<String,Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
 			for(BSimFromFileBacterium bacterium : bacPop.getValue()) {
-				bacterium.setGoal(fields.get((bacterium.getChemotaxisGoalFieldName())));
-				bacterium.setInput(fields.get((bacterium.getChemicalInputName())));
-				bacterium.setOutput(fields.get((bacterium.getChemicalOutputName())));
+				if(fields.get((bacterium.getChemotaxisGoalFieldName())) != null){
+					bacterium.setGoal(fields.get((bacterium.getChemotaxisGoalFieldName())));
+				}
+				if(fields.get((bacterium.getChemicalInputName())) != null){
+					bacterium.setInput(fields.get((bacterium.getChemicalInputName())));
+				}
+				if(fields.get((bacterium.getChemicalOutputName())) != null){
+					bacterium.setOutput(fields.get((bacterium.getChemicalOutputName())));
+				}
 			}
 		}
 	}
@@ -259,11 +274,15 @@ class BSimFromFile {
 		@Override
 		public void scene (PGraphics3D p3d) {
 			
-			// draw the mesh
-			if(mesh != null){
-				draw(mesh, 0);
-			}
+			p3d.translate(25, 0, 25);
+			p3d.scale(5f);
 			
+			// Draw chemical fields
+			for (Map.Entry<String,BSimFromFileChemicalField> fieldKV : fields.entrySet()) {
+				BSimFromFileChemicalField field = fieldKV.getValue();
+				draw(field, field.getColor(), field.getAlphaPerUnit(), field.getAlphaMax());
+			}
+						
 			// Draw the bacteria
 			for (Map.Entry<String,Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
 				for(BSimFromFileBacterium bacterium : bacPop.getValue()) {
@@ -278,12 +297,10 @@ class BSimFromFile {
 				}
 			}
 			
-			// Draw chemical fields
-			for (Map.Entry<String,BSimFromFileChemicalField> fieldKV : fields.entrySet()) {
-				BSimFromFileChemicalField field = fieldKV.getValue();
-				draw(field, field.getColor(), field.getAlphaPerUnit(), field.getAlphaMax());
+			// draw the mesh
+			if(mesh != null){
+				draw(mesh, 0);
 			}
-
 		}
 	}
 }

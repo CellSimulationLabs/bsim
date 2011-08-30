@@ -34,8 +34,8 @@ class BSimBacteriumFactory {
 
 		
 		// read in the desired population size
-		if (params.containsKey("PopulationSize")) {
-			populationSize = BSimParser.parseToInt(params.get("PopulationSize"));
+		if (params.containsKey("Population")) {
+			populationSize = BSimParser.parseToInt(params.get("Population"));
 		}
 
 		// Positions of the form BoundStart=0.1;2.4;5.1
@@ -75,7 +75,7 @@ class BSimBacteriumFactory {
 
 		// Generate all of the bacteria
 		Vector<BSimFromFileBacterium> bacteria = new Vector<BSimFromFileBacterium>(populationSize);
-		for (int i = 0; i < bacteria.size(); i++) {
+		for (int i = 0; i < populationSize; i++) {
 			
 			BSimFromFileBacterium b = new BSimFromFileBacterium(sim, BSimParser.randomVector3d(bndStartVec, bndEndVec), bacColor);
 			
