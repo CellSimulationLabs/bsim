@@ -19,7 +19,7 @@ MOVIE_HEIGHT:480
 *** Simulation Objects (Chemical Fields, Particles, Bacteria)
 *** Ensure the mesh comes first as used by other objects
 *** ===============================================================
-MESH:FullPathToMesh/MeshFileName.obj
+MESH:./mesh.obj
 CHEM_FIELD:CF1: Antos to fill in some normal parameters
 PARTICLES:PP1:Population=10,ParticleSize=12,BoundStart=0.1;0.1;0.1,BoundEnd=20;20;20,Color=255;0;0;255
 PARTICLES:PP2:Population=100,ParticleSize=0.5,BoundStart=5;5;5,BoundEnd=10;10;10,Color=0;0;255;255
