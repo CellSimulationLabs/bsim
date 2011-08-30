@@ -1,5 +1,7 @@
 package BSimParser;
 
+import java.awt.Color;
+
 import javax.vecmath.Vector3d;
 
 import bsim.BSim;
@@ -7,6 +9,9 @@ import bsim.BSimChemicalField;
 import bsim.particle.BSimBacterium;
 
 class BSimFromFileBacterium extends BSimBacterium {
+	
+	// Colour of the bacteria when it is being displayed
+	private Color bacColor;	
 	
 	// Names of chemical fields that this bacterium interacts with
 	private String chemotaxisGoalField = "";
@@ -21,8 +26,9 @@ class BSimFromFileBacterium extends BSimBacterium {
 	private double chemicalInRate = 0;
 	private double chemicalOutRate = 0;
 	
-	public BSimFromFileBacterium(BSim sim, Vector3d position) {
+	public BSimFromFileBacterium(BSim sim, Vector3d position, Color newColor) {
 		super(sim, position);
+		setColor(newColor);
 	}
 	
 	@Override
@@ -31,6 +37,14 @@ class BSimFromFileBacterium extends BSimBacterium {
 		
 		inputChemical();
 		outputChemical();
+	}
+	
+	// Colour
+	public Color getColor() { 
+		return bacColor; 
+	}
+	public void setColor(Color newColor) { 
+		bacColor = newColor; 
 	}
 	
 	/** Input chemical quantity from the external field */

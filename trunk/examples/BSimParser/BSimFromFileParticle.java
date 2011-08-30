@@ -12,6 +12,7 @@ public class BSimFromFileParticle extends BSimParticle {
 	
 	public BSimFromFileParticle(BSim sim, Vector3d position, double radius, Color newColor) {
 		super(sim, position, radius);
+		setColor(newColor);
 	}
 	
 	public Color getColor() {
