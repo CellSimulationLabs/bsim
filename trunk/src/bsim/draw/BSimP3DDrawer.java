@@ -158,16 +158,19 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	/**
-	 * Mesh draw with a given color (draws each triangle of the mesh individually). 
+	 * Draw a mesh with a given colour (draws each triangle of the mesh individually). 
 	 * Also draws face normals as a red line from the face.
 	 * @param mesh	The mesh you want to draw...
+	 * @param c Mesh face colour.
 	 * @param normalScaleFactor	Scale factor for normal vector length. Set to zero to disable normal drawing.
 	 */
 	public void draw(BSimMesh mesh, Color c, double normalScaleFactor){
 		p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),c.getAlpha());
+		
 		int lineAlpha = c.getAlpha() + 50;
 		if (lineAlpha > 255) lineAlpha = 255;
 		p3d.stroke(c.getRed(),c.getGreen(),c.getBlue(),lineAlpha);
+		
 		p3d.beginShape(PConstants.TRIANGLES);
 		for(BSimTriangle t:mesh.getFaces()){
 			vertex(mesh.getVertCoordsOfTri(t,0));
@@ -175,6 +178,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 			vertex(mesh.getVertCoordsOfTri(t,2));
 		}
 		p3d.endShape();
+		
 		if(normalScaleFactor != 0){
 			for(BSimTriangle t:mesh.getFaces()){
 				vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
@@ -183,28 +187,12 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 	
 	/**
-	 * Mesh draw (draws each triangle of the mesh individually). 
-	 * Also draws face normals as a red line from the face.
-	 * @param mesh	The mesh you want to draw...
-	 * @param normalScaleFactor	Scale factor for normal vector length. Set to zero to disable normal drawing.
+	 Draw a mesh, default colour.
 	 */
 	public void draw(BSimMesh mesh, double normalScaleFactor){
-		p3d.fill(128,128,255,50);
-		p3d.stroke(128,128,255,100);
-		p3d.beginShape(PConstants.TRIANGLES);
-		for(BSimTriangle t:mesh.getFaces()){
-			vertex(mesh.getVertCoordsOfTri(t,0));
-			vertex(mesh.getVertCoordsOfTri(t,1));
-			vertex(mesh.getVertCoordsOfTri(t,2));
-		}
-		p3d.endShape();
-		if(normalScaleFactor != 0){
-			for(BSimTriangle t:mesh.getFaces()){
-				vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
-			}
-		}
+		draw(mesh, new Color(128,128,255,50), normalScaleFactor);
 	}
-	
+		
 	/**
 	 * Draw a 'vector' originating at a point, represented by a line.
 	 * @param origin		Point from which the vector originates.
@@ -252,57 +240,48 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	/**
-	 * Draws a chemical field structure based on its defined parameters. with  alphaGrad
+	 * Draws a chemical field structure based on its defined parameters, with custom transparency (alpha) parameters.
 	 * @param field		The chemical field structure to be rendered.
 	 * @param c			Desired colour of the chemical field.
 	 * @param alphaGrad	Alpha per unit concentration of the field.
-	 */
-	public void draw(BSimChemicalField field, Color c, float alphaGrad) {
-		int[] boxes = field.getBoxes();
-		double[] boxSize = field.getBox();				
-		for(int i=0; i < boxes[0]; i++)
-			for(int j=0; j < boxes[1]; j++)
-				for(int k=0; k < boxes[2]; k++) {							
-					p3d.pushMatrix();					
-					p3d.translate((float)(boxSize[0]*i+boxSize[0]/2), (float)(boxSize[1]*j+boxSize[1]/2), (float)(boxSize[2]*k+boxSize[2]/2));
-					p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)field.getConc(i,j,k));
-					p3d.box((float)boxSize[0],(float)boxSize[1],(float)boxSize[2]);
-					p3d.popMatrix();
-				}
-	}
-	
-	/**
-	 * Draws a chemical field structure based on its defined parameters. with alphaGrad and minAlpha
-	 * @param field		The chemical field structure to be rendered.
-	 * @param c			Desired colour of the chemical field.
-	 * @param alphaGrad	Alpha per unit concentration of the field.
-	 * @param alphaMin	Maximum alpha value (enables better viewing).
+	 * @param alphaMax	Maximum alpha value (enables better viewing).
 	 */
 	public void draw(BSimChemicalField field, Color c, double alphaGrad, double alphaMax) {
 		int[] boxes = field.getBoxes();
 		double[] boxSize = field.getBox();
 		double alpha = 0.0f;
-		for(int i=0; i < boxes[0]; i++)
-			for(int j=0; j < boxes[1]; j++)
+		
+		for(int i=0; i < boxes[0]; i++) {
+			for(int j=0; j < boxes[1]; j++) {
 				for(int k=0; k < boxes[2]; k++) {							
 					p3d.pushMatrix();					
 					p3d.translate((float)(boxSize[0]*i+boxSize[0]/2), (float)(boxSize[1]*j+boxSize[1]/2), (float)(boxSize[2]*k+boxSize[2]/2));
+					
 					alpha = alphaGrad*field.getConc(i,j,k);
 					if (alpha > alphaMax) alpha = alphaMax;
-					p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),(float)alpha);
-					p3d.box((float)boxSize[0],(float)boxSize[1],(float)boxSize[2]);
+					
+					p3d.fill(c.getRed(), c.getGreen(), c.getBlue(),(float)alpha);
+					p3d.box((float)boxSize[0], (float)boxSize[1], (float)boxSize[2]);
 					p3d.popMatrix();
 				}
+			}
+		}
 	}
 	
+	/**
+	 * Draws a chemical field structure based on its defined parameters (default alpha).
+	 */
+	public void draw(BSimChemicalField field, Color c, float alphaGrad) {
+		draw(field, c, alphaGrad, 255);
+	}
 	
-	
-//////////////////////////////////////////////////////////////////////////////////
-	
-	//Drawing functions for octrees
-	
-	/**Post order hierarchy display drawing function for Octree
-	 * takes color as a parameter*/
+	//********************* TODO - reduce code duplication in octree rendering.
+	/**	
+	 * 	Post order hierarchy display drawing function for Octree
+	 *	@param t The (sub)octree to be drawn.
+	 *	@param c The desired colour
+	 *	@param alphaGrad The alpha-per-unit-concentration. 
+	 */
 	public  void draw(OctreeNode t, Color c, float alphaGrad){
 		if(t!=null){
 			
@@ -310,23 +289,18 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 				draw(t.getsubNode(i), c,  alphaGrad);				
 			}
 			
+			p3d.pushMatrix();	
+			p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
+			//p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
 			
-				p3d.pushMatrix();	
-				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-				//p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
-				
-				//filling like before 
-				p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.quantity);
-			//	System.out.print(t.quantity);System.out.print("\n");
-				
-				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
-				p3d.popMatrix();
+			//filling like before 
+			p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.quantity);
+		//	System.out.print(t.quantity);System.out.print("\n");
 			
-			
-			
+			p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
+			p3d.popMatrix();
 		}
 	}
-	
 	
 	/**Post order hierarchy display drawing - uses internal color value for individual nodes
 	 * Not the fastest while rendering....
@@ -337,21 +311,16 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 			for (int i=0;  i<8; i++){			
 				draw(t.getsubNode(i), alphaGrad);				
 			}
-			
+
 				p3d.pushMatrix();	
 				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-				if(t.getnodeColor()==Color.cyan){p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), 100);}
-				else{
+				
+				if(t.getnodeColor()==Color.cyan){
+					p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), 100);
+				} else {
 				p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), alphaGrad);}
 				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
 				p3d.popMatrix();
-			
-			
-			
 		}
 	}
-	
-	
-
-
 }
