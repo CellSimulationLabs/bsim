@@ -20,7 +20,6 @@ import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
-import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -29,7 +28,7 @@ class BSimFromFile {
 	
 	// Objects in the simulation (most are referenced by 'name')
 	private HashMap<String, Vector<BSimBacterium>> bacteria;
-	private HashMap<String, Vector<BSimParticle>>  particles;
+	private HashMap<String, Vector<BSimFromFileParticle>>  particles;
 	private HashMap<String, BSimChemicalField>     fields;
 	private BSimOBJMesh                            mesh;
 	
@@ -53,7 +52,7 @@ class BSimFromFile {
 		
 		// Create empty containers for simulation objects
 		bacteria = new HashMap<String, Vector<BSimBacterium>>();
-		particles = new HashMap<String, Vector<BSimParticle>>();
+		particles = new HashMap<String, Vector<BSimFromFileParticle>>();
 		fields = new HashMap<String, BSimChemicalField>();
 		mesh = new BSimOBJMesh();
 		
@@ -80,7 +79,7 @@ class BSimFromFile {
 	/** Add bacterial population to simulation */
 	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
 	/** Add particle population to simulation */
-	public void addParticles (String name, Vector<BSimParticle> newParticles) { particles.put(name, newParticles); }
+	public void addParticles (String name, Vector<BSimFromFileParticle> newParticles) { particles.put(name, newParticles); }
 	/** Add chemical field to simulation */
 	public void addChemicalField (String name, BSimChemicalField newField) { fields.put(name, newField); }
 	/** Set simulation mesh */
@@ -172,8 +171,8 @@ class BSimFromFile {
 			}
 			
 			// Update all particles
-			for (Map.Entry<String,Vector<BSimParticle>> partPop : particles.entrySet()) {
-				for(BSimParticle particle : partPop.getValue()) {
+			for (Map.Entry<String,Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
+				for(BSimFromFileParticle particle : partPop.getValue()) {
 					particle.action();
 					particle.updatePosition();
 				}
