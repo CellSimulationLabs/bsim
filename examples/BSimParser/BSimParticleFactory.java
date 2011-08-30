@@ -25,10 +25,14 @@ class BSimParticleFactory {
 		Color    partCol     = new Color(205,197,191);
 		
 		// Update the population size
-		BSimParser.assignParamToInt(params, "Population", popSize);
-				
+		if (params.containsKey("Population")) { 
+			popSize = BSimParser.parseToInt(params.get("Population"));
+		}
+		
 		// Update the particle size (microns)
-		BSimParser.assignParamToDouble(params, "ParticleSize", partSize);
+		if (params.containsKey("ParticleSize")) {
+			partSize = BSimParser.parseToDouble(params.get("ParticleSize"));
+		}
 		
 		// Positions of the form BoundStart=0.1;2.4;5.1
 		BSimParser.assignParamToVector3d(params, "BoundStart", bndStartVec);
