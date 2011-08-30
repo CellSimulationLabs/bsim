@@ -1,9 +1,9 @@
 package BSimParser;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Vector;
 import javax.vecmath.Vector3d;
-import bsim.particle.BSimParticle;
 import bsim.BSim;
 
 /**
@@ -12,7 +12,7 @@ import bsim.BSim;
  */
 class BSimParticleFactory {
 	
-	public static Vector<BSimParticle> parse (String paramStr, BSim sim) {
+	public static Vector<BSimFromFileParticle> parse (String paramStr, BSim sim) {
 		
 		// Grab the attribute value pairs that we need
 		HashMap<String,String> params = BSimParser.parseAttributeValuePairs(paramStr);
@@ -22,6 +22,7 @@ class BSimParticleFactory {
 		double   partSize    = 1.0;
 		Vector3d bndStartVec = new Vector3d(0.0, 0.0, 0.0);
 		Vector3d bndEndVec   = new Vector3d(10.0, 10.0, 10.0);
+		Color    partCol     = new Color(205,197,191);
 		
 		// Update the population size
 		BSimParser.assignParamToInt(params, "Population", popSize);
@@ -35,10 +36,14 @@ class BSimParticleFactory {
 		// Positions of the form BoundEnd=0.1;2.4;5.1
 		BSimParser.assignParamToVector3d(params, "BoundEnd", bndEndVec);
 		
+		// Update the colour of the particles	
+		Color tempCol = BSimParser.getColorFromParam(params, "Color");
+		if (tempCol != null) { partCol = tempCol; }
+		
 		// Generate the population
-		Vector<BSimParticle> particles = new Vector<BSimParticle>(popSize);
+		Vector<BSimFromFileParticle> particles = new Vector<BSimFromFileParticle>(popSize);
 		for (int i=0; i<popSize; i++) {
-			BSimParticle p = new BSimParticle(sim, BSimParser.randomVector3d(bndStartVec, bndEndVec), partSize);
+			BSimFromFileParticle p = new BSimFromFileParticle(sim, BSimParser.randomVector3d(bndStartVec, bndEndVec), partSize, partCol);
 			particles.add(p);
 		}
 
