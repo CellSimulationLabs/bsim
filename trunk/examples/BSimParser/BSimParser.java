@@ -1,7 +1,10 @@
 package BSimParser;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
@@ -15,9 +18,28 @@ public class BSimParser {
 	
 	public static void main (String[] args) {
 		
-		// Open the file from args
-        File paramFile = new File(args[0]);        
-        
+		File paramFile = null;
+		
+		try {
+			// Open the file from args
+			paramFile = new File(args[0]);
+			
+		} catch(ArrayIndexOutOfBoundsException e){
+			System.err.println("No arguments specified?\n" +
+					"Usage: 'java BSimParser.BSimParser parameterFileToLoad'\n");
+			System.out.println("Please specify a parameter file to load:");
+			
+			try {
+				BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+				paramFile = new File(br.readLine()); 
+				br.close();
+				
+			} catch(IOException excIO){
+				System.err.println("I/O error in parameter file loader");
+				System.exit(1);
+			}
+		}
+		
         // Parse the file to generate a simulation
         BSimFromFile sim = BSimParser.parseFile(paramFile);
 	
@@ -36,14 +58,20 @@ public class BSimParser {
     	int lineCounter = 1;
     	
     	// Attempt to scan each line and process it
-    	try { scanner = new Scanner(paramFile);
-    	try {
-    		while(scanner.hasNextLine()) {
-    			processLine(scanner.nextLine().split(":"), sim, lineCounter);
-    			lineCounter++;
-    		}
-    	} finally { scanner.close(); }
-    	} catch(FileNotFoundException e) {System.err.println("Input file not found"); }
+    	try { 
+    		scanner = new Scanner(paramFile);
+	    	try {
+	    		while(scanner.hasNextLine()) {
+	    			processLine(scanner.nextLine().split(":"), sim, lineCounter);
+	    			lineCounter++;
+	    		}
+	    	} finally { 
+	    		scanner.close(); 
+	    	}
+    	} catch(FileNotFoundException e) {
+    		System.err.println("Input file not found");
+    		System.exit(1);
+    	}
 
     	// Now that valid objects have been created, try to assign chemical fields to bacteria
     	sim.assignBacteriaChemicalFieldsFromNames();
