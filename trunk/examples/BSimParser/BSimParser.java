@@ -67,15 +67,19 @@ public class BSimParser {
     	
     	// Simulation bounds
     	if (line[0].equals("BOUNDS")) {
-    		String[] boundsTriplet = line[1].split(",");
-			if (boundsTriplet.length != 3) {
-				System.err.println("Problem extracting the BOUNDS, Line: " + lineNo);
-			}
-			else {
-				sim.getSim().setBound(BSimParser.parseToDouble(boundsTriplet[0]),
-										BSimParser.parseToDouble(boundsTriplet[1]), 
-										BSimParser.parseToDouble(boundsTriplet[2]));
-			}
+    		HashMap<String,String> boundParams = parseAttributeValuePairs(line[1]);
+
+    		// Extract the bounds from the parameters and update simulation
+    		Vector3d bounds = new Vector3d(100.0,100.0,100.0);
+    		BSimParser.assignParamToVector3d(boundParams, "Size", bounds);
+    		sim.getSim().setBound(bounds.x, bounds.y, bounds.z);
+    		
+    		// Extract if the boundaries are solid or wrapping (by default all solid) and update simulation
+    		Vector3d solid = new Vector3d(1.0,1.0,1.0);
+    		BSimParser.assignParamToVector3d(boundParams, "Solid", solid);
+    		sim.getSim().setSolid((solid.x == 1.0) ? true : false,
+    								(solid.y == 1.0) ? true : false,
+    								(solid.z == 1.0) ? true : false);
     	}
     	
     	// Create a new chemical field, options of the form CHEM_FIELD:name:param1=value1,param2=value2...

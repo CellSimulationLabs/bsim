@@ -2,7 +2,7 @@
 *** General Parameters and Outputs
 *** ===============================================================
 DT:0.1
-BOUNDS:1000,1000,100
+BOUNDS:Size=1000;1000;100,Solid=1;0;0
 OUTPUT_PATH:./
 OUTPUT_DATA:1
 OUTPUT_MOVIE:0
