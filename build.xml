@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="BSim" default="packageLatest" basedir=".">
+	<description>Custom global build file for BSim bits and pieces...</description>
+
+	<!-- Set up some global properties -->
+	<property name="src" location="src"/>
+	<property name="lib" location="lib"/>
+	<property name="coreLibs"  location="${lib}/core.jar;${lib}/vecmath.jar;${lib}/objimport.jar"/>
+	<property name="latestLib"  location="${lib}/bsimSVN.jar"/>
+	<property name="examples" location="examples"/>
+	<property name="dist"  location="dist"/>
+	<property name="build" location="${dist}/build"/>
+
+	<!-- Build and run an example file 
+	Bit of a test at the moment, most likely it will be better to farm this out 
+	to a bunch of separate targets...
+	-->
+	<target name="buildExample">
+		<property name="example" value="BSimParser" />
+		<property name="exArgs" value="ExampleSim.bsim" />
+
+		<javac classpath="${coreLibs};${latestLib}"
+			srcdir="${examples}/${example}" destdir="${examples}">
+		</javac>
+		
+		<!-- Could use spawn="true" here to make a persistent BSim that is separate
+		from the ant build process... -->
+		<java classpath="${coreLibs};${latestLib};${examples}" 
+			classname="${example}.${example}"
+			dir="${examples}/${example}"
+			fork="true">
+			<arg value="${exArgs}"/>
+		</java>
+		
+		<delete>
+			<fileset dir="${examples}/${example}" includes="**.class"/>
+		</delete>
+	</target>
+	
+	<!-- create a jar of the latest source (svn working copy).
+	Useful when running examples etc. where unversioned 
+	bleeding edge code is required from the main bsim library -->
+	<target name="packageLatest">
+		<property name="version" value="SVN" />
+		<antcall target="distClean"/>
+		<antcall target="fatjar-bsim">
+			<param name="version" value="${version}" />
+		</antcall>
+		<copy file="${dist}/bsim${version}.jar" todir="${lib}"/>
+	</target>
+
+	<target name="init">
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+	</target>
+	
+	<target name="compile" depends="init"
+		description="compile the source " >
+		<!-- Compile the java code from ${src} into ${build} -->
+		<javac classpath="${coreLibs}"
+			srcdir="${src}" destdir="${build}">
+			<include name="bsim/**"/>
+			<exclude name="bsim/geometry/tests/**"/>
+		</javac>
+	</target>
+
+    <target name="fatjar-bsim" depends="compile"
+    	description="fatjar the latest version of bsim to be used in examples etc">
+        <fatjar.build output="${dist}/BSim${version}.jar">
+            <fatjar.manifest/>
+            <fatjar.filesource path="${build}" relpath="">
+            </fatjar.filesource>
+            <fatjar.jarsource file="${lib}/core.jar" relpath=""/>
+            <fatjar.jarsource file="${lib}/vecmath.jar" relpath=""/>
+            <fatjar.jarsource file="${lib}/objimport.jar" relpath=""/>
+        </fatjar.build>
+    </target>
+	
+	<target name="clean"
+		description="clean up" >
+		<!-- Delete the ${build} directory tree -->
+		<delete dir="${build}"/>
+	</target>
+</project>
