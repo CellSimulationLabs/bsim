@@ -35,8 +35,8 @@ class BSimFromFileBacterium extends BSimBacterium {
 	public void action(){
 		super.action();
 		
-		inputChemical();
-		outputChemical();
+		if(inputField != null) inputChemical();
+		if(outputField != null) outputChemical();
 	}
 	
 	// Colour

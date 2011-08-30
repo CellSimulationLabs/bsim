@@ -135,6 +135,11 @@ public class BSimParser {
     	// Output Related Parameters
     	// --------------------------------------------------------------
     	
+    	else if (line[0].equals("PREVIEW")) {
+    		if (parseToInt(line[1]) == 1) { sim.setPreviewMode(true); }
+    		else { sim.setPreviewMode(false); }
+    	}
+    	
     	else if (line[0].equals("OUTPUT_PATH")) 
     		sim.setOutputPath(line[1]);
     	
