@@ -1,8 +1,8 @@
 package BSimParser;
 
+import java.awt.Color;
 import java.util.HashMap;
 
-import bsim.BSimChemicalField;
 import bsim.BSim;
 
 /**
@@ -11,37 +11,37 @@ import bsim.BSim;
  */
 class BSimChemicalFieldFactory {
 	
-	public static BSimChemicalField parse (String paramString, BSim sim) {
+	public static BSimFromFileChemicalField parse (String paramString, BSim sim) {
 		// get the attribute-value pairs for the chemical field
 		HashMap<String, String> params = BSimParser.parseAttributeValuePairs(paramString);
 
 		// set the default chemical field values for discretisation, diffusivity, and chemical decay rate
-		int[] numBoxes = {10,10,10};
-		double diffusivity = 0;
-		double decayRate = 0;
+		int[] 		numBoxes = {10,10,10};
+		double 		diffusivity = 0;
+		double 		decayRate = 0;
+		
+		Color 		chemFieldCol = new Color(128, 128, 255);
+		double 		alphaPerUnit = 1.0;
+		double		alphaMax = 200.0;
 		
 		
 		// set the chemical field discretisation (number of boxes)
 		// Boxes=nBoxesInXDirection;nBoxesInYDirection;nBoxesInZDirection		
-		if (params.containsKey("Boxes")) {
-			// Split the positions on ';' character
-			String[] boxes = params.get("Boxes").split(";");
-			if (boxes.length != 3) {
-				System.err.println("Problem extracting the box dimensions for chemical field");
-			}
-			else {
-				for (int i = 0; i < 3; i++) {
-					numBoxes[i] = BSimParser.parseToInt(boxes[i]);
-				}
-			}
-		}
-
+		assignParamToIntArray(params, "Boxes", numBoxes);
+		
 		BSimParser.assignParamToDouble(params, "Diffusivity", diffusivity);
 		BSimParser.assignParamToDouble(params, "DecayRate", decayRate);
 				
-		// generate the chemical field
-		BSimChemicalField theField = new BSimChemicalField(sim, numBoxes, diffusivity, decayRate);
+		// Update the chemical field's colour properties
+		BSimParser.assignParamToDouble(params, "AlphaPerUnit", alphaPerUnit);
+		BSimParser.assignParamToDouble(params, "AlphaMax", alphaMax);
+				
+		Color tempCol = BSimParser.getColorFromParam(params, "Color");
+		if (tempCol != null) { chemFieldCol = tempCol; }
 		
+		// generate the chemical field
+		BSimFromFileChemicalField theField = new BSimFromFileChemicalField(sim, numBoxes, diffusivity, decayRate, chemFieldCol, alphaPerUnit, alphaMax);
+				
 		// set up chemical field gradient if one is defined
 		if (params.containsKey("GradientDirection")) {
 			if (params.containsKey("GradientLimits")) {
@@ -68,7 +68,26 @@ class BSimChemicalFieldFactory {
 			}
 		}
 
-		
 		return theField;
 	}
+	
+    private static void assignParamToIntArray(HashMap<String, String> params, String paramName, int[] variable){
+		if (params.containsKey(paramName)) {
+			// Split the positions on ';' character
+			String[] paramArray = params.get(paramName).split(";");
+			
+			int dimension = variable.length;
+			
+			if (paramArray.length != dimension) {
+				System.err.println("Problem extracting " + paramName + " for chemical field");
+			}
+			else {
+				for (int i = 0; i < dimension; i++) {
+					variable[i] = BSimParser.parseToInt(paramArray[i]);
+				}
+			}
+		}
+    }
+
+	
 }

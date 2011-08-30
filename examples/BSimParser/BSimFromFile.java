@@ -13,14 +13,12 @@ import javax.vecmath.Vector3d;
 
 import processing.core.PGraphics3D;
 import bsim.BSim;
-import bsim.BSimChemicalField;
 import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
-import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -28,9 +26,9 @@ class BSimFromFile {
 	private BSim sim;
 	
 	// Objects in the simulation (most are referenced by 'name')
-	private HashMap<String, Vector<BSimBacterium>> bacteria;
+	private HashMap<String, Vector<BSimFromFileBacterium>> bacteria;
 	private HashMap<String, Vector<BSimFromFileParticle>>  particles;
-	private HashMap<String, BSimChemicalField>     fields;
+	private HashMap<String, BSimFromFileChemicalField>     fields;
 	private BSimOBJMesh                            mesh;
 	
 	// Output related parameters
@@ -52,9 +50,9 @@ class BSimFromFile {
 		sim = new BSim();
 		
 		// Create empty containers for simulation objects
-		bacteria = new HashMap<String, Vector<BSimBacterium>>();
+		bacteria = new HashMap<String, Vector<BSimFromFileBacterium>>();
 		particles = new HashMap<String, Vector<BSimFromFileParticle>>();
-		fields = new HashMap<String, BSimChemicalField>();
+		fields = new HashMap<String, BSimFromFileChemicalField>();
 		mesh = new BSimOBJMesh();
 		
 		// Defaults for output files
@@ -78,11 +76,11 @@ class BSimFromFile {
 	public BSim getSim () { return sim; }
 	
 	/** Add bacterial population to simulation */
-	public void addBacteria (String name, Vector<BSimBacterium> newBacteria) { bacteria.put(name, newBacteria); }
+	public void addBacteria (String name, Vector<BSimFromFileBacterium> newBacteria) { bacteria.put(name, newBacteria); }
 	/** Add particle population to simulation */
 	public void addParticles (String name, Vector<BSimFromFileParticle> newParticles) { particles.put(name, newParticles); }
 	/** Add chemical field to simulation */
-	public void addChemicalField (String name, BSimChemicalField newField) { fields.put(name, newField); }
+	public void addChemicalField (String name, BSimFromFileChemicalField newField) { fields.put(name, newField); }
 	/** Set simulation mesh */
 	public void setMesh (String filename) {
 		try { mesh.load(filename); }
@@ -140,15 +138,11 @@ class BSimFromFile {
 	 * Assign to the bacteria any necessary chemical fields
 	 */
 	public void assignBacteriaChemicalFieldsFromNames() {
-		for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
-			for(BSimBacterium bacterium : bacPop.getValue()) {
-				// TODO: refactor this to be less grim...
-				if(bacterium instanceof BSimFromFileBacterium) {
-					BSimFromFileBacterium fileBacterium = (BSimFromFileBacterium)bacterium;
-					fileBacterium.setGoal(fields.get((fileBacterium.getChemotaxisGoalFieldName())));
-					fileBacterium.setInput(fields.get((fileBacterium.getChemicalInputName())));
-					fileBacterium.setOutput(fields.get((fileBacterium.getChemicalOutputName())));
-				}
+		for (Map.Entry<String,Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
+			for(BSimFromFileBacterium bacterium : bacPop.getValue()) {
+				bacterium.setGoal(fields.get((bacterium.getChemotaxisGoalFieldName())));
+				bacterium.setInput(fields.get((bacterium.getChemicalInputName())));
+				bacterium.setOutput(fields.get((bacterium.getChemicalOutputName())));
 			}
 		}
 	}
@@ -164,7 +158,7 @@ class BSimFromFile {
 		public void tick () {
 			
 			// Update all bacteria
-			for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
+			for (Map.Entry<String, Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
 				for(BSimBacterium bacterium : bacPop.getValue()) {
 					bacterium.action();
 					bacterium.updatePosition();
@@ -172,7 +166,7 @@ class BSimFromFile {
 			}
 			
 			// Update all particles
-			for (Map.Entry<String,Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
+			for (Map.Entry<String, Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
 				for(BSimFromFileParticle particle : partPop.getValue()) {
 					particle.action();
 					particle.updatePosition();
@@ -180,7 +174,7 @@ class BSimFromFile {
 			}
 			
 			// Update all chemical fields
-			for (Map.Entry<String,BSimChemicalField> chemField : fields.entrySet()) {
+			for (Map.Entry<String, BSimFromFileChemicalField> chemField : fields.entrySet()) {
 				chemField.getValue().update();
 			}	
 		}
@@ -210,7 +204,7 @@ class BSimFromFile {
 				// PopName1,x1,y1,z1,x2,y2,y2,...
 				// PopName2,x1,y1,z1,x2,y2,z2,...
 				// ...
-				for (Map.Entry<String,Vector<BSimBacterium>> bacPop : bacteria.entrySet()) {
+				for (Map.Entry<String,Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
 
 					// Write the population name to file
 					writer.write(bacPop.getKey());
@@ -265,18 +259,31 @@ class BSimFromFile {
 		@Override
 		public void scene (PGraphics3D p3d) {
 			
+			// draw the mesh
+			if(mesh != null){
+				draw(mesh, 0);
+			}
+			
 			// Draw the bacteria
-			// TODO: Antos one for you ;)
+			for (Map.Entry<String,Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
+				for(BSimFromFileBacterium bacterium : bacPop.getValue()) {
+					draw(bacterium, bacterium.getColor());
+				}
+			}
 			
 			// Draw the particles
 			for (Map.Entry<String,Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
 				for(BSimFromFileParticle particle : partPop.getValue()) {
-					draw((BSimParticle)particle, particle.getColor());
+					draw(particle, particle.getColor());
 				}
 			}
 			
-			// Draw the chemical fields (including the parameters for nice rendering (min, max, gradient for alpha)
-			// TODO: Antos one for you ;)
+			// Draw chemical fields
+			for (Map.Entry<String,BSimFromFileChemicalField> fieldKV : fields.entrySet()) {
+				BSimFromFileChemicalField field = fieldKV.getValue();
+				draw(field, field.getColor(), field.getAlphaPerUnit(), field.getAlphaMax());
+			}
+
 		}
 	}
 }
