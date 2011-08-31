@@ -41,7 +41,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 
 	// With updated Processing library (1.5.1), looks like begindraw() will reset the camera
 	// after 1st frame has been drawn, so this provides a workaround for now.
-	//private boolean cameraIsInitialised = false;
+	private boolean cameraIsInitialised = false;
 	
 	/**
 	 * Default constructor for initialising a Processing3D rendering context.
@@ -73,12 +73,12 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	public void draw(Graphics2D g) {
 		p3d.beginDraw();
 
-		//if(!cameraIsInitialised){
-		//	p3d.camera(-(float)bound.x*0.7f, -(float)bound.y*0.3f, -(float)bound.z*0.5f, 
-		//		(float)bound.x, (float)bound.y, (float)bound.z, 
-		//		0, 1, 0);
-		//	cameraIsInitialised = true;
-		//}
+		if(!cameraIsInitialised){
+			p3d.camera(-(float)bound.x*0.7f, -(float)bound.y*0.3f, -(float)bound.z*0.5f, 
+				(float)bound.x, (float)bound.y, (float)bound.z, 
+				0, 1, 0);
+			cameraIsInitialised = true;
+		}
 		
 		p3d.textFont(font);
 		p3d.textMode(PConstants.SCREEN);

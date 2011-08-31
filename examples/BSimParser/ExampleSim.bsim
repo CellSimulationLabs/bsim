@@ -5,7 +5,7 @@ DT:0.1
 PREVIEW:1
 BOUNDS:Size=100;100;100,Solid=0;0;0
 LENGTH:50
-OUTPUT_PATH:/Users/Tom/Desktop/TEMP
+OUTPUT_PATH:./
 OUTPUT_DATA:1
 OUTPUT_MOVIE:0
 DATA_FILENAME:OutputData.txt
@@ -17,7 +17,7 @@ MOVIE_SPEED:50
 MOVIE_DT:1.0
 MOVIE_WIDTH:640
 MOVIE_HEIGHT:480
-MOVIE_CAMERA:200;40;120
+MOVIE_CAMERA:-100;-50;-20
 *** ===============================================================
 *** Simulation Objects (Chemical Fields, Particles, Bacteria)
 *** Ensure the mesh comes first as used by other objects
