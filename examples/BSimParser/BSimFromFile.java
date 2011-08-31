@@ -314,7 +314,7 @@ class BSimFromFile {
 				}
 			}
 			
-			// draw the mesh
+			// Draw the mesh
 			if (mesh != null) {
 				draw(mesh, 0);
 			}
