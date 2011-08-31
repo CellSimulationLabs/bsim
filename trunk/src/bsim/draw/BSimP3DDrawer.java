@@ -179,7 +179,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		}
 		p3d.endShape();
 		
-		if(normalScaleFactor != 0){
+		if(normalScaleFactor != 0.0){
 			for(BSimTriangle t:mesh.getFaces()){
 				vector(mesh.getTCentre(t),t.getNormal(),normalScaleFactor,(new Color(255,0,0,150)));
 			}
