@@ -19,7 +19,6 @@ import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
-import bsim.particle.BSimParticle;
 
 class BSimFromFile {
 	
@@ -30,7 +29,7 @@ class BSimFromFile {
 	private HashMap<String, Vector<BSimFromFileBacterium>> bacteria;
 	private HashMap<String, Vector<BSimFromFileParticle>>  particles;
 	private HashMap<String, BSimFromFileChemicalField>     fields;
-	private BSimOBJMesh                            mesh;
+	private BSimOBJMesh                                    mesh;
 	
 	// Output related parameters
 	private boolean outputData;
