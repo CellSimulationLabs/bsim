@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 import processing.core.PGraphics3D;
 import bsim.BSim;
@@ -17,6 +18,7 @@ import bsim.BSimTicker;
 import bsim.draw.BSimP3DDrawer;
 import bsim.export.BSimExporter;
 import bsim.export.BSimMovExporter;
+import bsim.geometry.BSimCollision;
 import bsim.geometry.BSimOBJMesh;
 import bsim.particle.BSimBacterium;
 
@@ -45,6 +47,9 @@ class BSimFromFile {
 	private int     movieWidth;
 	private int     movieHeight;
 	
+	// Rendering parameters
+	private Vector3f cameraPos;
+	
 	public BSimFromFile () {
 		
 		// Create the simulation
@@ -69,6 +74,9 @@ class BSimFromFile {
 		movieDt = 1.0;
 		movieWidth = 800;
 		movieHeight = 600;
+		
+		// Defaults for rendering based parameters
+		cameraPos = new Vector3f(0.0f, 0.0f, 0.0f);
 		
 		// Our own ticker that knows how to use our object collections
 		sim.setTicker(new BSimFromFileTicker());
@@ -110,6 +118,8 @@ class BSimFromFile {
 	public void setMovieWidth (int width) { movieWidth = width; }
 	/** Set output movie height */
 	public void setMovieHeight (int height) { movieHeight = height; }
+	/** Set output movie translation */
+	public void setMovieCameraPosition (Vector3f pos) { cameraPos = pos; }
 	
 	/**
 	 * Run the simulation. Generates necessary exporters and runs export() for the simulation.
@@ -176,6 +186,9 @@ class BSimFromFile {
 				for(BSimBacterium bacterium : bacPop.getValue()) {
 					bacterium.action();
 					bacterium.updatePosition();
+					if (mesh != null) {
+						BSimCollision.collideAndRepel(bacterium, mesh);
+					}
 				}
 			}
 			
@@ -184,6 +197,9 @@ class BSimFromFile {
 				for(BSimFromFileParticle particle : partPop.getValue()) {
 					particle.action();
 					particle.updatePosition();
+					if (mesh != null) {
+						BSimCollision.collideAndRepel(particle, mesh);
+					}
 				}
 			}
 			
@@ -273,8 +289,10 @@ class BSimFromFile {
 		@Override
 		public void scene (PGraphics3D p3d) {
 			
-			p3d.translate(25, 0, 25);
-			p3d.scale(5f);
+			// Allow users to specify the eye position, always centred on middle of bounds
+			p3d.camera(cameraPos.x, cameraPos.y, cameraPos.z, 
+					(float)boundCentre.x,(float)boundCentre.y,(float)boundCentre.z, 
+					0, 1, 0);
 			
 			// Draw chemical fields
 			for (Map.Entry<String,BSimFromFileChemicalField> fieldKV : fields.entrySet()) {
@@ -297,7 +315,7 @@ class BSimFromFile {
 			}
 			
 			// draw the mesh
-			if(mesh != null){
+			if (mesh != null) {
 				draw(mesh, 0);
 			}
 		}

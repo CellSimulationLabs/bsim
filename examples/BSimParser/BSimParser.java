@@ -11,6 +11,7 @@ import java.util.Scanner;
 import java.awt.Color;
 
 import javax.vecmath.Vector3d;
+import javax.vecmath.Vector3f;
 
 public class BSimParser {
 	
@@ -111,6 +112,11 @@ public class BSimParser {
     								(solid.z == 1.0) ? true : false);
     	}
     	
+    	// Length of the simulation (ignored if preview selected)
+    	else if (line[0].equals("LENGTH")) {
+    		sim.getSim().setSimulationTime(parseToDouble(line[1]));
+    	}
+    	
     	// Create a new chemical field, options of the form CHEM_FIELD:name:param1=value1,param2=value2...
     	// See BSimChemicalFieldFactory for more details.
     	else if(line[0].equals("MESH"))
@@ -170,6 +176,12 @@ public class BSimParser {
     	
     	else if (line[0].equals("MOVIE_HEIGHT")) 
     		sim.setMovieHeight(parseToInt(line[1]));
+    	
+    	else if (line[0].equals("MOVIE_CAMERA")) {
+    		Vector3f pos = new Vector3f(0.0f,0.0f,0.0f);
+    		assignStringToVector3f(line[1],pos);
+    		sim.setMovieCameraPosition(pos);
+    	}
     	
     	// --------------------------------------------------------------
     	// Unknown Parameters
@@ -256,6 +268,20 @@ public class BSimParser {
 								BSimParser.parseToDouble(vectorTriplet[2]));
 			}
 		}
+    } 
+    
+    /** Assign Vector3f variable from string */
+    public static void assignStringToVector3f(String str, Vector3f variable) {
+    	// Split the positions on ';' character
+    	String[] vectorTriplet = str.split(";");
+    	if (vectorTriplet.length != 3) {
+    		System.err.println("Problem extracting the Vector3f from string, Line: ");
+    	}
+    	else {
+    		variable.set((float)BSimParser.parseToDouble(vectorTriplet[0]),
+    				(float)BSimParser.parseToDouble(vectorTriplet[1]),
+    				(float)BSimParser.parseToDouble(vectorTriplet[2]));
+    	}
     } 
     
     /** Return the Color for a particular parameter (necessary because Colors are immutable - i.e. no set methods) */
