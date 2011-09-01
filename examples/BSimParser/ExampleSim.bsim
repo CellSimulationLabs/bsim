@@ -1,7 +1,7 @@
 ***: ===============================================================
 ***: General Parameters and Outputs
 ***: ===============================================================
-DT:0.03
+DT:0.01
 PREVIEW:1
 BOUNDS:Size=100;100;100,Solid=1;1;1
 LENGTH:50
@@ -17,7 +17,7 @@ MOVIE_SPEED:50
 MOVIE_DT:1.0
 MOVIE_WIDTH:640
 MOVIE_HEIGHT:480
-MOVIE_CAMERA:-100;-50;-20
+MOVIE_CAMERA:-100;-50;30
 ***: ===============================================================
 ***: Simulation Objects (Chemical Fields, Particles, Bacteria)
 ***: Ensure the mesh comes first as used by other objects
