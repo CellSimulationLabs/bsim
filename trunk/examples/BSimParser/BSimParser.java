@@ -311,8 +311,8 @@ public class BSimParser {
 
     	// Generate new random positions in the range
     	newX = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
-    	newY = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
-    	newZ = boundStart.x + ((boundEnd.x-boundStart.x) * rng.nextDouble());
+    	newY = boundStart.y + ((boundEnd.y-boundStart.y) * rng.nextDouble());
+    	newZ = boundStart.z + ((boundEnd.z-boundStart.z) * rng.nextDouble());
 
     	return new Vector3d(newX, newY, newZ);
     }
