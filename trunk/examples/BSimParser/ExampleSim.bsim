@@ -24,8 +24,8 @@ MOVIE_CAMERA:-100;-50;-20
 ***: ===============================================================
 MESH:./examples/BSimParser/mesh_b.obj
 CHEM_FIELD:CF1:Boxes=25;25;25,Diffusivity=0.1,DecayRate=0.2
-PARTICLES:PP1:Population=100,ParticleSize=0.1,BoundStart=0;0;0,BoundEnd=100;100;100,Color=255;0;0;255
-***:PARTICLES:PP2:Population=100,ParticleSize=0.5,BoundStart=5;5;5,BoundEnd=10;10;10,Color=0;0;255;255
+PARTICLES:PP1:Population=100,ParticleSize=0.1,BoundStart=0;0;0,BoundEnd=30;30;20,Color=255;0;0;255
+PARTICLES:PP2:Population=5,ParticleSize=10,BoundStart=0;0;0,BoundEnd=60;60;15,Color=0;0;255;255
 BACTERIA:BP1:Population=1000,BoundStart=0;0;0,BoundEnd=100;100;10,OutputChemicalField=CF1,OutputChemicalRate=10,GoalField=CF1
 ***: ===============================================================
 ***: End of file
