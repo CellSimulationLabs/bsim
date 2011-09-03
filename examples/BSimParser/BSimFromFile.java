@@ -180,15 +180,24 @@ class BSimFromFile {
 	class BSimFromFileTicker extends BSimTicker {
 		@Override
 		public void tick () {
-			
 			// Update all bacteria
 			for (Map.Entry<String, Vector<BSimFromFileBacterium>> bacPop : bacteria.entrySet()) {
 				for(BSimBacterium bacterium : bacPop.getValue()) {
 					bacterium.action();
-					bacterium.updatePosition();
+					// Collisions with particles
+					for (Map.Entry<String, Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
+						for(BSimFromFileParticle particle : partPop.getValue()) {
+							if(bacterium.outerDistance(particle) < 0) {
+								// Forces in both directions
+								bacterium.logReaction(particle, 1);
+								particle.logReaction(bacterium, 1);
+							}
+						}
+					}
 					if (mesh != null) {
 						BSimCollision.collideAndRepel(bacterium, mesh);
 					}
+					bacterium.updatePosition();
 				}
 			}
 			
@@ -196,10 +205,10 @@ class BSimFromFile {
 			for (Map.Entry<String, Vector<BSimFromFileParticle>> partPop : particles.entrySet()) {
 				for(BSimFromFileParticle particle : partPop.getValue()) {
 					particle.action();
-					particle.updatePosition();
 					if (mesh != null) {
 						BSimCollision.collideAndRepel(particle, mesh);
 					}
+					particle.updatePosition();
 				}
 			}
 			
