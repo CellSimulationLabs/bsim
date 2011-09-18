@@ -1,33 +1,33 @@
-***: ===============================================================
-***: General Parameters and Outputs
-***: ===============================================================
-DT:0.1
-PREVIEW:1
-BOUNDS:Size=100;100;100,Solid=1;1;1
-LENGTH:50
-OUTPUT_PATH:/Users/Tom/Desktop/
-OUTPUT_DATA:1
-OUTPUT_MOVIE:0
-DATA_FILENAME:OutputData.txt
-MOVIE_FILENAME:OutputMovie.mov
-***: ===============================================================
-***: Movie Rendering Options
-***: ===============================================================
-MOVIE_SPEED:50
-MOVIE_DT:1.0
-MOVIE_WIDTH:640
-MOVIE_HEIGHT:480
-MOVIE_CAMERA:-100;-50;85
-***: ===============================================================
-***: Simulation Objects (Chemical Fields, Particles, Bacteria)
-***: Ensure the mesh comes first as used by other objects
-***: ===============================================================
-MESH:./examples/BSimParser/mesh_b2.obj
-CHEM_FIELD:CF1:Boxes=25;25;25,Diffusivity=0.0,DecayRate=0.2
-***:PARTICLES:PP1:Population=100,ParticleSize=0.1,BoundStart=0;0;0,BoundEnd=30;30;20,Color=255;0;0;255
-PARTICLES:PP2:Population=5,ParticleSize=5,BoundStart=0;0;0,BoundEnd=60;60;15,Color=0;0;255;255
-BACTERIA:BP1:Population=2000,BoundStart=0;0;0,BoundEnd=100;100;10,OutputChemicalField=CF1,OutputChemicalRate=10,GoalField=CF1
-***:BACTERIA:BP1:Population=10000,BoundStart=0;0;0,BoundEnd=100;100;10
-***: ===============================================================
-***: End of file
-***: ===============================================================
+***> ===============================================================
+***> General Parameters and Outputs
+***> ===============================================================
+DT>0.1
+PREVIEW>1
+BOUNDS>Size=100;100;100,Solid=1;1;1
+LENGTH>50
+OUTPUT_PATH>/Users/Tom/Desktop/
+OUTPUT_DATA>1
+OUTPUT_MOVIE>0
+DATA_FILENAME>OutputData.txt
+MOVIE_FILENAME>OutputMovie.mov
+***> ===============================================================
+***> Movie Rendering Options
+***> ===============================================================
+MOVIE_SPEED>50
+MOVIE_DT>1.0
+MOVIE_WIDTH>640
+MOVIE_HEIGHT>480
+MOVIE_CAMERA>-100;-50;85
+***> ===============================================================
+***> Simulation Objects (Chemical Fields, Particles, Bacteria)
+***> Ensure the mesh comes first as used by other objects
+***> ===============================================================
+MESH>./examples/BSimParser/mesh_b2.obj
+CHEM_FIELD>CF1>Boxes=25;25;25,Diffusivity=0.0,DecayRate=0.2
+***>PARTICLES>PP1>Population=100,ParticleSize=0.1,BoundStart=0;0;0,BoundEnd=30;30;20,Color=255;0;0;255
+PARTICLES>PP2>Population=5,ParticleSize=5,BoundStart=0;0;0,BoundEnd=60;60;15,Color=0;0;255;255
+BACTERIA>BP1>Population=2000,BoundStart=0;0;0,BoundEnd=100;100;10,OutputChemicalField=CF1,OutputChemicalRate=10,GoalField=CF1
+***>BACTERIA>BP1>Population=10000,BoundStart=0;0;0,BoundEnd=100;100;10
+***> ===============================================================
+***> End of file
+***> ===============================================================
