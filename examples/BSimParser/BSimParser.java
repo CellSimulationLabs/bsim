@@ -63,7 +63,7 @@ public class BSimParser {
     		scanner = new Scanner(paramFile);
 	    	try {
 	    		while(scanner.hasNextLine()) {
-	    			processLine(scanner.nextLine().split(":"), sim, lineCounter);
+	    			processLine(scanner.nextLine().split(">"), sim, lineCounter);
 	    			lineCounter++;
 	    		}
 	    	} finally { 
