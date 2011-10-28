@@ -66,6 +66,8 @@ public class BSimUtils {
 		Vector3d randomPerp = new Vector3d();
 		randomPerp.cross(v, random);		
 		rotate(v, randomPerp, theta);
+		// Ensure the vector is unit
+		v.normalize();
 	}
 	
 	/**
