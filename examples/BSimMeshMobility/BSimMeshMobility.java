@@ -27,25 +27,25 @@ class BSimMeshMobility {
 		 * Create a new simulation object
 		 */
 		BSim sim = new BSim();		
-		sim.setDt(0.01);
+		sim.setDt(0.015);
 		sim.setTimeFormat("0.00");
-		sim.setSimulationTime(60.0);
+		sim.setSimulationTime(9000.0); // 2.5 hours
 		sim.setSolid(true,true,true);
-		sim.setBound(100000,100000,100000);
+		sim.setBound(8000,8000,8000);
 
 		/**
 		 * Load the mesh (ensure only one load is uncommented)
 		 */
 		theMesh = new BSimOBJMesh();
-		theMesh.load("Mesh_Intact.obj");
-		//theMesh.load("Mesh_20PctRemoved.obj");
-		// theMesh.load("Mesh_40PctRemoved.obj");
+		//theMesh.load("./examples/BSimMeshMobility/Mesh_Intact.obj");
+		//theMesh.load("./examples/BSimMeshMobility/Mesh_20PctRemoved.obj");
+		theMesh.load("./examples/BSimMeshMobility/Mesh_40PctRemoved.obj");
 		
 		/**
 		 * Place mesh in the correct location for the simulation
 		 */
-		theMesh.scale(55000);
-		theMesh.translateAbsolute(new Vector3d(50000,50000,50000));
+		theMesh.scale(4400);
+		theMesh.translateAbsolute(new Vector3d(4000,4000,4000));
 		
 		/**
 		 * A type of bacteria that is repelled by the mesh surface
@@ -67,8 +67,11 @@ class BSimMeshMobility {
 		 * independantly.
 		 */
 		final Vector<BSimCollidingBacterium> bacteria = new Vector<BSimCollidingBacterium>();	
-		while(bacteria.size() < 10) {		
-			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, new Vector3d(50000.0,50000.0,50000.0));
+		while(bacteria.size() < 100) {		
+			BSimCollidingBacterium b = new BSimCollidingBacterium(sim, 
+					new Vector3d(1500.0 + Math.random()*5000.0, 
+							     1500.0 + Math.random()*5000.0, 
+							     1500.0 + Math.random()*5000.0));
 			bacteria.add(b);
 		}
 
@@ -102,7 +105,7 @@ class BSimMeshMobility {
 		/**
 		 * Create exporter of the distance traveled from start position
 		 */
-		BSimLogger tracker = new BSimLogger(sim, "results.csv") {
+		BSimLogger tracker = new BSimLogger(sim, "/Users/Tom/Desktop/BSim/results.csv") {
 			@Override
 			public void before() {
 				int i = 1;
@@ -128,12 +131,12 @@ class BSimMeshMobility {
 				write(sim.getFormattedTime() + "," + buffer);
 			}
 		};
-		tracker.setDt(2.0);
+		tracker.setDt(10.0);
 		sim.addExporter(tracker);
 		
 		// Uncomment to export movement data
-		// sim.export();
+		sim.export();
 
-		sim.preview();	
+		//sim.preview();	
 	}	
 }
