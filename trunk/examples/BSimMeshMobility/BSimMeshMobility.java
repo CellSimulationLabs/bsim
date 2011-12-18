@@ -38,8 +38,8 @@ class BSimMeshMobility {
 		 */
 		theMesh = new BSimOBJMesh();
 		//theMesh.load("./examples/BSimMeshMobility/Mesh_Intact.obj");
-		//theMesh.load("./examples/BSimMeshMobility/Mesh_20PctRemoved.obj");
-		theMesh.load("./examples/BSimMeshMobility/Mesh_40PctRemoved.obj");
+		theMesh.load("./examples/BSimMeshMobility/Mesh_20PctRemoved.obj");
+		//theMesh.load("./examples/BSimMeshMobility/Mesh_40PctRemoved.obj");
 		
 		/**
 		 * Place mesh in the correct location for the simulation
@@ -135,8 +135,8 @@ class BSimMeshMobility {
 		sim.addExporter(tracker);
 		
 		// Uncomment to export movement data
-		sim.export();
+		//sim.export();
 
-		//sim.preview();	
+		sim.preview();	
 	}	
 }
