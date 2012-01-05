@@ -1,6 +1,8 @@
 package bsim;
 
-
+/**
+ * 
+ */
 public abstract class BSimTicker {
 	/**
 	 * Run each timestep, this is where you should update particle properties

@@ -9,9 +9,9 @@ import java.util.Vector;
 public interface BSimDdeSystem {
 	
 	/** 
-	 * Define a system of derivatives - </br>
+	 * Defines a system of derivatives - </br>
 	 * dy[0] = ..., dy[1] = ..., etc</br>
-	 * then return dy[]
+	 * and returns dy[]
 	 */
 	public double[] derivativeSystem(double x, double[] y, Vector<double[]> ys);
 	
@@ -34,7 +34,7 @@ public interface BSimDdeSystem {
 	
 	/**
 	 * Sets the initial history when solving. 
-	 * @param history Vector of historic states (double[])
+	 * @param ys Vector of historic states (double[])
 	 */
 	public void setInitialHistory(Vector<double[]> ys);
 }

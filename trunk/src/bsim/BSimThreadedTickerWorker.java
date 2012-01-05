@@ -2,16 +2,22 @@ package bsim;
 
 import java.util.concurrent.CyclicBarrier;
 
-
+/**
+ * 
+ */
 public abstract class BSimThreadedTickerWorker implements Runnable {
 
-	protected int threadID; // The ID of this worker
-	protected int threads; // Total number of threads in the pool
-	protected static CyclicBarrier barrier1; // Shared barrier to enable synchronisation of all threads at start of update.
-	protected static CyclicBarrier barrier2; // Shared barrier to enable synchronisation of all threads at end of update.
+	/** The ID of this worker. */
+	protected int threadID;
+	/** Total number of threads in the pool. */
+	protected int threads;
+	/** Shared barrier to enable synchronisation of all threads at start of update. */
+	protected static CyclicBarrier barrier1;
+	/** Shared barrier to enable synchronisation of all threads at end of update. */
+	protected static CyclicBarrier barrier2;
 	
 	/**
-	 * Created a new worker for the BSimThreadedTicker.
+	 * Constructor to create a new worker for the BSimThreadedTicker.
 	 * @param threadID Unique thread ID for the worker.
 	 * @param threads Total number of threads.
 	 */

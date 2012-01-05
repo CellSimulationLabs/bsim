@@ -2,6 +2,9 @@ package bsim;
 
 import javax.vecmath.Vector3d;
 
+/**
+ * 
+ */
 public class BSimChemicalField {
 	
 	/* 1 molecule/(micron)^3 = 1.7 nM = 1.7 nanomol/L */
@@ -21,6 +24,14 @@ public class BSimChemicalField {
 	protected double[] box = new double[3]; // microns
 	protected double boxVolume;
 	
+	/**
+	 * Constructor that creates a new chemical field with attached to a particular simulation and
+	 * with a specified number of boxes, chemical diffusivity and decay rate.
+	 * @param sim Associated simulation.
+	 * @param boxes Number of boxes in the (x,y,z) directions.
+	 * @param diffusivity Diffusivity of the chemical (microns)^2/s.
+	 * @param decayRate Decay rate of the chemical (molecules/s).
+	 */
 	public BSimChemicalField(BSim sim, int[] boxes, double diffusivity, double decayRate) {
 		this.sim = sim;
 		this.bound = sim.getBound();
@@ -34,7 +45,9 @@ public class BSimChemicalField {
 		this.decayRate = decayRate;
 	}	
 	
+	/** Return the number of boxes in (x,y,z) directions. */
 	public int[] getBoxes() { return boxes; }
+	/** Return the size of each box (x,y,z) in microns. */
 	public double[] getBox() { return box; }	
 	
 	/**
@@ -60,10 +73,10 @@ public class BSimChemicalField {
 		int[] b = boxCoords(v);
 		addQuantity(b[0],b[1],b[2],q);
 	}
-	/** Adds a quantity of chemical to the box (i,j,k) */
-	public void addQuantity(int i, int j, int k, double q) {
-		quantity[i][j][k] += q;
-		if(quantity[i][j][k] < 0) quantity[i][j][k] = 0;
+	/** Adds a quantity of chemical to the box (x,y,z) */
+	public void addQuantity(int x, int y, int z, double q) {
+		quantity[x][y][z] += q;
+		if(quantity[x][y][z] < 0) quantity[x][y][z] = 0;
 	}
 	
 	/** Sets the concentration of the box containing position v */
@@ -71,9 +84,9 @@ public class BSimChemicalField {
 		int[] b = boxCoords(v);
 		setConc(b[0],b[1],b[2],c);
 	}
-	/** Sets the concentration of the box (i,j,k) */
-	public void setConc(int i, int j, int k, double c) {
-		quantity[i][j][k] = c*boxVolume;
+	/** Sets the concentration of the box (x,y,z) */
+	public void setConc(int x, int y, int z, double c) {
+		quantity[x][y][z] = c*boxVolume;
 	}
 	/** Sets the concentration of the field */
 	public void setConc(double c) {		
@@ -87,7 +100,7 @@ public class BSimChemicalField {
 		int[] b = boxCoords(v);
 		return getConc(b[0],b[1],b[2]);
 	}	
-	/** Gets the concentration of the field in the box (i,j,k) in molecules/(micron)^3 */
+	/** Gets the concentration of the field in the box (x,y,z) in molecules/(micron)^3 */
 	public double getConc(int i, int j, int k) {
 		return quantity[i][j][k]/boxVolume;
 	}
@@ -116,18 +129,26 @@ public class BSimChemicalField {
 		return new int[] {x, y, z};	
 	}
 	
-	
+	/**
+	 * Update the chemical field by diffusing and decaying the chemical present.
+	 */
 	public void update() {
 		diffuse();
 		decay();
 	}
 	
+	/**
+	 * Decay the chemical present in the field.
+	 */
 	public void decay() {
 		for(int i=0;i<boxes[0];i++)
 			for(int j=0;j<boxes[1];j++)
 				for(int k=0;k<boxes[2];k++) quantity[i][j][k] *= (1 - decayRate*sim.getDt());
 	}	
 	
+	/**
+	 * Diffuse the chemical present in the field.
+	 */
 	public void diffuse() {
 		double[][][] before = quantity;
 		/* Index of the box in positive (negative) .. direction, taking account of the boundary conditions */
@@ -235,7 +256,6 @@ public class BSimChemicalField {
 					}
 					
 				}
-		
 	}
 	
 }

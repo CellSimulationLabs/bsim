@@ -1,6 +1,8 @@
 package bsim;
 
-
+/**
+ * 
+ */
 public class BSimNotifier {
 	
 	public BSimNotifier () {

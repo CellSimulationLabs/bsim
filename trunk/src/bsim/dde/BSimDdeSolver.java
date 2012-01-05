@@ -43,8 +43,7 @@ public class BSimDdeSolver {
 	// --------------------------------------------------
 	
 	/**
-	 *  Numerically solve an DDE system with Euler's method.
-	 *  
+	 * Numerically solve an DDE system with Euler's method.
 	 * @param odes The {@link BSimDdeSystem} to solve.
 	 * @param t Independent variable.
 	 * @param ys Vector of dependent variables including history.
@@ -69,7 +68,6 @@ public class BSimDdeSolver {
 	
 	/** 
 	 * Numerically solve an DDE system with 2nd order Runge-Kutta method.
-	 * 
 	 * @param odes The {@link BSimDdeSystem} to solve.
 	 * @param t Independent variable.
 	 * @param y Vector of dependent variables.
@@ -108,8 +106,7 @@ public class BSimDdeSolver {
 	// --------------------------------------------------
 	
 	/**
-	 * Numerically solve an DDE system with 4th order Runge-Kutta method
-	 *  
+	 * Numerically solve an DDE system with 4th order Runge-Kutta method.
 	 * @param odes The {@link BSimDdeSystem} to solve.
 	 * @param t Independent variable.
 	 * @param y Vector of dependent variables.

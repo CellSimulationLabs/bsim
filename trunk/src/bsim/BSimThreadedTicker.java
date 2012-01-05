@@ -2,19 +2,24 @@ package bsim;
 
 import java.util.Vector;
 
-
+/**
+ * 
+ */
 public abstract class BSimThreadedTicker extends BSimTicker {
 	
-	protected int threads; // Total number of threads (including main one)
-	protected Vector<BSimThreadedTickerWorker> workers; // List of workers to call upon
-	protected BSimThreadedTickerWorker myWorker; // A local working for the main thread to call directly
+	/** Total number of threads (including main one). */
+	protected int threads;
+	/** List of workers to call upon. */
+	protected Vector<BSimThreadedTickerWorker> workers;
+	/** A local working for the main thread to call directly. */
+	protected BSimThreadedTickerWorker myWorker;
 	
 	/**
-	 * Creates a threaded ticker that uses a fixed size pool of threads. These are
+	 * Constructor that creates a threaded ticker that uses a fixed size pool of threads. These are
 	 * not recreated each call due to the sizable overhead in Java, but instead
 	 * a pool of worker threads is blocked and notified to carry out work each
 	 * time the ticker is called.
-	 * @param threads Total number of threads to use
+	 * @param threads Total number of threads to use.
 	 */
 	public BSimThreadedTicker (int threads) {
 		this.threads = threads;
@@ -30,7 +35,8 @@ public abstract class BSimThreadedTicker extends BSimTicker {
 	}
 	
 	/**
-	 * Called at each time step by the BSim simulation object
+	 * Called at each time step by the BSim simulation object. Runs the sequential before, the
+	 * workers code, and then the sequential after.
 	 */
 	@Override
 	final public void tick() {
