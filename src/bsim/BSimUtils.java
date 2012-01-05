@@ -8,12 +8,16 @@ import javax.vecmath.AxisAngle4d;
 import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
+/**
+ * 
+ */
 public class BSimUtils {
 	
+	/** Shared random number generator. */
 	private static Random rng = new Random();
 	
 	/**
-	 * Sample from a gamma distribution
+	 * Sample from a gamma distribution. See: 
 	 * http://vyshemirsky.blogspot.com/2007/11/sample-from-gamma-distribution-in-java.html
 	 */
 	public static synchronized double sampleGamma(double k, double theta) {
@@ -58,7 +62,7 @@ public class BSimUtils {
 	}
 	
 	/**
-	 * Rotates the vector v by an angle theta in a random direction perpendicular to v
+	 * Rotates the vector v by an angle theta in a random direction perpendicular to v.
 	 */
 	public static synchronized void rotatePerp(Vector3d v, double theta) {		
 		/* Obtain a random direction perpendicular to v */		
@@ -71,7 +75,7 @@ public class BSimUtils {
 	}
 	
 	/**
-	 * Rotates the vector v towards the specified axis by an angle theta
+	 * Rotates the vector v towards the specified axis by an angle theta.
 	 */
 	public static synchronized void rotate(Vector3d v, Vector3d axis, double theta) {
 		/* Generate the rotation matrix for rotating about the axis by an angle theta */
@@ -82,6 +86,10 @@ public class BSimUtils {
 		r.transform(v);
 	}
 	
+	/**
+	 * Returns a string representation of the current date and time.
+	 * @return String representation of the current date and time.
+	 */
 	public static synchronized String timeStamp(){
 		// Build the time stamp of the whole batch (this helps to keep batches together)
 		Calendar calNow = Calendar.getInstance();
@@ -101,7 +109,7 @@ public class BSimUtils {
 	}
 	
 	/**
-	* Returns a padded version of the number to a size of two
+	* Returns a padded version of the number to a size of two.
 	*/
 	public static synchronized String padInt2(int val) {
 		String outStr = "";
@@ -118,10 +126,10 @@ public class BSimUtils {
 	}
 	
 	/**
-	 * Method to check existence of a desired path. If the path does not exist,
-	 * then the method will generate the necessary directories
-	 * @param dirPath The desired directory path to check and generate
-	 * @return String representation of the desired directory path
+	 * Checks the existence of a desired path. If the path does not exist,
+	 * then the method will generate the necessary directories.
+	 * @param dirPath The desired directory path to check and generate.
+	 * @return String representation of the desired directory path.
 	 */
 	public static String generateDirectoryPath(String dirPath) {
 

@@ -11,8 +11,12 @@ import javax.vecmath.Vector3d;
 import bsim.draw.BSimDrawer;
 import bsim.export.BSimExporter;
 
+/**
+ * 
+ */
 public class BSim {
 	
+	/** Boltzmann constant. */
 	public static double BOLTZMANN = 1.38e-23;
 
 	private double dt = 0.01;
@@ -31,29 +35,52 @@ public class BSim {
 	private BSimDrawer drawer;
 	private Vector<BSimExporter> exporters = new Vector<BSimExporter>();	
 
-	public void setDt(double d) { dt = d; }	
+	/** Set the timestep (secs). */
+	public void setDt(double d) { dt = d; }
+	/** Set the length of the simulation (secs). */
 	public void setSimulationTime(double d) { simulationTime = d; }
+	/** Set the time format. Used to display the time on movies. */
 	public void setTimeFormat(String s) { timeFormat = new DecimalFormat(s); }
-	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z);	}
+	/** Set the simulation bound (microns). */
+	public void setBound(double x, double y, double z) { bound = new Vector3d(x,y,z); }
+	/** Set whether the boundaries are solid (reflecting) or wrapping (periiodic). Solid = true, relecting = false. */
 	public void setSolid(boolean x, boolean y, boolean z) { solid = new boolean[]{x,y,z}; }
+	/** Set whether the boundaries are leaky. A leaky boundary allows for chemicals to escape at some defined rate. */
 	public void setLeaky(boolean xTop, boolean xBottom, boolean yTop, boolean yBottom, boolean zTop, boolean zBottom) { leaky = new boolean[]{xTop,xBottom,yTop,yBottom,zTop,zBottom}; }
+	/** Set the rate that chemicals can escape from the simulation (if the boundary is leaky). */
 	public void setLeakyRate(double xTop, double xBottom, double yTop, double yBottom, double zTop, double zBottom) { leakyRate = new double[]{xTop,xBottom,yTop,yBottom,zTop,zBottom}; }
+	/** Set the viscosity of the environment. */
 	public void setVisc(double v) { visc = v; }
+	/** Set the temperature of the environment. */
 	public void setTemperature(double t) { temperature = t; }	
+	/** Set the ticker to be used during simulation. */
 	public void setTicker(BSimTicker bSimTicker) { ticker = bSimTicker;	}
+	/** Set the drawer to be used during simulation. */
 	public void setDrawer(BSimDrawer bSimDrawer) { drawer = bSimDrawer;	}
+	/** Add an exporter to be called during simulation. */
 	public void addExporter(BSimExporter e) { exporters.add(e); }	
 	
+	/** Return the timestep. */
 	public double getDt() { return dt; }
+	/** Return the length of the simulation. */
 	public double getSimulationTime(){ return simulationTime; }
+	/** Return the current timestep of the simulation. */
 	public double getTimestep() { return timestep; }
+	/** Return the current time of the simulation. */
 	public double getTime() { return timestep*dt; }
+	/** Return a formatted version of the current time of the simulation. */
 	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
+	/** Return the simulation bounds (microns). */
 	public Vector3d getBound() { return bound; }
+	/** Return whether the boundaries are solid (reflecting) or wrapping (periiodic). Solid = true, relecting = false. */
 	public boolean[] getSolid() { return solid; }
+	/** Return whether the boundaries are leaky. */
 	public boolean[] getLeaky() { return leaky; }
+	/** Return the rate that chemicals can escape from the simulation (if the boundary is leaky). */
 	public double[] getLeakyRate() { return leakyRate; }
+	/** Return the viscosity of the environment. */
 	public double getVisc() { return visc; }
+	/** Return the temperature of the environment. */
 	public double getTemperature() { return temperature; }
 	
 	private int timestep;
@@ -87,7 +114,7 @@ public class BSim {
 	}
 	
 	/**
-	 * Runs and exports the simulation
+	 * Runs and exports the simulation.
 	 */
 	public void export() {						
 		for(BSimExporter exporter : exporters) exporter.before();		
@@ -104,7 +131,7 @@ public class BSim {
 	}	
 		
 	/**
-	 * Returns the number of timesteps in the duration d
+	 * Returns the number of complete timesteps in the duration d.
 	 */
 	public int timesteps(double d) {
 		return (int)(d/dt);

@@ -22,7 +22,7 @@ public abstract class BSimExporter {
 	/**
 	 * The exporter is called every d seconds in simulation time. Defaults to sim.getDt()  
 	 */
-	public void setDt(double d) { dt = d;  }
+	public void setDt(double d) { dt = d; }
 	
 	public double getDt() { return dt; }
 	

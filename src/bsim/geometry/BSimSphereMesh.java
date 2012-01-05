@@ -21,7 +21,7 @@ import java.util.Hashtable;
 import javax.vecmath.Vector3d;
 
 /**
- * Sphere mesh, uses face-vertex representation (extends BSimFVMesh).
+ * Sphere mesh, uses face-vertex representation.
  */
 public class BSimSphereMesh extends BSimMesh {
 

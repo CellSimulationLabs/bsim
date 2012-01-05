@@ -25,12 +25,11 @@ import bsim.geometry.BSimTriangle;
 import bsim.particle.BSimParticle;
 import bsim.particle.BSimVesicle;
 
-
 /**
  * Scene preview and visualisation renderer (extends BSimDrawer). Uses 
  * Processing3D libraries to render the scene. The resulting image is 
  * then drawn to a native Java 2D graphics context which can be used 
- * within a GUI etc.
+ * within a GUI.
  */
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
@@ -187,7 +186,9 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 	
 	/**
-	 Draw a mesh, default colour.
+	 * Draw a mesh, default colour.
+	 * @param mesh Mesh to draw.
+	 * @param normalScaleFactor Scaling factor.
 	 */
 	public void draw(BSimMesh mesh, double normalScaleFactor){
 		draw(mesh, new Color(128,128,255,50), normalScaleFactor);
@@ -269,58 +270,52 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 	
 	/**
-	 * Draws a chemical field structure based on its defined parameters (default alpha).
+	 * Draw a chemical field structure based on its defined parameters (default alpha).
+	 * @param field The chemical field to be drawn.
+	 * @param c The desired colour.
+	 * @param alphaGrad The alpha-per-unit-concentration.
 	 */
 	public void draw(BSimChemicalField field, Color c, float alphaGrad) {
 		draw(field, c, alphaGrad, 255);
 	}
-	
-	//********************* TODO - reduce code duplication in octree rendering.
+
 	/**	
-	 * 	Post order hierarchy display drawing function for Octree
+	 * 	Post order hierarchy display drawing function for Octree.
 	 *	@param t The (sub)octree to be drawn.
-	 *	@param c The desired colour
+	 *	@param c The desired colour.
 	 *	@param alphaGrad The alpha-per-unit-concentration. 
 	 */
 	public  void draw(OctreeNode t, Color c, float alphaGrad){
-		if(t!=null){
-			
+		if(t!=null){	
 			for (int i=0;  i<8; i++){			
 				draw(t.getsubNode(i), c,  alphaGrad);				
-			}
-			
+			}	
 			p3d.pushMatrix();	
 			p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-			//p3d.fill(c.getRed(),c.getGreen(),c.getBlue(), alphaGrad);
-			
-			//filling like before 
 			p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.quantity);
-		//	System.out.print(t.quantity);System.out.print("\n");
-			
 			p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
 			p3d.popMatrix();
 		}
 	}
-	
-	/**Post order hierarchy display drawing - uses internal color value for individual nodes
+
+	/**
+	 * Post order hierarchy display drawing - uses internal color value for individual nodes
 	 * Not the fastest while rendering....
 	 * */
 	public  void draw(OctreeNode t, float alphaGrad){
 		if(t!=null){
-			
 			for (int i=0;  i<8; i++){			
 				draw(t.getsubNode(i), alphaGrad);				
 			}
-
-				p3d.pushMatrix();	
-				p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-				
-				if(t.getnodeColor()==Color.cyan){
-					p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), 100);
-				} else {
-				p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), alphaGrad);}
-				p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
-				p3d.popMatrix();
+			p3d.pushMatrix();	
+			p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));	
+			if(t.getnodeColor()==Color.cyan){
+				p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), 100);
+			} else {
+				p3d.fill(t.getnodeColor().getRed(), t.getnodeColor().getGreen(),t.getnodeColor().getBlue(), alphaGrad);
+			}
+			p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
+			p3d.popMatrix();
 		}
 	}
 }
