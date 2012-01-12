@@ -14,6 +14,25 @@ import javax.vecmath.Vector3d;
  */
 public class BSimUtils {
 	
+	/**
+	 * Method samples from the normal distribution Z(0,1) 
+	 * and scales the returned variable as if it was from normal distribution Z(mean,stdev).
+	 * Author: Petros Mina.
+	 * @param mean Supply mean value as a double.
+	 * @param stdev Supply standard deviation value as a double.
+	 * @return Returns a random variable from the normal distribution Z(mean,stdev).
+	 */
+	
+	public static double sampleNormal(double mean, double stdev) {
+	    
+		final double GaussianNumber  = rng.nextGaussian();
+		final double normalVariable = GaussianNumber;
+		final double scaledVariable = stdev*normalVariable + mean;
+		
+		return scaledVariable;
+			
+		}
+	
 	/** Shared random number generator. */
 	private static Random rng = new Random();
 	
