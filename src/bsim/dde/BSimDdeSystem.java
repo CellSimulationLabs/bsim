@@ -9,9 +9,7 @@ import java.util.Vector;
 public interface BSimDdeSystem {
 	
 	/** 
-	 * Defines a system of derivatives - </br>
-	 * dy[0] = ..., dy[1] = ..., etc</br>
-	 * and returns dy[]
+	 * Defines a system of derivatives dy[0] = ..., dy[1] = ..., etc and returns dy[]
 	 */
 	public double[] derivativeSystem(double x, double[] y, Vector<double[]> ys);
 	

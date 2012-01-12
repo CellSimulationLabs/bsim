@@ -19,7 +19,7 @@ import processing.core.PGraphics3D;
 
 import bsim.BSim;
 import bsim.BSimChemicalField;
-import bsim.OctreeNode;
+import bsim.BSimOctreeField;
 import bsim.geometry.BSimMesh;
 import bsim.geometry.BSimTriangle;
 import bsim.particle.BSimParticle;
@@ -33,9 +33,13 @@ import bsim.particle.BSimVesicle;
  */
 public abstract class BSimP3DDrawer extends BSimDrawer {
 
+	/** Processing graphics context used for drawing. */
 	protected PGraphics3D p3d;
+	/** Font used when rendering text. */
 	protected PFont font;
+	/** Size of the simulation. */
 	protected Vector3d bound;
+	/** Centre of the simulation. Used for camera positioning. */
 	protected Vector3d boundCentre;
 
 	// With updated Processing library (1.5.1), looks like begindraw() will reset the camera
@@ -280,29 +284,30 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 	}
 
 	/**	
-	 * 	Post order hierarchy display drawing function for Octree.
-	 *	@param t The (sub)octree to be drawn.
-	 *	@param c The desired colour.
+	 * 	Draw a BSimOctreeField in given colour. Post order hierarchy used for drawing.
+	 *	@param t Octree to be drawn.
+	 *	@param c Desired colour.
 	 *	@param alphaGrad The alpha-per-unit-concentration. 
 	 */
-	public  void draw(OctreeNode t, Color c, float alphaGrad){
+	public  void draw(BSimOctreeField t, Color c, float alphaGrad){
 		if(t!=null){	
 			for (int i=0;  i<8; i++){			
 				draw(t.getsubNode(i), c,  alphaGrad);				
 			}	
 			p3d.pushMatrix();	
 			p3d.translate((float)(t.getCentre().x), (float)(t.getCentre().y), (float)(t.getCentre().z));
-			p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.quantity);
+			p3d.fill(c.getRed(),c.getGreen(),c.getBlue(),alphaGrad*(float)t.getQuantity());
 			p3d.box((float)t.getLength(),(float)t.getLength(),(float)t.getLength());
 			p3d.popMatrix();
 		}
 	}
 
-	/**
-	 * Post order hierarchy display drawing - uses internal color value for individual nodes
-	 * Not the fastest while rendering....
-	 * */
-	public  void draw(OctreeNode t, float alphaGrad){
+	/**	
+	 * 	Draw a BSimOctreeField. Post order hierarchy used for drawing.
+	 *	@param t Octree to be drawn.
+	 *	@param alphaGrad The alpha-per-unit-concentration. 
+	 */
+	public  void draw(BSimOctreeField t, float alphaGrad){
 		if(t!=null){
 			for (int i=0;  i<8; i++){			
 				draw(t.getsubNode(i), alphaGrad);				

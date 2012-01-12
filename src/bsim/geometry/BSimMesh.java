@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import javax.vecmath.Vector3d;
 
 /**
- * Abstract 3-D mesh surface class, represented as indexed list of vertices,
+ * Abstract 3-D mesh surface class. Represented as indexed list of vertices,
  * or points in 3-D, of which the mesh faces are composed.
  */
 public abstract class BSimMesh {

@@ -3,25 +3,31 @@ package bsim;
 import javax.vecmath.Vector3d;
 
 /**
- * 
+ * Standard chemical field (uniform division of space) .
+ * Uses regular division of the three-dimensional space into boxes that
+ * then allow for diffusion of chemical quantities between the boxes at
+ * some rate (diffusivity).
  */
 public class BSimChemicalField {
 	
 	/* 1 molecule/(micron)^3 = 1.7 nM = 1.7 nanomol/L */
 	/* 1 mM = 6e5 molecules/(micron)^3 */
 	
+	/** Simulation the chemical field is associated with. */
 	protected BSim sim;
+	/** Diffusivity of the chemical field. */
 	protected double diffusivity; // (microns)^2/s
-	/** Fraction of chemical decaying per second, quantity(t+dt) = quantity(t)*(1-decayRate*dt) */
+	/** Fraction of chemical decaying per second, quantity(t+dt) = quantity(t)*(1-decayRate*dt). */
 	protected double decayRate; // 1/seconds 
-	/** The quantity of chemical in the box (i,j,k) */
+	/** The quantity of chemical in the box (i,j,k). */
 	protected double[][][] quantity; // number of molecules
-	/** sim.getBound() */
+	/** sim.getBound(). */
 	protected Vector3d bound;
-	/** Number of boxes in each dimension */
+	/** Number of boxes in each dimension. */
 	protected int[] boxes = new int[3];
-	/** Box size */
+	/** Box size. */
 	protected double[] box = new double[3]; // microns
+	/** Volume of each box (microns^3). */
 	protected double boxVolume;
 	
 	/**
@@ -68,23 +74,23 @@ public class BSimChemicalField {
 					setConc(index[0], index[1], index[2], startConc + index[axis]*grad);
 	}
 	
-	/** Adds a quantity of chemical to the box containing position v */
+	/** Adds a quantity of chemical to the box containing position v. */
 	public void addQuantity(Vector3d v, double q) {
 		int[] b = boxCoords(v);
 		addQuantity(b[0],b[1],b[2],q);
 	}
-	/** Adds a quantity of chemical to the box (x,y,z) */
+	/** Adds a quantity of chemical to the box (x,y,z). */
 	public void addQuantity(int x, int y, int z, double q) {
 		quantity[x][y][z] += q;
 		if(quantity[x][y][z] < 0) quantity[x][y][z] = 0;
 	}
 	
-	/** Sets the concentration of the box containing position v */
+	/** Sets the concentration of the box containing position v. */
 	public void setConc(Vector3d v, double c) {
 		int[] b = boxCoords(v);
 		setConc(b[0],b[1],b[2],c);
 	}
-	/** Sets the concentration of the box (x,y,z) */
+	/** Sets the concentration of the box (x,y,z). */
 	public void setConc(int x, int y, int z, double c) {
 		quantity[x][y][z] = c*boxVolume;
 	}
@@ -95,17 +101,17 @@ public class BSimChemicalField {
 				for(int k=0;k<boxes[2];k++) quantity[i][j][k] = c*boxVolume;
 	}
 	
-	/** Gets the concentration of the field at the position v in molecules/(micron)^3 */
+	/** Gets the concentration of the field at the position v in molecules/(micron)^3. */
 	public double getConc(Vector3d v) {
 		int[] b = boxCoords(v);
 		return getConc(b[0],b[1],b[2]);
 	}	
-	/** Gets the concentration of the field in the box (x,y,z) in molecules/(micron)^3 */
+	/** Gets the concentration of the field in the box (x,y,z) in molecules/(micron)^3. */
 	public double getConc(int i, int j, int k) {
 		return quantity[i][j][k]/boxVolume;
 	}
 	
-	/** Returns the total quantity of chemical in the field */
+	/** Returns the total quantity of chemical in the field. */
 	public double totalQuantity() {
 		double t = 0;
 		for(int i=0;i<boxes[0];i++)
@@ -114,7 +120,7 @@ public class BSimChemicalField {
 		return t;
 	}
 	
-	/** Returns the integer coordinates of the box containing the position v */ 
+	/** Returns the integer coordinates of the box containing the position v. */ 
 	public int[] boxCoords(Vector3d v) {
 		/* Check the bounds are valid */
 		int x = (int)(v.x/box[0]);

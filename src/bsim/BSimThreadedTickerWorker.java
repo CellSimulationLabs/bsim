@@ -3,7 +3,9 @@ package bsim;
 import java.util.concurrent.CyclicBarrier;
 
 /**
- * 
+ * Multi-threaded ticker worker.
+ * This carries out the actual update task and captures how individual threads
+ * should work on separate parts of the simulation.
  */
 public abstract class BSimThreadedTickerWorker implements Runnable {
 
@@ -60,7 +62,7 @@ public abstract class BSimThreadedTickerWorker implements Runnable {
 	/**
 	 * Run each timestep in parallel, use the threadID to figure
 	 * out which part of the problem to work on. threads is the
-	 * total number of threads created.
+	 * total number of threads created. To be overwritten by user.
 	 */
 	public abstract void threadedTick(int threadID, int threads);
 }
