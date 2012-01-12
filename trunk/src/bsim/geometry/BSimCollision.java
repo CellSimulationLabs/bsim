@@ -6,11 +6,15 @@ import javax.vecmath.Vector3d;
 
 import bsim.particle.BSimParticle;
 
+/**
+ * Collision related methods.
+ */
 public class BSimCollision {
 		protected double t;
 		protected Vector3d pos;
 		public static boolean recursiveCollisions = false;
 		
+		/** Constructor for an empty collision. */
 		public BSimCollision(){
 			t = Double.NaN;
 			pos = new Vector3d();
@@ -33,16 +37,25 @@ public class BSimCollision {
 			pos.set(newP);
 		}
 		
+		/** Set the collision values. */
 		public void set(BSimCollision col){
 			t = col.getTVal();
 			pos.set(col.getLocation());
 		}
 		
+		/** Return the t value. */
 		public double getTVal(){ return t;}
+		/** Return location of collision. */
 		public Vector3d getLocation(){return pos;}
 		
+		/** Set whether recursive collisions are enabled. */
 		public static void setRecursiveCollisions(boolean recursiveCollisionsActive){ recursiveCollisions = recursiveCollisionsActive;}
 
+		/**
+		 * Check for collision between particle and mesh, and add repulsion force.
+		 * @param p Particle to check.
+		 * @param theMesh Mesh to check for intersection with.
+		 */
 		public static void collideAndRepel(BSimParticle p, BSimMesh theMesh){
 			boolean meshIntersection = false;
 			
@@ -89,7 +102,15 @@ public class BSimCollision {
 
 		
 		// NOTE that this is colliding a ray with a triangle (NOT in fact a swept sphere vs triangle)
-		// and therefore is less accurate for larger particles. drat...
+		// and therefore is less accurate for larger particles.
+		/**
+		 * Check to see if intersection with mesh and reflect. End point (p2) is updated to the correct
+		 * reflected position. Note that this is colliding a ray with a triangle (NOT in fact 
+		 * a swept sphere vs triangle).
+		 * @param p1 Start point
+		 * @param p2 End point
+		 * @param theMesh Mesh to check for intersection with.
+		 */
 		public static void collideAndReflect(Vector3d p1, Vector3d p2, BSimMesh theMesh){
 
 			BSimCollision iPos = new BSimCollision();
@@ -144,7 +165,13 @@ public class BSimCollision {
 			}
 		}
 		
-		
+		/**
+		 * Check if mesh is crossed.
+		 * @param p1 Start point.
+		 * @param p2 End point
+		 * @param theMesh Mesh to check for intersection with.
+		 * @return Boolean whether crossing occurs.
+		 */
 		public static boolean collideAndCross(Vector3d p1, Vector3d p2, BSimMesh theMesh){
 			BSimCollision iPos = new BSimCollision();
 

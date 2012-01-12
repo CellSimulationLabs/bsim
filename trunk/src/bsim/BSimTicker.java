@@ -1,7 +1,8 @@
 package bsim;
 
 /**
- * 
+ * Standard ticker.
+ * Used to update the simulation state at each timestep.
  */
 public abstract class BSimTicker {
 	/**

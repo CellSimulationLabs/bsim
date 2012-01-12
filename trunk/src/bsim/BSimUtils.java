@@ -9,7 +9,8 @@ import javax.vecmath.Matrix3d;
 import javax.vecmath.Vector3d;
 
 /**
- * 
+ * Utility functions.
+ * Defines a wide array of utility functions used throughout BSim.
  */
 public class BSimUtils {
 	

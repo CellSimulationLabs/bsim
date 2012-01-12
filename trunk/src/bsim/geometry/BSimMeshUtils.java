@@ -12,9 +12,12 @@ package bsim.geometry;
 
 import javax.vecmath.Vector3d;
 
-import bsim.OctreeNode;
+import bsim.BSimOctreeField;
 import bsim.particle.BSimParticle;
 
+/**
+ * Utility functions for meshes.
+ */
 public class BSimMeshUtils {
 	
 	/**
@@ -215,7 +218,7 @@ public class BSimMeshUtils {
 	 * @param n Octree node to test against
 	 * @return true if an intersection occurs
 	 */
-	public static boolean intersectTriOctreeNode(BSimTriangle t, OctreeNode n){
+	public static boolean intersectTriOctreeNode(BSimTriangle t, BSimOctreeField n){
 		double length = n.getLength();
 		return intersectTriangleAAB(t, n.getCentre(), new Vector3d(length, length, length));
 	}

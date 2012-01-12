@@ -3,7 +3,12 @@ package bsim;
 import java.util.Vector;
 
 /**
- * 
+ * Multi-threaded ticker.
+ * This can be used instead of a standard ticker and will allow for concurrent
+ * updating of appropriate parts of a simulation. Care must be taken to ensure
+ * that data structures are not updated and read by two different threads. A
+ * user must define a BSimThreadedTickerWorker object that captures how the
+ * ticker should split up the update task.
  */
 public abstract class BSimThreadedTicker extends BSimTicker {
 	

@@ -12,6 +12,12 @@ import bsim.dde.BSimDdeSystem;
  */
 public class BSimDdeSolver {
 	
+	/**
+	 * Create an initial state, including history.
+	 * @param ddes The DDE system.
+	 * @param h Timestep.
+	 * @return Initial state vector.
+	 */
 	public static Vector<double[]> getInitialState (BSimDdeSystem ddes, double h){
 		// Create the initial state (including history)
 		Vector<double[]> ys = new Vector<double[]>((int)(ddes.getMaxDelay()/h));
@@ -22,6 +28,14 @@ public class BSimDdeSolver {
 		return ys;
 	}
 	
+	/**
+	 * Calculates a delayed (historic) state. Should be used by the DDE system
+	 * when retrieving historic states of the system. 
+	 * @param ys The state vector.
+	 * @param h Timestep
+	 * @param delay Required delayed state vector
+	 * @return Delayed state vector.
+	 */
 	public static double[] getDelayedState(Vector<double[]> ys, double h, double delay){
 		// Calculate the index for the delayed value (rounds down)
 		int i = (int)(delay/h);
@@ -29,6 +43,11 @@ public class BSimDdeSolver {
 		return ys.get(i);
 	}
 	
+	/**
+	 * Shifts all elements in the state vector by one timestep.
+	 * Looses last historic state vector.
+	 * @param ys The state vector.
+	 */
 	public static void shiftState(Vector<double[]> ys){
 		// Shift all elements and loose last
 		double[] y = new double[ys.get(0).length];

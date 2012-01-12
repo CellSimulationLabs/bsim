@@ -7,9 +7,11 @@ import bsim.geometry.BSimTriangle;
 
 
 /**
- * Octree Chemical Field, uses an octree structure to compute a chemical field of an arbitrary shape
- * Only one BSimOctree Field object needs to be created by the user, it subdivides into an appropriate shape with the 
- * 'fitFieldtoMesh' command. Decay and diffusion are performed through post order traversals. 
+ * Octree chemical field (non-uniform division of space).
+ * Uses an octree datatype to compute a chemical field of an arbitrary shape. Only one 
+ * BSimOctreeField object needs to be created by the user, it subdivides into an appropriate 
+ * shape with the fitFieldtoMesh() method. Decay and diffusion are performed through post 
+ * order traversals. 
  */
 public class BSimOctreeField
 

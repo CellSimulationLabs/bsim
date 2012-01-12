@@ -7,6 +7,9 @@ import javax.vecmath.Vector3d;
 
 import bsim.BSim;
 
+/**
+ * 
+ */
 public class BSimParticle {	
 		
 	protected static Random rng = new Random();

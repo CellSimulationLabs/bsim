@@ -1,5 +1,6 @@
 package bsim;
 
+
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.text.DecimalFormat;
@@ -12,7 +13,9 @@ import bsim.draw.BSimDrawer;
 import bsim.export.BSimExporter;
 
 /**
- * 
+ * Main simulation class.
+ * Holds information related to a simulation including the bounds, types
+ * of boundary, temperature, etc.
  */
 public class BSim {
 	

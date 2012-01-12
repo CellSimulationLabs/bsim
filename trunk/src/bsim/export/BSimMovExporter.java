@@ -9,13 +9,26 @@ import bsim.BSim;
 import bsim.draw.BSimDrawer;
 import bsim.export.quicktime.QuickTimeOutputStream;
 
+/**
+ * Movie file exporter.
+ */
 public class BSimMovExporter extends BSimExporter {
 
+	/** Movie that is output to. */
 	protected QuickTimeOutputStream outputStream;
+	/** Filename of the output movie. */
 	protected String filename;
+	/** Speed of the movie. */
 	protected int speed = 1;
+	/** Drawer to generate a movie frame. */
 	protected BSimDrawer drawer;
 
+	/**
+	 * Constructor for the movie exporter.
+	 * @param sim Associated simulation.
+	 * @param drawer Drawer to generate movie frames.
+	 * @param filename Output movie filename.
+	 */
 	public BSimMovExporter(BSim sim, BSimDrawer drawer, String filename) {
 		super(sim);
 		this.drawer = drawer;
@@ -30,6 +43,9 @@ public class BSimMovExporter extends BSimExporter {
 		speed = f;		
 	}
 	
+	/**
+	 * Called before the simulation starts.
+	 */
 	@Override
 	public void before() {		
 		try {
@@ -42,6 +58,9 @@ public class BSimMovExporter extends BSimExporter {
 		}			
 	}
 	
+	/**
+	 * Called at each timestep of the simulation.
+	 */
 	@Override
 	public void during() {			
 		BufferedImage img = new BufferedImage(drawer.getWidth(), drawer.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -55,6 +74,9 @@ public class BSimMovExporter extends BSimExporter {
 		}
 	}
 	
+	/**
+	 * Called after the simulation ends.
+	 */
 	@Override
 	public void after() {
 		try {
@@ -63,5 +85,4 @@ public class BSimMovExporter extends BSimExporter {
 			e.printStackTrace();
 		}
 	}
-
 }

@@ -5,7 +5,8 @@ import java.awt.Graphics2D;
 import bsim.BSim;
 
 /**
- * 
+ * Drawer base class.
+ * Does not implement any drawing itself, but should be extended by the user.
  */
 public abstract class BSimDrawer {
 	

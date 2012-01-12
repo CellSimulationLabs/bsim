@@ -10,7 +10,7 @@ import bsim.BSimUtils;
 
 /**
  * Class representing a bacterium whose run-tumble motion 
- * is affected in a simple way by a single goal chemical 
+ * is affected in a simple way by a single goal chemical.
  */
 public class BSimBacterium extends BSimParticle {
 	
@@ -37,13 +37,13 @@ public class BSimBacterium extends BSimParticle {
 	 */
 	protected double forceMagnitude = 1; // pN
 	/** 
-	 * Direction that the cell exerts its flagellar force
+	 * Direction that the cell exerts its flagellar force.
 	 */
 	protected Vector3d direction;
 	
-	/** Bacteria tend to swim towards higher concentrations of this chemical field */
+	/** Bacteria tend to swim towards higher concentrations of this chemical field. */
 	protected BSimChemicalField goal;
-	/** Memory of previous concentrations of the goal field */ 
+	/** Memory of previous concentrations of the goal field. */ 
 	protected double[] memory; // molecules/(micron)^3
 	/*
 	 * 'Temporal comparisons in bacterial chemotaxis', Segall, Berg et al.:
@@ -56,8 +56,8 @@ public class BSimBacterium extends BSimParticle {
 	protected double shortTermMemoryLength;
 	/** sim.timesteps(longTermMemoryDuration) */
 	protected double longTermMemoryLength;
-	/** Sensitivity to differences in sequential averages */
-	protected double sensitivity = 1; //molecules/(micron)^3
+	/** Sensitivity to differences in sequential averages (molecules/(micron)^3). */
+	protected double sensitivity = 1;
 			
 	/*
 	 * 
@@ -94,7 +94,7 @@ public class BSimBacterium extends BSimParticle {
 		if(goal != null && movingUpGradient()) return pEndRunUp;
 		else return pEndRunElse;
 	}
-	/** Probability per per unit time of ending a tumble */
+	/** Probability per per unit time of ending a tumble. */
 	public double pEndTumble() { return pEndTumble; }
 	/* Setters */
 	public void pEndRunUp(double d) { pEndRunUp = d; }
@@ -104,7 +104,7 @@ public class BSimBacterium extends BSimParticle {
 	public void setMotionState(MotionState s) { motionState = s; }
 	public void setForceMagnitude(double d) { forceMagnitude = d; }
 	/**
-	 * Set the direction of the cell to the direction of the vector v
+	 * Set the direction of the cell to the direction of the vector v.
 	 */
 	public void setDirection(Vector3d v) {
 		Vector3d x = new Vector3d(v); 
@@ -112,7 +112,7 @@ public class BSimBacterium extends BSimParticle {
 		this.direction = x;
 	}		
 	/**
-	 * Set this chemical field as the goal field
+	 * Set this chemical field as the goal field.
 	 */
 	public void setGoal(BSimChemicalField goal) { 
 		this.goal = goal; 	
@@ -132,7 +132,7 @@ public class BSimBacterium extends BSimParticle {
 	public double getMemoryDuration() { return shortTermMemoryDuration + longTermMemoryDuration; }
 	
 	/**
-	 * Applies the flagellar force 
+	 * Applies the flagellar force.
 	 */
 	public void flagellarForce() {				
 		Vector3d f = new Vector3d();		
@@ -141,7 +141,7 @@ public class BSimBacterium extends BSimParticle {
 	}
 	
 	/**
-	 * Causes the cell to rotate such that Var(theta(dt)) = 4*D*dt
+	 * Causes the cell to rotate such that Var(theta(dt)) = 4*D*dt.
 	 */
 	public void rotationalDiffusion() {
 		double dTheta = rng.nextGaussian()*Math.sqrt(4*BSim.BOLTZMANN*sim.getTemperature()*sim.getDt()/rotationalStokesCoefficient())*Math.pow(10,9);
@@ -155,7 +155,7 @@ public class BSimBacterium extends BSimParticle {
 	/**
 	 * Return a tumble angle in radians distributed according to Fig. 3, 'Chemotaxis 
 	 * in Escherichia Coli', Berg et al. (claim from 'AgentCell: a digital single-cell 
-	 * assay for bacterial chemotaxis', Emonet et al.) 
+	 * assay for bacterial chemotaxis', Emonet et al.).
 	 */
 	public double tumbleAngle() {	
 		double tumbleShape = 4;
@@ -172,7 +172,7 @@ public class BSimBacterium extends BSimParticle {
 		
 	/**
 	 * p23, 'Strategies for Chemotaxis', Schnizter, Berg et al.
-	 * Compare two sequential averages
+	 * Compare two sequential averages.
 	 */
 	public boolean movingUpGradient() {
 		double shortTermCounter = 0, shortTermMean = 0;
@@ -195,10 +195,7 @@ public class BSimBacterium extends BSimParticle {
         
 		return shortTermMean - longTermMean > sensitivity;
 	}
-	
-	
-	
-	
+
 	/* 
 	 * GROWTH and REPLICATION
 	 *  
