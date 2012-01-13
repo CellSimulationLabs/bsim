@@ -1,14 +1,14 @@
 #Fat Jar Configuration File
-#Fri Sep 02 17:55:16 BST 2011
+#Fri Jan 13 09:46:52 GMT 2012
 onejar.license.required=false
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
-jarname=lib/BSimParser.jar
+jarname=lib/bsim3.0.jar
 manifest.mergeall=true
-manifest.mainclass=BSimParser.BSimParser
+manifest.mainclass=
 manifest.file=<createnew>
 jarname.isextern=false
 onejar.expand=
-excludes=<po|BSim>~BSimBrownianMotion/;<po|BSim>~BSimChemicalActivation/;<po|BSim>~BSimChemicalFieldTest/;<po|BSim>~BSimCoupledRepressilators/;<po|BSim>~BSimDdeDynamics/;<po|BSim>~BSimLacOperon/;<po|BSim>~BSimLactam/;<po|BSim>~BSimLogic/;<po|BSim>~BSimMeshBehavior/;<po|BSim>~BSimMeshMobility/;<po|BSim>~BSimMultiThreaded/;<po|BSim>~BSimQuorumOscillator/;<po|BSim>~BSimReaction/;<po|BSim>~BSimReplication/;<po|BSim>~BSimRotationalDiffusion/;<po|BSim>~BSimRunTumble/;<po|BSim>~BSimSimplest/;<po|BSim>~BSimTracking/;<po|BSim>~BSimTutorial/;<po|BSim>~BSimVesicleActivation/;<po|BSim>~BSimVesiculation/
+excludes=<po|BSim>~BSimBrownianMotion/;<po|BSim>~BSimChemicalActivation/;<po|BSim>~BSimChemicalFieldTest/;<po|BSim>~BSimCoupledRepressilators/;<po|BSim>~BSimDdeDynamics/;<po|BSim>~BSimLacOperon/;<po|BSim>~BSimLactam/;<po|BSim>~BSimLogic/;<po|BSim>~BSimMeshBehavior/;<po|BSim>~BSimMeshMobility/;<po|BSim>~BSimMultiThreaded/;<po|BSim>~BSimParser/;<po|BSim>~BSimQuorumOscillator/;<po|BSim>~BSimReaction/;<po|BSim>~BSimReplication/;<po|BSim>~BSimRotationalDiffusion/;<po|BSim>~BSimRunTumble/;<po|BSim>~BSimSimplest/;<po|BSim>~BSimTracking/;<po|BSim>~BSimTutorial/;<po|BSim>~BSimVesicleActivation/;<po|BSim>~BSimVesiculation/;<po|BSim>~.DS_Store
 includes=
