@@ -50,6 +50,6 @@ public class BSimSimplest {
 		
 		// Run the simulation
 		sim.preview();
-	}
+	} 
 
 }
