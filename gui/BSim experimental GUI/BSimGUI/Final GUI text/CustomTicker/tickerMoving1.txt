@@ -1,1 +1,0 @@
-			bacterium.updatePosition();   //for bacteria that is not stationary!  

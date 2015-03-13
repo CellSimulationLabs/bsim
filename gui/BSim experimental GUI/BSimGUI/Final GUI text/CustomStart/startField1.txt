@@ -1,1 +1,0 @@
-	final BSimChemicalField field = new BSimChemicalField(sim, new int[]{20,20,20}, diffusivity, decayRate); //you can add more chemical fields the same way!

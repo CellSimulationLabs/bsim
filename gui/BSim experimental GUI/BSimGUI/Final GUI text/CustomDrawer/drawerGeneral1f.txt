@@ -1,4 +1,0 @@
-	BSimP3DDrawer drawer = new BSimP3DDrawer(sim, 800,600) {
-		@Override
-		public void scene(PGraphics3D p3d) {	
-			sim.getBound();	

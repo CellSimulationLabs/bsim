@@ -1,2 +1,0 @@
-	CustomBacterium bacterium = new CustomBacterium(sim, new Vector3d(1,1,99))
-	bacteria.add(bacterium);

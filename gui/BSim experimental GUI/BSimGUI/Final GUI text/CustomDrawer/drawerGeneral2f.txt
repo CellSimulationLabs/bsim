@@ -1,9 +1,0 @@
-			for(CustomBacterium bacterium : bacteria) {
-					
-				if (bacterium.activated == true)   //threshold signalling 
-					draw(bacterium, thresSignallingColour);
-				else if (bacterium.collision == true)   //collision bacteria
-					draw(bacterium, collisionColour);
-				else if (bacterium.ODEsignalling == true)     
-
-	

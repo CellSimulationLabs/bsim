@@ -1,8 +1,0 @@
-	// Add bacteria to the vector
-	while(bacteria.size() < populationSize) {		
-		CustomBacterium bacterium = new CustomBacterium(sim, 
-									  new Vector3d(Math.random()*sim.getBound().x,
-												   Math.random()*sim.getBound().y,
-												   Math.random()*sim.getBound().z));
-		if(!bacterium.intersection(bacteria)) bacteria.add(bacterium);
-	}

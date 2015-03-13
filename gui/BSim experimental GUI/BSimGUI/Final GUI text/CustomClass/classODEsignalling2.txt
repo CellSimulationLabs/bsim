@@ -1,2 +1,0 @@
-			yNew = BSimOdeSolver.rungeKutta45(repGRN, 1, y, sim.getDt());   //ODE signalling bacterium
-			y = yNew;   

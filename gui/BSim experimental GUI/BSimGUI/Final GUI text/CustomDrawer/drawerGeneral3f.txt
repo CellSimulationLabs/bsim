@@ -1,4 +1,0 @@
-				else 
-					draw(bacterium, simpleColour);
-					
-			}

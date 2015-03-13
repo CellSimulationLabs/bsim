@@ -1,2 +1,0 @@
-		//Create the parameters and initial conditions for the ODE system   //ODE signalling bacterium
-		ODEsignalling = true; 

@@ -1,1 +1,0 @@
-				draw(field, fieldColour, (float)(255/12.0e5));    //chemical creator bacterium & (threshold signalling bacteria)

@@ -1,2 +1,0 @@
-Main-Class: BSimGUI.BSimGUI
-Class-Path: lib/BSim3.0.jar

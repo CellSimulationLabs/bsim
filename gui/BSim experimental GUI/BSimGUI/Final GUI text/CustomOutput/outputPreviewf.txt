@@ -1,4 +1,0 @@
-		sim.preview();
-	}
-
-}

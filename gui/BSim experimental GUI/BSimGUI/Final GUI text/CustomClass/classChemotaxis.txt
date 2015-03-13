@@ -1,4 +1,0 @@
-			this.setGoal(field);               //chemotaxis bacteria
-			this.pEndRunUp = runUp;
-			this.pEndRunElse = runElse;
-			this.pEndTumble = tumble;   

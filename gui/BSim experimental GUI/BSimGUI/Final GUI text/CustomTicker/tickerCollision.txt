@@ -1,3 +1,0 @@
-			for(int i = 1; i < bacteria.size(); i++)             //collision bacteria
-				for(int j = i+1; j < bacteria.size(); j++)
-					bacteria.get(i).interaction(bacteria.get(j));  

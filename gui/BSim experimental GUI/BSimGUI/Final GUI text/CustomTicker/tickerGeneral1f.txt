@@ -1,7 +1,0 @@
-//----------------------
-//TICKER DEFINITION
-//----------------------
-			
-	sim.setTicker(new BSimTicker() {
-		@Override
-		public void tick() {
