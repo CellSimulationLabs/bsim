@@ -8,15 +8,15 @@ In many cases it it likely that the code may need to be extended for a specific 
 
 Additionally it is possible to obtain the source code from the SVN repository. At the time of writing, the "Trunk" corresponds to our working copy for the 2010 iGEM competition and it is therefore recommended that for the majority of users that a more extensively tested version be downloaded (one of the tagged versions). For users unfamiliar with SVN, we provide a brief overview here of setting up an IDE and downloading BSim. It is of course possible to use BSim with any Java IDE or standalone SVN clients, the method illustrated here is just the one with which I am most familiar.
 
-Downloading BSim using SVN with Eclipse
+##Downloading BSim using SVN with Eclipse
 Eclipse is a popular IDE for Java which includes subversion management. For the purposes of this tutorial, we will be using the "Eclipse IDE for Java Developers", with the "Subclipse" subversion plugin.
 
-Obtaining Eclipse
+##Obtaining Eclipse
 The latest version of Eclipse can be downloaded from here. In this tutorial we use the "Eclipse IDE for Java Developers", please be aware that other versions (e.g. those specifically for web developers) may include an incompatible version of Java by default which is why we are using this version.
 
 Note: When you start up Eclipse, it will ask for a workspace directory. This can be any directory of your choice but bear in mind that this is the directory where Eclipse will store all of your code in a session. You can create more than one workspace folder for different projects etc.
 
-Setting up an SVN plugin
+##Setting up an SVN plugin
 To get the code from Google, we need to install an SVN plugin, as Eclipse doesn't come with one included by default (yet). We will be using the Subclipse plugin.
 
 Click on "Help -> Install New Software..." and a window should pop up called 'Available Software'.
@@ -31,7 +31,7 @@ Restart Eclipse when the install is done.
 
 This concludes the Eclipse installation. Time to get some code....
 
-Getting BSim code via SVN
+##Getting BSim code via SVN
 Now that we have the plugin it is possible to just directly download all the code and keep it up to date through Eclipse.
 
 Right click in the 'Package Explorer' tab and select 'Import'. Expand out 'SVN', and select 'Checkout projects from SVN'.
