@@ -67,8 +67,9 @@ public class BSimChemicalField {
 		
 		int[] index = {0,0,0};
 		
-		double grad = (endConc - startConc)/boxes[2];		
-		for(index[0] = 0; index[0]<boxes[0]; index[0]++)
+		double grad = (endConc - startConc)/(double)boxes[axis];
+        
+        for(index[0] = 0; index[0]<boxes[0]; index[0]++)
 			for(index[1] = 0; index[1]<boxes[1]; index[1]++)
 				for(index[2] = 0; index[2]<boxes[2]; index[2]++)
 					setConc(index[0], index[1], index[2], startConc + index[axis]*grad);
