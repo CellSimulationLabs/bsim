@@ -13,6 +13,7 @@ import java.awt.Graphics2D;
 
 import javax.vecmath.Vector3d;
 
+import bsim.capsule.BSimCapsuleBacterium;
 import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PGraphics3D;
@@ -44,7 +45,7 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 
 	// With updated Processing library (1.5.1), looks like begindraw() will reset the camera
 	// after 1st frame has been drawn, so this provides a workaround for now.
-	private boolean cameraIsInitialised = false;
+	protected boolean cameraIsInitialised = false;
 	
 	/**
 	 * Default constructor for initialising a Processing3D rendering context.
@@ -242,6 +243,65 @@ public abstract class BSimP3DDrawer extends BSimDrawer {
 		p3d.stroke(c.getRed(), c.getGreen(), c.getBlue());
 		p3d.point((float)position.x, (float)position.y,(float)position.z);
 		p3d.noStroke();
+	}
+
+	/**
+	 * Draw a capsule bacterium as a cylinder with hemispherical caps.
+	 * @param bac	The BSimCapsuleBacterium that we would like to draw.
+	 * @param c		The desired colour of the BSimCapsuleBacterium.
+     */
+	public void draw(BSimCapsuleBacterium bac, Color c) {
+		p3d.fill(c.getRed(), c.getGreen(), c.getBlue());
+
+		Vector3d worldY = new Vector3d(0, 1, 0);
+		Vector3d bacDirVector = new Vector3d();
+
+		bacDirVector.sub(bac.x2, bac.x1);
+
+		Vector3d u = new Vector3d();
+		u.scaleAdd(0.5, bacDirVector, bac.x1);
+
+		Vector3d bacRotVector = new Vector3d();
+		bacRotVector.cross(worldY, bacDirVector);
+
+		bacDirVector.normalize();
+
+		// TODO: This will fail in the rare case that bac is aligned with Y axis
+		// (i.e., trying to normalize a zero vector, which results in [nan, nan, nan]).
+		bacRotVector.normalize();
+
+		p3d.pushMatrix();
+		p3d.translate((float) u.x, (float) u.y, (float) u.z);
+		//fix the rotation on the axis
+		//pushMatrix();
+		p3d.rotate((float) worldY.angle(bacDirVector), (float) bacRotVector.x, (float) bacRotVector.y, (float) bacRotVector.z);
+		drawRodShape((float) bac.radius, (float) bac.L, 32);
+		p3d.popMatrix();
+		sphere(bac.x1, bac.radius, c, 255);
+		sphere(bac.x2, bac.radius, c, 255);
+	}
+
+
+	/**
+	 * A helper function for drawing the BSimCapsuleBacterium.
+	 * Draws an uncapped cylinder or rod.
+	 * the RodShape is drawn along the y axis.
+	 * @param radius 	Desired cylinder radius.
+	 * @param length 	Desired cylinder length.
+	 * @param sides		Number of subdivisions around the outer surface (number of discretised sides in the final mesh).
+     */
+	public void drawRodShape(float radius, float length, int sides) {
+		float angle = 0;
+		float angleIncrement = p3d.TWO_PI / sides;
+		// save a bunch of calculations:
+		float lengthRatio = (length / 2.0f);
+		p3d.beginShape(p3d.QUAD_STRIP);
+		for (int i = 0; i < sides + 1; ++i) {
+			p3d.vertex((float) (radius * Math.cos(angle)), 0 - lengthRatio, (float) (radius * Math.sin(angle)));
+			p3d.vertex((float) (radius * Math.cos(angle)), 0 + lengthRatio, (float) (radius * Math.sin(angle)));
+			angle += angleIncrement;
+		}
+		p3d.endShape();
 	}
 
 	/**

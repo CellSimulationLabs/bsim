@@ -116,7 +116,16 @@ public class BSimUtils {
 		String yyyyStr, mmStr, ddStr, hhStr, miStr, ssStr, timestampStr;
 		
 		yyyyStr = "" + calNow.get(Calendar.YEAR);
-		mmStr = BSimUtils.padInt2(calNow.get(Calendar.MONTH));
+
+		/*
+		 TODO: Refactor this to use a nicer date/time API,
+		  e.g., Joda, or Java 8 java.time
+		  http://stackoverflow.com/questions/344380/why-is-january-month-0-in-java-calendar
+		  */
+		// As above, MONTH starts from index 0 (rather than 1, like DAY_OF... etc)
+		// So we add 1 for printing naturally in a formatted string.
+		mmStr = BSimUtils.padInt2(calNow.get(Calendar.MONTH) + 1);
+
 		ddStr = BSimUtils.padInt2(calNow.get(Calendar.DAY_OF_MONTH));
 		hhStr = BSimUtils.padInt2(calNow.get(Calendar.HOUR_OF_DAY));
 		miStr = BSimUtils.padInt2(calNow.get(Calendar.MINUTE));
