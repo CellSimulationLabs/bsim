@@ -73,6 +73,8 @@ public class BSim {
 	public double getTime() { return timestep*dt; }
 	/** Return a formatted version of the current time of the simulation. */
 	public String getFormattedTime() { return timeFormat.format(timestep*dt); }
+	public String getFormattedTimeHours() { return timeFormat.format(timestep*dt/3600.0); }
+
 	/** Return the simulation bounds (microns). */
 	public Vector3d getBound() { return bound; }
 	/** Return whether the boundaries are solid (reflecting) or wrapping (periiodic). Solid = true, relecting = false. */
@@ -130,7 +132,10 @@ public class BSim {
 				if(timestep % timesteps(exporter.getDt()) == 0) exporter.during();
 		}		
 
-		for(BSimExporter exporter : exporters) exporter.after();			
+		for(BSimExporter exporter : exporters) exporter.after();
+
+		// Any clean-up that is required for the ticker (especially in threaded case)
+		ticker.finish();
 	}	
 		
 	/**
