@@ -18,6 +18,7 @@ public class BSimDdeSolver {
 	 * @param h Timestep.
 	 * @return Initial state vector.
 	 */
+	@Deprecated
 	public static Vector<double[]> getInitialState (BSimDdeSystem ddes, double h){
 		// Create the initial state (including history)
 		Vector<double[]> ys = new Vector<double[]>((int)(ddes.getMaxDelay()/h));
@@ -36,6 +37,7 @@ public class BSimDdeSolver {
 	 * @param delay Required delayed state vector
 	 * @return Delayed state vector.
 	 */
+    @Deprecated
 	public static double[] getDelayedState(Vector<double[]> ys, double h, double delay){
 		// Calculate the index for the delayed value (rounds down)
 		int i = (int)(delay/h);
@@ -48,6 +50,7 @@ public class BSimDdeSolver {
 	 * Looses last historic state vector.
 	 * @param ys The state vector.
 	 */
+    @Deprecated
 	public static void shiftState(Vector<double[]> ys){
 		// Shift all elements and loose last
 		double[] y = new double[ys.get(0).length];
@@ -69,6 +72,7 @@ public class BSimDdeSolver {
 	 * @param h Time step for ode solution.
 	 * @return Vector of dependent variables at next time step including history.
 	 */
+    @Deprecated
 	public static Vector<double[]> euler(BSimDdeSystem ddes, double t, Vector<double[]> ys, double h){
 		int numEq = ddes.getNumEq();
 		System.out.println("Size of ys = " + ys.size());
@@ -93,6 +97,7 @@ public class BSimDdeSolver {
 	 * @param h Time step for ode solution.
 	 * @return Vector of dependent variables at next time step.
 	 */
+    @Deprecated
 	public static Vector<double[]> rungeKutta23(BSimDdeSystem ddes, double t, Vector<double[]> ys, double h){
 		int numEq = ddes.getNumEq();
 		double[] dydx = new double[numEq];
@@ -132,6 +137,7 @@ public class BSimDdeSolver {
 	 * @param h Time step for ode solution.
 	 * @return Vector of dependent variables at next time step.
 	 */
+    @Deprecated
 	public static Vector<double[]> rungeKutta45(BSimDdeSystem ddes, double t, Vector<double[]> ys, double h){
 		int numEq = ddes.getNumEq();
 		double[] dydx = new double[numEq];

@@ -1,0 +1,15 @@
+.ipynb_checkpoints
+.DS_Store
+.idea
+docs
+
+libbsim
+out
+release
+results
+
+.fatjar
+*.avi
+*.m4v
+*.iml
+*.class
