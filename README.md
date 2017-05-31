@@ -8,7 +8,7 @@ BSim is an agent-based modelling tool designed to allow for the study of bacteri
 
 We adapted the model from Chen et al., Science, 2015 ([DOI: 10.1126/science.aaa3794](http://science.sciencemag.org/content/349/6251/986.long)).
 
-The code for this case study can be found [here](https://github.com/bsim-bristol/bsim/examples/BSimChenOscillator).
+The code for this case study can be found [here](https://github.com/bsim-bristol/bsim/tree/master/examples/BSimChenOscillator).
 
 A video of an example simulation can be found here:
 https://www.youtube.com/watch?v=FpG7EgIC5yI
@@ -17,7 +17,7 @@ https://www.youtube.com/watch?v=FpG7EgIC5yI
 
 The implementation of the model from our paper 'In-Silico Analysis and Implementation of a Multicellular Feedback Control Strategy in a Synthetic Bacterial Consortium' (Fiore G, Matyjaszkiewicz A, et al., ACS Synth. Biol., 2017; [DOI: 10.1021/acssynbio.6b00220](http://pubs.acs.org/doi/abs/10.1021/acssynbio.6b00220)).
 
-Code for this example can be found [here](https://github.com/bsim-bristol/bsim/examples/BSimConsortiumController).
+Code for this example can be found [here](https://github.com/bsim-bristol/bsim/tree/master/examples/BSimConsortiumController).
 
 A video of an example simulation can be found here:
 https://www.youtube.com/watch?v=wBLXv9znhqE
