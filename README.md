@@ -35,7 +35,11 @@ The resulting compiled classes will reside in the directory `./out/*`.
 
 ## Citing BSim
 
-If you have made use of BSim in academic or commercial work, the project can be referenced using the following paper:
+If you have made use of BSim in academic or commercial work, the project can be referenced using the following paper(s):
 
+- The latest version of BSim:
+[Matyjaszkiewicz A, Fiore G, et al. (2017) BSim 2.0: An Advanced Agent-Based Cell Simulator. *ACS Synthetic Biology* **(web)Article ASAP** doi:10.1021/acssynbio.7b00121](http://pubs.acs.org/doi/abs/10.1021/acssynbio.7b00121)
+
+- The original article describing BSim:
 [Gorochowski TE, Matyjaszkiewicz A, Todd T, Oak N, Kowalska K, et al. (2012) BSim: An Agent-Based Tool for Modeling Bacterial Populations in Systems and Synthetic Biology. *PLoS ONE* **7**(8): e42790. doi:10.1371/journal.pone.0042790](http://dx.plos.org/10.1371/journal.pone.0042790)
 
