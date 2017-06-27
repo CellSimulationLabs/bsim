@@ -13,7 +13,7 @@ ant -f bsim-build-tree.xml
 
 Then go to the build dir:
 ```
-cd cd out/production/$BSIM_SRC/
+cd out/production/$BSIM_SRC/
 
 bash ./BSimConsortiumController/run_from_out.sh
 ```
