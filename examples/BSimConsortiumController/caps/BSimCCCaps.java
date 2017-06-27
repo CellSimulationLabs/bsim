@@ -34,7 +34,7 @@ public class BSimCCCaps {
     public List<Double> simDimensions = new ArrayList<>(Arrays.asList(new Double[] {25., 20., 1.1}));
 
     @Parameter(names = "-pop", arity = 1, description = "Initial seed population (ratio, n_total).")
-    public int initialPopulation = 120;
+    public int initialPopulation = 12;
 
     @Parameter(names = "-ratio", arity = 1, description = "Ratio of initial populations (proportion of controllers).")
     public double populationRatio = 0.5; //0.418;
