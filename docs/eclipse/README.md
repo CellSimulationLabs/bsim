@@ -68,7 +68,7 @@ and then set up a project in eclipse, using the directory you cloned the reposit
 
 13. OK. Everything should be set up to go. To test that things are working correctly, navigate to `bsim -> examples -> BSimSimplest`, right click `BSimSimplest`, select `run as -> java application` and you should be greeted by a window with a yellow bacterium swimming around:
 
-![BSim preview](/img/13-bsim-preview.png)
+![BSim preview](./img/13-bsim-preview.png)
 
 
 
