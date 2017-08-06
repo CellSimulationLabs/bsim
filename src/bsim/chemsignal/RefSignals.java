@@ -1,4 +1,4 @@
-package chemsignal;
+package bsim.chemsignal;
 
 import bsim.*;
 

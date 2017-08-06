@@ -15,7 +15,7 @@ import bsim.export.BSimLogger;
 import bsim.ode.BSimOdeSolver;
 import bsim.ode.BSimOdeSystem;
 import bsim.particle.BSimBacterium;
-import chemsignal.BSimChemFieldExt;
+import bsim.chemsignal.BSimChemFieldExt;
 
 public class BSimEntrainment_PIDCtrl {
 	
@@ -524,8 +524,8 @@ public class BSimEntrainment_PIDCtrl {
 			
 			 
 				 
-				 final chemsignal.RefSignals refsignal= new chemsignal.RefSignals();
-				 final chemsignal.ControlMethods piCTRL = new chemsignal.ControlMethods(kgain, 0, integraltime , derivativetime, AHLfield, signaldelayonset, signalstop);
+				 final bsim.chemsignal.RefSignals refsignal= new bsim.chemsignal.RefSignals();
+				 final bsim.chemsignal.ControlMethods piCTRL = new bsim.chemsignal.ControlMethods(kgain, 0, integraltime , derivativetime, AHLfield, signaldelayonset, signalstop);
 				 
 				 
 				 /** Setup ticker to specify and update actions of bacteria and other actions
